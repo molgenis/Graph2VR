@@ -1,0 +1,63 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using Valve.VR;
+
+public class zoomSphere : MonoBehaviour
+{
+    Vector3 rightPos;
+    Vector3 leftPos;
+    public GameObject zoomGraph;
+    Vector3 startScale;
+
+    bool isZooming = false;
+    float zoomStart = 0.0f;
+
+    public SteamVR_Action_Boolean gripAction = SteamVR_Input.GetAction<SteamVR_Action_Boolean>("GrabGrip");
+    // Start is called before the first frame update
+    void Start()
+    {
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        gameObject.transform.localPosition = (rightPos + leftPos) * 0.5f;
+        bool zoomAction = gripAction.GetState(SteamVR_Input_Sources.LeftHand) == true && gripAction.GetState(SteamVR_Input_Sources.RightHand) == true;
+        GetComponent<Renderer>().enabled = zoomAction;
+        if(isZooming)
+        {
+            if (zoomAction)
+            {
+                float currentZoom = (rightPos - leftPos).magnitude;
+                zoomGraph.transform.localScale = startScale*(currentZoom / zoomStart);
+            }
+            else
+            {
+                isZooming = false;
+            }
+        }
+        else
+        {
+            if (zoomAction)
+            {
+                isZooming = true;
+                zoomStart = (rightPos - leftPos).magnitude;
+                startScale = zoomGraph.transform.localScale;
+            }
+        }
+    }
+
+    public void ControllerMoved(SteamVR_Behaviour_Pose pose, SteamVR_Input_Sources source)
+    {
+        if(source == SteamVR_Input_Sources.LeftHand)
+        {
+            leftPos = pose.poseAction[source].localPosition;
+        }
+        else if (source == SteamVR_Input_Sources.RightHand)
+        {
+            rightPos = pose.poseAction[source].localPosition;
+        }
+    }
+}
