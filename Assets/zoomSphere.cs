@@ -7,6 +7,10 @@ public class zoomSphere : MonoBehaviour
 {
     Vector3 rightPos;
     Vector3 leftPos;
+    Vector3 leftdiffPos;
+    Vector3 rightdiffPos;
+    Vector3 eulerRotation;
+
     public GameObject zoomGraph;
     Vector3 startScale;
 
@@ -32,6 +36,7 @@ public class zoomSphere : MonoBehaviour
             {
                 float currentZoom = (rightPos - leftPos).magnitude;
                 zoomGraph.transform.localScale = startScale*(currentZoom / zoomStart);
+                zoomGraph.transform.position = zoomGraph.transform.position + (leftdiffPos + rightdiffPos) * 0.5f;
             }
             else
             {
@@ -51,13 +56,16 @@ public class zoomSphere : MonoBehaviour
 
     public void ControllerMoved(SteamVR_Behaviour_Pose pose, SteamVR_Input_Sources source)
     {
-        if(source == SteamVR_Input_Sources.LeftHand)
+        if (source == SteamVR_Input_Sources.LeftHand)
         {
             leftPos = pose.poseAction[source].localPosition;
+            leftdiffPos = pose.poseAction[source].localPosition - pose.poseAction[source].lastLocalPosition;
+
         }
         else if (source == SteamVR_Input_Sources.RightHand)
         {
             rightPos = pose.poseAction[source].localPosition;
+            rightdiffPos = pose.poseAction[source].localPosition - pose.poseAction[source].lastLocalPosition;
         }
     }
 }
