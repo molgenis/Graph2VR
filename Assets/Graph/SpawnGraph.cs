@@ -83,6 +83,7 @@ public class SpawnGraph : MonoBehaviour
             clone.transform.localPosition = Random.insideUnitSphere;
             clone.GetComponent<movement>().sg = this;
             clone.GetComponent<movement>().index = 1+(i % 50);
+            clone.layer = 8;
             TMPro.TextMeshPro test = clone.GetComponentInChildren<TMPro.TextMeshPro>(true);
             test.text = result.ToString();
             nodes.Add(clone);
