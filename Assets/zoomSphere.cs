@@ -13,6 +13,8 @@ public class zoomSphere : MonoBehaviour
 
     public GameObject zoomGraph;
     Vector3 startScale;
+    Quaternion startRotation;
+    Vector3 startDirection;
 
     bool isZooming = false;
     float zoomStart = 0.0f;
@@ -37,6 +39,7 @@ public class zoomSphere : MonoBehaviour
                 float currentZoom = (rightPos - leftPos).magnitude;
                 zoomGraph.transform.localScale = startScale*(currentZoom / zoomStart);
                 zoomGraph.transform.position = zoomGraph.transform.position + (leftdiffPos + rightdiffPos) * 0.5f;
+                zoomGraph.transform.rotation = (Quaternion.FromToRotation(startDirection, (rightPos - leftPos).normalized)) * startRotation;
             }
             else
             {
@@ -50,6 +53,8 @@ public class zoomSphere : MonoBehaviour
                 isZooming = true;
                 zoomStart = (rightPos - leftPos).magnitude;
                 startScale = zoomGraph.transform.localScale;
+                startRotation = zoomGraph.transform.rotation;
+                startDirection = (rightPos - leftPos).normalized;
             }
         }
     }
