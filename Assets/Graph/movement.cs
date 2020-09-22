@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -31,6 +32,8 @@ public class movement : MonoBehaviour
             }
 
             Rigidbody me = gameObject.GetComponent<Rigidbody>();
+            float tmp = gameObject.transform.localToWorldMatrix.MultiplyPoint(new Vector3(1, 0, 0)).magnitude;
+            me.mass = tmp;
             // repulse all closeby nodes
 
             for (int i = 0; i < sg.nodes.Count; i++)

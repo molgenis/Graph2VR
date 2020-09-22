@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Valve.VR;
@@ -15,7 +16,7 @@ public class zoomSphere : MonoBehaviour
     Vector3 startScale;
     Quaternion startRotation;
     Vector3 startDirection;
-
+    
     bool isZooming = false;
     float zoomStart = 0.0f;
 
@@ -29,21 +30,22 @@ public class zoomSphere : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        gameObject.transform.localPosition = (rightPos + leftPos) * 0.5f;
         bool zoomAction = gripAction.GetState(SteamVR_Input_Sources.LeftHand) == true && gripAction.GetState(SteamVR_Input_Sources.RightHand) == true;
         GetComponent<Renderer>().enabled = zoomAction;
-        if(isZooming)
+
+        gameObject.transform.localPosition = (rightPos + leftPos) * 0.5f;
+        float currentZoom = (rightPos - leftPos).magnitude;
+        if (Math.Abs(zoomStart) > 0.001f)
         {
-            if (zoomAction)
-            {
-                float currentZoom = (rightPos - leftPos).magnitude;
-                zoomGraph.transform.localScale = startScale*(currentZoom / zoomStart);
-                zoomGraph.transform.position = zoomGraph.transform.position + (leftdiffPos + rightdiffPos) * 0.5f;
-                zoomGraph.transform.rotation = (Quaternion.FromToRotation(startDirection, (rightPos - leftPos).normalized)) * startRotation;
-            }
-            else
-            {
+            gameObject.transform.localScale = startScale * (currentZoom / zoomStart);
+        }
+        Quaternion rotation = Quaternion.FromToRotation(startDirection, (rightPos - leftPos).normalized);
+        gameObject.transform.rotation = (Quaternion.FromToRotation(startDirection, (rightPos - leftPos).normalized)) * startRotation;
+        if (isZooming)
+        {
+            if (!zoomAction) {
                 isZooming = false;
+                zoomGraph.transform.SetParent(null);
             }
         }
         else
@@ -51,9 +53,10 @@ public class zoomSphere : MonoBehaviour
             if (zoomAction)
             {
                 isZooming = true;
+                zoomGraph.transform.SetParent(gameObject.transform, true);
                 zoomStart = (rightPos - leftPos).magnitude;
-                startScale = zoomGraph.transform.localScale;
-                startRotation = zoomGraph.transform.rotation;
+                startScale = gameObject.transform.localScale;
+                startRotation = gameObject.transform.rotation;
                 startDirection = (rightPos - leftPos).normalized;
             }
         }
