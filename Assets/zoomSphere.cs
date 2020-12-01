@@ -8,6 +8,8 @@ public class zoomSphere : MonoBehaviour
 {
     Vector3 rightPos;
     Vector3 leftPos;
+    Quaternion rightOrientation;
+    Quaternion leftOriantation;
     Vector3 leftdiffPos;
     Vector3 rightdiffPos;
     Vector3 eulerRotation;
@@ -16,7 +18,9 @@ public class zoomSphere : MonoBehaviour
     Vector3 startScale;
     Quaternion startRotation;
     Vector3 startDirection;
-    
+    float startRightAngle = 0;
+    float startLeftAngle = 0;
+
     bool isZooming = false;
     float zoomStart = 0.0f;
 
@@ -39,8 +43,15 @@ public class zoomSphere : MonoBehaviour
         {
             gameObject.transform.localScale = startScale * (currentZoom / zoomStart);
         }
-        Quaternion rotation = Quaternion.FromToRotation(startDirection, (rightPos - leftPos).normalized);
-        gameObject.transform.rotation = (Quaternion.FromToRotation(startDirection, (rightPos - leftPos).normalized)) * startRotation;
+        float rightAngleRotationDiff = (startRightAngle - Quaternion.Angle(Quaternion.identity, rightOrientation)) *0.5f;
+        float leftAngleRotationDiff = (startLeftAngle - Quaternion.Angle(Quaternion.identity, leftOriantation)) * 0.5f;
+        float rotationDiff = rightAngleRotationDiff + leftAngleRotationDiff;
+        rotationDiff = Mathf.Clamp(rotationDiff, -90, 90);
+        gameObject.transform.rotation = 
+            Quaternion.AngleAxis(rotationDiff, (rightPos - leftPos).normalized)
+            * Quaternion.FromToRotation(startDirection, (rightPos - leftPos).normalized)
+            * startRotation;
+        
         if (isZooming)
         {
             if (!zoomAction) {
@@ -58,6 +69,9 @@ public class zoomSphere : MonoBehaviour
                 startScale = gameObject.transform.localScale;
                 startRotation = gameObject.transform.rotation;
                 startDirection = (rightPos - leftPos).normalized;
+
+                startRightAngle = Quaternion.Angle(Quaternion.identity, rightOrientation);
+                startLeftAngle = Quaternion.Angle(Quaternion.identity, leftOriantation);
             }
         }
     }
@@ -67,12 +81,14 @@ public class zoomSphere : MonoBehaviour
         if (source == SteamVR_Input_Sources.LeftHand)
         {
             leftPos = pose.poseAction[source].localPosition;
+            leftOriantation = pose.poseAction[source].localRotation;
             leftdiffPos = pose.poseAction[source].localPosition - pose.poseAction[source].lastLocalPosition;
 
         }
         else if (source == SteamVR_Input_Sources.RightHand)
         {
             rightPos = pose.poseAction[source].localPosition;
+            rightOrientation = pose.poseAction[source].localRotation;
             rightdiffPos = pose.poseAction[source].localPosition - pose.poseAction[source].lastLocalPosition;
         }
     }
