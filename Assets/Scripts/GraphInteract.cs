@@ -10,11 +10,10 @@ public class GraphInteract : MonoBehaviour
     public SteamVR_Input_Sources inputSource;
 
     public SpawnGraph graph;
-    GameObject lastHit = null;
     // Start is called before the first frame update
 
     public Canvas menu;
-    private Vector3 direction = new Vector3(0, -0.5f, 2);
+    private Vector3 direction = new Vector3(0, 0, 2);
     void Start()
     {
         pinchAction[inputSource].onChange += SteamVR_Behaviour_Pinch_OnChange;
@@ -31,33 +30,12 @@ public class GraphInteract : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        RaycastHit hitinfo;
-        int layerMask = 1 << 8 | 1 << 5;
-        if (Physics.Raycast(transform.localPosition, transform.rotation * direction, out hitinfo, Mathf.Infinity, layerMask))
-        {
-            if (lastHit != hitinfo.collider.gameObject && graph.nodes.Contains(hitinfo.collider.gameObject))
-            {
-                MeshRenderer meshRenderer = hitinfo.collider.gameObject.GetComponent<MeshRenderer>();
-                meshRenderer.material.color = new Color(1, 1, 1);
-                if(lastHit)
-                {
-                    MeshRenderer meshRenderer2 = lastHit.GetComponent<MeshRenderer>();
-                    meshRenderer2.material.color = new Color(1, 0, 1);
-                }
-                lastHit = hitinfo.collider.gameObject;
-            }
-            //hitinfo.collider.gameObject
-        } else if(lastHit)
-        {
-            MeshRenderer meshRenderer = lastHit.GetComponent<MeshRenderer>();
-            meshRenderer.material.color = new Color(1, 0, 1);
-            lastHit = null;
-        }
+
     }
 
     private void SteamVR_Behaviour_Pinch_OnChange(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState)
     {
-        if(newState)
+      /*  if(newState)
         {
             if (lastHit)
             {
@@ -76,6 +54,6 @@ public class GraphInteract : MonoBehaviour
             {
                 menu.enabled = false;
             }
-        }
+        }*/
     }
 }
