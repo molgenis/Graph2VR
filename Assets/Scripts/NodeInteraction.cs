@@ -14,6 +14,6 @@ public class NodeInteraction : MonoBehaviour, IPointerEnterHandler, IPointerExit
     void IPointerExitHandler.OnPointerExit(PointerEventData eventData)
     {
         MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
-        meshRenderer.material.color = new Color(1, 0, 1);
+        meshRenderer.material.color = new Color(0, 0.259f, 0.6f);
     }
 }

@@ -24,17 +24,17 @@ public class SpawnGraph : MonoBehaviour
         public string URI;
     }
     public List<Links> links = new List<Links>();
-//    public string SPARQLEndpoint = "http://dbpedia.org/sparql"; //dbpedia
-//    public string BaseURI = "http://dbpedia.org";
-    public string SPARQLEndpoint = "http://localhost:8890/sparql"; //local sparql endpoint from e.g. Virtuoso
-    public string BaseURI = "http://www.maelstrom.org/ontology/2020/10/"; //simple selfmade Ontology based on the maelstrom data 
+    public string SPARQLEndpoint = "http://dbpedia.org/sparql"; //dbpedia
+    public string BaseURI = "http://dbpedia.org";
+//    public string SPARQLEndpoint = "http://localhost:8890/sparql"; //local sparql endpoint from e.g. Virtuoso
+//    public string BaseURI = "http://www.maelstrom.org/ontology/2020/10/"; //simple selfmade Ontology based on the maelstrom data 
  void SendQuery(string query) {
         SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new System.Uri(SPARQLEndpoint), BaseURI);
 
         SparqlResultSet results = endpoint.QueryWithResultSet(query);
         foreach (SparqlResult result in results)
         {
-           // Debug.Log(result.ToString());
+            //Debug.Log(result.ToString());
         }
         addNodes(results);
         // Adds only random links - this needs to be replaced!
