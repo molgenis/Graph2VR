@@ -15,26 +15,38 @@ public class SpawnGraph : MonoBehaviour
     public GameObject nodePrefab;
     public GameObject linkPrefab;
     public List<GameObject> nodes = new List<GameObject>();
+    private string sparqlQueryString = "select distinct <http://dbpedia.org/resource/Biobank> as ?s ?p ?o where { <http://dbpedia.org/resource/Biobank> ?p ?o } LIMIT 100";
     public class Links
     {
         public LineRenderer line;
         public Transform a;
         public Transform b;
+        public string URI;
     }
     public List<Links> links = new List<Links>();
+//    public string SPARQLEndpoint = "http://dbpedia.org/sparql"; //dbpedia
+//    public string BaseURI = "http://dbpedia.org";
+    public string SPARQLEndpoint = "http://localhost:8890/sparql"; //local sparql endpoint from e.g. Virtuoso
+    public string BaseURI = "http://www.maelstrom.org/ontology/2020/10/"; //simple selfmade Ontology based on the maelstrom data 
+ void SendQuery(string query) {
+        SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new System.Uri(SPARQLEndpoint), BaseURI);
 
-    void Start()
-    {
-        SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new System.Uri("http://dbpedia.org/sparql"), "http://dbpedia.org");
-
-        SparqlResultSet results = endpoint.QueryWithResultSet("SELECT DISTINCT ?Concept WHERE {[] a ?Concept}");
+        SparqlResultSet results = endpoint.QueryWithResultSet(query);
         foreach (SparqlResult result in results)
         {
-            //Debug.Log(result.ToString());
+           // Debug.Log(result.ToString());
         }
         addNodes(results);
+        // Adds only random links - this needs to be replaced!
         addLinks();
     }
+    
+    void Start()
+    {
+		SendQuery(sparqlQueryString);
+    }
+    
+    //Used to Build a new graph just from the current query
     public void Rebuild()
     {
         // destroy all stuff
@@ -47,22 +59,37 @@ public class SpawnGraph : MonoBehaviour
         nodes.Clear();
         links.Clear();
         // rebuild
-        SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new System.Uri("http://dbpedia.org/sparql"), "http://dbpedia.org");
-
-        SparqlResultSet results = endpoint.QueryWithResultSet("SELECT DISTINCT ?Concept WHERE {[] a ?Concept}");
-        foreach (SparqlResult result in results)
-        {
-            //Debug.Log(result.ToString());
-        }
-        addNodes(results);
-        addLinks();
+        SendQuery(sparqlQueryString);
     }
     void Update()
     {
         updateLinks();
-
-
     }
+
+	public void setSparqlQuery(string newQuery)
+    {
+        sparqlQueryString = newQuery;
+    }
+
+    public string getSparqlQuery(string newQuery)
+    {
+        return sparqlQueryString;
+    }    
+    
+    //Saves a SPARQL query for all predicates of one URI in the sparqlQueryString (maximum: 100)
+    //One example for a valid URI is "http://dbpedia.org/resource/Biobank"
+    public void PredicatesForURI(string URI)
+    {
+        SendQuery("select distinct ?p where {<" + URI + "> ?p ?o} LIMIT 100");
+    }
+    
+     //Saves a SPARQL query for all predicates of one URI in the sparqlQueryString 
+     //Usually only one lable is expected, just in case there are mor, the maximum is 20
+    //One example for a valid URI is "http://dbpedia.org/resource/Biobank"
+    public void LabelForURI(string URI)
+    {
+        SendQuery("select distinct ?label where {<" + URI + "> rdfs:label ?label} LIMIT 20");
+    }   
 
     void updateLinks()
     {
@@ -73,6 +100,7 @@ public class SpawnGraph : MonoBehaviour
         }
     }
 
+    //Each node should have a URI and we might also want to add an information wether it already has been visited (like a previously visited Haperlink)
     void addNodes(SparqlResultSet query)
     {
         int i = 0;
