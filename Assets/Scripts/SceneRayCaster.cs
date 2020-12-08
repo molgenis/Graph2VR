@@ -14,7 +14,7 @@ public class SceneRayCaster : BaseRaycaster
 
     public override void Raycast(PointerEventData eventData, List<RaycastResult> resultAppendList)
     {
-        Ray ray = new Ray(gameObject.transform.localPosition, gameObject.transform.forward);
+        Ray ray = new Ray(gameObject.transform.position, gameObject.transform.forward);
         RaycastHit[] hitResults = Physics.RaycastAll(ray);
         foreach(RaycastHit hitResult in hitResults)
         {

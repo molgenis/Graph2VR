@@ -16,7 +16,7 @@ public class movement : MonoBehaviour
 
     void Update()
     {
-        if (Time.frameCount % index == 0)
+        /*if (Time.frameCount % index == 0)
         {
             // add force towards links
             for (int i = 0; i < links.Count; i++)
@@ -51,6 +51,6 @@ public class movement : MonoBehaviour
                     me.AddForce(-normal * power);
                 }
             }
-        }
+        }*/
     }
 }

@@ -13,18 +13,10 @@ public class GraphInteract : MonoBehaviour
     // Start is called before the first frame update
 
     public Canvas menu;
-    private Vector3 direction = new Vector3(0, 0, 2);
+    private Vector3 direction = new Vector3(0, 0, 1);
     void Start()
     {
         pinchAction[inputSource].onChange += SteamVR_Behaviour_Pinch_OnChange;
-        LineRenderer line = gameObject.AddComponent<LineRenderer>();
-        Material loaded = AssetDatabase.LoadAssetAtPath<Material>("Assets/Graph/line.mat");
-        line.material = loaded;
-        line.startWidth = 0.01f;
-        line.endWidth = 0.01f;
-        line.useWorldSpace = false;
-        line.SetPosition(0, new Vector3(0, 0, 0));
-        line.SetPosition(1, direction);
     }
 
     // Update is called once per frame

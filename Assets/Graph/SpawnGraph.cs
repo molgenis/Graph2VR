@@ -15,6 +15,7 @@ public class SpawnGraph : MonoBehaviour
     public GameObject nodePrefab;
     public GameObject linkPrefab;
     public List<GameObject> nodes = new List<GameObject>();
+    public Canvas menu;
     private string sparqlQueryString = "select distinct <http://dbpedia.org/resource/Biobank> as ?s ?p ?o where { <http://dbpedia.org/resource/Biobank> ?p ?o } LIMIT 100";
     public class Links
     {
@@ -111,6 +112,7 @@ public class SpawnGraph : MonoBehaviour
             clone.transform.localPosition = Random.insideUnitSphere;
             clone.GetComponent<movement>().sg = this;
             clone.GetComponent<movement>().index = 1+(i % 50);
+            clone.GetComponent<NodeInteraction>().menu = menu;
             TMPro.TextMeshPro test = clone.GetComponentInChildren<TMPro.TextMeshPro>(true);
             test.text = result.ToString();
             nodes.Add(clone);
