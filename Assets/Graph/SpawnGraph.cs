@@ -12,36 +12,80 @@ public class SpawnGraph : MonoBehaviour
     public float repulseDistance = 1f;
 
     public int nodesToBuild = 50;
+    public int index = 0;
     public GameObject nodePrefab;
-    public GameObject linkPrefab;
+    public GameObject EdgePrefab;
+    public List<Triple> ts = new List<Triple>();
     public List<GameObject> nodes = new List<GameObject>();
     public Canvas menu;
     private string sparqlQueryString = "select distinct <http://dbpedia.org/resource/Biobank> as ?s ?p ?o where { <http://dbpedia.org/resource/Biobank> ?p ?o } LIMIT 100";
-    public class Links
+    public class edge
     {
         public LineRenderer line;
         public Transform a;
         public Transform b;
         public string URI;
     }
-    public List<Links> links = new List<Links>();
+
+    public class Triple
+    {
+        public string Subject;
+        public string Predicate;
+        public string Object;
+    }
+
+    public List<edge> edges = new List<edge>();
     public string SPARQLEndpoint = "http://dbpedia.org/sparql"; //dbpedia
     public string BaseURI = "http://dbpedia.org";
 //    public string SPARQLEndpoint = "http://localhost:8890/sparql"; //local sparql endpoint from e.g. Virtuoso
 //    public string BaseURI = "http://www.maelstrom.org/ontology/2020/10/"; //simple selfmade Ontology based on the maelstrom data 
  void SendQuery(string query) {
         SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new System.Uri(SPARQLEndpoint), BaseURI);
-
+        Triple triple = new Triple();
         SparqlResultSet results = endpoint.QueryWithResultSet(query);
         foreach (SparqlResult result in results)
         {
+            INode s = null;
+            INode p = null;
+            INode o = null;
+            triple = new Triple();
+            result.TryGetValue("s", out s);
+            triple.Subject = s.ToString();
+            addNode(s);
+            result.TryGetValue("p", out p);
+            triple.Predicate = s.ToString();
+            result.TryGetValue("o", out o);
+            addNode(o);
+            triple.Object = o.ToString();
+            ts.Add(triple);
             //Debug.Log(result.ToString());
         }
-        addNodes(results);
+        //addNodes(results);
         // Adds only random links - this needs to be replaced!
-        addLinks();
+        addEdges();
     }
-    
+
+    void addNode(INode node) {
+        if (GameObject.Find(node.ToString()) == null)
+        {
+            GameObject clone = Instantiate(nodePrefab);
+            clone.transform.SetParent(gameObject.transform);
+            clone.transform.localPosition = Random.insideUnitSphere;
+            clone.GetComponent<movement>().sg = this;
+            clone.GetComponent<movement>().index = 1 + (index % 50);
+            index += 1;
+            clone.GetComponent<NodeInteraction>().menu = menu;
+            clone.name = node.ToString();
+            TMPro.TextMeshPro test = clone.GetComponentInChildren<TMPro.TextMeshPro>(true);
+            test.text = node.ToString();
+            nodes.Add(clone);
+        }
+        else {
+            //node is already there
+            return;
+        }
+    }
+
     void Start()
     {
 		SendQuery(sparqlQueryString);
@@ -54,11 +98,11 @@ public class SpawnGraph : MonoBehaviour
         for (int i = 0; i < nodes.Count; i++) {
             Destroy(nodes[i]);
         }
-        for (int i = 0; i < links.Count; i++) {
-            Destroy(links[i].line.gameObject);
+        for (int i = 0; i < edges.Count; i++) {
+            Destroy(edges[i].line.gameObject);
         }
         nodes.Clear();
-        links.Clear();
+        edges.Clear();
         // rebuild
         SendQuery(sparqlQueryString);
     }
@@ -94,15 +138,15 @@ public class SpawnGraph : MonoBehaviour
 
     void updateLinks()
     {
-        for (int i = 0; i < links.Count; i++) {
-            Links l = links[i];
-            l.line.SetPosition(0, l.a.transform.position);
-            l.line.SetPosition(1, l.b.transform.position);
+        for (int i = 0; i < edges.Count; i++) {
+            edge e = edges[i];
+            e.line.SetPosition(0, e.a.transform.position);
+            e.line.SetPosition(1, e.b.transform.position);
         }
     }
 
     //Each node should have a URI and we might also want to add an information wether it already has been visited (like a previously visited Haperlink)
-    void addNodes(SparqlResultSet query)
+   /* void addNodes(SparqlResultSet query)
     {
         int i = 0;
         foreach (SparqlResult result in query) {
@@ -113,6 +157,7 @@ public class SpawnGraph : MonoBehaviour
             clone.GetComponent<movement>().sg = this;
             clone.GetComponent<movement>().index = 1+(i % 50);
             clone.GetComponent<NodeInteraction>().menu = menu;
+            clone.name = "uri";
             TMPro.TextMeshPro test = clone.GetComponentInChildren<TMPro.TextMeshPro>(true);
             test.text = result.ToString();
             nodes.Add(clone);
@@ -122,25 +167,36 @@ public class SpawnGraph : MonoBehaviour
                 break;
             }
         }
-    }
+    }*/
 
-    void addLinks()
+    void addEdges()
     {
-        for (int i = 0; i < nodes.Count; i++) {
-            GameObject clone = Instantiate(linkPrefab);
+        for (int i = 0; i < ts.Count; i++) {
+            GameObject clone = Instantiate(EdgePrefab);
             clone.transform.parent = gameObject.transform;
             clone.transform.localPosition = Random.insideUnitSphere;
 
-            Links l = new Links();
-            l.line = clone.GetComponent<LineRenderer>();
-            l.a = nodes[i].transform;
-            //l.a = nodes[Random.Range(0, (int)Mathf.Round(nodes.Count - 1))].transform;
-            l.b = nodes[Random.Range(0, (int)Mathf.Round(nodes.Count - 1))].transform;
-
-            l.a.gameObject.GetComponent<movement>().links.Add(l);
-            l.b.gameObject.GetComponent<movement>().links.Add(l);
-
-            links.Add(l);
+            edge e = new edge();
+            e.line = clone.GetComponent<LineRenderer>();
+            //we need to get the node.transform where the URI == triple.Subject
+            if (GameObject.Find(ts[i].Subject) != null)
+            {
+                e.a = GameObject.Find(ts[i].Subject).transform;
+                e.a.gameObject.GetComponent<movement>().edges.Add(e);
+            }
+            else {
+                //break;
+            }
+            if (GameObject.Find(ts[i].Object) != null)
+            {
+                e.b = GameObject.Find(ts[i].Object).transform;
+                e.b.gameObject.GetComponent<movement>().edges.Add(e);
+            }
+            else
+            {
+                //break;
+            }
+            edges.Add(e);
         }
     }
 }

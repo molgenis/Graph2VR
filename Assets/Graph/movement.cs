@@ -6,7 +6,7 @@ using UnityEngine;
 public class movement : MonoBehaviour
 {
     public SpawnGraph sg;
-    public List<SpawnGraph.Links> links = new List<SpawnGraph.Links>();
+    public List<SpawnGraph.edge> edges = new List<SpawnGraph.edge>();
     public int index = 1;
 
     void Start()
@@ -14,16 +14,20 @@ public class movement : MonoBehaviour
 
     }
 
+    // when we realize, that this is too inefficient when we have too many nodes, we might optimize this by using a 3d Barnes-Hut Algorithm
+    //Explanation: http://arborjs.org/docs/barnes-hut
+    //Example implementation (2d) in Unity: https://forum.unity.com/threads/barnes-hut.292885/
+
     void Update()
     {
         /*if (Time.frameCount % index == 0)
         {
             // add force towards links
-            for (int i = 0; i < links.Count; i++)
+            for (int i = 0; i < edges.Count; i++)
             {
-                SpawnGraph.Links l = links[i];
-                Rigidbody a = l.a.transform.GetComponent<Rigidbody>();
-                Rigidbody b = l.b.transform.GetComponent<Rigidbody>();
+                SpawnGraph.edge e = edges[i];
+                Rigidbody a = e.a.transform.GetComponent<Rigidbody>();
+                Rigidbody b = e.b.transform.GetComponent<Rigidbody>();
 
                 Vector3 normal = b.transform.localPosition - a.transform.localPosition;
                 normal.Normalize();

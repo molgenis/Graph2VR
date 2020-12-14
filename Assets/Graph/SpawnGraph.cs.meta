@@ -3,7 +3,10 @@ guid: dc9a571ae286cc444ba46e851dd69e57
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - nodePrefab: {fileID: 8140518496034193294, guid: cc359b16d405dae408c5a6fb5fae847a, type: 3}
+  - EdgePrefab: {fileID: 7414521966326491276, guid: 0fb57c9021752b44c9584cf451ad4f22, type: 3}
+  - menu: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
