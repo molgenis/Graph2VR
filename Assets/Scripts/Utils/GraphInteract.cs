@@ -9,7 +9,6 @@ public class GraphInteract : MonoBehaviour
     public SteamVR_Action_Boolean pinchAction = SteamVR_Input.GetAction<SteamVR_Action_Boolean>("GrabPinch");
     public SteamVR_Input_Sources inputSource;
 
-    public SpawnGraph graph;
     // Start is called before the first frame update
 
     public Canvas menu;
