@@ -18,7 +18,8 @@ public class SpawnGraph : MonoBehaviour
     public List<Triple> ts = new List<Triple>();
     public List<GameObject> nodes = new List<GameObject>();
     public Canvas menu;
-    private string sparqlQueryString = "select distinct <http://dbpedia.org/resource/Biobank> as ?s ?p ?o where { <http://dbpedia.org/resource/Biobank> ?p ?o } LIMIT 100";
+    private string sparqlQueryString = "select distinct ?s ?p ?o where { {<http://dbpedia.org/resource/Biobank> ?p ?o. BIND(<http://dbpedia.org/resource/Biobank> as ?s)} UNION {<http://dbpedia.org/resource/Biorepository> ?p ?o. BIND(<http://dbpedia.org/resource/Biorepository> as ?s)}} LIMIT 100";
+        //"select distinct <http://dbpedia.org/resource/Biobank> as ?s ?p ?o where { <http://dbpedia.org/resource/Biobank> ?p ?o } LIMIT 100";
     public class edge
     {
         public LineRenderer line;
@@ -145,7 +146,7 @@ public class SpawnGraph : MonoBehaviour
         }
     }
 
-    //Each node should have a URI and we might also want to add an information wether it already has been visited (like a previously visited Haperlink)
+    //Each node should have a URI and we might also want to add an information wether it already has been visited (like a previously visited Hyperlink)
    /* void addNodes(SparqlResultSet query)
     {
         int i = 0;
