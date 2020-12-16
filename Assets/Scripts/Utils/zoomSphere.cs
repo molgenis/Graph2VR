@@ -35,7 +35,7 @@ public class zoomSphere : MonoBehaviour
     void Update()
     {
         bool zoomAction = gripAction.GetState(SteamVR_Input_Sources.LeftHand) == true && gripAction.GetState(SteamVR_Input_Sources.RightHand) == true;
-        GetComponent<Renderer>().enabled = zoomAction;
+        GetComponent<Renderer>().enabled = false; // disable for now
 
         gameObject.transform.localPosition = (rightPos + leftPos) * 0.5f;
         float currentZoom = (rightPos - leftPos).magnitude;

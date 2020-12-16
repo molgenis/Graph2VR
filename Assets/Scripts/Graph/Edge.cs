@@ -7,17 +7,29 @@ public class Edge : MonoBehaviour
     public string uri;
     public Node from;
     public Node to;
-    private LineRenderer renderer;
+    private LineRenderer lineRenderer;
     private void Start()
     {
-        renderer = GetComponent<LineRenderer>();
+        transform.localPosition = (from.transform.localPosition + to.transform.localPosition) * 0.5f;
+
+        lineRenderer = GetComponent<LineRenderer>();
+        lineRenderer.useWorldSpace = false;
+
+        Vector3 fromPosition = from.transform.localPosition - transform.localPosition;
+        Vector3 toPosition = to.transform.localPosition - transform.localPosition;
+        lineRenderer.SetPosition(0, fromPosition);
+        lineRenderer.SetPosition(1, toPosition);
+
+        TMPro.TextMeshPro text = GetComponentInChildren<TMPro.TextMeshPro>(true);
+        text.text = uri;
+        text.transform.localRotation = Quaternion.FromToRotation(Vector3.right, fromPosition.normalized);
+        text.transform.localPosition = text.transform.localRotation * (Vector3.up * 0.08f);
+
     }
 
     void Update()
     {
-        // Update line position
-        renderer.SetPosition(0, from.transform.position);
-        renderer.SetPosition(1, to.transform.position);
+
     }
 
 }
