@@ -44,25 +44,32 @@ public class Graph : MonoBehaviour
             result.TryGetValue("o", out INode o);
 
             Triple triple = new Triple();
-            if (s != null) triple.Subject = s.ToString();
-            if (p != null) triple.Predicate = p.ToString();
-            if (o != null) triple.Object = o.ToString();
             triples.Add(triple);
-        }
-
-        // Create all Subject / Object nodes
-        // NOTE: this can be optimised substantially if large sets take long to load
-        foreach (Triple triple in triples) {
             // Drop alternate languages
-            // TODO: write a more robust implementation
-            if (translatablePredicates.Contains(triple.Predicate)) {
-                if(!triple.Object.EndsWith("@"+ Main.instance.languageCode)) {
-                    continue;
-                } else {
-                    triple.Object = triple.Object.Substring(0, triple.Object.Length - 3); // remove the language code
+            if (o != null)
+            {
+                if (o is ILiteralNode)
+                {
+                    ILiteralNode oLiteral = o as ILiteralNode;
+                    if (oLiteral.Language.Length == 0 || oLiteral.Language.Equals(Main.instance.languageCode))
+                    {
+                        triple.Object = oLiteral.Value;
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+                else
+                {
+                    triple.Object = o.ToString();
                 }
             }
 
+            if (s != null) triple.Subject = s.ToString();
+            if (p != null) triple.Predicate = p.ToString();
+            
+            // Create all Subject / Object nodes
             // This is probably a label?
             string label = "";
             if (triple.Predicate.EndsWith("#label")) {
