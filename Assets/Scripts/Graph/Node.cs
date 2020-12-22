@@ -35,9 +35,8 @@ public class Node : MonoBehaviour
 
     void Update()
     {
-        // Todo: implement better way to keep text aligned to view than this hack.
-        TMPro.TextMeshPro test = GetComponentInChildren<TMPro.TextMeshPro>(true);
-        test.transform.rotation = Quaternion.identity;
+        transform.rotation = Quaternion.LookRotation(Camera.main.transform.position - transform.position, Vector3.up);
     }
 
 }
+
