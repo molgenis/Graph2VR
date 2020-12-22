@@ -98,12 +98,9 @@ public class Graph : MonoBehaviour
             }
 
             // Find or Create a edge
-            Edge predicateEdge = edgeList.Find(edge => edge.from == subjectNode && edge.to == objectNode);
-            if (predicateEdge == null) {
-                // Dont create a label node
-                predicateEdge = CreateEdge(subjectNode, triple.Predicate, objectNode);
-                edgeList.Add(predicateEdge);
-            }
+            Edge predicateEdge = null;
+            predicateEdge = CreateEdge(subjectNode, triple.Predicate, objectNode);
+            edgeList.Add(predicateEdge);
 
             // Add known connections to node's and edge's
             if (subjectNode != null) {
