@@ -21,8 +21,6 @@ public class Edge : MonoBehaviour
 
         Vector3 fromPosition = from.transform.localPosition - transform.localPosition;
         Vector3 toPosition = to.transform.localPosition - transform.localPosition;
-        lineRenderer.SetPosition(0, fromPosition);
-        lineRenderer.SetPosition(1, toPosition);
 
         textFront = transform.Find("FrontText").GetComponent<TMPro.TextMeshPro>();
         textBack = transform.Find("BackText").GetComponent<TMPro.TextMeshPro>();
@@ -56,6 +54,8 @@ public class Edge : MonoBehaviour
     {
         Vector3 fromPosition = from.transform.position - transform.position;
         Vector3 toPosition = to.transform.position - transform.position;
+        lineRenderer.SetPosition(0, transform.worldToLocalMatrix * fromPosition);
+        lineRenderer.SetPosition(1, transform.worldToLocalMatrix * toPosition);
         Vector2 rot = CalculateAngles(fromPosition, toPosition, true);
         textFront.transform.rotation = Quaternion.Euler(0, rot.x, rot.y); // note this is world rotation
         textFront.transform.localPosition = textFront.transform.localRotation * (Vector3.up * 0.05f); // note this is local position

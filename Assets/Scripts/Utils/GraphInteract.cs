@@ -6,45 +6,92 @@ using Valve.VR;
 
 public class GraphInteract : MonoBehaviour
 {
-    public SteamVR_Action_Boolean pinchAction = SteamVR_Input.GetAction<SteamVR_Action_Boolean>("GrabPinch");
+    private SteamVR_Action_Boolean grabAction = SteamVR_Input.GetAction<SteamVR_Action_Boolean>("GrabGrip");
     public SteamVR_Input_Sources inputSource;
 
-    // Start is called before the first frame update
+    private GameObject CurrentHoveredObject = null;
+    private GameObject GrabbedObject = null;
 
-    public Canvas menu;
-    private Vector3 direction = new Vector3(0, 0, 1);
+    // Start is called before the first frame update
     void Start()
     {
-        pinchAction[inputSource].onChange += SteamVR_Behaviour_Pinch_OnChange;
+        grabAction[inputSource].onChange += SteamVR_Behaviour_Grab_OnChange;
     }
 
     // Update is called once per frame
     void Update()
     {
+        Collider[] overlapping = Physics.OverlapSphere(transform.position, 0.03f);
+        GameObject closestObject = null;
+        foreach(Collider col in overlapping)
+        {
+            GameObject colliderAsGrab = null;
+            if (col.gameObject.GetComponent<IGrabInterface>() != null)
+            {
+                colliderAsGrab = col.gameObject;
+            }
+            if (colliderAsGrab != null)
+            {
+                if (closestObject != null)
+                {
+                    if (Vector3.SqrMagnitude(transform.position - col.gameObject.transform.position) < Vector3.SqrMagnitude(transform.position - closestObject.transform.position))
+                    {
+                        closestObject = colliderAsGrab;
+                    }
+                }
+                else
+                {
+                    closestObject = colliderAsGrab;
+                }
+            }
+        }
 
+        HandleHoveredObject(closestObject);
     }
 
-    private void SteamVR_Behaviour_Pinch_OnChange(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState)
+    void HandleHoveredObject(GameObject newHoveredObject)
     {
-      /*  if(newState)
+        IGrabInterface newGrabAble = null;
+        if(newHoveredObject)
         {
-            if (lastHit)
+            newGrabAble = newHoveredObject.GetComponent<IGrabInterface>();
+        }
+        if (newGrabAble == null)
+        {
+            if(CurrentHoveredObject != null)
             {
-                menu.enabled = true;
-                menu.transform.position = lastHit.transform.position;
-                menu.transform.rotation = Camera.main.transform.rotation;
-                menu.transform.position += menu.transform.rotation * new Vector3(0.15f, 0, 0);
-
-                TMPro.TextMeshProUGUI text = GameObject.Find("UI_Title").GetComponent<TMPro.TextMeshProUGUI>();
-                if(text)
+                CurrentHoveredObject.GetComponent<IGrabInterface>().ControllerExit();
+                CurrentHoveredObject = null;
+            }
+        }
+        else
+        {
+            if(newHoveredObject != CurrentHoveredObject)
+            {
+                if (CurrentHoveredObject)
                 {
-                    text.text = lastHit.GetComponentInChildren<TMPro.TextMeshPro>().text;
+                    CurrentHoveredObject.GetComponent<IGrabInterface>().ControllerExit();
                 }
+                newGrabAble.ControllerEnter();
+                CurrentHoveredObject = newHoveredObject;
+            }
+        }
+    }
+
+    private void SteamVR_Behaviour_Grab_OnChange(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState)
+    {
+        if(CurrentHoveredObject != null)
+        {
+            if(newState)
+            {
+                CurrentHoveredObject.GetComponent<IGrabInterface>().ControllerGrabBegin(this.gameObject);
+                GrabbedObject = CurrentHoveredObject;
             }
             else
             {
-                menu.enabled = false;
+                CurrentHoveredObject.GetComponent<IGrabInterface>().ControllerGrabEnd();
+                GrabbedObject = null;
             }
-        }*/
+        }
     }
 }
