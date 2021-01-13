@@ -35,17 +35,17 @@ public class NodeInteraction : MonoBehaviour, IPointerEnterHandler, IPointerExit
         }
     }
 
-    void IGrabInterface.ControllerEnter()
+    void SetNewColorState()
     {
-        ControllerHovered = true;
-        mesh.material.color = new Color(0.5f, 0.5f, 1);
-    }
-
-    void IGrabInterface.ControllerExit()
-    {
-        ControllerHovered = false;
-        ControllerGrabbed = false;
-        if (PointerHovered)
+        if (ControllerGrabbed)
+        {
+            mesh.material.color = new Color(0.5f, 1.0f, 0.5f);
+        }
+        else if (ControllerHovered)
+        {
+            mesh.material.color = new Color(0.5f, 0.5f, 1);
+        }
+        else if(PointerHovered)
         {
             mesh.material.color = new Color(1, 1, 1);
         }
@@ -55,24 +55,29 @@ public class NodeInteraction : MonoBehaviour, IPointerEnterHandler, IPointerExit
         }
     }
 
+    void IGrabInterface.ControllerEnter()
+    {
+        ControllerHovered = true;
+        SetNewColorState();
+    }
+
+    void IGrabInterface.ControllerExit()
+    {
+        ControllerHovered = false;
+        SetNewColorState();
+    }
+
     void IGrabInterface.ControllerGrabBegin(GameObject newParent)
     {
         ControllerGrabbed = true;
-        mesh.material.color = new Color(0.5f, 1.0f, 0.5f);
+        SetNewColorState();
         this.transform.SetParent(newParent.transform, true);
     }
 
     void IGrabInterface.ControllerGrabEnd()
     {
         ControllerGrabbed = false;
-        if (ControllerHovered)
-        {
-            mesh.material.color = new Color(0.5f, 0.5f, 1);
-        }
-        else if (PointerHovered)
-        {
-            mesh.material.color = new Color(1, 1, 1);
-        }
+        SetNewColorState();
         this.transform.SetParent(originalParent, true);
         this.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
     }
@@ -80,18 +85,12 @@ public class NodeInteraction : MonoBehaviour, IPointerEnterHandler, IPointerExit
     void IPointerEnterHandler.OnPointerEnter(PointerEventData eventData)
     {
         PointerHovered = true;
-        if (!ControllerHovered && !ControllerGrabbed)
-        {
-            mesh.material.color = new Color(1, 1, 1);
-        }
+        SetNewColorState();
     }
 
     void IPointerExitHandler.OnPointerExit(PointerEventData eventData)
     {
         PointerHovered = false;
-        if (!ControllerHovered && !ControllerGrabbed)
-        {
-            mesh.material.color = new Color(0, 0.259f, 0.6f);
-        }
+        SetNewColorState();
     }
 }

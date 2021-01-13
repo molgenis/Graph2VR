@@ -80,16 +80,19 @@ public class GraphInteract : MonoBehaviour
 
     private void SteamVR_Behaviour_Grab_OnChange(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState)
     {
-        if(CurrentHoveredObject != null)
+        if(newState)
         {
-            if(newState)
+            if (CurrentHoveredObject)
             {
                 CurrentHoveredObject.GetComponent<IGrabInterface>().ControllerGrabBegin(this.gameObject);
                 GrabbedObject = CurrentHoveredObject;
             }
-            else
+        }
+        else
+        {
+            if (GrabbedObject)
             {
-                CurrentHoveredObject.GetComponent<IGrabInterface>().ControllerGrabEnd();
+                GrabbedObject.GetComponent<IGrabInterface>().ControllerGrabEnd();
                 GrabbedObject = null;
             }
         }
