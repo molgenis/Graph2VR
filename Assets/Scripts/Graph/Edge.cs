@@ -24,11 +24,13 @@ public class Edge : MonoBehaviour
         lineRenderer.SetPosition(0, fromPosition);
         lineRenderer.SetPosition(1, toPosition);
 
-        TMPro.TextMeshPro textFront = transform.Find("FrontText").GetComponent<TMPro.TextMeshPro>();
-        TMPro.TextMeshPro textBack = transform.Find("BackText").GetComponent<TMPro.TextMeshPro>();
+        textFront = transform.Find("FrontText").GetComponent<TMPro.TextMeshPro>();
+        textBack = transform.Find("BackText").GetComponent<TMPro.TextMeshPro>();
         textFront.text = textBack.text = uri;
 
         // Calculate Text rotations
+        fromPosition = from.transform.localPosition - transform.localPosition;
+        toPosition = to.transform.localPosition - transform.localPosition;
         Vector2 rot = CalculateAngles(fromPosition, toPosition, true);
         textFront.transform.localRotation = Quaternion.Euler(0, rot.x, rot.y);
         textFront.transform.localPosition = textFront.transform.localRotation * (Vector3.up * 0.05f);
@@ -48,5 +50,17 @@ public class Edge : MonoBehaviour
         float yRotation = angle + Mathf.Atan2(fromPosition.x, fromPosition.z) * (180 / Mathf.PI);
         float zRotation = Mathf.Asin(height / Vector3.Distance(fromPosition, toPosition)) * (180 / Mathf.PI);
         return new Vector2(yRotation, zRotation);
+    }
+
+    private void Update()
+    {
+        Vector3 fromPosition = from.transform.position - transform.position;
+        Vector3 toPosition = to.transform.position - transform.position;
+        Vector2 rot = CalculateAngles(fromPosition, toPosition, true);
+        textFront.transform.rotation = Quaternion.Euler(0, rot.x, rot.y); // note this is world rotation
+        textFront.transform.localPosition = textFront.transform.localRotation * (Vector3.up * 0.05f); // note this is local position
+        rot = CalculateAngles(fromPosition, toPosition, false);
+        textBack.transform.rotation = Quaternion.Euler(0, rot.x, rot.y);
+        textBack.transform.localPosition = textBack.transform.localRotation * (Vector3.up * 0.05f);
     }
 }
