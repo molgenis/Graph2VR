@@ -74,6 +74,7 @@ public class NodeInteraction : MonoBehaviour, IPointerEnterHandler, IPointerExit
             mesh.material.color = new Color(1, 1, 1);
         }
         this.transform.SetParent(originalParent, true);
+        this.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
     }
 
     void IPointerEnterHandler.OnPointerEnter(PointerEventData eventData)
