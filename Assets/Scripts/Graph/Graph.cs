@@ -133,7 +133,7 @@ public class Graph : MonoBehaviour
         instance = this;
     }
 
-    private Edge CreateEdge(Node from, string uri,  Node to)
+    public Edge CreateEdge(Node from, string uri,  Node to)
     {
         GameObject clone = Instantiate<GameObject>(edgePrefab);
         clone.transform.SetParent(transform);
@@ -158,6 +158,20 @@ public class Graph : MonoBehaviour
         Node node = clone.AddComponent<Node>();
         node.SetValue(value);
         node.type = type;
+        return node;
+    }
+
+    public Node CreateNode(string value, Vector3 position)
+    {
+        GameObject clone = Instantiate<GameObject>(nodePrefab);
+        clone.transform.SetParent(transform);
+        clone.transform.position = position;
+        clone.transform.localRotation = Quaternion.identity;
+        clone.transform.localScale = Vector3.one * 0.3f;
+        clone.GetComponent<NodeInteraction>().menu = menu;
+        Node node = clone.AddComponent<Node>();
+        node.SetValue(value);
+        node.type = Node.Type.Subject;
         return node;
     }
 }

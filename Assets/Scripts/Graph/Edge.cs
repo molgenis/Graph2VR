@@ -52,6 +52,7 @@ public class Edge : MonoBehaviour
 
     private void Update()
     {
+        transform.position = (from.transform.position + to.transform.position) * 0.5f;
         Vector3 fromPosition = from.transform.position - transform.position;
         Vector3 toPosition = to.transform.position - transform.position;
         lineRenderer.SetPosition(0, transform.worldToLocalMatrix * fromPosition);
