@@ -198,7 +198,6 @@ namespace VRKeys {
 		/// Enable the keyboard.
 		/// </summary>
 		public void Enable () {
-            Debug.Log("Enable called");
 			if (!initialized) {
 				// Make sure we're initialized first.
 				StartCoroutine (EnableWhenInitialized ());
