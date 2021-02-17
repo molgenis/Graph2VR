@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 public class NodeInteraction : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler, IGrabInterface
 {
-    public Canvas menu;
+    private Canvas menu;
 
     private MeshRenderer mesh;
 
@@ -23,16 +23,36 @@ public class NodeInteraction : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        menu.enabled = true;
+        if(menu == null)
+        {
+            menu = Instantiate<Canvas>(Resources.Load<Canvas>("UI/ContextMenu"));
+            menu.renderMode = RenderMode.WorldSpace;
+            menu.worldCamera = GameObject.Find("Controller (right)").GetComponent<Camera>();
+        }
+        else
+        {
+            menu.enabled = !menu.enabled;
+        }
+
+        ContextMenuHandler selectorHandler = menu.GetComponent<ContextMenuHandler>();
+
         menu.transform.position = transform.position;
         menu.transform.rotation = Camera.main.transform.rotation;
-        menu.transform.position += menu.transform.rotation * new Vector3(0.25f, 0, 0);
+        menu.transform.position += menu.transform.rotation * new Vector3(1.0f, 0, 0) * Mathf.Max(transform.lossyScale.x, gameObject.transform.lossyScale.y);
 
-        TMPro.TextMeshProUGUI text = GameObject.Find("UI_Title").GetComponent<TMPro.TextMeshProUGUI>();
+        TMPro.TextMeshPro text = gameObject.GetComponentInChildren<TMPro.TextMeshPro>();
         if (text)
         {
-            text.text = GetComponentInChildren<TMPro.TextMeshPro>().text;
+            menu.GetComponentInChildren<TMPro.TextMeshProUGUI>(true).text = text.text;
         }
+
+        selectorHandler.itemSelected += delegate(string label)
+        {
+            if (text)
+            {
+                text.text = label;
+            }
+        };
     }
 
     void SetNewColorState()

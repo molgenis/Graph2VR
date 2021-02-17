@@ -114,11 +114,6 @@ public class GraphInteract : MonoBehaviour
                 CurrentHoveredObject.GetComponent<IGrabInterface>().ControllerGrabBegin(this.gameObject);
                 GrabbedObject = CurrentHoveredObject;
             }
-            else
-            {
-                IsHoldingPinchButton = true;
-                HoldBeginTime = Time.time;
-            }
         }
         else
         {
@@ -127,7 +122,6 @@ public class GraphInteract : MonoBehaviour
                 GrabbedObject.GetComponent<IGrabInterface>().ControllerGrabEnd();
                 GrabbedObject = null;
             }
-            IsHoldingPinchButton = false;
         }
     }
 

@@ -31,6 +31,30 @@ public class Graph : MonoBehaviour
         public string Object = null;
     }
 
+    public List<string> GetSubjects()
+    {
+        SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new System.Uri(SPARQLEndpoint), BaseURI);
+        lastResults = endpoint.QueryWithResultSet(
+            "select distinct ?s where { ?s ?p ?o } LIMIT 10"
+            );
+
+        List<string> results = new List<string>();
+        // Fill triples list 
+        foreach (SparqlResult result in lastResults)
+        {
+            result.TryGetValue("s", out INode s);
+            result.TryGetValue("p", out INode p);
+            result.TryGetValue("o", out INode o);
+
+            if (s != null)
+            {
+                results.Add(s.ToString());
+            }
+        }
+
+        return results;
+    }
+
     public void SendQuery(string query)
     {
         Clear();
@@ -154,7 +178,7 @@ public class Graph : MonoBehaviour
         clone.transform.localPosition = Vector3.zero;
         clone.transform.localRotation = Quaternion.identity;
         clone.transform.localScale = Vector3.one * 0.3f;
-        clone.GetComponent<NodeInteraction>().menu = menu;
+        //clone.GetComponent<NodeInteraction>().menu = menu;
         Node node = clone.AddComponent<Node>();
         node.SetValue(value);
         node.type = type;
@@ -168,7 +192,7 @@ public class Graph : MonoBehaviour
         clone.transform.position = position;
         clone.transform.localRotation = Quaternion.identity;
         clone.transform.localScale = Vector3.one * 0.3f;
-        clone.GetComponent<NodeInteraction>().menu = menu;
+        //clone.GetComponent<NodeInteraction>().menu = menu;
         Node node = clone.AddComponent<Node>();
         node.SetValue(value);
         node.type = Node.Type.Subject;
