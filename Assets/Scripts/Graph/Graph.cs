@@ -55,6 +55,34 @@ public class Graph : MonoBehaviour
         return results;
     }
 
+    //To expand the graph, we want to know, which outgoing predicates we have for the given Node and how many Nodes are connected for each of the predicates.
+    public Dictionary<string, int> GetOutgoingPredicats(string URI)
+    {
+        SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new System.Uri(SPARQLEndpoint), BaseURI);
+        lastResults = endpoint.QueryWithResultSet(
+            "select distinct ?p (STR(COUNT(?o)) AS ?count) where { <"+ URI + "> ?p ?o } LIMIT 100"
+            );
+
+        Dictionary<string, int> results = new Dictionary<string, int>();
+        // Fill triples list 
+        foreach (SparqlResult result in lastResults)
+        {
+            Debug.Log(result);
+            result.TryGetValue("p", out INode p);
+            result.TryGetValue("count", out INode count);
+
+            if (p != null)
+            {
+                Debug.Log("Here is what I logged:" + int.Parse(count.ToString()));
+                results.Add(p.ToString(), int.Parse(count.ToString()));
+            }
+        }
+
+        return results;
+    }
+
+
+
     public void SendQuery(string query)
     {
         Clear();
