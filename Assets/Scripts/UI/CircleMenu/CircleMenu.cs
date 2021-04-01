@@ -45,7 +45,7 @@ public class CircleMenu : MonoBehaviour
 
     private void Update()
     {
-        // Where are te controlers pointing?
+        // Where are the controlers pointing?
         Plane plane = new Plane(lookAt.normal, transform.position);
         Ray left = new Ray(leftControler.position, leftControler.forward);
         Ray right = new Ray(rightControler.position, rightControler.forward);

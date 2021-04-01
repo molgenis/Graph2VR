@@ -15,7 +15,7 @@ namespace Dweiss {
 	public class Settings : ASettings {
 
         [Header("--Main settings--")]
-        public string SpartlEndpoint = "https://dbpedia.org/sparql";
+        public string SparqlEndpoint = "https://dbpedia.org/sparql";
 
         public string StartingURI = "Biobank";
 

@@ -33,7 +33,7 @@ public class Graph : MonoBehaviour
 
     public List<string> GetSubjects()
     {
-        SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new System.Uri(Settings.Instance.SpartlEndpoint), BaseURI);
+        SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new System.Uri(Settings.Instance.SparqlEndpoint), BaseURI);
         lastResults = endpoint.QueryWithResultSet(
             "select distinct ?s where { ?s ?p ?o } LIMIT 10"
             );
@@ -58,7 +58,7 @@ public class Graph : MonoBehaviour
     //To expand the graph, we want to know, which outgoing predicates we have for the given Node and how many Nodes are connected for each of the predicates.
     public Dictionary<string, int> GetOutgoingPredicats(string URI)
     {
-        SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new System.Uri(Settings.Instance.SpartlEndpoint), BaseURI);
+        SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new System.Uri(Settings.Instance.SparqlEndpoint), BaseURI);
         lastResults = endpoint.QueryWithResultSet(
             "select distinct ?p (STR(COUNT(?o)) AS ?count) where { <"+ URI + "> ?p ?o } LIMIT 100"
             );
@@ -86,7 +86,7 @@ public class Graph : MonoBehaviour
     public void SendQuery(string query)
     {
         Clear();
-        SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new System.Uri(Settings.Instance.SpartlEndpoint), BaseURI);
+        SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new System.Uri(Settings.Instance.SparqlEndpoint), BaseURI);
         lastResults = endpoint.QueryWithResultSet(query);
 
         // Fill triples list 
