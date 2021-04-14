@@ -1,4 +1,0 @@
-{
-    "SparqlEndpoint": "https://dbpedia.org/sparql",
-    "StartingURI": "Biobank"
-}
