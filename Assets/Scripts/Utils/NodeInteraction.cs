@@ -23,6 +23,8 @@ public class NodeInteraction : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        GameObject.FindGameObjectWithTag("LeftControler").BroadcastMessage("Populate", SendMessageOptions.DontRequireReceiver);
+        /*
         if(menu == null)
         {
             menu = Instantiate<Canvas>(Resources.Load<Canvas>("UI/ContextMenu"));
@@ -53,6 +55,7 @@ public class NodeInteraction : MonoBehaviour, IPointerEnterHandler, IPointerExit
                 text.text = label;
             }
         };
+        */
     }
 
     void SetNewColorState()

@@ -9,18 +9,19 @@ public class CircleMenu : MonoBehaviour
 {
     public Transform leftControler = null;
     public Transform rightControler = null;
-    public GameObject cursorPrefab = null;
+    //public GameObject cursorPrefab = null;
     public Material baseMaterial;
     public float size = 0.1f;
     public float scaleFactor = 0.5f;
     public enum Type { Circle, HalfCircleLeft, HalfCircleRight }
     public Type type = Type.Circle;
+    private bool isBuild = false;
 
     public SteamVR_Action_Boolean gripAction = null;
 
     private LookAtTransform lookAt = null;
-    private GameObject cursorLeft = null;
-    private GameObject cursorRight = null;
+    //private GameObject cursorLeft = null;
+    //private GameObject cursorRight = null;
 
     public class CircleButton
     {
@@ -28,6 +29,7 @@ public class CircleMenu : MonoBehaviour
         public string label;
         public Color color;
         public Action callback;
+        public int number;
 
         // Generated values
         public GameObject instance;
@@ -45,34 +47,34 @@ public class CircleMenu : MonoBehaviour
 
     private void Update()
     {
+        if (!isBuild) return;
+
         // Where are the controlers pointing?
         Plane plane = new Plane(lookAt.normal, transform.position);
         Ray left = new Ray(leftControler.position, leftControler.forward);
         Ray right = new Ray(rightControler.position, rightControler.forward);
         Vector3 leftPoint = Vector3.zero;
         Vector3 rightPoint = Vector3.zero;
+        bool leftActive = false;
+        bool rightActive = false;
 
         // Find menu cursor points
         float leftDistance = 0;
         if (plane.Raycast(left, out leftDistance)) {
-            leftPoint = cursorLeft.transform.position = left.GetPoint(leftDistance - 0.025f);
-            if(cursorLeft.transform.localPosition.magnitude < 20) {
-                cursorLeft.SetActive(true);
-            } else {
-                cursorLeft.SetActive(false);
+            leftPoint = left.GetPoint(leftDistance);
+            if(transform.InverseTransformPoint(leftPoint).magnitude * size * scaleFactor < 10 ) {
+                leftActive = true;
             }
         }
 
         float rightDistance = 0;
         if(plane.Raycast(right, out rightDistance)) {
-            rightPoint = cursorRight.transform.position = right.GetPoint(rightDistance - 0.025f);
-            if (cursorRight.transform.localPosition.magnitude < 20) {
-                cursorRight.SetActive(true);
-            } else {
-                cursorRight.SetActive(false);
+            rightPoint = right.GetPoint(rightDistance);
+            if (transform.InverseTransformPoint(rightPoint).magnitude * size * scaleFactor < 10) {
+                rightActive = true;
             }
         }
-
+        
         // Scale buttons with distance
         CircleButton selectedLeftButton = null;
         CircleButton selectedRightButton = null;
@@ -81,10 +83,10 @@ public class CircleMenu : MonoBehaviour
         foreach (CircleButton button in buttons) {
             button.instance.transform.localScale = Vector3.one;
         }
-        if (cursorLeft.activeSelf) {
+        if (leftActive) {
             foreach (CircleButton button in buttons) {
                 Vector3 center = button.instance.transform.localPosition.normalized * 5 * button.instance.transform.localScale.magnitude;
-                float distanceFactor = Vector3.Distance(center, cursorLeft.transform.localPosition) / 10;
+                float distanceFactor = Vector3.Distance(center, transform.InverseTransformPoint(leftPoint)) / 10;
                 distanceFactor = 1 - Mathf.Clamp01(distanceFactor);
                 button.instance.transform.localScale = Vector3.Max(button.instance.transform.localScale, Vector3.one * (1 + (distanceFactor * scaleFactor)));
 
@@ -97,10 +99,10 @@ public class CircleMenu : MonoBehaviour
                 button.instance.gameObject.GetComponent<Renderer>().material.color = button.color;
             }
         }
-        if (cursorRight.activeSelf) {
+        if (rightActive) {
             foreach (CircleButton button in buttons) {
                 Vector3 center = button.instance.transform.localPosition.normalized * 5 * button.instance.transform.localScale.magnitude;
-                float distanceFactor = Vector3.Distance(center, cursorRight.transform.localPosition) / 10;
+                float distanceFactor = Vector3.Distance(center, transform.InverseTransformPoint(rightPoint)) / 10;
                 distanceFactor = 1 - Mathf.Clamp01(distanceFactor);
                 button.instance.transform.localScale = Vector3.Max(button.instance.transform.localScale, Vector3.one * (1 + (distanceFactor * scaleFactor)));
 
@@ -132,10 +134,18 @@ public class CircleMenu : MonoBehaviour
     }
 
     // ----
-
-    public void AddButton(string label, Color color, Action callback)
+    public void AddButton(string label, Color color, Action callback, int number = -1)
     {
-        buttons.Add(new CircleButton { label = label, color = color, callback = callback });
+        buttons.Add(new CircleButton { label = label, color = color, callback = callback, number = number });
+    }
+
+    public void Close()
+    {
+        foreach (Transform child in transform){
+            Destroy(child.gameObject);
+        }
+        buttons.Clear();
+        isBuild = false;
     }
 
     public void ReBuild(Type type)
@@ -151,16 +161,6 @@ public class CircleMenu : MonoBehaviour
         if (type == Type.Circle) {
             totalAngle = 360;
             amount = buttons.Count;
-        }
-
-        if (cursorPrefab != null) {
-            cursorLeft = Instantiate<GameObject>(cursorPrefab);
-            cursorRight = Instantiate<GameObject>(cursorPrefab);
-            cursorLeft.transform.parent = cursorRight.transform.parent = transform;
-            cursorLeft.transform.position = cursorRight.transform.position = Vector3.zero;
-            cursorLeft.transform.localScale = cursorRight.transform.localScale = Vector3.one * 2;
-            cursorLeft.SetActive(false);
-            cursorRight.SetActive(false);
         }
 
         transform.localScale = Vector3.one * size;
@@ -192,7 +192,8 @@ public class CircleMenu : MonoBehaviour
             clone.transform.localScale = Vector3.one;
             button.instance = clone;
 
-            GameObject textObject = new GameObject("Text: " + button.label);
+            // Text object
+            GameObject textObject = new GameObject(button.label);
             textObject.transform.parent = clone.transform;
             TextMeshPro text = textObject.AddComponent<TextMeshPro>();
             text.text = button.label;
@@ -212,42 +213,84 @@ public class CircleMenu : MonoBehaviour
             textTransform.localPosition = new Vector3(0, 2f, 0.1f);
             textTransform.localRotation = Quaternion.Euler(0, flip ? 0 : 180, flip ? -90 : 90);
 
+            // Number object
+            if(button.number != -1) {
+                GameObject numberObject = new GameObject(button.number.ToString());
+                numberObject.transform.parent = clone.transform;
+                TextMeshPro num = numberObject.AddComponent<TextMeshPro>();
+                num.text = button.number.ToString();
+                num.fontSizeMax = 10;
+                num.fontSizeMin = 4;
+                num.enableAutoSizing = true;
+                num.alignment = TextAlignmentOptions.Center;
+
+                RectTransform numberTransform = (RectTransform)numberObject.transform;
+                numberTransform.pivot = new Vector2(flip ? 1 : 0, 0.5f);
+                numberTransform.sizeDelta = new Vector2(2.6f, 3f);
+                numberTransform.localScale = new Vector3(1, flip ? -1 : 1, 1);
+                numberTransform.localPosition = new Vector3(0, 10.3f, 0.1f);
+                numberTransform.localRotation = Quaternion.Euler(0, flip ? 0 : 180, flip ? -90 : 90);
+            }
+
             MeshRenderer render = clone.AddComponent<MeshRenderer>();
             render.material = baseMaterial;
             render.material.color = button.color;
 
             MeshFilter mesh = clone.AddComponent<MeshFilter>();
             float slice = (1f / amount) * (totalAngle * Mathf.Deg2Rad) * 0.5f;
-            mesh.mesh = GenerateMesh(slice);
+            mesh.mesh = GenerateMesh(slice, button.number != -1);
             index++;
 
             MeshCollider collider = clone.AddComponent<MeshCollider>();
             collider.sharedMesh = mesh.mesh;
             collider.convex = true;
         }
+        isBuild = true;
     }
 
-    private Mesh GenerateMesh(float angle)
+    private Mesh GenerateMesh(float angle, bool extended)
     {
         Vector2 normalA = new Vector2(Mathf.Sin(angle), Mathf.Cos(angle));
         Vector2 normalB = new Vector2(Mathf.Sin(-angle), Mathf.Cos(-angle));
 
         Mesh mesh = new Mesh();
-        Vector3[] vertices = new Vector3[4]
-        {
-            normalB * 2,
-            normalB * 10,
-            normalA * 2,
-            normalA * 10,
-        };
 
-        int[] tris = new int[6]
-        {
-            0, 2, 1, 2, 3, 1
-        };
+        if (!extended) {
+            Vector3[] vertices = new Vector3[4]
+            {
+                normalB * 2,
+                normalB * 10,
+                normalA * 2,
+                normalA * 10,
+            };
+            int[] tris = new int[6]
+            {
+                0, 2, 1, 2, 3, 1,
+            };
+            mesh.vertices = vertices;
+            mesh.triangles = tris;
+        } else {
+            Vector3[] xvertices = new Vector3[8]
+            {
+                normalB * 2,
+                normalB * 10,
+                normalA * 2,
+                normalA * 10,
+                normalB * 10.3f,
+                normalB * 13.3f,
+                normalA * 10.3f,
+                normalA * 13.3f,
+            };
 
-        mesh.vertices = vertices;
-        mesh.triangles = tris;
+            int[] xtris = new int[12]
+            {
+                0, 2, 1, 2, 3, 1,
+                4, 6, 5, 6, 7, 5,
+            };
+            mesh.vertices = xvertices;
+            mesh.triangles = xtris;
+        }
+
         mesh.RecalculateBounds();
         mesh.RecalculateNormals();
         return mesh;
