@@ -12,7 +12,7 @@ public class Main : MonoBehaviour
     {
         Graph.instance.positionCalculator = new RandomPositions(Graph.instance);
 
-        //Graph.instance.SendQuery(initialSparqlQueryString);
+        Graph.instance.SendQuery(initialSparqlQueryString);
     }
     private void Awake()
     {

@@ -13,6 +13,9 @@ public class Node : MonoBehaviour
     public List<Node> connectedNodes = new List<Node>();
     public List<Edge> connectedEdges = new List<Edge>();
 
+    // Vairalbes for the Force-directed algorithm
+    public Vector3 displacement;
+
     public void SetValue(string value)
     {
         this.uri = value;
