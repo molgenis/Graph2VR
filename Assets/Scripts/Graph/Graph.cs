@@ -4,7 +4,10 @@ using UnityEngine;
 using VDS.RDF;
 using VDS.RDF.Query;
 using Dweiss;
-
+using VDS.RDF.Parsing;
+using VDS.RDF.Query.Builder;
+using VDS.RDF.Query.Patterns;
+using System;
 
 public class Graph : MonoBehaviour
 {
@@ -14,7 +17,7 @@ public class Graph : MonoBehaviour
     public GameObject nodePrefab;
     public Canvas menu;
 
-    public List<Triple> triples = new List<Triple>();
+    public HashSet<Triple> triples = new HashSet<Triple>();
     public List<Edge> edgeList = new List<Edge>();
     public List<Node> nodeList = new List<Node>();
 
@@ -84,53 +87,79 @@ public class Graph : MonoBehaviour
         return results;
     }
 
-
+    private string CleanInfo(string str)
+    {
+        // TODO: do we need: return str.TrimStart('<', '"').TrimEnd('>', '"');
+        return str.TrimStart('<').TrimEnd('>');
+    }
 
     public void SendQuery(string query)
     {
         Clear();
+        // load sparql query
+        SparqlQueryParser parser = new SparqlQueryParser();
+        SparqlQuery sparqlQuery = parser.ParseFromString(query);
+
+        // load pattern
+        GraphPattern pattern = sparqlQuery.RootGraphPattern;
+        List<ITriplePattern> triplePattern = pattern.TriplePatterns;
+
+        // Execute query
         SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new System.Uri(Settings.Instance.SparqlEndpoint), BaseURI);
         lastResults = endpoint.QueryWithResultSet(query);
 
-        // Fill triples list 
-        foreach (SparqlResult result in lastResults) {
-            result.TryGetValue("s", out INode s);
-            result.TryGetValue("p", out INode p);
-            result.TryGetValue("o", out INode o);
+        // join pattern with query
+        foreach (TriplePattern triple in triplePattern) {
+            string constantSubject = triple.Subject.VariableName;
+            string constantPredicate = triple.Predicate.VariableName;
+            string constantObject = triple.Object.VariableName;
+            
+            foreach (SparqlResult result in lastResults) {
+                Triple t = new Triple();
 
-            Triple triple = new Triple();
-            triples.Add(triple);
+                if (constantSubject == null) t.Subject = triple.Subject.ToString().TrimStart('<').TrimEnd('>');
+                else t.Subject = result.Value(constantSubject).ToString();
+
+                if (constantPredicate == null) t.Predicate = triple.Predicate.ToString().TrimStart('<').TrimEnd('>');
+                else t.Predicate = result.Value(constantPredicate).ToString();
+
+                if (constantObject == null) t.Object = triple.Object.ToString().TrimStart('<').TrimEnd('>');
+                else t.Object = result.Value(constantObject).ToString();
+
+                triples.Add(t);
+            }
+        }
+        /*
+        foreach (var t in triples) {
+            Debug.Log(t.Subject + " " + t.Predicate + " " + t.Object + " " );
+        }
+        */
+        foreach (Triple triple in triples) {
+
+            /*
             // Drop alternate languages
-            if (o != null)
-            {
-                if (o is ILiteralNode)
-                {
+            if (o != null) {
+                if (o is ILiteralNode) {
                     ILiteralNode oLiteral = o as ILiteralNode;
-                    if (oLiteral.Language.Length == 0 || oLiteral.Language.Equals(Main.instance.languageCode))
-                    {
+                    if (oLiteral.Language.Length == 0 || oLiteral.Language.Equals(Main.instance.languageCode)) {
                         triple.Object = oLiteral.Value;
-                    }
-                    else
-                    {
+                    } else {
                         continue;
                     }
-                }
-                else
-                {
+                } else {
                     triple.Object = o.ToString();
                 }
             }
-
             if (s != null) triple.Subject = s.ToString();
             if (p != null) triple.Predicate = p.ToString();
-            
+            */
+
             // Create all Subject / Object nodes
-            // This is probably a label?
             string label = "";
-            if (triple.Predicate.EndsWith("#label")) {
+            if (triple.Predicate == "http://www.w3.org/2000/01/rdf-schema#label") {
                 label = triple.Object;
             }
-
+            
             // Find or Create a subject node
             Node subjectNode = nodeList.Find(node => node.uri == triple.Subject && node.type == Node.Type.Subject);
             if (subjectNode == null) {
@@ -159,7 +188,7 @@ public class Graph : MonoBehaviour
 
             // Add known connections to node's and edge's
             if (subjectNode != null) {
-                if(predicateEdge != null) subjectNode.connectedEdges.Add(predicateEdge);
+                if (predicateEdge != null) subjectNode.connectedEdges.Add(predicateEdge);
                 if (objectNode != null) subjectNode.connectedNodes.Add(objectNode);
             }
             if (objectNode != null) {
@@ -181,6 +210,7 @@ public class Graph : MonoBehaviour
         }
         nodeList.Clear();
         edgeList.Clear();
+        triples.Clear();
     }
 
     private void Awake()
