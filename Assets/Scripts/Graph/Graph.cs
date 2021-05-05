@@ -35,7 +35,7 @@ public class Graph : MonoBehaviour
     }
 
     // variables for the Fruchterman-Reingold algorithm
-    public float Temperature = 1.0f;
+    public float Temperature = 0.05f;
 
     public List<string> GetSubjects()
     {
@@ -273,13 +273,13 @@ public class Graph : MonoBehaviour
     //Function for the Fruchterman-Reingold algorithm
     private float Fa(float x)
     {
-        return x*x/(C_CONSTANT*Mathf.Sqrt(AREA_CONSTANT/nodeList.Count));
+        return (x*x)/(C_CONSTANT*Mathf.Sqrt(AREA_CONSTANT/nodeList.Count));
     }
 
     //Function for the Fruchterman-Reingold algorithm
     private float Fr(float x)
     {
-        return (C_CONSTANT* C_CONSTANT* AREA_CONSTANT / nodeList.Count) / x;
+        return ((C_CONSTANT * Mathf.Sqrt(AREA_CONSTANT / nodeList.Count))* (C_CONSTANT * Mathf.Sqrt(AREA_CONSTANT / nodeList.Count))) / x;
     }
 
     // Do one iteration fo the Fruchterman-Reingold algorithm
@@ -295,8 +295,11 @@ public class Graph : MonoBehaviour
                 if(node != neightbor)
                 {
                     Vector3 delta = node.transform.localPosition - neightbor.transform.localPosition;
-                    float deltaMagnitude = delta.magnitude;
-                    node.displacement += (delta / deltaMagnitude) * Fr(deltaMagnitude);
+                    if (delta.magnitude < 1)
+                    {
+                        float FrForce = Fr(delta.magnitude);
+                        node.displacement += delta.normalized * FrForce;
+                    }
                 }
             }
         }
@@ -305,12 +308,10 @@ public class Graph : MonoBehaviour
         foreach(Edge edge in edgeList)
         {
             Vector3 delta = edge.to.transform.localPosition - edge.from.transform.localPosition;
-            float deltaMagnitude = delta.magnitude;
-            //if (deltaMagnitude > 1)
-            {
-                edge.to.displacement -= (delta / deltaMagnitude) * Fa(deltaMagnitude);
-                edge.from.displacement += (delta / deltaMagnitude) * Fa(deltaMagnitude);
-            }
+            float FaForce = Fa(delta.magnitude);
+            Vector3 normal = delta.normalized;
+            edge.to.displacement -= normal * FaForce;
+            edge.from.displacement += normal * FaForce;
         }
 
         // Reposition the nodes, taking ionto account the temperature
@@ -318,8 +319,11 @@ public class Graph : MonoBehaviour
         foreach (Node node in nodeList)
         {
             float DisplacementMagitude = node.displacement.magnitude;
-            TotalDisplacement = Mathf.Max(DisplacementMagitude, TotalDisplacement);
-            node.transform.localPosition += (node.displacement / DisplacementMagitude) * Mathf.Min(DisplacementMagitude, Temperature);
+            if (DisplacementMagitude > 0.3f)
+            {
+                TotalDisplacement = Mathf.Max(DisplacementMagitude, TotalDisplacement);
+                node.transform.localPosition += (node.displacement / DisplacementMagitude) * Mathf.Min(DisplacementMagitude, Temperature);
+            }
         }
 
         // reduce the temperature
