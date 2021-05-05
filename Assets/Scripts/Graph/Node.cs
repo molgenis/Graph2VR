@@ -28,6 +28,21 @@ public class Node : MonoBehaviour
         UpdateDisplay();
     }
 
+    public string GetURI(string value)
+    {
+        return this.uri;
+    }
+
+    public string GetLabel()
+    {
+        return this.label;
+    }
+
+    public System.Uri GetURI()
+    {
+        return VDS.RDF.UriFactory.Create(this.uri);
+    }
+
     private void UpdateDisplay()
     {
         string text = label;

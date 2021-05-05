@@ -12,6 +12,16 @@ public class Edge : MonoBehaviour
     private TMPro.TextMeshPro textFront;
     private TMPro.TextMeshPro textBack;
 
+    public string GetURI(string value)
+    {
+        return this.uri;
+    }
+
+    public System.Uri GetURI()
+    {
+        return VDS.RDF.UriFactory.Create(this.uri);
+    }
+
     private void Start()
     {
         transform.localPosition = (from.transform.localPosition + to.transform.localPosition) * 0.5f;
