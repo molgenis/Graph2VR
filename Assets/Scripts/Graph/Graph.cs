@@ -161,7 +161,7 @@ public class Graph : MonoBehaviour
             }
             
             // Find or Create a subject node
-            Node subjectNode = nodeList.Find(node => node.uri == triple.Subject && node.type == Node.Type.Subject);
+            Node subjectNode = nodeList.Find(node => node.uri == triple.Subject);
             if (subjectNode == null) {
                 subjectNode = CreateNode(triple.Subject, Node.Type.Subject);
                 if (label != "") {
@@ -172,9 +172,12 @@ public class Graph : MonoBehaviour
             }
 
             // Always create a Object node, i dont think they need to be made unique?
-            Node objectNode = null;
+            Node objectNode = nodeList.Find(node => node.uri == triple.Object);
             if (label == "") { // NOTE: Dont create a label node here
-                objectNode = CreateNode(triple.Object, Node.Type.Object);
+                if (objectNode == null)
+                {
+                    objectNode = CreateNode(triple.Object, Node.Type.Object);
+                }
                 nodeList.Add(objectNode);
             } else {
                 // We dont need to create a edge if this is a label node
