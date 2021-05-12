@@ -45,7 +45,8 @@ public class GraphInteract : MonoBehaviour
             if (HoldBeginTime + 2 < Time.time)
             {
                 IsHoldingPinchButton = false;
-                Graph.instance.CreateNode("No label", transform.position);
+                Node node = Graph.instance.CreateNode("No label", transform.position);
+                Graph.instance.nodeList.Add(node);
             }
         }
         Collider[] overlapping = Physics.OverlapSphere(transform.position, 0.03f);
@@ -155,7 +156,8 @@ public class GraphInteract : MonoBehaviour
                 Node EdgeEnd = CurrentHoveredObject.GetComponent<Node>();
                 if (EdgeBegin != null && EdgeEnd != null && EdgeBegin != EdgeEnd)
                 {
-                    Graph.instance.CreateEdge(EdgeBegin, "No label", EdgeEnd);
+                    Edge edge = Graph.instance.CreateEdge(EdgeBegin, "No label", EdgeEnd);
+                    Graph.instance.edgeList.Add(edge);
                 }
             }
             EdgeBegin = null;
