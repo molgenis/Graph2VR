@@ -157,7 +157,7 @@ public class Graph : MonoBehaviour
             // Create all Subject / Object nodes
             string label = "";
             if (triple.Predicate == "http://www.w3.org/2000/01/rdf-schema#label") {
-                label = triple.Object;
+                //label = triple.Object;
             }
             
             // Find or Create a subject node
