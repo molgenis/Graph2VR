@@ -177,17 +177,20 @@ public class Graph : MonoBehaviour
                 if (objectNode == null)
                 {
                     objectNode = CreateNode(triple.Object, Node.Type.Object);
+                    nodeList.Add(objectNode);
                 }
-                nodeList.Add(objectNode);
             } else {
                 // We dont need to create a edge if this is a label node
                 continue;
             }
 
             // Find or Create a edge
-            Edge predicateEdge = null;
-            predicateEdge = CreateEdge(subjectNode, triple.Predicate, objectNode);
-            edgeList.Add(predicateEdge);
+            Edge predicateEdge = edgeList.Find(edge => edge.from == subjectNode && edge.to == objectNode && edge.uri == triple.Predicate);
+            if (predicateEdge == null)
+            {
+                predicateEdge = CreateEdge(subjectNode, triple.Predicate, objectNode);
+                edgeList.Add(predicateEdge);
+            }
 
             // Add known connections to node's and edge's
             if (subjectNode != null) {
