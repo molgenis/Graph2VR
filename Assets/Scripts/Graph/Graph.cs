@@ -25,6 +25,7 @@ public class Graph : MonoBehaviour
     public BasePositionCalculator positionCalculator = null;
 
     private SparqlResultSet lastResults = null;
+    private SparqlRemoteEndpoint endpoint;
 
     [System.Serializable]
     public class Triple
@@ -103,14 +104,13 @@ public class Graph : MonoBehaviour
 
         // load pattern
         GraphPattern pattern = sparqlQuery.RootGraphPattern;
+        endpoint = new SparqlRemoteEndpoint(new System.Uri(Settings.Instance.SparqlEndpoint), BaseURI);
 
         // Execute query
         if (sparqlQuery.QueryType == SparqlQueryType.Construct) {
-            SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new System.Uri(Settings.Instance.SparqlEndpoint), BaseURI);
             IGraph iGraph = endpoint.QueryWithResultGraph(query);
             BuildByIGraph(iGraph);
         } else {
-            SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new System.Uri(Settings.Instance.SparqlEndpoint), BaseURI);
             lastResults = endpoint.QueryWithResultSet(query);
             BuildByResultSet(lastResults, pattern);
         }
@@ -128,6 +128,7 @@ public class Graph : MonoBehaviour
         }
     }
 
+    // TODO: Can we get iNode's to put in to the node
     private void BuildByResultSet(SparqlResultSet resultSet, GraphPattern pattern)
     {
         List<ITriplePattern> triplePattern = pattern.TriplePatterns;
@@ -290,7 +291,8 @@ public class Graph : MonoBehaviour
         clone.transform.localRotation = Quaternion.identity;
         clone.transform.localScale = Vector3.one * 0.3f;
         Node node = clone.AddComponent<Node>();
-        node.SetValue(value);
+        node.SetURI(value);
+        node.SetLabel(value);
         nodeList.Add(node);
         return node;
     }
@@ -299,6 +301,20 @@ public class Graph : MonoBehaviour
     {
         Node node = CreateNode(value);
         node.iNode = iNode;
+
+        switch (iNode.NodeType) {
+            case NodeType.Literal:
+                node.SetLabel(((ILiteralNode)iNode).Value);
+                node.SetURI("");
+                break;
+            case NodeType.Uri:
+                // TODO: this should work?
+                node.SetURI( ((IUriNode)iNode).Uri.ToString() );
+                node.RequestLabel(endpoint);
+                break;
+                // etc.
+        }
+
         return node;
     }
 
@@ -311,7 +327,8 @@ public class Graph : MonoBehaviour
         clone.transform.localRotation = Quaternion.identity;
         clone.transform.localScale = Vector3.one * 0.3f;
         Node node = clone.AddComponent<Node>();
-        node.SetValue(value);
+        node.SetURI(value);
+        node.SetLabel(value);
         nodeList.Add(node);
         return node;
     }

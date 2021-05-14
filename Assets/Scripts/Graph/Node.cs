@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using VDS.RDF;
+using VDS.RDF.Query;
 
 public class Node : MonoBehaviour
 {
-    public string uri = "";
+    public string uri = ""; // Full URI, empty if literal
     public string label = "";
 
     public INode iNode;
@@ -14,22 +15,14 @@ public class Node : MonoBehaviour
 
     // Vairalbes for the Force-directed algorithm
     public Vector3 displacement;
-
-    public void SetValue(string value)
+    public void Start()
     {
-        this.uri = value;
-        UpdateDisplay();
+        InvokeRepeating("SlowUpdate", 1, 1);
     }
-
     public void SetLabel(string label)
     {
         this.label = label;
         UpdateDisplay();
-    }
-
-    public string GetURI(string value)
-    {
-        return this.uri;
     }
 
     public string GetLabel()
@@ -37,9 +30,29 @@ public class Node : MonoBehaviour
         return this.label;
     }
 
+    public string GetURIAsString()
+    {
+        return this.uri;
+    }
+
+    public void SetURI(string uri)
+    {
+        this.uri = uri;
+    }
+
     public System.Uri GetURI()
     {
         return VDS.RDF.UriFactory.Create(this.uri);
+    }
+
+    public void RequestLabel(SparqlRemoteEndpoint endpoint)
+    {
+        string query = "prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>  select ?label where { <" + uri + "> rdfs:label ?label . FILTER(LANG(?label) = '' || LANGMATCHES(LANG(?label), '" + Main.instance.languageCode + "')) } LIMIT 1";
+
+        endpoint.QueryWithResultSet(query, (results, state) => {
+            results[0].TryGetValue("label",  out INode label);
+            SetLabel(label.ToString());
+        }, (object)this);
     }
 
     private void UpdateDisplay()
@@ -48,6 +61,11 @@ public class Node : MonoBehaviour
         if (label == "") text = uri;
         TMPro.TextMeshPro test = GetComponentInChildren<TMPro.TextMeshPro>(true);
         test.text = text;
+    }
+
+    void SlowUpdate()
+    {
+        UpdateDisplay();
     }
 
     void Update()

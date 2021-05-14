@@ -14,7 +14,7 @@ public class NodeMenu : MonoBehaviour
     public void Populate(Object input)
     {
         Node node = input as Node;
-        Dictionary<string, int> set = Graph.instance.GetOutgoingPredicats(node.GetURI().ToString());
+        Dictionary<string, int> set = Graph.instance.GetOutgoingPredicats(node.GetURIAsString());
 
         // Get uri of selected node
         // Get list of predicats 
