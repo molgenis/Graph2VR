@@ -4,11 +4,8 @@ using UnityEngine;
 
 public class Node : MonoBehaviour
 {
-    public enum Type { Subject, Object }
-
     public string uri = "";
     public string label = "";
-    public Type type = Type.Subject;
 
     public List<Node> connectedNodes = new List<Node>();
     public List<Edge> connectedEdges = new List<Edge>();

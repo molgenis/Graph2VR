@@ -163,7 +163,7 @@ public class Graph : MonoBehaviour
             // Find or Create a subject node
             Node subjectNode = nodeList.Find(node => node.uri == triple.Subject);
             if (subjectNode == null) {
-                subjectNode = CreateNode(triple.Subject, Node.Type.Subject);
+                subjectNode = CreateNode(triple.Subject);
                 if (label != "") {
                     // We have a label, lets use it
                     subjectNode.SetLabel(label);
@@ -176,7 +176,7 @@ public class Graph : MonoBehaviour
             if (label == "") { // NOTE: Dont create a label node here
                 if (objectNode == null)
                 {
-                    objectNode = CreateNode(triple.Object, Node.Type.Object);
+                    objectNode = CreateNode(triple.Object);
                     nodeList.Add(objectNode);
                 }
             } else {
@@ -238,7 +238,7 @@ public class Graph : MonoBehaviour
         return edge;
     }
 
-    private Node CreateNode(string value, Node.Type type)
+    private Node CreateNode(string value)
     {
         GameObject clone = Instantiate<GameObject>(nodePrefab);
         clone.transform.SetParent(transform);
@@ -248,7 +248,6 @@ public class Graph : MonoBehaviour
         //clone.GetComponent<NodeInteraction>().menu = menu;
         Node node = clone.AddComponent<Node>();
         node.SetValue(value);
-        node.type = type;
         return node;
     }
 
@@ -262,7 +261,6 @@ public class Graph : MonoBehaviour
         //clone.GetComponent<NodeInteraction>().menu = menu;
         Node node = clone.AddComponent<Node>();
         node.SetValue(value);
-        node.type = Node.Type.Subject;
         return node;
     }
 
