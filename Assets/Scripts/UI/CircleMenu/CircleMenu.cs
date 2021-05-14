@@ -200,6 +200,7 @@ public class CircleMenu : MonoBehaviour
             text.fontSizeMax = 10;
             text.fontSizeMin = 4;
             text.enableAutoSizing = true;
+            text.enableCulling = true;
             if (flip) {
                 text.alignment = TextAlignmentOptions.Left;
             } else {
