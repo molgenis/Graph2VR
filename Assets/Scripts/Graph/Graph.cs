@@ -102,19 +102,42 @@ public class Graph : MonoBehaviour
 
         // load pattern
         GraphPattern pattern = sparqlQuery.RootGraphPattern;
-        List<ITriplePattern> triplePattern = pattern.TriplePatterns;
 
         // Execute query
-        SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new System.Uri(Settings.Instance.SparqlEndpoint), BaseURI);
-        lastResults = endpoint.QueryWithResultSet(query);
+        if (sparqlQuery.QueryType == SparqlQueryType.Construct) {
+            SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new System.Uri(Settings.Instance.SparqlEndpoint), BaseURI);
+            IGraph iGraph = endpoint.QueryWithResultGraph(query);
+            BuildByIGraph(iGraph);
+        } else {
+            SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new System.Uri(Settings.Instance.SparqlEndpoint), BaseURI);
+            lastResults = endpoint.QueryWithResultSet(query);
+            BuildByResultSet(lastResults, pattern);
+        }
+        positionCalculator.SetInitial();
+    }
+
+    private void BuildByIGraph(IGraph iGraph)
+    {
+        foreach (INode node in iGraph.Nodes) {
+            Node n = CreateNode(node.ToString(), node);
+        }
+
+        foreach (VDS.RDF.Triple triple in iGraph.Triples) {
+            Edge e = CreateEdge(triple.Subject, triple.Predicate, triple.Object);
+        }
+    }
+
+    private void BuildByResultSet(SparqlResultSet resultSet, GraphPattern pattern)
+    {
+        List<ITriplePattern> triplePattern = pattern.TriplePatterns;
 
         // join pattern with query
         foreach (TriplePattern triple in triplePattern) {
             string constantSubject = triple.Subject.VariableName;
             string constantPredicate = triple.Predicate.VariableName;
             string constantObject = triple.Object.VariableName;
-            
-            foreach (SparqlResult result in lastResults) {
+
+            foreach (SparqlResult result in resultSet) {
                 Triple t = new Triple();
 
                 if (constantSubject == null) t.Subject = triple.Subject.ToString().TrimStart('<').TrimEnd('>');
@@ -129,11 +152,7 @@ public class Graph : MonoBehaviour
                 triples.Add(t);
             }
         }
-        /*
-        foreach (var t in triples) {
-            Debug.Log(t.Subject + " " + t.Predicate + " " + t.Object + " " );
-        }
-        */
+
         foreach (Triple triple in triples) {
 
             /*
@@ -159,7 +178,7 @@ public class Graph : MonoBehaviour
             if (triple.Predicate == "http://www.w3.org/2000/01/rdf-schema#label") {
                 //label = triple.Object;
             }
-            
+
             // Find or Create a subject node
             Node subjectNode = nodeList.Find(node => node.uri == triple.Subject);
             if (subjectNode == null) {
@@ -173,8 +192,7 @@ public class Graph : MonoBehaviour
             // Always create a Object node, i dont think they need to be made unique?
             Node objectNode = nodeList.Find(node => node.uri == triple.Object);
             if (label == "") { // NOTE: Dont create a label node here
-                if (objectNode == null)
-                {
+                if (objectNode == null) {
                     objectNode = CreateNode(triple.Object);
                 }
             } else {
@@ -184,8 +202,7 @@ public class Graph : MonoBehaviour
 
             // Find or Create a edge
             Edge predicateEdge = edgeList.Find(edge => edge.from == subjectNode && edge.to == objectNode && edge.uri == triple.Predicate);
-            if (predicateEdge == null)
-            {
+            if (predicateEdge == null) {
                 predicateEdge = CreateEdge(subjectNode, triple.Predicate, objectNode);
             }
 
@@ -199,7 +216,6 @@ public class Graph : MonoBehaviour
                 if (subjectNode != null) objectNode.connectedNodes.Add(subjectNode);
             }
         }
-        positionCalculator.SetInitial();
     }
 
     public void Clear()
