@@ -1,12 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using VDS.RDF;
 
 public class Node : MonoBehaviour
 {
     public string uri = "";
     public string label = "";
 
+    public INode iNode;
     public List<Node> connectedNodes = new List<Node>();
     public List<Edge> connectedEdges = new List<Edge>();
 

@@ -1,12 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using VDS.RDF;
 
 public class Edge : MonoBehaviour
 {
     public string uri;
     public Node from;
     public Node to;
+    public INode iNode;
 
     private LineRenderer lineRenderer;
     private TMPro.TextMeshPro textFront;
@@ -49,6 +51,9 @@ public class Edge : MonoBehaviour
 
     private Vector2 CalculateAngles(Vector3 fromPosition, Vector3 toPosition, bool isFront)
     {
+        if(Vector3.Distance(fromPosition, toPosition) == 0) {
+            return Vector2.zero;
+        }
         float height = (fromPosition.y - toPosition.y);
         float angle = -90;
         if (isFront) {
@@ -62,6 +67,10 @@ public class Edge : MonoBehaviour
 
     private void Update()
     {
+        if(from == null || to == null) {
+            Debug.Log("WAAAAAAa dont be null");
+            return;
+        }
         transform.position = (from.transform.position + to.transform.position) * 0.5f;
         Vector3 fromPosition = from.transform.position - transform.position;
         Vector3 toPosition = to.transform.position - transform.position;

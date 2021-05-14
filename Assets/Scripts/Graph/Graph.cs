@@ -168,7 +168,6 @@ public class Graph : MonoBehaviour
                     // We have a label, lets use it
                     subjectNode.SetLabel(label);
                 }
-                nodeList.Add(subjectNode);
             }
 
             // Always create a Object node, i dont think they need to be made unique?
@@ -177,7 +176,6 @@ public class Graph : MonoBehaviour
                 if (objectNode == null)
                 {
                     objectNode = CreateNode(triple.Object);
-                    nodeList.Add(objectNode);
                 }
             } else {
                 // We dont need to create a edge if this is a label node
@@ -189,7 +187,6 @@ public class Graph : MonoBehaviour
             if (predicateEdge == null)
             {
                 predicateEdge = CreateEdge(subjectNode, triple.Predicate, objectNode);
-                edgeList.Add(predicateEdge);
             }
 
             // Add known connections to node's and edge's
@@ -224,6 +221,11 @@ public class Graph : MonoBehaviour
         instance = this;
     }
 
+    public Node GetByINode(INode iNode)
+    {
+        return nodeList.Find((Node node) => node.iNode.Equals(iNode));
+    }
+
     public Edge CreateEdge(Node from, string uri,  Node to)
     {
         GameObject clone = Instantiate<GameObject>(edgePrefab);
@@ -235,21 +237,54 @@ public class Graph : MonoBehaviour
         edge.uri = uri;
         edge.from = from;
         edge.to = to;
+        edgeList.Add(edge);
         return edge;
     }
 
-    private Node CreateNode(string value)
+    public Edge CreateEdge(INode from, INode uri, INode to)
+    {
+        GameObject clone = Instantiate<GameObject>(edgePrefab);
+        clone.transform.SetParent(transform);
+        clone.transform.localPosition = Vector3.zero;
+        clone.transform.localRotation = Quaternion.identity;
+        clone.transform.localScale = Vector3.one;
+        Edge edge = clone.AddComponent<Edge>();
+
+        Node fromNode = GetByINode(from);
+        Node toNode = GetByINode(to);
+        if(fromNode == null || toNode == null) {
+            Debug.Log("The Subject and Object needs to be defined to create a edge");
+            return null;
+        }
+
+        edge.uri = uri.ToString();
+        edge.iNode = uri;
+        edge.from = fromNode;
+        edge.to = toNode;
+        edgeList.Add(edge);
+        return edge;
+    }
+
+    public Node CreateNode(string value)
     {
         GameObject clone = Instantiate<GameObject>(nodePrefab);
         clone.transform.SetParent(transform);
         clone.transform.localPosition = Vector3.zero;
         clone.transform.localRotation = Quaternion.identity;
         clone.transform.localScale = Vector3.one * 0.3f;
-        //clone.GetComponent<NodeInteraction>().menu = menu;
         Node node = clone.AddComponent<Node>();
         node.SetValue(value);
+        nodeList.Add(node);
         return node;
     }
+
+    public Node CreateNode(string value, INode iNode)
+    {
+        Node node = CreateNode(value);
+        node.iNode = iNode;
+        return node;
+    }
+
 
     public Node CreateNode(string value, Vector3 position)
     {
@@ -258,9 +293,9 @@ public class Graph : MonoBehaviour
         clone.transform.position = position;
         clone.transform.localRotation = Quaternion.identity;
         clone.transform.localScale = Vector3.one * 0.3f;
-        //clone.GetComponent<NodeInteraction>().menu = menu;
         Node node = clone.AddComponent<Node>();
         node.SetValue(value);
+        nodeList.Add(node);
         return node;
     }
 
