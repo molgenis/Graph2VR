@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class NodeMenu : MonoBehaviour
 {
@@ -10,14 +11,22 @@ public class NodeMenu : MonoBehaviour
         cm = GetComponent<CircleMenu>();
     }
 
-    public void Populate()
+    public void Populate(Object input)
     {
+        Node node = input as Node;
+        Dictionary<string, int> set = Graph.instance.GetOutgoingPredicats(node.GetURI().ToString());
+
+        // Get uri of selected node
+        // Get list of predicats 
+        // call GetOutgoingPredicats()
+
         Close();
-        List<string> subjects = Graph.instance.GetSubjects();
-        foreach (string subject in subjects) {
-            cm.AddButton(subject, Color.gray, () => {
+        
+        foreach (KeyValuePair<string, int> item in set) {
+            Debug.Log(item.Key);
+            cm.AddButton(item.Key, Color.gray, () => {
                 cm.Close();
-            }, Random.Range(1, 10));
+            }, item.Value);
         }
         cm.AddButton("Test: Add more buttons", Color.gray, () => {
             cm.AddButton("Added button", Color.black, () => { });

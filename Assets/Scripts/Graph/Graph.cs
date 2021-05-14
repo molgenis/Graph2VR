@@ -37,6 +37,7 @@ public class Graph : MonoBehaviour
     // variables for the Fruchterman-Reingold algorithm
     public float Temperature = 0.05f;
 
+    // NOTE: this is a development function
     public List<string> GetSubjects()
     {
         SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new System.Uri(Settings.Instance.SparqlEndpoint), BaseURI);
@@ -73,13 +74,13 @@ public class Graph : MonoBehaviour
         // Fill triples list 
         foreach (SparqlResult result in lastResults)
         {
-            Debug.Log(result);
+            //Debug.Log(result);
             result.TryGetValue("p", out INode p);
             result.TryGetValue("count", out INode count);
 
             if (p != null)
             {
-                Debug.Log("Here is what I logged:" + int.Parse(count.ToString()));
+                //Debug.Log("Here is what I logged:" + int.Parse(count.ToString()));
                 results.Add(p.ToString(), int.Parse(count.ToString()));
             }
         }
