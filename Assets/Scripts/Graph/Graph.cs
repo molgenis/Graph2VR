@@ -89,6 +89,43 @@ public class Graph : MonoBehaviour
         return results;
     }
 
+    //Sometimes not only the outgoing predicates are important, but also the incoming ones.
+    public Dictionary<string, int> GetIncomingPredicats(string URI)
+    {
+        SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new System.Uri(Settings.Instance.SparqlEndpoint), BaseURI);
+        lastResults = endpoint.QueryWithResultSet(
+            "select distinct ?p (STR(COUNT(?s)) AS ?count) where { ?s ?p <" + URI + "> } LIMIT 100"
+            );
+
+        Dictionary<string, int> results = new Dictionary<string, int>();
+        // Fill triples list 
+        foreach (SparqlResult result in lastResults)
+        {
+            //Debug.Log(result);
+            result.TryGetValue("p", out INode p);
+            result.TryGetValue("count", out INode count);
+
+            if (p != null)
+            {
+                //Debug.Log("Here is what I logged:" + int.Parse(count.ToString()));
+                results.Add(p.ToString(), int.Parse(count.ToString()));
+            }
+        }
+
+        return results;
+    }
+
+    //We want to be able to display information about a single node, the describe query allows to get some information.
+    //Todo: return the description
+ //   public IGraph GetDescription(string URI)
+ //   {
+ //       SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new System.Uri(Settings.Instance.SparqlEndpoint), BaseURI);
+ //       IGraph lastResults = endpoint.QueryWithResultGraph(
+ //           "DESCRIBE {<"+ URI +">}"
+ //           );
+ //       return lastResults;
+ //   }
+
     private string CleanInfo(string str)
     {
         // TODO: do we need: return str.TrimStart('<', '"').TrimEnd('>', '"');
