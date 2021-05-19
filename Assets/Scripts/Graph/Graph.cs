@@ -148,6 +148,7 @@ public class Graph : MonoBehaviour
 
     public IEnumerator BuildIGraphOnTheMainThread()
     {
+        // IMPORTANT: possible race condition. Add the merge of igraph's in the main thread! 
         BuildByIGraph(currentGraph);
         yield return null;
     }
@@ -200,11 +201,12 @@ public class Graph : MonoBehaviour
         }
 
         foreach (VDS.RDF.Triple triple in iGraph.Triples) {
+            // TODO: make sure not to add the same edge again. ( check for existing edges with same Subject, Predicate, Object ? )
             Edge e = CreateEdge(triple.Subject, triple.Predicate, triple.Object);
             e.SetColor(defaultEdgeColor);
         }
 
-        // Is this the correct way to reenable FruchtermanReingold
+        // TODO: create resolve function
         Temperature = 0.05f;
     }
 
