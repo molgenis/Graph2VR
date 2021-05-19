@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 public class NodeMenu : MonoBehaviour
 {
     private CircleMenu cm = null;
-    public bool predicatMode = true;
+    public bool isOutgoingLink = true;
     private Dictionary<string, int> set;
     private Node node = null;
 
@@ -18,7 +18,7 @@ public class NodeMenu : MonoBehaviour
     public void GetPredicats()
     {
         if (node != null) {
-            if (predicatMode) {
+            if (isOutgoingLink) {
                 set = Graph.instance.GetOutgoingPredicats(node.GetURIAsString());
             } else {
                 set = Graph.instance.GetIncomingPredicats(node.GetURIAsString());
@@ -38,21 +38,21 @@ public class NodeMenu : MonoBehaviour
 
             Close();
 
-            if (predicatMode) {
+            if (isOutgoingLink) {
                 cm.AddButton("List incoming predicats", Color.blue / 2, () => {
-                    predicatMode = false;
+                    isOutgoingLink = false;
                     Populate(input); 
                 });
             } else {
                 cm.AddButton("List outgoing predicats", Color.blue / 2, () => {
-                    predicatMode = true;
+                    isOutgoingLink = true;
                     Populate(input);
                 });
             }
 
             foreach (KeyValuePair<string, int> item in set) {
                 cm.AddButton(item.Key, Color.gray, () => {
-                    Graph.instance.ExpandGraph(node, item.Key, predicatMode);
+                    Graph.instance.ExpandGraph(node, item.Key, isOutgoingLink);
                     cm.Close();
                 }, item.Value);
             }

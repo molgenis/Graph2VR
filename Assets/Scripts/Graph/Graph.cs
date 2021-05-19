@@ -12,6 +12,8 @@ using System.Threading;
 
 public class Graph : MonoBehaviour
 {
+    public Color defaultNodeColor;
+    public Color defaultEdgeColor;
     public static Graph instance;
     public string BaseURI = "http://dbpedia.org";
     public GameObject edgePrefab;
@@ -193,11 +195,13 @@ public class Graph : MonoBehaviour
         foreach (INode node in iGraph.Nodes) {
             if(!nodeList.Find(graficalNode => graficalNode.iNode == node)) {
                 Node n = CreateNode(node.ToString(), node);
+                n.SetColor(defaultNodeColor);
             }
         }
 
         foreach (VDS.RDF.Triple triple in iGraph.Triples) {
             Edge e = CreateEdge(triple.Subject, triple.Predicate, triple.Object);
+            e.SetColor(defaultEdgeColor);
         }
 
         // Is this the correct way to reenable FruchtermanReingold

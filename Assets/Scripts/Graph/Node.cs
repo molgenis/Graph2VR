@@ -10,6 +10,7 @@ public class Node : MonoBehaviour
     public string label = "";
 
     public INode iNode;
+
     public List<Node> connectedNodes = new List<Node>();
     public List<Edge> connectedEdges = new List<Edge>();
 
@@ -19,6 +20,12 @@ public class Node : MonoBehaviour
     {
         InvokeRepeating("SlowUpdate", 1, 1);
     }
+
+    public void SetColor(Color color)
+    {
+        GetComponent<Renderer>().material.color = color;
+    }
+
     public void SetLabel(string label)
     {
         this.label = label;
