@@ -68,7 +68,6 @@ public class Edge : MonoBehaviour
     private void Update()
     {
         if(from == null || to == null) {
-            Debug.Log("WAAAAAAa dont be null");
             return;
         }
         transform.position = (from.transform.position + to.transform.position) * 0.5f;

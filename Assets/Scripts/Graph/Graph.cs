@@ -66,65 +66,91 @@ public class Graph : MonoBehaviour
     //To expand the graph, we want to know, which outgoing predicates we have for the given Node and how many Nodes are connected for each of the predicates.
     public Dictionary<string, int> GetOutgoingPredicats(string URI)
     {
-        SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new System.Uri(Settings.Instance.SparqlEndpoint), BaseURI);
-        lastResults = endpoint.QueryWithResultSet(
-            "select distinct ?p (STR(COUNT(?o)) AS ?count) where { <"+ URI + "> ?p ?o } LIMIT 100"
-            );
+        if (URI == "") return null;
+        try {
+            SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new System.Uri(Settings.Instance.SparqlEndpoint), BaseURI);
+            lastResults = endpoint.QueryWithResultSet(
+                "select distinct ?p (STR(COUNT(?o)) AS ?count) where { <" + URI + "> ?p ?o } LIMIT 100"
+                );
 
-        Dictionary<string, int> results = new Dictionary<string, int>();
-        // Fill triples list 
-        foreach (SparqlResult result in lastResults)
-        {
-            //Debug.Log(result);
-            result.TryGetValue("p", out INode p);
-            result.TryGetValue("count", out INode count);
+            Dictionary<string, int> results = new Dictionary<string, int>();
+            // Fill triples list 
+            foreach (SparqlResult result in lastResults) {
+                //Debug.Log(result);
+                result.TryGetValue("p", out INode p);
+                result.TryGetValue("count", out INode count);
 
-            if (p != null)
-            {
-                //Debug.Log("Here is what I logged:" + int.Parse(count.ToString()));
-                results.Add(p.ToString(), int.Parse(count.ToString()));
+                if (p != null) {
+                    //Debug.Log("Here is what I logged:" + int.Parse(count.ToString()));
+                    results.Add(p.ToString(), int.Parse(count.ToString()));
+                }
             }
+            return results;
+        } catch (Exception e) {
+            Debug.Log("GetOutgoingPredicats error: " + e.Message);
         }
-
-        return results;
+        return null;
     }
 
     //Sometimes not only the outgoing predicates are important, but also the incoming ones.
     public Dictionary<string, int> GetIncomingPredicats(string URI)
     {
-        SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new System.Uri(Settings.Instance.SparqlEndpoint), BaseURI);
-        lastResults = endpoint.QueryWithResultSet(
-            "select distinct ?p (STR(COUNT(?s)) AS ?count) where { ?s ?p <" + URI + "> } LIMIT 100"
-            );
+        if (URI == "") return null;
+            try {
 
-        Dictionary<string, int> results = new Dictionary<string, int>();
-        // Fill triples list 
-        foreach (SparqlResult result in lastResults)
-        {
-            //Debug.Log(result);
-            result.TryGetValue("p", out INode p);
-            result.TryGetValue("count", out INode count);
+                SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new System.Uri(Settings.Instance.SparqlEndpoint), BaseURI);
+            lastResults = endpoint.QueryWithResultSet(
+                "select distinct ?p (STR(COUNT(?s)) AS ?count) where { ?s ?p <" + URI + "> } LIMIT 100"
+                );
 
-            if (p != null)
+            Dictionary<string, int> results = new Dictionary<string, int>();
+            // Fill triples list 
+            foreach (SparqlResult result in lastResults)
             {
-                //Debug.Log("Here is what I logged:" + int.Parse(count.ToString()));
-                results.Add(p.ToString(), int.Parse(count.ToString()));
+                //Debug.Log(result);
+                result.TryGetValue("p", out INode p);
+                result.TryGetValue("count", out INode count);
+
+                if (p != null)
+                {
+                    //Debug.Log("Here is what I logged:" + int.Parse(count.ToString()));
+                    results.Add(p.ToString(), int.Parse(count.ToString()));
+                }
             }
+
+            return results;
+        } catch (Exception e) {
+            Debug.Log("GetIncomingPredicats error: " + e.Message);
+        }
+        return null;
+
+    }
+
+    public void ExpandGraph(Node node, string uri, bool isOutgoingLink)
+    {
+        string query = "";
+        if (isOutgoingLink) {
+            query = "construct {<" + node.GetURIAsString() + "> <" + uri + "> ?object} where {<" + node.GetURIAsString() + "> <" + uri + "> ?object}";
+        } else {
+            query = "construct { ?subject <" + uri + "> <" + node.GetURIAsString() + ">} where {?subject <" + uri + "> <" + node.GetURIAsString() + ">}";
         }
 
-        return results;
+        // Execute query
+        IGraph iGraph = endpoint.QueryWithResultGraph(query);
+        BuildByIGraph(iGraph);
+        positionCalculator.SetInitial();
     }
 
     //We want to be able to display information about a single node, the describe query allows to get some information.
     //Todo: return the description
- //   public IGraph GetDescription(string URI)
- //   {
- //       SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new System.Uri(Settings.Instance.SparqlEndpoint), BaseURI);
- //       IGraph lastResults = endpoint.QueryWithResultGraph(
- //           "DESCRIBE {<"+ URI +">}"
- //           );
- //       return lastResults;
- //   }
+    //   public IGraph GetDescription(string URI)
+    //   {
+    //       SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new System.Uri(Settings.Instance.SparqlEndpoint), BaseURI);
+    //       IGraph lastResults = endpoint.QueryWithResultGraph(
+    //           "DESCRIBE {<"+ URI +">}"
+    //           );
+    //       return lastResults;
+    //   }
 
     private string CleanInfo(string str)
     {
@@ -219,7 +245,7 @@ public class Graph : MonoBehaviour
             }
 
             // Find or Create a subject node
-            Node subjectNode = nodeList.Find(node => node.uri == triple.Subject);
+            Node subjectNode = nodeList.Find(node => node.GetURIAsString() == triple.Subject);
             if (subjectNode == null) {
                 subjectNode = CreateNode(triple.Subject);
                 if (label != "") {
@@ -229,7 +255,7 @@ public class Graph : MonoBehaviour
             }
 
             // Always create a Object node, i dont think they need to be made unique?
-            Node objectNode = nodeList.Find(node => node.uri == triple.Object);
+            Node objectNode = nodeList.Find(node => node.GetURIAsString() == triple.Object);
             if (label == "") { // NOTE: Dont create a label node here
                 if (objectNode == null) {
                     objectNode = CreateNode(triple.Object);

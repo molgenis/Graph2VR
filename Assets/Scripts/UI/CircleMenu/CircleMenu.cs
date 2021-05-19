@@ -119,14 +119,14 @@ public class CircleMenu : MonoBehaviour
         // Button click
         if (selectedLeftButton != null) {
             selectedLeftButton.instance.gameObject.GetComponent<Renderer>().material.color = selectedLeftButton.color + new Color(0.2f, 0.2f, 0.2f);
-            if (gripAction.GetState(SteamVR_Input_Sources.LeftHand) == true) {
+            if (gripAction.GetStateDown(SteamVR_Input_Sources.LeftHand) == true) {
                 selectedLeftButton.callback();
             }
         }
 
         if (selectedRightButton != null) {
             selectedRightButton.instance.gameObject.GetComponent<Renderer>().material.color = selectedRightButton.color + new Color(0.2f, 0.2f, 0.2f);
-            if (gripAction.GetState(SteamVR_Input_Sources.RightHand) == true) {
+            if (gripAction.GetStateDown(SteamVR_Input_Sources.RightHand) == true) {
                 selectedRightButton.callback();
             }
         }
