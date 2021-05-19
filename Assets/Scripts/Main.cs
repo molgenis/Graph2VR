@@ -10,8 +10,6 @@ public class Main : MonoBehaviour
     static public Main instance;
     void Start()
     {
-        Graph.instance.positionCalculator = new RandomPositions(Graph.instance);
-
         Graph.instance.SendQuery(initialSparqlQueryString);
     }
     private void Awake()

@@ -8,6 +8,7 @@ using VDS.RDF.Parsing;
 using VDS.RDF.Query.Builder;
 using VDS.RDF.Query.Patterns;
 using System;
+using System.Threading;
 
 public class Graph : MonoBehaviour
 {
@@ -22,9 +23,10 @@ public class Graph : MonoBehaviour
     public List<Node> nodeList = new List<Node>();
 
     public List<string> translatablePredicates = new List<string>();
-    public BasePositionCalculator positionCalculator = null;
 
     private SparqlResultSet lastResults = null;
+    IGraph currentGraph = null;
+
     private SparqlRemoteEndpoint endpoint;
 
     [System.Serializable]
@@ -134,11 +136,18 @@ public class Graph : MonoBehaviour
         } else {
             query = "construct { ?subject <" + uri + "> <" + node.GetURIAsString() + ">} where {?subject <" + uri + "> <" + node.GetURIAsString() + ">}";
         }
-
         // Execute query
-        IGraph iGraph = endpoint.QueryWithResultGraph(query);
-        BuildByIGraph(iGraph);
-        positionCalculator.SetInitial();
+        endpoint.QueryWithResultGraph(query, (graph, state) => {
+            currentGraph.Merge(graph);
+            // To draw new elements to unity we need to be on the main Thread
+            UnityMainThreadDispatcher.Instance().Enqueue(BuildIGraphOnTheMainThread());
+        }, null);
+    }
+
+    public IEnumerator BuildIGraphOnTheMainThread()
+    {
+        BuildByIGraph(currentGraph);
+        yield return null;
     }
 
     //We want to be able to display information about a single node, the describe query allows to get some information.
@@ -171,24 +180,28 @@ public class Graph : MonoBehaviour
 
         // Execute query
         if (sparqlQuery.QueryType == SparqlQueryType.Construct) {
-            IGraph iGraph = endpoint.QueryWithResultGraph(query);
-            BuildByIGraph(iGraph);
+            currentGraph = endpoint.QueryWithResultGraph(query);
+            BuildByIGraph(currentGraph);
         } else {
             lastResults = endpoint.QueryWithResultSet(query);
             BuildByResultSet(lastResults, pattern);
         }
-        positionCalculator.SetInitial();
     }
 
     private void BuildByIGraph(IGraph iGraph)
     {
         foreach (INode node in iGraph.Nodes) {
-            Node n = CreateNode(node.ToString(), node);
+            if(!nodeList.Find(graficalNode => graficalNode.iNode == node)) {
+                Node n = CreateNode(node.ToString(), node);
+            }
         }
 
         foreach (VDS.RDF.Triple triple in iGraph.Triples) {
             Edge e = CreateEdge(triple.Subject, triple.Predicate, triple.Object);
         }
+
+        // Is this the correct way to reenable FruchtermanReingold
+        Temperature = 0.05f;
     }
 
     // TODO: Can we get iNode's to put in to the node
@@ -350,7 +363,7 @@ public class Graph : MonoBehaviour
     {
         GameObject clone = Instantiate<GameObject>(nodePrefab);
         clone.transform.SetParent(transform);
-        clone.transform.localPosition = Vector3.zero;
+        clone.transform.localPosition = UnityEngine.Random.insideUnitSphere * 3f; // TODO: maybe base position on position of connected parent!
         clone.transform.localRotation = Quaternion.identity;
         clone.transform.localScale = Vector3.one * 0.3f;
         Node node = clone.AddComponent<Node>();
