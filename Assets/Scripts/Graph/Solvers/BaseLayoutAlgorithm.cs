@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BaseSolver : MonoBehaviour
+public class BaseLayoutAlgorithm : MonoBehaviour
 {
     protected Graph graph;
     public void Awake()
@@ -10,7 +10,7 @@ public class BaseSolver : MonoBehaviour
         graph = GetComponent<Graph>();
     }
 
-    public virtual void Solve()
+    public virtual void CalculateLayout()
     {
 
     }

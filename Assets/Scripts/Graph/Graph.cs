@@ -12,7 +12,7 @@ using System.Threading;
 
 public class Graph : MonoBehaviour
 {
-    public BaseSolver solver = null;
+    public BaseLayoutAlgorithm layout = null;
     public Color defaultNodeColor;
     public Color defaultEdgeColor;
     public static Graph instance;
@@ -66,25 +66,35 @@ public class Graph : MonoBehaviour
     }
 
     //To expand the graph, we want to know, which outgoing predicates we have for the given Node and how many Nodes are connected for each of the predicates.
-    public Dictionary<string, int> GetOutgoingPredicats(string URI)
+    public Dictionary<string, Tuple<string, int>> GetOutgoingPredicats(string URI)
     {
         if (URI == "") return null;
         try {
             SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new System.Uri(Settings.Instance.SparqlEndpoint), BaseURI);
             lastResults = endpoint.QueryWithResultSet(
-                "select distinct ?p (STR(COUNT(?o)) AS ?count) where { <" + URI + "> ?p ?o } LIMIT 100"
+                "select distinct ?p (STR(COUNT(?o)) AS ?count) ?label where { <" + URI + "> ?p ?o . OPTIONAL { ?p rdfs:label ?label } FILTER(LANG(?label) = '' || LANGMATCHES(LANG(?label), '" + Main.instance.languageCode + "')) } LIMIT 100"
                 );
 
-            Dictionary<string, int> results = new Dictionary<string, int>();
+            Dictionary<string, Tuple<string, int>> results = new Dictionary<string, Tuple<string, int>>();
             // Fill triples list 
             foreach (SparqlResult result in lastResults) {
                 //Debug.Log(result);
                 result.TryGetValue("p", out INode p);
                 result.TryGetValue("count", out INode count);
+                result.TryGetValue("label", out INode labelNode);
 
+                string label = "";
+                if (labelNode!= null) {
+                    label  = labelNode.ToString();
+                }
                 if (p != null) {
-                    //Debug.Log("Here is what I logged:" + int.Parse(count.ToString()));
-                    results.Add(p.ToString(), int.Parse(count.ToString()));
+                    if (!results.ContainsKey(p.ToString())) {
+                        results.Add(p.ToString(), new Tuple<string, int>(label, int.Parse(count.ToString())));
+                    } else {
+                        if(!results[p.ToString()].Item1.Contains("@"+Main.instance.languageCode)) {
+                            results[p.ToString()] = new Tuple<string, int>(label, int.Parse(count.ToString()));
+                        }
+                    }
                 }
             }
             return results;
@@ -95,28 +105,38 @@ public class Graph : MonoBehaviour
     }
 
     //Sometimes not only the outgoing predicates are important, but also the incoming ones.
-    public Dictionary<string, int> GetIncomingPredicats(string URI)
+    public Dictionary<string, Tuple<string, int>> GetIncomingPredicats(string URI)
     {
         if (URI == "") return null;
             try {
 
                 SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new System.Uri(Settings.Instance.SparqlEndpoint), BaseURI);
-            lastResults = endpoint.QueryWithResultSet(
-                "select distinct ?p (STR(COUNT(?s)) AS ?count) where { ?s ?p <" + URI + "> } LIMIT 100"
-                );
+                lastResults = endpoint.QueryWithResultSet(
+                    "select distinct ?p (STR(COUNT(?s)) AS ?count) ?label where { ?s ?p <" + URI + "> . OPTIONAL { ?p rdfs:label ?label } FILTER(LANG(?label) = '' || LANGMATCHES(LANG(?label), '" + Main.instance.languageCode + "')) } LIMIT 100"
+                    );
 
-            Dictionary<string, int> results = new Dictionary<string, int>();
+            Dictionary<string, Tuple<string, int>> results = new Dictionary<string, Tuple<string, int>>();
             // Fill triples list 
             foreach (SparqlResult result in lastResults)
             {
                 //Debug.Log(result);
                 result.TryGetValue("p", out INode p);
                 result.TryGetValue("count", out INode count);
+                result.TryGetValue("label", out INode labelNode);
+                string label = "";
+                if (labelNode != null) {
+                    label = labelNode.ToString();
+                }
 
-                if (p != null)
-                {
-                    //Debug.Log("Here is what I logged:" + int.Parse(count.ToString()));
-                    results.Add(p.ToString(), int.Parse(count.ToString()));
+                // NOTE: duplicate code, create function?
+                if (p != null) {
+                    if (!results.ContainsKey(p.ToString())) {
+                        results.Add(p.ToString(), new Tuple<string, int>(label, int.Parse(count.ToString())));
+                    } else {
+                        if (!results[p.ToString()].Item1.Contains("@" + Main.instance.languageCode)) {
+                            results[p.ToString()] = new Tuple<string, int>(label, int.Parse(count.ToString()));
+                        }
+                    }
                 }
             }
 
@@ -133,6 +153,7 @@ public class Graph : MonoBehaviour
         string query = "";
         if (isOutgoingLink) {
             query = "construct {<" + node.GetURIAsString() + "> <" + uri + "> ?object} where {<" + node.GetURIAsString() + "> <" + uri + "> ?object}";
+            //query = "construct {<" + node.GetURIAsString() + "> <" + uri + "> ?object . <" + uri + "> rdfs:label ?edgelabel } where {<" + node.GetURIAsString() + "> <" + uri + "> ?object . OPTIONAL {<" + uri + "> rdfs:label ?edgelabel}}";
         } else {
             query = "construct { ?subject <" + uri + "> <" + node.GetURIAsString() + ">} where {?subject <" + uri + "> <" + node.GetURIAsString() + ">}";
         }
@@ -142,6 +163,17 @@ public class Graph : MonoBehaviour
             // To draw new elements to unity we need to be on the main Thread
             UnityMainThreadDispatcher.Instance().Enqueue(BuildIGraphOnTheMainThread());
         }, null);
+    }
+
+    public string GetShortName(string uri)
+    {
+        //Get label?
+
+        //Qname
+        if (currentGraph.NamespaceMap.ReduceToQName(uri, out string qname)) {
+            return qname;
+        }
+        return "";
     }
 
     public IEnumerator BuildIGraphOnTheMainThread()
@@ -182,12 +214,25 @@ public class Graph : MonoBehaviour
         // Execute query
         if (sparqlQuery.QueryType == SparqlQueryType.Construct) {
             currentGraph = endpoint.QueryWithResultGraph(query);
+            AddDefaultNameSpaces();
             BuildByIGraph(currentGraph);
+
         } else {
             lastResults = endpoint.QueryWithResultSet(query);
             BuildByResultSet(lastResults, pattern);
         }
     }
+
+    private void AddDefaultNameSpaces()
+    {
+        currentGraph.NamespaceMap.AddNamespace("rdf", new Uri("http://www.w3.org/1999/02/22-rdf-syntax-ns#%22"));
+        currentGraph.NamespaceMap.AddNamespace("owl", new Uri("http://www.w3.org/2002/07/owl#"));
+
+        // For nice demo's
+        currentGraph.NamespaceMap.AddNamespace("dbpedia", new Uri("http://dbpedia.org/resource/"));
+        currentGraph.NamespaceMap.AddNamespace("dbpedia/ontology", new Uri("http://dbpedia.org/ontology/"));
+    }
+
 
     private void BuildByIGraph(IGraph iGraph)
     {
@@ -205,7 +250,7 @@ public class Graph : MonoBehaviour
         }
 
         // TODO: create resolve function
-        solver.Solve();
+        layout.CalculateLayout();
     }
 
     // TODO: Can we get iNode's to put in to the node

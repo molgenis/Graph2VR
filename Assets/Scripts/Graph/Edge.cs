@@ -47,7 +47,13 @@ public class Edge : MonoBehaviour
 
         textFront = transform.Find("FrontText").GetComponent<TMPro.TextMeshPro>();
         textBack = transform.Find("BackText").GetComponent<TMPro.TextMeshPro>();
-        textFront.text = textBack.text = uri;
+
+        string qname = Graph.instance.GetShortName(uri);
+        if (qname != "") {
+            textFront.text = textBack.text = qname;
+        } else {
+            textFront.text = textBack.text = uri;
+        }
 
         // Calculate Text rotations
         UpdatePosition();

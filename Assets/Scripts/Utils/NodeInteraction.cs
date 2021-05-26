@@ -98,7 +98,7 @@ public class NodeInteraction : MonoBehaviour, IPointerEnterHandler, IPointerExit
         ControllerGrabbed = true;
         SetNewColorState();
         this.transform.SetParent(newParent.transform, true);
-        graph.solver.Stop();
+        graph.layout.Stop();
     }
 
     void IGrabInterface.ControllerGrabEnd()
@@ -106,7 +106,7 @@ public class NodeInteraction : MonoBehaviour, IPointerEnterHandler, IPointerExit
         ControllerGrabbed = false;
         SetNewColorState();
         this.transform.SetParent(originalParent, true);
-        graph.solver.Solve();
+        graph.layout.CalculateLayout();
     }
 
     void IPointerEnterHandler.OnPointerEnter(PointerEventData eventData)

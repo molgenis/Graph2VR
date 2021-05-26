@@ -7,7 +7,7 @@ public class NodeMenu : MonoBehaviour
 {
     private CircleMenu cm = null;
     public bool isOutgoingLink = true;
-    private Dictionary<string, int> set;
+    private Dictionary<string, System.Tuple<string, int>> set;
     private Node node = null;
 
     public void Start()
@@ -50,11 +50,16 @@ public class NodeMenu : MonoBehaviour
                 });
             }
 
-            foreach (KeyValuePair<string, int> item in set) {
-                cm.AddButton(item.Key, Color.gray, () => {
+            foreach (KeyValuePair<string, System.Tuple<string, int>> item in set) {
+                //Debug.Log("k: " + item.Key + " v1: " + item.Value.Item1 + " v2: " + item.Value.Item2);
+                string label = item.Value.Item1;
+                if (label == "") label = item.Key;
+                // TODO: add qname als alt.
+
+                cm.AddButton(label, Color.gray, () => {
                     Graph.instance.ExpandGraph(node, item.Key, isOutgoingLink);
                     cm.Close();
-                }, item.Value);
+                }, item.Value.Item2);
             }
             cm.AddButton("Convert to Variable", Color.blue / 2, () => { });
             cm.AddButton("Convert to Constant", Color.cyan / 2, () => { });

@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FruchtermanReingold : BaseSolver
+public class FruchtermanReingold : BaseLayoutAlgorithm
 {
     // variables for the Fruchterman-Reingold algorithm
     public float Temperature = 0;
 
-    public override void Solve()
+    public override void CalculateLayout()
     {
         Temperature = 0.05f;
     }
