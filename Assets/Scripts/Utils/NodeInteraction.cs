@@ -98,7 +98,7 @@ public class NodeInteraction : MonoBehaviour, IPointerEnterHandler, IPointerExit
         ControllerGrabbed = true;
         SetNewColorState();
         this.transform.SetParent(newParent.transform, true);
-        graph.Temperature = 0.0f;
+        graph.solver.Stop();
     }
 
     void IGrabInterface.ControllerGrabEnd()
@@ -106,8 +106,7 @@ public class NodeInteraction : MonoBehaviour, IPointerEnterHandler, IPointerExit
         ControllerGrabbed = false;
         SetNewColorState();
         this.transform.SetParent(originalParent, true);
-        this.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-        graph.Temperature = 0.05f;
+        graph.solver.Solve();
     }
 
     void IPointerEnterHandler.OnPointerEnter(PointerEventData eventData)
