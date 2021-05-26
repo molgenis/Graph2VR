@@ -106,7 +106,7 @@ public class NodeInteraction : MonoBehaviour, IPointerEnterHandler, IPointerExit
         ControllerGrabbed = false;
         SetNewColorState();
         this.transform.SetParent(originalParent, true);
-        this.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
+        this.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
         graph.Temperature = 0.05f;
     }
 

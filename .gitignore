@@ -73,3 +73,7 @@ crashlytics-build.properties
 # Unity Layout
 Library/CurrentMaximizeLayout.dwlt
 Library/CurrentLayout.dwlt
+
+# Please dont do FilesToCopy stuff
+/[Aa]ssets/_FilesToCopy*
+/[Aa]ssets/_FilesToCopy/*

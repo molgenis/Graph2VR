@@ -371,7 +371,7 @@ public class Graph : MonoBehaviour
         clone.transform.SetParent(transform);
         clone.transform.localPosition = UnityEngine.Random.insideUnitSphere * 3f; // TODO: maybe base position on position of connected parent!
         clone.transform.localRotation = Quaternion.identity;
-        clone.transform.localScale = Vector3.one * 0.3f;
+        clone.transform.localScale = Vector3.one * 0.05f;
         Node node = clone.AddComponent<Node>();
         node.SetURI(value);
         node.SetLabel(value);

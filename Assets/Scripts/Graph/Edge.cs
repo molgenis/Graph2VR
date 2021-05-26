@@ -84,7 +84,7 @@ public class Edge : MonoBehaviour
         Vector3 toPosition = to.transform.position - transform.position;
         Vector3 normal = (toPosition - fromPosition).normalized;
         lineRenderer.SetPosition(0, transform.worldToLocalMatrix * fromPosition);
-        lineRenderer.SetPosition(1, transform.worldToLocalMatrix * (toPosition - (normal * 0.2f)));
+        lineRenderer.SetPosition(1, transform.worldToLocalMatrix * (toPosition - (normal * ((to.transform.localScale.x * 0.5f) + (arrow.localScale.x * 0.05f)))));
         Vector2 rot = CalculateAngles(fromPosition, toPosition, true);
         textFront.transform.rotation = Quaternion.Euler(0, rot.x, rot.y); // note this is world rotation
         textFront.transform.localPosition = textFront.transform.localRotation * (Vector3.up * 0.05f); // note this is local position
@@ -92,7 +92,9 @@ public class Edge : MonoBehaviour
         textBack.transform.rotation = Quaternion.Euler(0, rot.x, rot.y);
         textBack.transform.localPosition = textBack.transform.localRotation * (Vector3.up * 0.05f);
 
-        arrow.localPosition = toPosition - (normal*0.15f);
+        
+        arrow.localPosition = (transform.worldToLocalMatrix * (toPosition - (normal * (to.transform.localScale.x * 0.5f)))) ;
+        //arrow.localPosition = toPosition - (normal * 0.15f);
         arrow.rotation = Quaternion.FromToRotation(Vector3.up, normal);
     }
 }
