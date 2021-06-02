@@ -63,6 +63,7 @@ public class zoomSphere : MonoBehaviour
         {
             if (zoomAction)
             {
+                // Initial values
                 isZooming = true;
                 zoomGraph.transform.SetParent(gameObject.transform, true);
                 zoomStart = (rightPos - leftPos).magnitude;

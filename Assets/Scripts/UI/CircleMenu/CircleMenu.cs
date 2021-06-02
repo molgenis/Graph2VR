@@ -19,7 +19,7 @@ public class CircleMenu : MonoBehaviour
 
     public SteamVR_Action_Boolean gripAction = null;
 
-    private LookAtTransform lookAt = null;
+    //private LookAtTransform lookAt = null;
     //private GameObject cursorLeft = null;
     //private GameObject cursorRight = null;
 
@@ -39,8 +39,8 @@ public class CircleMenu : MonoBehaviour
 
     private void Start()
     {
-        lookAt = gameObject.AddComponent<LookAtTransform>();
-        lookAt.flipDirection = true;
+        //lookAt = gameObject.AddComponent<LookAtTransform>();
+        //lookAt.flipDirection = true;
         if (leftControler == null) leftControler = GameObject.FindGameObjectWithTag("LeftControler").transform;
         if (rightControler == null) rightControler = GameObject.FindGameObjectWithTag("RightControler").transform;
     }
@@ -50,7 +50,8 @@ public class CircleMenu : MonoBehaviour
         if (!isBuild) return;
 
         // Where are the controlers pointing?
-        Plane plane = new Plane(lookAt.normal, transform.position);
+        //Plane plane = new Plane(lookAt.normal, transform.position);
+        Plane plane = new Plane(Vector3.forward, transform.position);
         Ray left = new Ray(leftControler.position, leftControler.forward);
         Ray right = new Ray(rightControler.position, rightControler.forward);
         Vector3 leftPoint = Vector3.zero;

@@ -52,11 +52,15 @@ public class NodeMenu : MonoBehaviour
 
             foreach (KeyValuePair<string, System.Tuple<string, int>> item in set) {
                 //Debug.Log("k: " + item.Key + " v1: " + item.Value.Item1 + " v2: " + item.Value.Item2);
+                Color color = Color.gray;
                 string label = item.Value.Item1;
-                if (label == "") label = item.Key;
+                if (label == "") {
+                    label = item.Key;
+                    color = Color.gray * 0.75f;
+                }
                 // TODO: add qname als alt.
 
-                cm.AddButton(label, Color.gray, () => {
+                cm.AddButton(label, color, () => {
                     Graph.instance.ExpandGraph(node, item.Key, isOutgoingLink);
                     cm.Close();
                 }, item.Value.Item2);
