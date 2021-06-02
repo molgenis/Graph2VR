@@ -29,13 +29,15 @@ public class FruchtermanReingold : BaseLayoutAlgorithm
     //Function for the Fruchterman-Reingold algorithm
     private float Fa(float x)
     {
-        return (x * x) / (C_CONSTANT * Mathf.Sqrt(AREA_CONSTANT / graph.nodeList.Count));
+        float k = (C_CONSTANT * Mathf.Sqrt(AREA_CONSTANT / graph.nodeList.Count));
+        return 0.001f * (x * x * x * x) / k;
     }
 
     //Function for the Fruchterman-Reingold algorithm
     private float Fr(float x)
     {
-        return ((C_CONSTANT * Mathf.Sqrt(AREA_CONSTANT / graph.nodeList.Count)) * (C_CONSTANT * Mathf.Sqrt(AREA_CONSTANT / graph.nodeList.Count))) / x;
+        float k = (C_CONSTANT * Mathf.Sqrt(AREA_CONSTANT / graph.nodeList.Count));
+        return 0.001f * (k * k) / (x * x * x);
     }
 
     // Do one iteration fo the Fruchterman-Reingold algorithm
@@ -48,10 +50,8 @@ public class FruchtermanReingold : BaseLayoutAlgorithm
             foreach (Node neightbor in graph.nodeList) {
                 if (node != neightbor) {
                     Vector3 delta = node.transform.localPosition - neightbor.transform.localPosition;
-                    if (delta.magnitude < 1) {
-                        float FrForce = Fr(delta.magnitude);
-                        node.displacement += delta.normalized * FrForce;
-                    }
+                    float FrForce = Fr(delta.magnitude);
+                    node.displacement += delta.normalized * FrForce;
                 }
             }
         }
@@ -69,10 +69,8 @@ public class FruchtermanReingold : BaseLayoutAlgorithm
         float TotalDisplacement = 0.0f;
         foreach (Node node in graph.nodeList) {
             float DisplacementMagitude = node.displacement.magnitude;
-            if (DisplacementMagitude > 0.3f) {
-                TotalDisplacement = Mathf.Max(DisplacementMagitude, TotalDisplacement);
-                node.transform.localPosition += (node.displacement / DisplacementMagitude) * Mathf.Min(DisplacementMagitude, Temperature);
-            }
+            TotalDisplacement = Mathf.Max(DisplacementMagitude, TotalDisplacement);
+            node.transform.localPosition += (node.displacement / DisplacementMagitude) * Mathf.Min(DisplacementMagitude, Temperature);
         }
 
         // reduce the temperature
