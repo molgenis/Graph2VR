@@ -72,7 +72,7 @@ public class Graph : MonoBehaviour
         try {
             SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new System.Uri(Settings.Instance.SparqlEndpoint), BaseURI);
             lastResults = endpoint.QueryWithResultSet(
-                "select distinct ?p (STR(COUNT(?o)) AS ?count) ?label where { <" + URI + "> ?p ?o . OPTIONAL { ?p rdfs:label ?label } FILTER(LANG(?label) = '' || LANGMATCHES(LANG(?label), '" + Main.instance.languageCode + "')) } LIMIT 100"
+                "select distinct ?p (STR(COUNT(?o)) AS ?count) STR(?label) where { <" + URI + "> ?p ?o . OPTIONAL { ?p rdfs:label ?label } FILTER(LANG(?label) = '' || LANGMATCHES(LANG(?label), '" + Main.instance.languageCode + "')) } LIMIT 100"
                 );
 
             Dictionary<string, Tuple<string, int>> results = new Dictionary<string, Tuple<string, int>>();
@@ -112,7 +112,7 @@ public class Graph : MonoBehaviour
 
                 SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new System.Uri(Settings.Instance.SparqlEndpoint), BaseURI);
                 lastResults = endpoint.QueryWithResultSet(
-                    "select distinct ?p (STR(COUNT(?s)) AS ?count) ?label where { ?s ?p <" + URI + "> . OPTIONAL { ?p rdfs:label ?label } FILTER(LANG(?label) = '' || LANGMATCHES(LANG(?label), '" + Main.instance.languageCode + "')) } LIMIT 100"
+                    "select distinct ?p (STR(COUNT(?s)) AS ?count) STR(?label) where { ?s ?p <" + URI + "> . OPTIONAL { ?p rdfs:label ?label } FILTER(LANG(?label) = '' || LANGMATCHES(LANG(?label), '" + Main.instance.languageCode + "')) } LIMIT 100"
                     );
 
             Dictionary<string, Tuple<string, int>> results = new Dictionary<string, Tuple<string, int>>();
