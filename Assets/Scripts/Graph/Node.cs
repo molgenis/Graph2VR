@@ -54,7 +54,7 @@ public class Node : MonoBehaviour
 
     public void RequestLabel(SparqlRemoteEndpoint endpoint)
     {
-        string query = "prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>  select STR(?label) where { <" + uri + "> rdfs:label ?label . FILTER(LANG(?label) = '' || LANGMATCHES(LANG(?label), '" + Main.instance.languageCode + "')) } LIMIT 1";
+        string query = "prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>  select STR(?label) AS ?label where { <" + uri + "> rdfs:label ?label . FILTER(LANG(?label) = '' || LANGMATCHES(LANG(?label), '" + Main.instance.languageCode + "')) } LIMIT 1";
 
         endpoint.QueryWithResultSet(query, (results, state) => {
             results[0].TryGetValue("label",  out INode label);
