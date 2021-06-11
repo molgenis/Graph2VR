@@ -31,8 +31,7 @@ public class Movement : MonoBehaviour
 
     private void SteamVR_Behaviour_Movement_OnChange(SteamVR_Action_Vector2 fromAction, SteamVR_Input_Sources fromSource, Vector2 axis, Vector2 delta)
     {
-        
-        transform.position = transform.position + transform.rotation * ( new Vector3(axis.x, 0, axis.y) * movementSpeed * Time.deltaTime );
+        transform.position = transform.position + Camera.main.transform.rotation * ( new Vector3(axis.x, 0, axis.y) * movementSpeed * Time.deltaTime );
     }
 
     private void SteamVR_Behaviour_Teleport_OnChange(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState)
@@ -42,7 +41,6 @@ public class Movement : MonoBehaviour
         } else {
             line.enabled = false;
             transform.position = teleportPoint;
-            // tp
         }
     }
 
