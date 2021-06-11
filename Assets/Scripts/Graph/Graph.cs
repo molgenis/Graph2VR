@@ -114,7 +114,7 @@ public class Graph : MonoBehaviour
                 lastResults = endpoint.QueryWithResultSet(
                     "select distinct ?p (STR(COUNT(?s)) AS ?count) STR(?label) AS ?label where { ?s ?p <" + URI + "> . OPTIONAL { ?p rdfs:label ?label } FILTER(LANG(?label) = '' || LANGMATCHES(LANG(?label), '" + Main.instance.languageCode + "')) } LIMIT 100"
                     );
-
+            Debug.Log("select distinct ?p (STR(COUNT(?s)) AS ?count) STR(?label) AS ?label where { ?s ?p <" + URI + "> . OPTIONAL { ?p rdfs:label ?label } FILTER(LANG(?label) = '' || LANGMATCHES(LANG(?label), '" + Main.instance.languageCode + "')) } LIMIT 100");
             Dictionary<string, Tuple<string, int>> results = new Dictionary<string, Tuple<string, int>>();
             // Fill triples list 
             foreach (SparqlResult result in lastResults)
@@ -237,7 +237,7 @@ public class Graph : MonoBehaviour
     private void BuildByIGraph(IGraph iGraph)
     {
         foreach (INode node in iGraph.Nodes) {
-            if(!nodeList.Find(graficalNode => graficalNode.iNode == node)) {
+            if(!nodeList.Find(graficalNode => graficalNode.iNode.Equals(node))) {
                 Node n = CreateNode(node.ToString(), node);
                 n.SetColor(defaultNodeColor);
             }
@@ -245,8 +245,10 @@ public class Graph : MonoBehaviour
 
         foreach (VDS.RDF.Triple triple in iGraph.Triples) {
             // TODO: make sure not to add the same edge again. ( check for existing edges with same Subject, Predicate, Object ? )
-            Edge e = CreateEdge(triple.Subject, triple.Predicate, triple.Object);
-            e.SetColor(defaultEdgeColor);
+            if (!edgeList.Find(edge => edge.Equals(triple.Subject, triple.Predicate, triple.Object))) {
+                Edge e = CreateEdge(triple.Subject, triple.Predicate, triple.Object);
+                e.SetColor(defaultEdgeColor);
+            }
         }
 
         // TODO: create resolve function
@@ -402,6 +404,8 @@ public class Graph : MonoBehaviour
 
         edge.uri = uri.ToString();
         edge.iNode = uri;
+        edge.iFrom = from;
+        edge.iTo = to;
         edge.from = fromNode;
         edge.to = toNode;
         edgeList.Add(edge);

@@ -8,12 +8,19 @@ public class Edge : MonoBehaviour
     public string uri;
     public Node from;
     public Node to;
+    public INode iFrom;
     public INode iNode;
+    public INode iTo;
     public Transform arrow;
 
     private LineRenderer lineRenderer;
     private TMPro.TextMeshPro textFront;
     private TMPro.TextMeshPro textBack;
+
+    public bool Equals(INode Subject, INode Predicate, INode Object)
+    {
+        return Subject.Equals(iFrom) && Predicate.Equals(iNode) && Object.Equals(iTo);
+    }
 
     public string GetURI(string value)
     {
