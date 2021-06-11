@@ -15,6 +15,12 @@ public class Graph : MonoBehaviour
     public BaseLayoutAlgorithm layout = null;
     public Color defaultNodeColor;
     public Color defaultEdgeColor;
+
+    public Color uriNodeColor;
+    public Color literalNodeColor;
+    public Color variableNodeColor;
+    public Color blankNodeColor;
+
     public static Graph instance;
     public string BaseURI = "http://dbpedia.org";
     public GameObject edgePrefab;
@@ -239,7 +245,6 @@ public class Graph : MonoBehaviour
         foreach (INode node in iGraph.Nodes) {
             if(!nodeList.Find(graficalNode => graficalNode.iNode.Equals(node))) {
                 Node n = CreateNode(node.ToString(), node);
-                n.SetColor(defaultNodeColor);
             }
         }
 
@@ -432,14 +437,23 @@ public class Graph : MonoBehaviour
         node.iNode = iNode;
 
         switch (iNode.NodeType) {
+            case NodeType.Variable:
+                node.SetDefaultColor(variableNodeColor);
+                break;
+            case NodeType.Blank:
+                node.SetURI("");
+                node.SetDefaultColor(blankNodeColor);
+                break;
             case NodeType.Literal:
                 node.SetLabel(((ILiteralNode)iNode).Value);
                 node.SetURI("");
+                node.SetDefaultColor(literalNodeColor);
                 break;
             case NodeType.Uri:
                 // TODO: this should work?
                 node.SetURI( ((IUriNode)iNode).Uri.ToString() );
                 node.RequestLabel(endpoint);
+                node.SetDefaultColor(uriNodeColor);
                 break;
                 // etc.
         }

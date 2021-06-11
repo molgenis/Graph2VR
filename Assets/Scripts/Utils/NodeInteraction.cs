@@ -15,10 +15,12 @@ public class NodeInteraction : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
     private Transform originalParent;
     private Graph graph;
+    private Node node;
 
     public void Start()
     {
         mesh = GetComponent<MeshRenderer>();
+        node = GetComponent<Node>();
         originalParent = transform.parent;
         graph = originalParent.GetComponent<Graph>();
     }
@@ -65,19 +67,19 @@ public class NodeInteraction : MonoBehaviour, IPointerEnterHandler, IPointerExit
     {
         if (ControllerGrabbed)
         {
-            mesh.material.color = new Color(0.5f, 1.0f, 0.5f);
+            node.SetColor(new Color(0.5f, 1.0f, 0.5f));
         }
         else if (ControllerHovered)
         {
-            mesh.material.color = new Color(0.5f, 0.5f, 1);
+            node.SetColor(new Color(0.5f, 0.5f, 1));
         }
         else if(PointerHovered)
         {
-            mesh.material.color = new Color(1, 1, 1);
+            node.SetColor(new Color(1, 1, 1));
         }
         else
         {
-            mesh.material.color = new Color(0, 0.259f, 0.6f);
+            node.SetColor(node.defaultColor);
         }
     }
 

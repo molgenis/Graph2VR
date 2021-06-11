@@ -10,7 +10,7 @@ public class Node : MonoBehaviour
     public string label = "";
 
     public INode iNode;
-
+    public Color defaultColor;
     public List<Node> connectedNodes = new List<Node>();
     public List<Edge> connectedEdges = new List<Edge>();
 
@@ -19,6 +19,12 @@ public class Node : MonoBehaviour
     public void Start()
     {
         InvokeRepeating("SlowUpdate", 1, 1);
+    }
+
+    public void SetDefaultColor(Color color)
+    {
+        defaultColor = color;
+        GetComponent<Renderer>().material.color = color;
     }
 
     public void SetColor(Color color)
