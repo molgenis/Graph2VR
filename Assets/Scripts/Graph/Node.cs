@@ -19,6 +19,38 @@ public class Node : MonoBehaviour
     public void Start()
     {
         InvokeRepeating("SlowUpdate", 1, 1);
+        Refine();
+    }
+    
+    public void Refine()
+    {
+        foreach (Triple t in iNode.Graph.GetTriplesWithSubject(iNode)) {
+            // rdfs:subClassOf -> relations
+            // owl:equivalentClass
+            // owl:Class, owl:ObjectProperty, owl:disjointWith
+            // rdfs:Resource, rdf:Property
+            // owl:DeprecatedClass, owl:DeprecatedProperty
+            // rdfs:Datatype, rdfs:Literal
+            // owl:DatatypeProperty
+            // owl:disjointWith, owl:unionOf, owl:intersectionOf, owl:ComplementOf
+
+            // rdfs:Label -- shown as text
+            // <url> / rdfs:Type / "image" -- show
+            // foaf: Image -- renderd on circle
+            // rdfs:Literal -- change color
+            // owl:Class, owl:ObjectProperty -- change to lightblue color
+
+            // http://vowl.visualdataweb.org/v2/#rdfsResource
+            // Filter out all common metadata, put in in this node (like labels, classes, image tags ) 
+            // (display detail on selection?)
+            // Remove those connecting nodes from graph (hide)
+
+            if (t.Predicate.ToString() == "http://www.w3.org/2000/01/rdf-schema#label") {
+                SetLabel(t.Object.ToString());
+                Graph.instance.Hide(t.Object);
+            }
+
+        }
     }
 
     public void SetDefaultColor(Color color)
@@ -34,7 +66,7 @@ public class Node : MonoBehaviour
 
     public void SetLabel(string label)
     {
-        this.label = label;
+        this.label = label.Replace("@" + Main.instance.languageCode, "");
         UpdateDisplay();
     }
 
@@ -60,6 +92,7 @@ public class Node : MonoBehaviour
 
     public void RequestLabel(SparqlRemoteEndpoint endpoint)
     {
+        // Depricated
         string query = "prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>  select STR(?label) AS ?label where { <" + uri + "> rdfs:label ?label . FILTER(LANG(?label) = '' || LANGMATCHES(LANG(?label), '" + Main.instance.languageCode + "')) } LIMIT 1";
 
         endpoint.QueryWithResultSet(query, (results, state) => {
@@ -67,7 +100,19 @@ public class Node : MonoBehaviour
             SetLabel(label.ToString());
         }, (object)this);
     }
+/*
+    public bool RequestIsClass(SparqlRemoteEndpoint endpoint)
+    {
+        string query = "prefix rdfs: http://www.w3.org/2000/01/rdf-schema#  ASK {{<" + uri + "> a owl:Class.} UNION {?anything a <" + uri + ">.}}";
+        try {
+            SparqlResultSet result = endpoint.QueryWithResultSet(query);
+            Debug.Log(result.Result.ToString());
+            return result.Result;
+        } catch { Debug.Log(uri); }
+        return false;
 
+    }
+    */
     private void UpdateDisplay()
     {
         string text = label;

@@ -56,14 +56,12 @@ public class Graph : MonoBehaviour
 
         List<string> results = new List<string>();
         // Fill triples list 
-        foreach (SparqlResult result in lastResults)
-        {
+        foreach (SparqlResult result in lastResults) {
             result.TryGetValue("s", out INode s);
             result.TryGetValue("p", out INode p);
             result.TryGetValue("o", out INode o);
 
-            if (s != null)
-            {
+            if (s != null) {
                 results.Add(s.ToString());
             }
         }
@@ -90,14 +88,14 @@ public class Graph : MonoBehaviour
                 result.TryGetValue("label", out INode labelNode);
 
                 string label = "";
-                if (labelNode!= null) {
-                    label  = labelNode.ToString();
+                if (labelNode != null) {
+                    label = labelNode.ToString();
                 }
                 if (p != null) {
                     if (!results.ContainsKey(p.ToString())) {
                         results.Add(p.ToString(), new Tuple<string, int>(label, int.Parse(count.ToString())));
                     } else {
-                        if(!results[p.ToString()].Item1.Contains("@"+Main.instance.languageCode)) {
+                        if (!results[p.ToString()].Item1.Contains("@" + Main.instance.languageCode)) {
                             results[p.ToString()] = new Tuple<string, int>(label, int.Parse(count.ToString()));
                         }
                     }
@@ -114,17 +112,15 @@ public class Graph : MonoBehaviour
     public Dictionary<string, Tuple<string, int>> GetIncomingPredicats(string URI)
     {
         if (URI == "") return null;
-            try {
+        try {
 
-                SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new System.Uri(Settings.Instance.SparqlEndpoint), BaseURI);
-                lastResults = endpoint.QueryWithResultSet(
-                    "select distinct ?p (STR(COUNT(?s)) AS ?count) STR(?label) AS ?label where { ?s ?p <" + URI + "> . OPTIONAL { ?p rdfs:label ?label } FILTER(LANG(?label) = '' || LANGMATCHES(LANG(?label), '" + Main.instance.languageCode + "')) } LIMIT 100"
-                    );
-            Debug.Log("select distinct ?p (STR(COUNT(?s)) AS ?count) STR(?label) AS ?label where { ?s ?p <" + URI + "> . OPTIONAL { ?p rdfs:label ?label } FILTER(LANG(?label) = '' || LANGMATCHES(LANG(?label), '" + Main.instance.languageCode + "')) } LIMIT 100");
+            SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new System.Uri(Settings.Instance.SparqlEndpoint), BaseURI);
+            lastResults = endpoint.QueryWithResultSet(
+                "select distinct ?p (STR(COUNT(?s)) AS ?count) STR(?label) AS ?label where { ?s ?p <" + URI + "> . OPTIONAL { ?p rdfs:label ?label } FILTER(LANG(?label) = '' || LANGMATCHES(LANG(?label), '" + Main.instance.languageCode + "')) } LIMIT 100"
+                );
             Dictionary<string, Tuple<string, int>> results = new Dictionary<string, Tuple<string, int>>();
             // Fill triples list 
-            foreach (SparqlResult result in lastResults)
-            {
+            foreach (SparqlResult result in lastResults) {
                 //Debug.Log(result);
                 result.TryGetValue("p", out INode p);
                 result.TryGetValue("count", out INode count);
@@ -158,13 +154,39 @@ public class Graph : MonoBehaviour
     {
         string query = "";
         if (isOutgoingLink) {
-            query = "construct {<" + node.GetURIAsString() + "> <" + uri + "> ?object} where {<" + node.GetURIAsString() + "> <" + uri + "> ?object}";
-            //query = "construct {<" + node.GetURIAsString() + "> <" + uri + "> ?object . <" + uri + "> rdfs:label ?edgelabel } where {<" + node.GetURIAsString() + "> <" + uri + "> ?object . OPTIONAL {<" + uri + "> rdfs:label ?edgelabel}}";
+            //query = "construct {<" + node.GetURIAsString() + "> <" + uri + "> ?object} where {<" + node.GetURIAsString() + "> <" + uri + "> ?object}";
+
+            // Select with label
+            query = $@"
+                prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+                construct {{
+                    <{node.GetURIAsString()}> <{uri}> ?object .
+                    ?object rdfs:label ?objectlabel
+                }} where {{
+                    <{node.GetURIAsString()}> <{uri}> ?object .
+                    OPTIONAL {{
+                        ?object rdfs:label ?objectlabel .
+                        FILTER(LANG(?objectlabel) = '' || LANGMATCHES(LANG(?objectlabel), '{Main.instance.languageCode}'))
+                    }}
+                }}";
+            //"prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>  select STR(?label) AS ?label where { <" + uri + "> rdfs:label ?label . FILTER(LANG(?label) = '' || LANGMATCHES(LANG(?label), '" + Main.instance.languageCode + "')) } LIMIT 1";
         } else {
-            query = "construct { ?subject <" + uri + "> <" + node.GetURIAsString() + ">} where {?subject <" + uri + "> <" + node.GetURIAsString() + ">}";
+            query = $@"
+            construct {{
+                ?subject <{uri}> <{node.GetURIAsString()}>
+            }} where {{
+                ?subject <{uri}> <{node.GetURIAsString()}>
+            }}";
         }
         // Execute query
         endpoint.QueryWithResultGraph(query, (graph, state) => {
+            if (state != null) {
+                Debug.Log("There may me an error");
+                Debug.Log(query);
+                Debug.Log(graph);
+                Debug.Log(state);
+                Debug.Log(((AsyncError)state).Error);
+            }
             currentGraph.Merge(graph);
             // To draw new elements to unity we need to be on the main Thread
             UnityMainThreadDispatcher.Instance().Enqueue(BuildIGraphOnTheMainThread());
@@ -238,7 +260,6 @@ public class Graph : MonoBehaviour
         currentGraph.NamespaceMap.AddNamespace("dbpedia", new Uri("http://dbpedia.org/resource/"));
         currentGraph.NamespaceMap.AddNamespace("dbpedia/ontology", new Uri("http://dbpedia.org/ontology/"));
     }
-
 
     private void BuildByIGraph(IGraph iGraph)
     {
@@ -371,11 +392,6 @@ public class Graph : MonoBehaviour
         instance = this;
     }
 
-    public Node GetByINode(INode iNode)
-    {
-        return nodeList.Find((Node node) => node.iNode.Equals(iNode));
-    }
-
     public Edge CreateEdge(Node from, string uri,  Node to)
     {
         GameObject clone = Instantiate<GameObject>(edgePrefab);
@@ -452,7 +468,7 @@ public class Graph : MonoBehaviour
             case NodeType.Uri:
                 // TODO: this should work?
                 node.SetURI( ((IUriNode)iNode).Uri.ToString() );
-                node.RequestLabel(endpoint);
+                //node.RequestLabel(endpoint);
                 node.SetDefaultColor(uriNodeColor);
                 break;
                 // etc.
@@ -476,4 +492,21 @@ public class Graph : MonoBehaviour
         return node;
     }
 
+    public Node GetByINode(INode iNode)
+    {
+        return nodeList.Find((Node node) => node.iNode.Equals(iNode));
+    }
+
+
+    public void Hide(INode node)
+    {
+        Node n = GetByINode(node);
+        if(n != null) {
+            n.gameObject.SetActive(false);
+        }
+        Edge e = edgeList.Find((Edge edge) => edge.iTo.Equals(node));
+        if (e != null) {
+            e.gameObject.SetActive(false);
+        }
+    }
 }
