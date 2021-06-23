@@ -6,6 +6,9 @@ using VDS.RDF.Query;
 
 public class Node : MonoBehaviour
 {
+    private Canvas infoPanel;
+
+
     public string uri = ""; // Full URI, empty if literal
     public string label = "";
 
@@ -129,6 +132,26 @@ public class Node : MonoBehaviour
     void Update()
     {
         transform.rotation = Quaternion.LookRotation(Camera.main.transform.position - transform.position, Vector3.up);
+    }
+
+    public void ToggleInfoPanel()
+    {
+        if (infoPanel == null)
+        {
+            infoPanel = Instantiate<Canvas>(Resources.Load<Canvas>("UI/ContextMenu"));
+            infoPanel.renderMode = RenderMode.WorldSpace;
+            infoPanel.worldCamera = GameObject.Find("Controller (right)").GetComponent<Camera>();
+            ContextMenuHandler selectorHandler = infoPanel.GetComponent<ContextMenuHandler>();
+            selectorHandler.Initiate(this);
+        }
+        else
+        {
+            infoPanel.enabled = !infoPanel.enabled;
+        }
+
+        infoPanel.transform.position = transform.position;
+        infoPanel.transform.rotation = Quaternion.LookRotation(transform.position - Camera.main.transform.position, Vector3.up);
+        infoPanel.transform.position += infoPanel.transform.rotation * new Vector3(1.0f, 0, 0) * Mathf.Max(transform.lossyScale.x, gameObject.transform.lossyScale.y);
     }
 
 }

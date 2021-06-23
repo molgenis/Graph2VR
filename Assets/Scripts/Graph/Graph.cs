@@ -150,6 +150,12 @@ public class Graph : MonoBehaviour
 
     }
 
+    public void GetDescriptionAsync(string URI, GraphCallback callback)
+    {
+        string query = "describe <" + URI + ">";
+        endpoint.QueryWithResultGraph(query, callback, null);
+    }
+
     public void ExpandGraph(Node node, string uri, bool isOutgoingLink)
     {
         string query = "";
