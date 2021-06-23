@@ -193,9 +193,12 @@ public class Graph : MonoBehaviour
                 Debug.Log(state);
                 Debug.Log(((AsyncError)state).Error);
             }
-            currentGraph.Merge(graph);
             // To draw new elements to unity we need to be on the main Thread
-            UnityMainThreadDispatcher.Instance().Enqueue(BuildIGraphOnTheMainThread());
+            UnityMainThreadDispatcher.Instance().Enqueue(() =>
+            {
+                currentGraph.Merge(graph);
+                BuildByIGraph(currentGraph);
+            });
         }, null);
     }
 
@@ -209,24 +212,6 @@ public class Graph : MonoBehaviour
         }
         return "";
     }
-
-    public IEnumerator BuildIGraphOnTheMainThread()
-    {
-        // IMPORTANT: possible race condition. Add the merge of igraph's in the main thread! 
-        BuildByIGraph(currentGraph);
-        yield return null;
-    }
-
-    //We want to be able to display information about a single node, the describe query allows to get some information.
-    //Todo: return the description
-    //   public IGraph GetDescription(string URI)
-    //   {
-    //       SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new System.Uri(Settings.Instance.SparqlEndpoint), BaseURI);
-    //       IGraph lastResults = endpoint.QueryWithResultGraph(
-    //           "DESCRIBE {<"+ URI +">}"
-    //           );
-    //       return lastResults;
-    //   }
 
     private string CleanInfo(string str)
     {
