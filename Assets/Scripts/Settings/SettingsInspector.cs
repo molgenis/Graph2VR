@@ -20,6 +20,7 @@ namespace Dweiss
         public override void OnInspectorGUI()
         {
             DrawDefaultInspector();
+            /*
             var script = ((ASettings)target);
 
             EditorGUILayout.Separator();
@@ -44,6 +45,7 @@ namespace Dweiss
 
             script.AutoSave = EditorGUILayout.Toggle("Auto Save",
                script.AutoSave);
+               */
         }
 
     }
