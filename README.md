@@ -12,8 +12,9 @@ We tried to reduce the ways to interact with the graph to a few simple operation
 - Expanding the graph at a certain node using incoming or outgoing predicates.
 - Deleting a node or collapsing those nodes around it that are not connected to the graph elsewhere.
 - Filtering and slicing the graph to get only the relevant information
-- Comparing different parts of the graph side by side
+- Comparing different parts of the graph side by side (different visualisations)
 - Building visual query pattern to form a SPARQL query.
 - Adding new nodes and edges.
+- Interacting with the graph (zoom, move, rotate) 
 
 
