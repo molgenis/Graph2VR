@@ -9,17 +9,11 @@ Virtual Reality offers the user way more space to expand the graph, then a 2D co
 
 We tried to reduce the ways to interact with the graph to a few simple operations:
 - Getting some information about the current node
-- Expanding the graph at a certain node using a specific incoming or outgoing predicate.
-- Declaring a node or edge in the graph as variable node, to build a query pattern for a SPARQL query.
-- If you can expand a node, it has to be possible to reduce the amount of nodes again or to remove a certain node
-- Beeing able to filter helps to slice the graph to the relevant parts
-- Besides of the pure visualisation GraphVR is also able to create new nodes and edges.
-
-
-
-
-
-
-
+- Expanding the graph at a certain node using incoming or outgoing predicates.
+- Deleting a node or collapsing those nodes around it that are not connected to the graph elsewhere.
+- Filtering and slicing the graph to get only the relevant information
+- Comparing different parts of the graph side by side
+- Building visual query pattern to form a SPARQL query.
+- Adding new nodes and edges.
 
 
