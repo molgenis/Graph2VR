@@ -12,11 +12,10 @@ public class SphereInteraction : MonoBehaviour
     Transform leftControler;
     Transform rightControler;
 
-    // Worldspace vectors
-    Vector3 lefToRight;
+    Vector3 lefToRight; // In worldspace
     Vector3 leftToCenter;
-    public float sphereSize;
     float handleDistance;
+    Vector3 initialScale;
 
     void StartInteraction()
     {
@@ -26,7 +25,7 @@ public class SphereInteraction : MonoBehaviour
         lefToRight = right - left;
         leftToCenter = center - left;
         handleDistance = Vector3.Distance(left, right);
-        sphereSize = bsphere.transform.localScale.magnitude;
+        initialScale = transform.localScale;
     }
 
     void StopInteraction()
@@ -42,19 +41,12 @@ public class SphereInteraction : MonoBehaviour
         Vector3 newLefToRight = right - left;
         float sizeFactor = Vector3.Distance(left, right) / handleDistance;
 
-        // MAX: please help, what is this (2.525) constant? why do i need it? 
-        // Something to do with the initial size of the graph?
-        // Maybe to do with relative scale of graph object and the bounding sphere?
-        // i dont know, please help.. its driving me mad!
-        // - Bigger values will make de graph smaller every time it is used
-        // - Smaller values will make de grapgh bigger very time it is used
-        float size = ((sphereSize) * sizeFactor) / 2.525f;
         Quaternion rotation = Quaternion.FromToRotation(lefToRight, newLefToRight);
         Vector3 center = (left + ((rotation * leftToCenter)*sizeFactor));
 
         transform.position = center + (transform.position - bsphere.transform.position);
         transform.rotation = rotation;
-        transform.localScale = Vector3.one * size;
+        transform.localScale = initialScale * sizeFactor;
     }
 
     private void Start()
