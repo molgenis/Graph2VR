@@ -96,18 +96,16 @@ public class Edge : MonoBehaviour
         Vector3 fromPosition = from.transform.position - transform.position;
         Vector3 toPosition = to.transform.position - transform.position;
         Vector3 normal = (toPosition - fromPosition).normalized;
+        lineRenderer.startWidth = lineRenderer.endWidth = 0.005f * transform.lossyScale.magnitude;
         lineRenderer.SetPosition(0, transform.worldToLocalMatrix * fromPosition);
-        lineRenderer.SetPosition(1, transform.worldToLocalMatrix * (toPosition - (normal * ((to.transform.localScale.x * 0.5f) + (arrow.localScale.x * 0.05f)))));
+        lineRenderer.SetPosition(1, transform.worldToLocalMatrix * (toPosition - (normal * ((to.transform.lossyScale.x * 0.5f) + (arrow.lossyScale.x * 0.05f)))));
         Vector2 rot = CalculateAngles(fromPosition, toPosition, true);
         textFront.transform.rotation = Quaternion.Euler(0, rot.x, rot.y); // note this is world rotation
         textFront.transform.localPosition = textFront.transform.localRotation * (Vector3.up * 0.05f); // note this is local position
         rot = CalculateAngles(fromPosition, toPosition, false);
         textBack.transform.rotation = Quaternion.Euler(0, rot.x, rot.y);
         textBack.transform.localPosition = textBack.transform.localRotation * (Vector3.up * 0.05f);
-
-        
-        arrow.localPosition = (transform.worldToLocalMatrix * (toPosition - (normal * (to.transform.localScale.x * 0.5f)))) ;
-        //arrow.localPosition = toPosition - (normal * 0.15f);
+        arrow.localPosition = (transform.worldToLocalMatrix * (toPosition - (normal * (to.transform.lossyScale.x * 0.5f)))) ;
         arrow.rotation = Quaternion.FromToRotation(Vector3.up, normal);
     }
 }

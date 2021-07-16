@@ -50,13 +50,11 @@ public class NodeMenu : MonoBehaviour
                 });
             }
 
-            foreach (KeyValuePair<string, System.Tuple<string, int>> item in set)
-            {
+            foreach (KeyValuePair<string, System.Tuple<string, int>> item in set) {
                 //Debug.Log("k: " + item.Key + " v1: " + item.Value.Item1 + " v2: " + item.Value.Item2);
                 Color color = Color.gray;
                 string label = item.Value.Item1;
-                if (label == "")
-                {
+                if (label == "") {
                     label = item.Key;
                     color = Color.gray * 0.75f;
                 }
@@ -69,7 +67,6 @@ public class NodeMenu : MonoBehaviour
             }
             cm.AddButton("Convert to Variable", Color.blue / 2, () => { });
             cm.AddButton("Convert to Constant", Color.cyan / 2, () => { });
-            cm.AddButton("Show details", Color.cyan / 2, () => { node.ToggleInfoPanel(); });
             cm.AddButton("Close", Color.red / 2, () => { });
             cm.ReBuild(cm.type);
         }
