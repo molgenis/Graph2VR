@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Valve.VR;
 
 public class NodeMenu : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class NodeMenu : MonoBehaviour
     public bool isOutgoingLink = true;
     private Dictionary<string, System.Tuple<string, int>> set;
     private Node node = null;
+    public GameObject controlerModel;
+    public SteamVR_Action_Boolean clickAction = null;
 
     public void Start()
     {
@@ -26,17 +29,24 @@ public class NodeMenu : MonoBehaviour
         }
     }
 
+    public void Update()
+    {
+        if (clickAction.GetStateDown(SteamVR_Input_Sources.LeftHand) == true) {
+            Close();
+        }
+    }
+
     public void Populate(Object input)
     {
         node = input as Node;
         GetPredicats();
-
         if (set != null) {
             // Get uri of selected node
             // Get list of predicats 
             // call GetOutgoingPredicats()
 
             Close();
+            controlerModel.SetActive(false);
 
             if (isOutgoingLink) {
                 cm.AddButton("List incoming predicats", Color.blue / 2, () => {
@@ -62,7 +72,7 @@ public class NodeMenu : MonoBehaviour
 
                 cm.AddButton(label, color, () => {
                     Graph.instance.ExpandGraph(node, item.Key, isOutgoingLink);
-                    cm.Close();
+                    Close();
                 }, item.Value.Item2);
             }
             cm.AddButton("Convert to Variable", Color.blue / 2, () => { });
@@ -74,6 +84,9 @@ public class NodeMenu : MonoBehaviour
 
     public void Close()
     {
-        if(cm!=null) cm.Close();
+        if (cm != null) {
+            cm.Close();
+            controlerModel.SetActive(true);
+        }
     }
 }

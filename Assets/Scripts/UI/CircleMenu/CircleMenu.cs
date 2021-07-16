@@ -17,9 +17,9 @@ public class CircleMenu : MonoBehaviour
     public Type type = Type.Circle;
     private bool isBuild = false;
 
-    public SteamVR_Action_Boolean gripAction = null;
+    public SteamVR_Action_Boolean clickAction = null;
 
-    //private LookAtTransform lookAt = null;
+    private LookAtTransform lookAt = null;
     //private GameObject cursorLeft = null;
     //private GameObject cursorRight = null;
 
@@ -39,8 +39,9 @@ public class CircleMenu : MonoBehaviour
 
     private void Start()
     {
-        //lookAt = gameObject.AddComponent<LookAtTransform>();
-        //lookAt.flipDirection = true;
+        lookAt = gameObject.AddComponent<LookAtTransform>();
+        lookAt.lookAt = Camera.main.transform;
+        lookAt.flipDirection = true;
         if (leftControler == null) leftControler = GameObject.FindGameObjectWithTag("LeftControler").transform;
         if (rightControler == null) rightControler = GameObject.FindGameObjectWithTag("RightControler").transform;
     }
@@ -50,8 +51,8 @@ public class CircleMenu : MonoBehaviour
         if (!isBuild) return;
 
         // Where are the controlers pointing?
-        //Plane plane = new Plane(lookAt.normal, transform.position);
-        Plane plane = new Plane(Vector3.forward, transform.position);
+        Plane plane = new Plane(lookAt.normal, transform.position);
+        //Plane plane = new Plane(Vector3.forward, transform.position);
         Ray left = new Ray(leftControler.position, leftControler.forward);
         Ray right = new Ray(rightControler.position, rightControler.forward);
         Vector3 leftPoint = Vector3.zero;
@@ -120,14 +121,14 @@ public class CircleMenu : MonoBehaviour
         // Button click
         if (selectedLeftButton != null) {
             selectedLeftButton.instance.gameObject.GetComponent<Renderer>().material.color = selectedLeftButton.color + new Color(0.2f, 0.2f, 0.2f);
-            if (gripAction.GetStateDown(SteamVR_Input_Sources.LeftHand) == true) {
+            if (clickAction.GetStateDown(SteamVR_Input_Sources.LeftHand) == true) {
                 selectedLeftButton.callback();
             }
         }
 
         if (selectedRightButton != null) {
             selectedRightButton.instance.gameObject.GetComponent<Renderer>().material.color = selectedRightButton.color + new Color(0.2f, 0.2f, 0.2f);
-            if (gripAction.GetStateDown(SteamVR_Input_Sources.RightHand) == true) {
+            if (clickAction.GetStateDown(SteamVR_Input_Sources.RightHand) == true) {
                 selectedRightButton.callback();
             }
         }
