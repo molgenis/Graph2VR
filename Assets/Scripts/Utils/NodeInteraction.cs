@@ -5,8 +5,6 @@ using UnityEngine.EventSystems;
 
 public class NodeInteraction : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler, IGrabInterface
 {
-    private Canvas menu;
-
     private MeshRenderer mesh;
 
     private bool PointerHovered = false;
@@ -15,10 +13,12 @@ public class NodeInteraction : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
     private Transform originalParent;
     private Graph graph;
+    private Node node;
 
     public void Start()
     {
         mesh = GetComponent<MeshRenderer>();
+        node = GetComponent<Node>();
         originalParent = transform.parent;
         graph = originalParent.GetComponent<Graph>();
     }
@@ -27,57 +27,25 @@ public class NodeInteraction : MonoBehaviour, IPointerEnterHandler, IPointerExit
     {
         Node node = GetComponent<Node>();
         GameObject.FindGameObjectWithTag("LeftControler").BroadcastMessage("Populate", node, SendMessageOptions.DontRequireReceiver);
-        /*
-        if(menu == null)
-        {
-            menu = Instantiate<Canvas>(Resources.Load<Canvas>("UI/ContextMenu"));
-            menu.renderMode = RenderMode.WorldSpace;
-            menu.worldCamera = GameObject.Find("Controller (right)").GetComponent<Camera>();
-        }
-        else
-        {
-            menu.enabled = !menu.enabled;
-        }
-
-        ContextMenuHandler selectorHandler = menu.GetComponent<ContextMenuHandler>();
-
-        menu.transform.position = transform.position;
-        menu.transform.rotation = Camera.main.transform.rotation;
-        menu.transform.position += menu.transform.rotation * new Vector3(1.0f, 0, 0) * Mathf.Max(transform.lossyScale.x, gameObject.transform.lossyScale.y);
-
-        TMPro.TextMeshPro text = gameObject.GetComponentInChildren<TMPro.TextMeshPro>();
-        if (text)
-        {
-            menu.GetComponentInChildren<TMPro.TextMeshProUGUI>(true).text = text.text;
-        }
-
-        selectorHandler.itemSelected += delegate(string label)
-        {
-            if (text)
-            {
-                text.text = label;
-            }
-        };
-        */
     }
 
     void SetNewColorState()
     {
         if (ControllerGrabbed)
         {
-            mesh.material.color = new Color(0.5f, 1.0f, 0.5f);
+            node.SetColor(new Color(0.5f, 1.0f, 0.5f));
         }
         else if (ControllerHovered)
         {
-            mesh.material.color = new Color(0.5f, 0.5f, 1);
+            node.SetColor(new Color(0.5f, 0.5f, 1));
         }
         else if(PointerHovered)
         {
-            mesh.material.color = new Color(1, 1, 1);
+            node.SetColor(new Color(1, 1, 1));
         }
         else
         {
-            mesh.material.color = new Color(0, 0.259f, 0.6f);
+            node.SetColor(node.defaultColor);
         }
     }
 

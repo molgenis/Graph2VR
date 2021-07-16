@@ -2,30 +2,73 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using VDS.RDF;
 
 public class ContextMenuHandler : MonoBehaviour
 {
     public GameObject ContentPanel;
-    Button buttonPrefab;
+    public GameObject labelPrefab;
     InputField inputPrefab;
 
     // Start is called before the first frame update
-    List<Button> buttons = new List<Button>();
+    List<GameObject> labels = new List<GameObject>();
     public delegate void OnItemIsSelected(string button);
-    public event OnItemIsSelected itemSelected;
 
-    void Start()
+
+    public void Initiate(Node node)
     {
-        inputPrefab = Resources.Load<InputField>("UI/InputField");
-        InputField inputField = Instantiate<InputField>(inputPrefab);
-        inputField.transform.SetParent(ContentPanel.transform, false);
-
-        buttonPrefab = Resources.Load<Button>("UI/Button");
-        List<string> subjects = Graph.instance.GetSubjects();
-        foreach (string subject in subjects)
-        {
-            AddButton(subject);
-        }
+        labelPrefab = Resources.Load<GameObject>("UI/Label");
+        Graph.instance.GetDescriptionAsync(node.uri, (graph, state) => {
+            UnityMainThreadDispatcher.Instance().Enqueue( () =>{
+                HashSet<INode> predicates = new HashSet<INode>();
+                foreach (Triple triple in graph.Triples)
+                {
+                    predicates.Add(triple.Predicate);
+                }
+                int numAdded = 0;
+                foreach (INode predicate in predicates)
+                {
+                    string property = "Has porperty\n" + predicate.ToString() + ":\n";
+                    string isOf = "is\n" + predicate.ToString() + " of:\n";
+                    IEnumerable<Triple> triples = graph.GetTriplesWithPredicate(predicate);
+                    bool hasPropery = false;
+                    bool isPropery = false;
+                    foreach (Triple triple in triples)
+                    {
+                        string subject = triple.Subject.ToString();
+                        string obj = triple.Object.ToString();
+                        if (subject.Equals(node.uri))
+                        {
+                            property += obj + "\n";
+                            hasPropery = true;
+                            numAdded++;
+                        }
+                        else if (obj.Equals(node.uri))
+                        {
+                            isOf += subject + "\n";
+                            isPropery = true;
+                            numAdded++;
+                        }
+                        if (numAdded > 100)
+                        {
+                            break;
+                        }
+                    }
+                    if (hasPropery)
+                    {
+                        AddLabel(property);
+                    }
+                    if (isPropery)
+                    {
+                        AddLabel(isOf);
+                    }
+                    if (numAdded > 100)
+                    {
+                        break;
+                    }
+                }
+            });
+        });
     }
 
     // Update is called once per frame
@@ -34,27 +77,11 @@ public class ContextMenuHandler : MonoBehaviour
         
     }
 
-    public void AddButton(string label)
+    public void AddLabel(string labelText)
     {
-        Button button = Instantiate<Button>(buttonPrefab);
-        button.transform.SetParent(ContentPanel.transform, false);
-        button.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = label;
-
-        button.onClick.AddListener(
-            delegate
-            {
-                GetComponentInChildren<TMPro.TextMeshProUGUI>(true).text = label;
-                itemSelected(label);
-            });
-
-        buttons.Add(button);
-    }
-
-    private void OnDisable()
-    {
-        foreach(Button button in buttons)
-        {
-            button.onClick.RemoveAllListeners();
-        }
+        GameObject label = Instantiate<GameObject>(labelPrefab);
+        label.transform.SetParent(ContentPanel.transform, false);
+        label.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = labelText;
+        labels.Add(label);
     }
 }

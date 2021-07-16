@@ -12,19 +12,18 @@ using System.Collections.Generic;
 
 namespace Dweiss {
 	[System.Serializable]
-	public class Settings : ASettings {
-
+	public class Settings : MonoBehaviour {  // Temporary removed baseclase ASettings
         [Header("--Main settings--")]
         public string SparqlEndpoint = "https://dbpedia.org/sparql";
 
         public string StartingURI = "Biobank";
 
         private new void Awake() {
-			base.Awake ();
+			// base.Awake ();
             SetupSingelton();
         }
 
-
+        string name = "";
         #region  Singelton
         public static Settings _instance;
         public static Settings Instance { get { return _instance; } }
