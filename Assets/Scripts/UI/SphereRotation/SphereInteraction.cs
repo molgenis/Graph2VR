@@ -16,6 +16,7 @@ public class SphereInteraction : MonoBehaviour
     Vector3 leftToCenter;
     float handleDistance;
     Vector3 initialScale;
+    Quaternion initialRotation;
 
     void StartInteraction()
     {
@@ -26,6 +27,7 @@ public class SphereInteraction : MonoBehaviour
         leftToCenter = center - left;
         handleDistance = Vector3.Distance(left, right);
         initialScale = transform.localScale;
+        initialRotation = transform.rotation;
     }
 
     void StopInteraction()
@@ -45,7 +47,7 @@ public class SphereInteraction : MonoBehaviour
         Vector3 center = (left + ((rotation * leftToCenter)*sizeFactor));
 
         transform.position = center + (transform.position - bsphere.transform.position);
-        transform.rotation = rotation;
+        transform.rotation = rotation * initialRotation;
         transform.localScale = initialScale * sizeFactor;
     }
 
