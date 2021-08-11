@@ -22,7 +22,7 @@ public class Graph : MonoBehaviour
     public Color blankNodeColor;
 
     public static Graph instance;
-    public string BaseURI = "http://dbpedia.org";
+    public string BaseURI = "https://github.com/PjotrSvetachov/GraphVR/example-graph";
     public GameObject edgePrefab;
     public GameObject nodePrefab;
     public Canvas menu;

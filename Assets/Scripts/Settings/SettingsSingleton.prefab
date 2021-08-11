@@ -43,15 +43,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfad8e0279381294fad0e271990e9952, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  show: 1
-  colorChangeCycle: 3.5
-  qualitySettings: 2
-  arrayExample:
-  - 3
-  - 4
-  listExample:
-  - 2
-  - 0
-  enumExample: 1
-  classExample:
-    txt: abcd
+  SparqlEndpoint: http://localhost:8890/sparql
+  StartingURI: http://www.semanticweb.org/alexander/ontologies/2021/6/untitled-ontology-479#geste_children_6to7years:icteric_lipids:Collected

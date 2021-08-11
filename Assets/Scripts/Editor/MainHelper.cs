@@ -7,7 +7,7 @@ using UnityEngine;
 [CustomEditor(typeof(Main))]
 public class MainHelper : Editor
 {
-    string text = "construct { <http://dbpedia.org/resource/Biobank> ?p ?o } where { <http://dbpedia.org/resource/Biobank> ?p ?o } LIMIT 100";
+    string text = "select ?s ?p ?o WHERE{<http://www.semanticweb.org/alexander/ontologies/2021/6/untitled-ontology-479#geste_children_6to7years:icteric_lipids:Collected> ?p ?o.} LIMIT 20";
 
     public override void OnInspectorGUI()
     {
