@@ -77,3 +77,9 @@ Library/CurrentLayout.dwlt
 # Please dont do FilesToCopy stuff
 /[Aa]ssets/_FilesToCopy*
 /[Aa]ssets/_FilesToCopy/*
+VirtuosoDocker/db/ToLoad/Maelstrom_Reach.v0.9.owl
+VirtuosoDocker/ToLoad/Maelstrom_Reach.v0.9.owl
+VirtuosoDocker/db/virtuoso.lck
+VirtuosoDocker/db/virtuoso.db
+VirtuosoDocker/db/virtuoso.log
+VirtuosoDocker/db/virtuoso-temp.db
