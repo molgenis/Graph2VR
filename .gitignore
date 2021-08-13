@@ -87,3 +87,4 @@ VirtuosoDocker/db/virtuoso-temp.db
 VirtuosoDocker/db/virtuoso.db
 VirtuosoDocker/db/virtuoso.log
 VirtuosoDocker/db/virtuoso.trx
+VirtuosoDocker/db/virtuoso.pxa
