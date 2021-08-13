@@ -9,7 +9,6 @@ public class CircleMenu : MonoBehaviour
 {
     public Transform leftControler = null;
     public Transform rightControler = null;
-    //public GameObject cursorPrefab = null;
     public Material baseMaterial;
     public float size = 0.1f;
     public float scaleFactor = 0.5f;
@@ -20,8 +19,11 @@ public class CircleMenu : MonoBehaviour
     public SteamVR_Action_Boolean clickAction = null;
 
     private LookAtTransform lookAt = null;
-    //private GameObject cursorLeft = null;
-    //private GameObject cursorRight = null;
+    private LineRenderer sliderLine;
+    public Material sliderLineMaterial;
+    public GameObject sliderNobPrefab;
+    private GameObject sliderNob;
+    public float sliderValue; // [0...1]
 
     public class CircleButton
     {
@@ -36,6 +38,10 @@ public class CircleMenu : MonoBehaviour
     }
 
     List<CircleButton> buttons = new List<CircleButton>();
+    private void Awake()
+    {
+        sliderLine = gameObject.AddComponent<LineRenderer>();
+    }
 
     private void Start()
     {
@@ -49,6 +55,14 @@ public class CircleMenu : MonoBehaviour
     private void Update()
     {
         if (!isBuild) return;
+
+        if (sliderNob != null) {
+            // position slider nob via sliderValue
+            float sliderAngle = (sliderValue * 180) * (Mathf.Deg2Rad);
+            sliderNob.transform.localPosition = new Vector3(Mathf.Sin(-sliderAngle), Mathf.Cos(-sliderAngle), 0) * 17;
+            sliderNob.transform.localRotation = Quaternion.Euler(0, 180, 0);
+            sliderNob.transform.localScale = Vector3.one * 2;
+        }
 
         // Where are the controlers pointing?
         Plane plane = new Plane(lookAt.normal, transform.position);
@@ -76,7 +90,7 @@ public class CircleMenu : MonoBehaviour
                 rightActive = true;
             }
         }
-        
+        /*
         // Scale buttons with distance
         CircleButton selectedLeftButton = null;
         CircleButton selectedRightButton = null;
@@ -132,7 +146,7 @@ public class CircleMenu : MonoBehaviour
                 selectedRightButton.callback();
             }
         }
-
+        */
     }
 
     // ----
@@ -155,6 +169,7 @@ public class CircleMenu : MonoBehaviour
         transform.rotation = Quaternion.identity;
         // Remove all child elements
         foreach (Transform child in transform) Destroy(child.gameObject);
+        sliderNob = Instantiate(sliderNobPrefab, transform);
 
         this.type = type;
         float totalAngle = 180;
@@ -168,7 +183,21 @@ public class CircleMenu : MonoBehaviour
         transform.localScale = Vector3.one * size;
         
         int index = 0;
-        foreach(CircleButton button in buttons) {
+        sliderLine.positionCount = buttons.Count * 2;
+        sliderLine.widthMultiplier = 0.2f;
+        sliderLine.material = sliderLineMaterial;
+        sliderLine.material.color = Color.gray;
+        sliderLine.useWorldSpace = false;
+
+        // Set slider track
+        for (int i = 0; i < buttons.Count * 2; i++) {
+            float angle = (-((1f / amount) * index * (totalAngle * Mathf.Deg2Rad)))/2f;
+            sliderLine.SetPosition(index, new Vector2(Mathf.Sin(angle), Mathf.Cos(angle)) * 17);
+            index++;
+        }
+
+        index = 0;
+        foreach (CircleButton button in buttons) {
             float angle = -((1f / amount) * index * (totalAngle * Mathf.Deg2Rad));
 
             bool flip;
