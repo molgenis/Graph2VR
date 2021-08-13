@@ -174,7 +174,7 @@ public class Graph : MonoBehaviour
                         ?object rdfs:label ?objectlabel .
                         FILTER(LANG(?objectlabel) = '' || LANGMATCHES(LANG(?objectlabel), '{Main.instance.languageCode}'))
                     }}
-                }}";
+                }} LIMIT 20";
             //"prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>  select STR(?label) AS ?label where { <" + uri + "> rdfs:label ?label . FILTER(LANG(?label) = '' || LANGMATCHES(LANG(?label), '" + Main.instance.languageCode + "')) } LIMIT 1";
         } else {
             query = $@"
@@ -182,7 +182,7 @@ public class Graph : MonoBehaviour
                 ?subject <{uri}> <{node.GetURIAsString()}>
             }} where {{
                 ?subject <{uri}> <{node.GetURIAsString()}>
-            }}";
+            }}  LIMIT 20";
         }
         // Execute query
         endpoint.QueryWithResultGraph(query, (graph, state) => {
