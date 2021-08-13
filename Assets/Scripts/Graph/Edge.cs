@@ -17,6 +17,9 @@ public class Edge : MonoBehaviour
     private TMPro.TextMeshPro textFront;
     private TMPro.TextMeshPro textBack;
 
+    private string textShort;
+    private string textLong;
+
     public bool Equals(INode Subject, INode Predicate, INode Object)
     {
         return Subject.Equals(iFrom) && Predicate.Equals(iNode) && Object.Equals(iTo);
@@ -57,13 +60,23 @@ public class Edge : MonoBehaviour
 
         string qname = Graph.instance.GetShortName(uri);
         if (qname != "") {
-            textFront.text = textBack.text = qname;
+            textShort = textLong = qname;
         } else {
-            textFront.text = textBack.text = uri;
+            textShort = URIEnd(uri);
+            textLong = uri;
         }
 
         // Calculate Text rotations
         UpdatePosition();
+    }
+
+    private string URIEnd(string uri)
+    {
+        var list = uri.Split('/', '#');
+        if(list.Length > 0) {
+            return list[list.Length-1];
+        }
+        return uri;
     }
 
     private Vector2 CalculateAngles(Vector3 fromPosition, Vector3 toPosition, bool isFront)
@@ -95,17 +108,28 @@ public class Edge : MonoBehaviour
         transform.position = (from.transform.position + to.transform.position) * 0.5f;
         Vector3 fromPosition = from.transform.position - transform.position;
         Vector3 toPosition = to.transform.position - transform.position;
+
+        float distance = (((toPosition - fromPosition).magnitude) * (1 / textBack.transform.localScale.x)) * 0.8f;
         Vector3 normal = (toPosition - fromPosition).normalized;
         lineRenderer.startWidth = lineRenderer.endWidth = 0.005f * transform.lossyScale.magnitude;
         lineRenderer.SetPosition(0, transform.worldToLocalMatrix * fromPosition);
         lineRenderer.SetPosition(1, transform.worldToLocalMatrix * (toPosition - (normal * ((to.transform.lossyScale.x * 0.5f) + (arrow.lossyScale.x * 0.05f)))));
         Vector2 rot = CalculateAngles(fromPosition, toPosition, true);
         textFront.transform.rotation = Quaternion.Euler(0, rot.x, rot.y); // note this is world rotation
-        textFront.transform.localPosition = textFront.transform.localRotation * (Vector3.up * 0.05f); // note this is local position
+        textFront.transform.localPosition = textFront.transform.localRotation * (Vector3.up * 0.025f); // note this is local position
         rot = CalculateAngles(fromPosition, toPosition, false);
         textBack.transform.rotation = Quaternion.Euler(0, rot.x, rot.y);
-        textBack.transform.localPosition = textBack.transform.localRotation * (Vector3.up * 0.05f);
+        textBack.transform.localPosition = textBack.transform.localRotation * (Vector3.up * 0.025f);
+        textBack.rectTransform.sizeDelta = new Vector2(distance, 1);
+        textFront.rectTransform.sizeDelta = new Vector2(distance, 1);
         arrow.localPosition = (transform.worldToLocalMatrix * (toPosition - (normal * (to.transform.lossyScale.x * 0.5f)))) ;
         arrow.rotation = Quaternion.FromToRotation(Vector3.up, normal);
+
+        // Update text
+        if(to.state == Node.NodeState.Grabbed || to.state == Node.NodeState.Pointed) {
+            textFront.text = textBack.text = textLong;
+        } else {
+            textFront.text = textBack.text = textShort;
+        }
     }
 }

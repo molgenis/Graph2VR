@@ -52,18 +52,21 @@ public class NodeInteraction : MonoBehaviour, IPointerEnterHandler, IPointerExit
     void IGrabInterface.ControllerEnter()
     {
         ControllerHovered = true;
+        node.state = Node.NodeState.CloseToControler;
         SetNewColorState();
     }
 
     void IGrabInterface.ControllerExit()
     {
         ControllerHovered = false;
+        node.state = Node.NodeState.None;
         SetNewColorState();
     }
 
     void IGrabInterface.ControllerGrabBegin(GameObject newParent)
     {
         ControllerGrabbed = true;
+        node.state = Node.NodeState.Grabbed;
         SetNewColorState();
         this.transform.SetParent(newParent.transform, true);
         graph.layout.Stop();
@@ -72,6 +75,7 @@ public class NodeInteraction : MonoBehaviour, IPointerEnterHandler, IPointerExit
     void IGrabInterface.ControllerGrabEnd()
     {
         ControllerGrabbed = false;
+        node.state = Node.NodeState.None;
         SetNewColorState();
         this.transform.SetParent(originalParent, true);
         graph.layout.CalculateLayout();
@@ -79,12 +83,14 @@ public class NodeInteraction : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
     void IPointerEnterHandler.OnPointerEnter(PointerEventData eventData)
     {
+        node.state = Node.NodeState.Pointed;
         PointerHovered = true;
         SetNewColorState();
     }
 
     void IPointerExitHandler.OnPointerExit(PointerEventData eventData)
     {
+        node.state = Node.NodeState.None;
         PointerHovered = false;
         SetNewColorState();
     }

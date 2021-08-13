@@ -7,7 +7,9 @@ using VDS.RDF.Query;
 public class Node : MonoBehaviour
 {
     private Canvas infoPanel;
-
+    public enum NodeState { None, Pointed, CloseToControler, Grabbed };
+    public NodeState state = NodeState.None;
+    public bool pinned = false;
 
     public string uri = ""; // Full URI, empty if literal
     public string label = "";
@@ -17,8 +19,14 @@ public class Node : MonoBehaviour
     public List<Node> connectedNodes = new List<Node>();
     public List<Edge> connectedEdges = new List<Edge>();
 
+    private TMPro.TextMeshPro textMesh;
     // Vairalbes for the Force-directed algorithm
     public Vector3 displacement;
+    public void Awake()
+    {
+        textMesh = GetComponentInChildren<TMPro.TextMeshPro>(true);
+    }
+
     public void Start()
     {
         InvokeRepeating("SlowUpdate", 1, 1);
@@ -120,8 +128,7 @@ public class Node : MonoBehaviour
     {
         string text = label;
         if (label == "") text = uri;
-        TMPro.TextMeshPro test = GetComponentInChildren<TMPro.TextMeshPro>(true);
-        test.text = text;
+        textMesh.text = text;
     }
 
     void SlowUpdate()
@@ -132,6 +139,11 @@ public class Node : MonoBehaviour
     void Update()
     {
         transform.rotation = Quaternion.LookRotation(Camera.main.transform.position - transform.position, Vector3.up);
+        if(state == NodeState.Grabbed || state == Node.NodeState.Pointed) {
+            textMesh.transform.localScale = Vector3.one * 0.6f;
+        } else {
+            textMesh.transform.localScale = Vector3.one * 0.3f;
+        }
     }
 
     public void ToggleInfoPanel()
