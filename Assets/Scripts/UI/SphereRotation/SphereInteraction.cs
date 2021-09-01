@@ -12,24 +12,18 @@ public class SphereInteraction : MonoBehaviour
     Transform leftControler;
     Transform rightControler;
 
-    // In worldspace
+    Vector3 lefToRight; // In worldspace
     Vector3 leftToCenter;
     float handleDistance;
     Vector3 initialScale;
     Quaternion initialRotation;
-
-    Quaternion initialLookat;
-
 
     void StartInteraction()
     {
         Vector3 center = bsphere.transform.position;
         Vector3 left = leftControler.transform.position;
         Vector3 right = rightControler.transform.position;
-
-        Vector3 initialForward = (leftControler.transform.forward + rightControler.transform.forward) * 0.5f;
-        initialLookat = Quaternion.LookRotation(initialForward, (right - left).normalized);
-
+        lefToRight = right - left;
         leftToCenter = center - left;
         handleDistance = Vector3.Distance(left, right);
         initialScale = transform.localScale;
@@ -46,17 +40,28 @@ public class SphereInteraction : MonoBehaviour
         Vector3 left = leftControler.transform.position;
         Vector3 right = rightControler.transform.position;
 
-        Vector3 forward = (leftControler.transform.forward + rightControler.transform.forward) * 0.5f;
-        Quaternion lookat = Quaternion.LookRotation(forward, (right - left).normalized);
-
+        Vector3 newLefToRight = right - left;
         float sizeFactor = Vector3.Distance(left, right) / handleDistance;
 
-        Quaternion rotation = lookat * Quaternion.Inverse(initialLookat);
+        Quaternion rotation = Quaternion.FromToRotation(lefToRight, newLefToRight);
         Vector3 center = (left + ((rotation * leftToCenter)*sizeFactor));
 
         transform.position = center + (transform.position - bsphere.transform.position);
         transform.rotation = rotation * initialRotation;
         transform.localScale = initialScale * sizeFactor;
+
+        // Reset the initial values of the rotation at 90 degree thresholds.
+        if(rotation.eulerAngles.x > 90.0f && rotation.eulerAngles.x < 270.0f ||
+            rotation.eulerAngles.y > 90.0f && rotation.eulerAngles.y < 270.0f ||
+            rotation.eulerAngles.z > 90.0f && rotation.eulerAngles.z < 270.0f)
+        {
+            lefToRight = right - left;
+            bsphere.Update();
+            leftToCenter = bsphere.transform.position - left;
+            handleDistance = Vector3.Distance(left, right);
+            initialScale = transform.localScale;
+            initialRotation = transform.rotation;
+        }
     }
 
     private void Start()

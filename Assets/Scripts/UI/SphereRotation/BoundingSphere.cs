@@ -7,7 +7,7 @@ public class BoundingSphere : MonoBehaviour
     public Graph graph;
 
     // Update is called once per frame
-    void Update()
+    public void Update()
     {
         // Calc center
         Vector3 center = Vector3.zero;
