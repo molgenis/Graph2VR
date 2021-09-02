@@ -78,7 +78,7 @@ public class NodeMenu : MonoBehaviour
             cm.AddButton("Convert to Variable", Color.blue / 2, () => { });
             cm.AddButton("Convert to Constant", Color.cyan / 2, () => { });
             cm.AddButton("Close", Color.red / 2, () => { });
-            cm.ReBuild(cm.type);
+            cm.ReBuild();
         }
     }
 

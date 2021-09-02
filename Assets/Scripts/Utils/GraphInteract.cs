@@ -36,6 +36,8 @@ public class GraphInteract : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Graph.instance == null) return;
+
         if(IsDraggingLine)
         {
             lineRenderer.SetPosition(1, transform.position);
