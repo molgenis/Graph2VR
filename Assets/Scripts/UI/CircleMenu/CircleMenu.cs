@@ -72,6 +72,11 @@ public class CircleMenu : MonoBehaviour
         foreach (Transform child in transform){
             Destroy(child.gameObject);
         }
+        sliderLine = gameObject.GetComponent<LineRenderer>();
+        if (sliderLine != null) {
+            Destroy(sliderLine);
+        }
+
         buttons.Clear();
         isBuild = false;
     }
@@ -199,6 +204,11 @@ public class CircleMenu : MonoBehaviour
             for (int i = 0; i < sliderPathResolution; i++) {
                 float sliderAngle = -(i / (float)sliderPathResolution) * totalAngle * Mathf.Deg2Rad;
                 sliderLine.SetPosition(i, new Vector2(Mathf.Sin(sliderAngle), Mathf.Cos(sliderAngle)) * 17);
+            }
+        } else {
+            sliderLine = gameObject.GetComponent<LineRenderer>();
+            if (sliderLine != null) {
+                Destroy(sliderLine);
             }
         }
         isBuild = true;

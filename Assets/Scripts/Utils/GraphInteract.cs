@@ -44,12 +44,14 @@ public class GraphInteract : MonoBehaviour
         } 
         else if (IsHoldingPinchButton)
         {
-            if (HoldBeginTime + 2 < Time.time)
+            bool menuScrollbarActive = !GameObject.FindGameObjectWithTag("RightControler").transform.Find("Pointer").gameObject.activeSelf; // TODO: have some sort of a nice 'scene state' singleton? this will get buggy and confusing in time.
+            if (!menuScrollbarActive && HoldBeginTime + 2 < Time.time)
             {
                 IsHoldingPinchButton = false;
                 Node node = Graph.instance.CreateNode("No label", transform.position);
                 Graph.instance.nodeList.Add(node);
             }
+
         }
         Collider[] overlapping = Physics.OverlapSphere(transform.position, 0.03f);
         GameObject closestObject = null;

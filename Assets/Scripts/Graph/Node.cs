@@ -35,6 +35,7 @@ public class Node : MonoBehaviour
     
     public void Refine()
     {
+        if (iNode == null) return;
         foreach (Triple t in iNode.Graph.GetTriplesWithSubject(iNode)) {
             // rdfs:subClassOf -> relations
             // owl:equivalentClass
