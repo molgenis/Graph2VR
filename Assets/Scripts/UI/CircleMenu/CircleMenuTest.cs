@@ -14,14 +14,26 @@ public class CircleMenuTest : MonoBehaviour
         cm.AddButton("Hello World", Color.gray, () => { }, 5);
         cm.AddButton("Hello World", Color.gray, () => { }, 3);
         cm.AddButton("Hello World", Color.gray, () => { }, 1);
+        cm.AddButton("Hello World", Color.gray, () => { });
+        cm.AddButton("Hello World", Color.gray, () => { }, 5);
+        cm.AddButton("Hello World", Color.gray, () => { }, 3);
+        cm.AddButton("Hello World", Color.gray, () => { }, 1);
+        cm.AddButton("Hello World", Color.gray, () => { });
+        cm.AddButton("Hello World", Color.gray, () => { }, 5);
+        cm.AddButton("Hello World", Color.gray, () => { }, 3);
+        cm.AddButton("Hello World", Color.gray, () => { }, 1);
+        cm.AddButton("Hello World", Color.gray, () => { });
+        cm.AddButton("Hello World", Color.gray, () => { }, 5);
+        cm.AddButton("Hello World", Color.gray, () => { }, 3);
+        cm.AddButton("Hello World", Color.gray, () => { }, 1);
         cm.AddButton("Add more buttons", Color.gray, () => {
             cm.AddButton("Added button", Color.gray, () => { });
-            cm.ReBuild(cm.type);
+            cm.ReBuild();
         });
         cm.AddButton("Convert to Variable", Color.blue / 2, () => { }, 3);
         cm.AddButton("Convert to Constant", Color.cyan / 2, () => { });
         cm.AddButton("Close", Color.red / 2, () => { }, 0);
 
-        cm.ReBuild(cm.type);
+        cm.ReBuild();
     }
 }

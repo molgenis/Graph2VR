@@ -255,7 +255,7 @@ public class Graph : MonoBehaviour
     private void BuildByIGraph(IGraph iGraph)
     {
         foreach (INode node in iGraph.Nodes) {
-            if(!nodeList.Find(graficalNode => graficalNode.iNode.Equals(node))) {
+            if(nodeList!=null && !nodeList.Find(graficalNode => graficalNode.iNode.Equals(node))) {
                 Node n = CreateNode(node.ToString(), node);
             }
         }
@@ -475,7 +475,7 @@ public class Graph : MonoBehaviour
         clone.transform.SetParent(transform);
         clone.transform.position = position;
         clone.transform.localRotation = Quaternion.identity;
-        clone.transform.localScale = Vector3.one * 0.3f;
+        clone.transform.localScale = Vector3.one * 0.05f;
         Node node = clone.AddComponent<Node>();
         node.SetURI(value);
         node.SetLabel(value);
