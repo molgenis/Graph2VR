@@ -156,6 +156,38 @@ public class Graph : MonoBehaviour
         endpoint.QueryWithResultGraph(query, callback, null);
     }
 
+    public void CollapseGraph(Node node)
+    {
+        // TODO DONT remove node itself
+        /*
+        string query = $@"
+                prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+                construct {{
+                    <{node.GetURIAsString()}> ?predicate ?object .
+                    ?subject ?predicate2 <{node.GetURIAsString()}> .
+                }} where {{
+                    <{node.GetURIAsString()}> ?predicate ?object .
+                    ?subject ?predicate2 <{node.GetURIAsString()}> .
+                }}";
+                */
+        string query = $@"
+                prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+                construct {{
+                    <{node.GetURIAsString()}> ?predicate ?object .
+                    ?subject ?predicate2 <{node.GetURIAsString()}> .
+                }} where {{
+                    <{node.GetURIAsString()}> ?predicate ?object .
+                    ?subject ?predicate2 <{node.GetURIAsString()}> .
+                }}";
+
+        VDS.RDF.Graph results = (VDS.RDF.Graph)currentGraph.ExecuteQuery(query);
+
+        foreach (VDS.RDF.Triple triple in results.Triples) {
+            currentGraph.Retract(triple);
+        }
+
+        BuildByIGraph(currentGraph);
+    }
     public void ExpandGraph(Node node, string uri, bool isOutgoingLink)
     {
         string query = "";
@@ -254,12 +286,44 @@ public class Graph : MonoBehaviour
 
     private void BuildByIGraph(IGraph iGraph)
     {
+        // Remove removed edges and nodes
+        foreach (Node node in nodeList) {
+            INode iNode = node.iNode;
+            // is the node in the current graph?
+            bool found = false;
+            foreach (INode currentNode in iGraph.Nodes) {
+                if (iNode.Equals(currentNode)) {
+                    found = true;
+                }
+            }
+            if (found == false) {
+                //remove me
+                node.gameObject.SetActive(false);
+
+                //is there a edge pointing to me!
+                foreach(Edge edge in edgeList) {
+                    if (edge.to == node) {
+                        // remove this edge
+                        edge.gameObject.SetActive(false);
+                    }
+                    if (edge.from == node) {
+                        // remove this edge
+                        edge.gameObject.SetActive(false);
+                    }
+                }
+            }
+
+        }
+
+
+        // Add nodes
         foreach (INode node in iGraph.Nodes) {
             if(nodeList!=null && !nodeList.Find(graficalNode => graficalNode.iNode.Equals(node))) {
                 Node n = CreateNode(node.ToString(), node);
             }
         }
 
+        // Add edges
         foreach (VDS.RDF.Triple triple in iGraph.Triples) {
             // TODO: make sure not to add the same edge again. ( check for existing edges with same Subject, Predicate, Object ? )
             if (!edgeList.Find(edge => edge.Equals(triple.Subject, triple.Predicate, triple.Object))) {
