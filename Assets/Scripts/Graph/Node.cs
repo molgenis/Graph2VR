@@ -22,6 +22,9 @@ public class Node : MonoBehaviour
     private TMPro.TextMeshPro textMesh;
     // Vairalbes for the Force-directed algorithm
     public Vector3 displacement;
+
+    public bool isVariable { get; private set; } = false;
+
     public void Awake()
     {
         textMesh = GetComponentInChildren<TMPro.TextMeshPro>(true);
@@ -65,6 +68,26 @@ public class Node : MonoBehaviour
         }
     }
 
+    public void MakeVariable()
+    {
+        isVariable = true;
+        SetDefaultColor(new Color(1, 1, 0.3f));
+        if(label.EndsWith("/"))
+        {
+            SetLabel("?" + label);
+        } else
+        {
+            int indexBackSlash = label.LastIndexOf('/');
+            if(indexBackSlash == -1)
+            {
+                SetLabel("?" + label);
+            }else
+            {
+                SetLabel("?" + label.Remove(0,indexBackSlash));
+            }
+        }
+    }
+
     public void SetDefaultColor(Color color)
     {
         defaultColor = color;
@@ -78,7 +101,14 @@ public class Node : MonoBehaviour
 
     public void SetLabel(string label)
     {
-        this.label = label.Replace("@" + Main.instance.languageCode, "");
+        if (isVariable && !label.StartsWith("?"))
+        {
+            this.label = "?" + label.Replace("@" + Main.instance.languageCode, "");
+        }
+        else
+        {
+            this.label = label.Replace("@" + Main.instance.languageCode, "");
+        }
         UpdateDisplay();
     }
 

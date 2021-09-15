@@ -38,47 +38,76 @@ public class NodeMenu : MonoBehaviour
 
     public void Populate(Object input)
     {
+        KeyboardHandler.instance.Close();
         node = input as Node;
-        GetPredicats();
-        if (set != null) {
-            // Get uri of selected node
-            // Get list of predicats 
-            // call GetOutgoingPredicats()
-
+        if (node.isVariable)
+        {
             Close();
             controlerModel.SetActive(false);
+            cm.AddButton("Apply", Color.red / 2, () => { Close(); });
+            cm.AddButton("Cancel", Color.red / 2, () => {
+                KeyboardHandler.instance.HandleCancel();
+                Close();
+            });
+            cm.ReBuild();
+            KeyboardHandler.instance.Open(node);
+        }
+        else
+        {
+            GetPredicats();
+            if (set != null)
+            {
+                // Get uri of selected node
+                // Get list of predicats 
+                // call GetOutgoingPredicats()
 
-            if (isOutgoingLink) {
-                cm.AddButton("List incoming predicats", Color.blue / 2, () => {
-                    isOutgoingLink = false;
-                    Populate(input); 
-                });
-            } else {
-                cm.AddButton("List outgoing predicats", Color.blue / 2, () => {
-                    isOutgoingLink = true;
+                Close();
+                controlerModel.SetActive(false);
+
+                if (isOutgoingLink)
+                {
+                    cm.AddButton("List incoming predicats", Color.blue / 2, () =>
+                    {
+                        isOutgoingLink = false;
+                        Populate(input);
+                    });
+                }
+                else
+                {
+                    cm.AddButton("List outgoing predicats", Color.blue / 2, () =>
+                    {
+                        isOutgoingLink = true;
+                        Populate(input);
+                    });
+                }
+
+                foreach (KeyValuePair<string, System.Tuple<string, int>> item in set)
+                {
+                    //Debug.Log("k: " + item.Key + " v1: " + item.Value.Item1 + " v2: " + item.Value.Item2);
+                    Color color = Color.gray;
+                    string label = item.Value.Item1;
+                    if (label == "")
+                    {
+                        label = item.Key;
+                        color = Color.gray * 0.75f;
+                    }
+                    // TODO: add qname als alt.
+
+                    cm.AddButton(label, color, () =>
+                    {
+                        Graph.instance.ExpandGraph(node, item.Key, isOutgoingLink);
+                        Close();
+                    }, item.Value.Item2);
+                }
+                cm.AddButton("Convert to Variable", Color.blue / 2, () =>
+                {
+                    node.MakeVariable();
                     Populate(input);
                 });
+                cm.AddButton("Convert to Constant", Color.cyan / 2, () => { });
+                cm.AddButton("Close", Color.red / 2, () => { Close(); });
+                cm.ReBuild();
             }
-
-            foreach (KeyValuePair<string, System.Tuple<string, int>> item in set) {
-                //Debug.Log("k: " + item.Key + " v1: " + item.Value.Item1 + " v2: " + item.Value.Item2);
-                Color color = Color.gray;
-                string label = item.Value.Item1;
-                if (label == "") {
-                    label = item.Key;
-                    color = Color.gray * 0.75f;
-                }
-                // TODO: add qname als alt.
-
-                cm.AddButton(label, color, () => {
-                    Graph.instance.ExpandGraph(node, item.Key, isOutgoingLink);
-                    Close();
-                }, item.Value.Item2);
-            }
-            cm.AddButton("Convert to Variable", Color.blue / 2, () => { });
-            cm.AddButton("Convert to Constant", Color.cyan / 2, () => { });
-            cm.AddButton("Close", Color.red / 2, () => { });
-            cm.ReBuild();
         }
     }
 
@@ -86,6 +115,7 @@ public class NodeMenu : MonoBehaviour
     {
         if (cm != null) {
             cm.Close();
+            KeyboardHandler.instance.Close();
             controlerModel.SetActive(true);
         }
     }
