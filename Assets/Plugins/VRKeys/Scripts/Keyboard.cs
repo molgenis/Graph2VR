@@ -32,7 +32,9 @@ namespace VRKeys {
 
 		public KeyboardLayout keyboardLayout = KeyboardLayout.Qwerty;
 
-		[Space (15)]
+        public Transform offset;
+
+        [Space (15)]
 		public TextMeshProUGUI placeholder;
 
 		public string placeholderMessage = "Tap the keys to begin typing";
@@ -135,8 +137,10 @@ namespace VRKeys {
 
 			leftHand = new GameObject ("Left Hand");
 			rightHand = new GameObject ("Right Hand");
+            leftHand.transform.parent = offset.transform;
+            rightHand.transform.parent = offset.transform;
 
-			yield return StartCoroutine (DoSetLanguage (keyboardLayout));
+            yield return StartCoroutine (DoSetLanguage (keyboardLayout));
 
 			validationNotice.SetActive (false);
 			infoNotice.SetActive (false);
@@ -149,11 +153,13 @@ namespace VRKeys {
 		}
 
 		private void Update () {
-			leftHand.transform.localPosition = InputTracking.GetLocalPosition (XRNode.LeftHand);
+
+
+            leftHand.transform.localPosition = InputTracking.GetLocalPosition(XRNode.LeftHand);
 			leftHand.transform.localRotation = InputTracking.GetLocalRotation (XRNode.LeftHand);
 
 			rightHand.transform.localPosition = InputTracking.GetLocalPosition (XRNode.RightHand);
-			rightHand.transform.localRotation = InputTracking.GetLocalRotation (XRNode.RightHand);
+            rightHand.transform.localRotation = InputTracking.GetLocalRotation (XRNode.RightHand);
 		}
 
 		private void PositionAndAttachMallets () {

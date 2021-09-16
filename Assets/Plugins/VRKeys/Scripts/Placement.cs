@@ -26,7 +26,7 @@ namespace VRKeys {
 			public Vector3 scale;
 		}
 
-		public float minScale = 0.4f;
+        public float minScale = 0.4f;
 
 		public float maxScale = 1.2f;
 
