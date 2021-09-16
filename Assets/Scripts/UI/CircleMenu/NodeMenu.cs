@@ -40,8 +40,7 @@ public class NodeMenu : MonoBehaviour
     {
         KeyboardHandler.instance.Close();
         node = input as Node;
-        if (node.isVariable)
-        {
+        if (node.isVariable) {
             Close();
             controlerModel.SetActive(false);
             cm.AddButton("Apply", Color.red / 2, () => { Close(); });
@@ -51,12 +50,9 @@ public class NodeMenu : MonoBehaviour
             });
             cm.ReBuild();
             KeyboardHandler.instance.Open(node);
-        }
-        else
-        {
+        } else {
             GetPredicats();
-            if (set != null)
-            {
+            if (set != null) {
                 // Get uri of selected node
                 // Get list of predicats 
                 // call GetOutgoingPredicats()
@@ -64,48 +60,47 @@ public class NodeMenu : MonoBehaviour
                 Close();
                 controlerModel.SetActive(false);
 
-                if (isOutgoingLink)
-                {
-                    cm.AddButton("List incoming predicats", Color.blue / 2, () =>
-                    {
+                if (isOutgoingLink) {
+                    cm.AddButton("List incoming predicats", Color.blue / 2, () => {
                         isOutgoingLink = false;
                         Populate(input);
                     });
-                }
-                else
-                {
-                    cm.AddButton("List outgoing predicats", Color.blue / 2, () =>
-                    {
+                } else {
+                    cm.AddButton("List outgoing predicats", Color.blue / 2, () => {
                         isOutgoingLink = true;
                         Populate(input);
                     });
                 }
 
-                foreach (KeyValuePair<string, System.Tuple<string, int>> item in set)
-                {
+                foreach (KeyValuePair<string, System.Tuple<string, int>> item in set) {
                     //Debug.Log("k: " + item.Key + " v1: " + item.Value.Item1 + " v2: " + item.Value.Item2);
                     Color color = Color.gray;
                     string label = item.Value.Item1;
-                    if (label == "")
-                    {
+                    if (label == "") {
                         label = item.Key;
                         color = Color.gray * 0.75f;
                     }
                     // TODO: add qname als alt.
 
-                    cm.AddButton(label, color, () =>
-                    {
+                    cm.AddButton(label, color, () => {
                         Graph.instance.ExpandGraph(node, item.Key, isOutgoingLink);
                         Close();
                     }, item.Value.Item2);
                 }
-                cm.AddButton("Convert to Variable", Color.blue / 2, () =>
-                {
+                cm.AddButton("Convert to Variable", Color.blue / 2, () => {
                     node.MakeVariable();
                     Populate(input);
                 });
                 cm.AddButton("Convert to Constant", Color.cyan / 2, () => { });
-                cm.AddButton("Close", Color.red / 2, () => { Close(); });
+                cm.AddButton("Collapse Incomming", Color.red / 2, () => {
+                    Graph.instance.CollapseIncomingGraph(node);
+                });
+                cm.AddButton("Collapse Outgoing", Color.red / 2, () => {
+                    Graph.instance.CollapseOutgoingGraph(node);
+                });
+                cm.AddButton("Collapse All", Color.red / 2, () => {
+                    Graph.instance.CollapseGraph(node);
+                });
                 cm.ReBuild();
             }
         }

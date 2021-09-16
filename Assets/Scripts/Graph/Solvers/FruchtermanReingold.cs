@@ -58,19 +58,23 @@ public class FruchtermanReingold : BaseLayoutAlgorithm
 
         // calculate attractive forces
         foreach (Edge edge in graph.edgeList) {
-            Vector3 delta = edge.to.transform.localPosition - edge.from.transform.localPosition;
-            float FaForce = Fa(delta.magnitude);
-            Vector3 normal = delta.normalized;
-            edge.to.displacement -= normal * FaForce;
-            edge.from.displacement += normal * FaForce;
+            if (edge.to != null && edge.from != null) {
+                Vector3 delta = edge.to.transform.localPosition - edge.from.transform.localPosition;
+                float FaForce = Fa(delta.magnitude);
+                Vector3 normal = delta.normalized;
+                edge.to.displacement -= normal * FaForce;
+                edge.from.displacement += normal * FaForce;
+            }
         }
 
         // Reposition the nodes, taking ionto account the temperature
         float TotalDisplacement = 0.0f;
         foreach (Node node in graph.nodeList) {
-            float DisplacementMagitude = node.displacement.magnitude;
-            TotalDisplacement = Mathf.Max(DisplacementMagitude, TotalDisplacement);
-            node.transform.localPosition += (node.displacement / DisplacementMagitude) * Mathf.Min(DisplacementMagitude, Temperature);
+            if (node != null) {
+                float DisplacementMagitude = node.displacement.magnitude;
+                TotalDisplacement = Mathf.Max(DisplacementMagitude, TotalDisplacement);
+                node.transform.localPosition += (node.displacement / DisplacementMagitude) * Mathf.Min(DisplacementMagitude, Temperature);
+            }
         }
 
         // reduce the temperature
