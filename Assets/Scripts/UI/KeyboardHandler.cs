@@ -17,6 +17,7 @@ public class KeyboardHandler : MonoBehaviour
     public Vector3 offset;
     private Keyboard keyboard;
     private InputField inputField;
+    private Node node;
     private string originalStringValue; // Use to restore string on cancel
     static public KeyboardHandler instance;
     
@@ -29,8 +30,25 @@ public class KeyboardHandler : MonoBehaviour
         keyboard.OnUpdate.AddListener(HandleUpdate);
         keyboard.OnSubmit.AddListener(HandleSubmit);
         keyboard.OnCancel.AddListener(HandleCancel);
+        node = null;
         inputField = input;
         originalStringValue = input.text;
+        UpdateLocation();
+    }
+
+    // U?se this to edit a node's label
+    public void Open(Node node)
+    {
+        keyboard.Enable();
+        keyboard.SetPlaceholderMessage("Please enter label name");
+
+        keyboard.OnUpdate.AddListener(HandleUpdate);
+        keyboard.OnSubmit.AddListener(HandleSubmit);
+        keyboard.OnCancel.AddListener(HandleCancel);
+        keyboard.SetText(node.label);
+        inputField = null;
+        this.node = node;
+        originalStringValue = node.label;
         UpdateLocation();
     }
 
@@ -63,7 +81,14 @@ public class KeyboardHandler : MonoBehaviour
     public void HandleUpdate(string text)
     {
         keyboard.HideValidationMessage();
-        inputField.text = text;
+        if (inputField != null)
+        {
+            inputField.text = text;
+        }
+        else if (node != null)
+        {
+            node.SetLabel(text);
+        }
     }
 
     public void HandleSubmit(string text)
@@ -75,7 +100,14 @@ public class KeyboardHandler : MonoBehaviour
     public void HandleCancel()
     {
         // Restore the string to what it was when opening the VR keyboard
-        inputField.text = originalStringValue; 
+        if (inputField != null)
+        {
+            inputField.text = originalStringValue;
+        }
+        else if (node != null)
+        {
+            node.SetLabel(originalStringValue);
+        }
         keyboard.SetText(originalStringValue);
         Close();
     }
