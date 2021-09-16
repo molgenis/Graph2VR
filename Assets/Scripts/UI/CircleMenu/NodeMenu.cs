@@ -43,6 +43,7 @@ public class NodeMenu : MonoBehaviour
         if (node.isVariable) {
             Close();
             controlerModel.SetActive(false);
+            cm.AddButton("Convert to Constant ( not implemented )", Color.cyan / 2, () => { });
             cm.AddButton("Apply", Color.red / 2, () => { Close(); });
             cm.AddButton("Cancel", Color.red / 2, () => {
                 KeyboardHandler.instance.HandleCancel();
@@ -87,11 +88,12 @@ public class NodeMenu : MonoBehaviour
                         Close();
                     }, item.Value.Item2);
                 }
-                cm.AddButton("Convert to Variable", Color.blue / 2, () => {
-                    node.MakeVariable();
-                    Populate(input);
-                });
-                cm.AddButton("Convert to Constant", Color.cyan / 2, () => { });
+                if (!node.isVariable) {
+                    cm.AddButton("Convert to Variable", Color.blue / 2, () => {
+                        node.MakeVariable();
+                        Populate(input);
+                    });
+                }
                 cm.AddButton("Collapse Incomming", Color.red / 2, () => {
                     Graph.instance.CollapseIncomingGraph(node);
                 });
