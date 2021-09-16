@@ -16,11 +16,11 @@ public class Node : MonoBehaviour
 
     public INode iNode;
     public Color defaultColor;
-    public List<Node> connectedNodes = new List<Node>();
-    public List<Edge> connectedEdges = new List<Edge>();
+    public List<Node> connectedNodes = new List<Node>(); // DEPRECATED?
+    public List<Edge> connectedEdges = new List<Edge>(); // DEPRECATED?
 
     private TMPro.TextMeshPro textMesh;
-    // Vairalbes for the Force-directed algorithm
+    // Variables for the Force-directed algorithm
     public Vector3 displacement;
     public void Awake()
     {
@@ -59,7 +59,7 @@ public class Node : MonoBehaviour
 
             if (t.Predicate.ToString() == "http://www.w3.org/2000/01/rdf-schema#label") {
                 SetLabel(t.Object.ToString());
-                Graph.instance.Hide(t.Object);
+                Graph.instance.Remove(Graph.instance.GetByINode(t.Object));
             }
 
         }

@@ -158,26 +158,55 @@ public class Graph : MonoBehaviour
 
     public void CollapseGraph(Node node)
     {
-        // TODO DONT remove node itself
-        /*
+        CollapseIncomingGraph(node);
+        CollapseOutgoingGraph(node);
+    }
+
+    public void CollapseIncomingGraph(Node node)
+    {
         string query = $@"
                 prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
                 construct {{
-                    <{node.GetURIAsString()}> ?predicate ?object .
-                    ?subject ?predicate2 <{node.GetURIAsString()}> .
+                    ?s ?p2 <{node.GetURIAsString()}> .
                 }} where {{
-                    <{node.GetURIAsString()}> ?predicate ?object .
-                    ?subject ?predicate2 <{node.GetURIAsString()}> .
+                    ?s ?p2 <{node.GetURIAsString()}> .
+                    FILTER NOT EXISTS {{
+                        {{
+                            ?s ?p3 ?o3 .
+                            Filter(?o3 != <{node.GetURIAsString()}>)
+                        }} UNION {{
+                            ?o4 ?p4 ?s .
+                            Filter(?o4 != <{node.GetURIAsString()}>)
+                        }}
+                    }}
                 }}";
-                */
+        
+        VDS.RDF.Graph results = (VDS.RDF.Graph)currentGraph.ExecuteQuery(query);
+
+        foreach (VDS.RDF.Triple triple in results.Triples) {
+            currentGraph.Retract(triple);
+        }
+
+        BuildByIGraph(currentGraph);
+    }
+
+    public void CollapseOutgoingGraph(Node node)
+    {
         string query = $@"
                 prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
                 construct {{
-                    <{node.GetURIAsString()}> ?predicate ?object .
-                    ?subject ?predicate2 <{node.GetURIAsString()}> .
+                    <{node.GetURIAsString()}> ?p ?o .
                 }} where {{
-                    <{node.GetURIAsString()}> ?predicate ?object .
-                    ?subject ?predicate2 <{node.GetURIAsString()}> .
+                      <{node.GetURIAsString()}> ?p ?o .
+                      FILTER NOT EXISTS {{
+                          {{
+                              ?o2 ?p2 ?o .
+                              Filter(?o2 != <{node.GetURIAsString()}>)
+                          }} UNION {{
+                              ?o ?p3 ?o3 .
+                              Filter(?o3 != <{node.GetURIAsString()}>)
+                          }}
+                      }}
                 }}";
 
         VDS.RDF.Graph results = (VDS.RDF.Graph)currentGraph.ExecuteQuery(query);
@@ -188,12 +217,11 @@ public class Graph : MonoBehaviour
 
         BuildByIGraph(currentGraph);
     }
+
     public void ExpandGraph(Node node, string uri, bool isOutgoingLink)
     {
         string query = "";
         if (isOutgoingLink) {
-            //query = "construct {<" + node.GetURIAsString() + "> <" + uri + "> ?object} where {<" + node.GetURIAsString() + "> <" + uri + "> ?object}";
-
             // Select with label
             query = $@"
                 prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
@@ -207,7 +235,6 @@ public class Graph : MonoBehaviour
                         FILTER(LANG(?objectlabel) = '' || LANGMATCHES(LANG(?objectlabel), '{Main.instance.languageCode}'))
                     }}
                 }} LIMIT 20";
-            //"prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>  select STR(?label) AS ?label where { <" + uri + "> rdfs:label ?label . FILTER(LANG(?label) = '' || LANGMATCHES(LANG(?label), '" + Main.instance.languageCode + "')) } LIMIT 1";
         } else {
             query = $@"
             construct {{
@@ -219,7 +246,7 @@ public class Graph : MonoBehaviour
         // Execute query
         endpoint.QueryWithResultGraph(query, (graph, state) => {
             if (state != null) {
-                Debug.Log("There may me an error");
+                Debug.Log("There may be an error");
                 Debug.Log(query);
                 Debug.Log(graph);
                 Debug.Log(state);
@@ -286,35 +313,25 @@ public class Graph : MonoBehaviour
 
     private void BuildByIGraph(IGraph iGraph)
     {
-        // Remove removed edges and nodes
+        // Remove all removed edges and nodes
+        List<Node> nodesToRemove = new List<Node>();
         foreach (Node node in nodeList) {
             INode iNode = node.iNode;
             // is the node in the current graph?
             bool found = false;
+
             foreach (INode currentNode in iGraph.Nodes) {
                 if (iNode.Equals(currentNode)) {
                     found = true;
                 }
             }
+
             if (found == false) {
                 //remove me
-                node.gameObject.SetActive(false);
-
-                //is there a edge pointing to me!
-                foreach(Edge edge in edgeList) {
-                    if (edge.to == node) {
-                        // remove this edge
-                        edge.gameObject.SetActive(false);
-                    }
-                    if (edge.from == node) {
-                        // remove this edge
-                        edge.gameObject.SetActive(false);
-                    }
-                }
+                nodesToRemove.Add(node);
             }
-
         }
-
+        Remove(nodesToRemove);
 
         // Add nodes
         foreach (INode node in iGraph.Nodes) {
@@ -325,7 +342,6 @@ public class Graph : MonoBehaviour
 
         // Add edges
         foreach (VDS.RDF.Triple triple in iGraph.Triples) {
-            // TODO: make sure not to add the same edge again. ( check for existing edges with same Subject, Predicate, Object ? )
             if (!edgeList.Find(edge => edge.Equals(triple.Subject, triple.Predicate, triple.Object))) {
                 Edge e = CreateEdge(triple.Subject, triple.Predicate, triple.Object);
                 e.SetColor(defaultEdgeColor);
@@ -492,7 +508,7 @@ public class Graph : MonoBehaviour
     {
         GameObject clone = Instantiate<GameObject>(nodePrefab);
         clone.transform.SetParent(transform);
-        clone.transform.localPosition = UnityEngine.Random.insideUnitSphere * 3f; // TODO: maybe base position on position of connected parent!
+        clone.transform.localPosition = UnityEngine.Random.insideUnitSphere * 3f;
         clone.transform.localRotation = Quaternion.identity;
         clone.transform.localScale = Vector3.one * 0.05f;
         Node node = clone.AddComponent<Node>();
@@ -553,15 +569,57 @@ public class Graph : MonoBehaviour
     }
 
 
-    public void Hide(INode node)
+    public void Hide(Node node)
     {
-        Node n = GetByINode(node);
-        if(n != null) {
-            n.gameObject.SetActive(false);
+        if (node != null) {
+            node.gameObject.SetActive(false);
         }
-        Edge e = edgeList.Find((Edge edge) => edge.iTo.Equals(node));
+        // NOTE: is it correct only to hide edges pointing to this node? how about edges pointing away from this node?
+        Edge e = edgeList.Find((Edge edge) => edge.iTo.Equals(node.iNode));
         if (e != null) {
             e.gameObject.SetActive(false);
+        }
+    }
+
+    public void Hide(INode node)
+    {
+        Hide(GetByINode(node));
+    }
+
+    public void Remove(List<Node> nodes)
+    {
+        for(int i=0; i< nodes.Count; i++) {
+            Remove(nodes[i]);
+        }
+    }
+
+    public void Remove(List<Edge> edges)
+    {
+        for (int i = 0; i < edges.Count; i++) {
+            Remove(edges[i]);
+        }
+    }
+
+    public void Remove(Node node)
+    {
+        if (node != null) {
+            // remove edges connected to this node
+            Edge e = edgeList.Find((Edge edge) => edge.iTo.Equals(node.iNode));
+            Remove(e);
+            e = edgeList.Find((Edge edge) => edge.iFrom.Equals(node.iNode));
+            Remove(e);
+
+            // Destoy the node
+            nodeList.Remove(node);
+            Destroy(node.gameObject);
+        }
+    }
+
+    public void Remove(Edge edge)
+    {
+        if (edge != null) {
+            edgeList.Remove(edge);
+            Destroy(edge.gameObject);
         }
     }
 }
