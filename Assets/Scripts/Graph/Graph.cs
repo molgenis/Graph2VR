@@ -187,7 +187,6 @@ public class Graph : MonoBehaviour
             currentGraph.Retract(triple);
         }
 
-        BuildByIGraph(currentGraph);
     }
 
     public void CollapseOutgoingGraph(Node node)
@@ -215,7 +214,6 @@ public class Graph : MonoBehaviour
             currentGraph.Retract(triple);
         }
 
-        BuildByIGraph(currentGraph);
     }
 
     public void ExpandGraph(Node node, string uri, bool isOutgoingLink)
@@ -256,7 +254,6 @@ public class Graph : MonoBehaviour
             UnityMainThreadDispatcher.Instance().Enqueue(() =>
             {
                 currentGraph.Merge(graph);
-                BuildByIGraph(currentGraph);
             });
         }, null);
     }
@@ -294,11 +291,62 @@ public class Graph : MonoBehaviour
             currentGraph = endpoint.QueryWithResultGraph(query);
             AddDefaultNameSpaces();
             BuildByIGraph(currentGraph);
+            currentGraph.TripleAsserted += CurrentGraph_TripleAsserted;
+            currentGraph.TripleRetracted += CurrentGraph_TripleRetracted;
 
         } else {
             lastResults = endpoint.QueryWithResultSet(query);
             BuildByResultSet(lastResults, pattern);
         }
+    }
+
+    private int NumTriples(IEnumerable<VDS.RDF.Triple> triples)
+    {
+        int count = 0;
+
+        foreach(VDS.RDF.Triple t in triples)
+        {
+            count++;
+        }
+
+        return count;
+    }
+
+    private void CurrentGraph_TripleRetracted(object sender, TripleEventArgs args)
+    {
+        // Object and subject will get removed when we only have one triple. edge will also get removed then and only then.
+        // This event is raised after deletion so we need to see if the object/subject is deleted in the resulting graph
+        if (NumTriples(currentGraph.GetTriples(args.Triple.Object)) == 0)
+        {
+            Remove(nodeList.Find(graficalNode => graficalNode.iNode.Equals(args.Triple.Object)));
+        }
+        if (NumTriples(currentGraph.GetTriples(args.Triple.Subject)) == 0)
+        {
+            Remove(nodeList.Find(graficalNode => graficalNode.iNode.Equals(args.Triple.Subject)));
+        }
+
+    }
+
+    private void CurrentGraph_TripleAsserted(object sender, TripleEventArgs args)
+    {
+        // Add nodes
+        if (nodeList != null && !nodeList.Find(graficalNode => graficalNode.iNode.Equals(args.Triple.Object)))
+        {
+            Node n = CreateNode(args.Triple.Object.ToString(), args.Triple.Object);
+        }
+        if (nodeList != null && !nodeList.Find(graficalNode => graficalNode.iNode.Equals(args.Triple.Subject)))
+        {
+            Node n = CreateNode(args.Triple.Subject.ToString(), args.Triple.Subject);
+        }
+
+        // Add edges
+        if (!edgeList.Find(edge => edge.Equals(args.Triple.Subject, args.Triple.Predicate, args.Triple.Object)))
+        {
+            Edge e = CreateEdge(args.Triple.Subject, args.Triple.Predicate, args.Triple.Object);
+            e.SetColor(defaultEdgeColor);
+        }
+
+        layout.CalculateLayout();
     }
 
     private void AddDefaultNameSpaces()
