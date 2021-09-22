@@ -43,14 +43,12 @@ public class NodeMenu : MonoBehaviour
         if (node.isVariable) {
             Close();
             controlerModel.SetActive(false);
-            cm.AddButton("Convert to Constant ( not implemented )", Color.cyan / 2, () => { });
-            cm.AddButton("Apply", Color.red / 2, () => { Close(); });
-            cm.AddButton("Cancel", Color.red / 2, () => {
-                KeyboardHandler.instance.HandleCancel();
-                Close();
+            cm.AddButton("Convert to Constant", Color.blue / 2, () => {
+                node.MakeConstant();
+                Populate(input);
             });
+            cm.AddButton("Rename", Color.red / 2, () => { KeyboardHandler.instance.Open(node); });
             cm.ReBuild();
-            KeyboardHandler.instance.Open(node);
         } else {
             GetPredicats();
             if (set != null) {

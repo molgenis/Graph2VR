@@ -13,6 +13,7 @@ public class Node : MonoBehaviour
 
     public string uri = ""; // Full URI, empty if literal
     public string label = "";
+    private string cachedNodeLabel = ""; // label of the node, (before it gets converted to variable)
 
     public INode iNode;
     public Color defaultColor;
@@ -71,7 +72,7 @@ public class Node : MonoBehaviour
     public void MakeVariable()
     {
         isVariable = true;
-        SetDefaultColor(new Color(1, 1, 0.3f));
+        SetDefaultColor(Graph.instance.variableNodeColor);
         if(label.EndsWith("/"))
         {
             SetLabel("?" + label);
@@ -88,6 +89,13 @@ public class Node : MonoBehaviour
         }
     }
 
+    public void MakeConstant()
+    {
+        isVariable = false;
+        SetDefaultColor(Graph.instance.defaultNodeColor);
+        SetLabel(cachedNodeLabel);
+    }
+
     public void SetDefaultColor(Color color)
     {
         defaultColor = color;
@@ -101,13 +109,21 @@ public class Node : MonoBehaviour
 
     public void SetLabel(string label)
     {
-        if (isVariable && !label.StartsWith("?"))
+        if (isVariable)
         {
-            this.label = "?" + label.Replace("@" + Main.instance.languageCode, "");
+            if (label.StartsWith("?"))
+            {
+                this.label = label.Replace("@" + Main.instance.languageCode, "");
+            }
+            else
+            {
+                this.label = "?" + label.Replace("@" + Main.instance.languageCode, "");
+            }
         }
         else
         {
             this.label = label.Replace("@" + Main.instance.languageCode, "");
+            cachedNodeLabel = this.label;
         }
         UpdateDisplay();
     }
