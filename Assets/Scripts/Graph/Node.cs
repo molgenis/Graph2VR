@@ -14,6 +14,7 @@ public class Node : MonoBehaviour
     public string uri = ""; // Full URI, empty if literal
     public string label = "";
     private string cachedNodeLabel = ""; // label of the node, (before it gets converted to variable)
+    private Color cachedNodeColor; // color of the node, (before it gets converted to variable)
 
     public INode iNode;
     public Color defaultColor;
@@ -72,8 +73,9 @@ public class Node : MonoBehaviour
     public void MakeVariable()
     {
         isVariable = true;
+        cachedNodeColor = defaultColor;
         SetDefaultColor(Graph.instance.variableNodeColor);
-        if(label.EndsWith("/"))
+        if (label.EndsWith("/"))
         {
             SetLabel("?" + label);
         } else
@@ -89,10 +91,10 @@ public class Node : MonoBehaviour
         }
     }
 
-    public void MakeConstant()
+    public void UndoConversion()
     {
         isVariable = false;
-        SetDefaultColor(Graph.instance.defaultNodeColor);
+        SetDefaultColor(cachedNodeColor);
         SetLabel(cachedNodeLabel);
     }
 

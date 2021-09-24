@@ -43,8 +43,8 @@ public class NodeMenu : MonoBehaviour
         if (node.isVariable) {
             Close();
             controlerModel.SetActive(false);
-            cm.AddButton("Convert to Constant", Color.blue / 2, () => {
-                node.MakeConstant();
+            cm.AddButton("Undo conversion", Color.blue / 2, () => {
+                node.UndoConversion();
                 Populate(input);
             });
             cm.AddButton("Rename", Color.red / 2, () => { KeyboardHandler.instance.Open(node); });
