@@ -51,14 +51,10 @@ public class NodeMenu : MonoBehaviour
             cm.ReBuild();
         } else {
             GetPredicats();
+            Close();
+            controlerModel.SetActive(false);
+
             if (set != null) {
-                // Get uri of selected node
-                // Get list of predicats 
-                // call GetOutgoingPredicats()
-
-                Close();
-                controlerModel.SetActive(false);
-
                 if (isOutgoingLink) {
                     cm.AddButton("List incoming predicats", Color.blue / 2, () => {
                         isOutgoingLink = false;
@@ -86,26 +82,33 @@ public class NodeMenu : MonoBehaviour
                         Close();
                     }, item.Value.Item2);
                 }
-                if (!node.isVariable) {
-                    cm.AddButton("Convert to Variable", Color.blue / 2, () => {
-                        node.MakeVariable();
-                        Populate(input);
-                    });
-                }
-                cm.AddButton("Collapse Incomming", new Color(1, 0.5f, 0.5f) /2 , () => {
+            }
+
+            if (!node.isVariable) {
+                cm.AddButton("Convert to Variable", Color.blue / 2, () => {
+                    node.MakeVariable();
+                    Populate(input);
+                });
+            }
+
+            if (node.uri != "") {
+                cm.AddButton("Collapse Incomming", new Color(1, 0.5f, 0.5f) / 2, () => {
                     Graph.instance.CollapseIncomingGraph(node);
                 });
-                cm.AddButton("Collapse Outgoing", new Color(1, 0.5f, 0.5f) /2 , () => {
+                cm.AddButton("Collapse Outgoing", new Color(1, 0.5f, 0.5f) / 2, () => {
                     Graph.instance.CollapseOutgoingGraph(node);
                 });
-                cm.AddButton("Collapse All", new Color(1,0.5f,0.5f) /2 , () => {
+                cm.AddButton("Collapse All", new Color(1, 0.5f, 0.5f) / 2, () => {
                     Graph.instance.CollapseGraph(node);
                 });
-                cm.AddButton("Close", Color.red / 2, () => {
-                    Graph.instance.RemoveNode(node);
-                });
-                cm.ReBuild();
             }
+
+            cm.AddButton("Close", Color.red / 2, () => {
+                Graph.instance.RemoveNode(node);
+                Close();
+            });
+
+            cm.ReBuild();
         }
     }
 

@@ -72,12 +72,12 @@ public class Graph : MonoBehaviour
     //To expand the graph, we want to know, which outgoing predicates we have for the given Node and how many Nodes are connected for each of the predicates.
     public Dictionary<string, Tuple<string, int>> GetOutgoingPredicats(string URI)
     {
+        string query = "";
         if (URI == "") return null;
         try {
             SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new System.Uri(Settings.Instance.SparqlEndpoint), BaseURI);
-            lastResults = endpoint.QueryWithResultSet(
-                "select distinct ?p (STR(COUNT(?o)) AS ?count) STR(?label) AS ?label where { <" + URI + "> ?p ?o . OPTIONAL { ?p rdfs:label ?label } FILTER(LANG(?label) = '' || LANGMATCHES(LANG(?label), '" + Main.instance.languageCode + "')) } LIMIT 100"
-                );
+            query = "select distinct ?p (STR(COUNT(?o)) AS ?count) STR(?label) AS ?label where { <" + URI + "> ?p ?o . OPTIONAL { ?p rdfs:label ?label } FILTER(LANG(?label) = '' || LANGMATCHES(LANG(?label), '" + Main.instance.languageCode + "')) } LIMIT 100";
+            lastResults = endpoint.QueryWithResultSet(query);
 
             Dictionary<string, Tuple<string, int>> results = new Dictionary<string, Tuple<string, int>>();
             // Fill triples list 
@@ -104,6 +104,10 @@ public class Graph : MonoBehaviour
             return results;
         } catch (Exception e) {
             Debug.Log("GetOutgoingPredicats error: " + e.Message);
+            Debug.Log("URI: "+URI);
+            Debug.Log(query);
+            Debug.Log(lastResults);
+
         }
         return null;
     }
@@ -111,13 +115,13 @@ public class Graph : MonoBehaviour
     //Sometimes not only the outgoing predicates are important, but also the incoming ones.
     public Dictionary<string, Tuple<string, int>> GetIncomingPredicats(string URI)
     {
+        string query = "";
         if (URI == "") return null;
         try {
-
+            
             SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new System.Uri(Settings.Instance.SparqlEndpoint), BaseURI);
-            lastResults = endpoint.QueryWithResultSet(
-                "select distinct ?p (STR(COUNT(?s)) AS ?count) STR(?label) AS ?label where { ?s ?p <" + URI + "> . OPTIONAL { ?p rdfs:label ?label } FILTER(LANG(?label) = '' || LANGMATCHES(LANG(?label), '" + Main.instance.languageCode + "')) } LIMIT 100"
-                );
+            query = "select distinct ?p (STR(COUNT(?s)) AS ?count) STR(?label) AS ?label where { ?s ?p <" + URI + "> . OPTIONAL { ?p rdfs:label ?label } FILTER(LANG(?label) = '' || LANGMATCHES(LANG(?label), '" + Main.instance.languageCode + "')) } LIMIT 100";
+            lastResults = endpoint.QueryWithResultSet(query);
             Dictionary<string, Tuple<string, int>> results = new Dictionary<string, Tuple<string, int>>();
             // Fill triples list 
             foreach (SparqlResult result in lastResults) {
@@ -145,6 +149,10 @@ public class Graph : MonoBehaviour
             return results;
         } catch (Exception e) {
             Debug.Log("GetIncomingPredicats error: " + e.Message);
+            Debug.Log("URI: " + URI);
+            Debug.Log(query);
+            Debug.Log(lastResults);
+
         }
         return null;
 
