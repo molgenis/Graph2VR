@@ -92,14 +92,17 @@ public class NodeMenu : MonoBehaviour
                         Populate(input);
                     });
                 }
-                cm.AddButton("Collapse Incomming", Color.red / 2, () => {
+                cm.AddButton("Collapse Incomming", new Color(1, 0.5f, 0.5f) /2 , () => {
                     Graph.instance.CollapseIncomingGraph(node);
                 });
-                cm.AddButton("Collapse Outgoing", Color.red / 2, () => {
+                cm.AddButton("Collapse Outgoing", new Color(1, 0.5f, 0.5f) /2 , () => {
                     Graph.instance.CollapseOutgoingGraph(node);
                 });
-                cm.AddButton("Collapse All", Color.red / 2, () => {
+                cm.AddButton("Collapse All", new Color(1,0.5f,0.5f) /2 , () => {
                     Graph.instance.CollapseGraph(node);
+                });
+                cm.AddButton("Close", Color.red / 2, () => {
+                    Graph.instance.RemoveNode(node);
                 });
                 cm.ReBuild();
             }

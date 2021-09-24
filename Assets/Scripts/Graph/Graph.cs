@@ -162,6 +162,25 @@ public class Graph : MonoBehaviour
         CollapseOutgoingGraph(node);
     }
 
+    public void RemoveNode(Node node)
+    {
+        List<VDS.RDF.Triple> tmpList = new List<VDS.RDF.Triple>();
+        IEnumerable<VDS.RDF.Triple> objects = currentGraph.GetTriplesWithObject(node.iNode);
+        IEnumerable<VDS.RDF.Triple> subjects = currentGraph.GetTriplesWithSubject(node.iNode);
+        
+        foreach (VDS.RDF.Triple triple in objects) {
+            tmpList.Add(triple);
+        }
+
+        foreach (VDS.RDF.Triple triple in subjects) {
+            tmpList.Add(triple);
+        }
+
+        foreach (VDS.RDF.Triple triple in tmpList) {
+            currentGraph.Retract(triple);
+        }
+    }
+
     public void CollapseIncomingGraph(Node node)
     {
         string query = $@"
@@ -213,7 +232,6 @@ public class Graph : MonoBehaviour
         foreach (VDS.RDF.Triple triple in results.Triples) {
             currentGraph.Retract(triple);
         }
-
     }
 
     public void ExpandGraph(Node node, string uri, bool isOutgoingLink)
