@@ -101,7 +101,7 @@ public class Node : MonoBehaviour
     public void SetDefaultColor(Color color)
     {
         defaultColor = color;
-        GetComponent<Renderer>().material.color = color;
+        SetColor(color);
     }
 
     public void SetColor(Color color)

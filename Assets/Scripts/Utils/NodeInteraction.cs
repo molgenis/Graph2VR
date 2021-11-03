@@ -26,7 +26,7 @@ public class NodeInteraction : MonoBehaviour, IPointerEnterHandler, IPointerExit
     public void OnPointerClick(PointerEventData eventData)
     {
         Node node = GetComponent<Node>();
-        GameObject.FindGameObjectWithTag("LeftControler").BroadcastMessage("Populate", node, SendMessageOptions.DontRequireReceiver);
+        GameObject.FindGameObjectWithTag("LeftControler").BroadcastMessage("PopulateNode", node, SendMessageOptions.DontRequireReceiver);
     }
 
     void SetNewColorState()
