@@ -87,12 +87,10 @@ public class Graph : MonoBehaviour
                 Debug.Log(state);
                 Debug.Log(((AsyncError)state).Error);
             }
-            /*
             // To draw new elements to unity we need to be on the main Thread
             UnityMainThreadDispatcher.Instance().Enqueue(() => {
                 currentGraph.Merge(graph);
             });
-            */
         }, null);
     }
 

@@ -11,7 +11,7 @@ public class NodeMenu : MonoBehaviour
     private Dictionary<string, System.Tuple<string, int>> set;
     private Node node = null;
     private Edge edge = null;
-    
+
     public GameObject controlerModel;
     public SteamVR_Action_Boolean clickAction = null;
 
@@ -131,6 +131,9 @@ public class NodeMenu : MonoBehaviour
                     edge.Deselect();
                     PopulateEdge(input);
                 });
+                cm.AddButton("Query similar patterns", Color.yellow / 2, () => {
+                    Graph.instance.QuerySimilarPatterns();
+                });
             } else {
                 cm.AddButton("Select triple", Color.yellow / 2, () => {
                     edge.Select();
@@ -157,7 +160,6 @@ public class NodeMenu : MonoBehaviour
                 });
                 cm.AddButton("Query similar patterns", Color.yellow / 2, () => {
                     Graph.instance.QuerySimilarPatterns();
-                    // Do magic stuff here
                 });
 
             } else {
