@@ -10,6 +10,8 @@ public class NodeMenu : MonoBehaviour
     public bool isOutgoingLink = true;
     private Dictionary<string, System.Tuple<string, int>> set;
     private Node node = null;
+    private Edge edge = null;
+    
     public GameObject controlerModel;
     public SteamVR_Action_Boolean clickAction = null;
 
@@ -36,7 +38,7 @@ public class NodeMenu : MonoBehaviour
         }
     }
 
-    public void Populate(Object input)
+    public void PopulateNode(Object input)
     {
         KeyboardHandler.instance.Close();
         node = input as Node;
@@ -45,7 +47,7 @@ public class NodeMenu : MonoBehaviour
             controlerModel.SetActive(false);
             cm.AddButton("Undo conversion", Color.blue / 2, () => {
                 node.UndoConversion();
-                Populate(input);
+                PopulateNode(input);
             });
             cm.AddButton("Rename", Color.red / 2, () => { KeyboardHandler.instance.Open(node); });
             cm.ReBuild();
@@ -58,12 +60,12 @@ public class NodeMenu : MonoBehaviour
                 if (isOutgoingLink) {
                     cm.AddButton("List incoming predicats", Color.blue / 2, () => {
                         isOutgoingLink = false;
-                        Populate(input);
+                        PopulateNode(input);
                     });
                 } else {
                     cm.AddButton("List outgoing predicats", Color.blue / 2, () => {
                         isOutgoingLink = true;
-                        Populate(input);
+                        PopulateNode(input);
                     });
                 }
 
@@ -87,7 +89,7 @@ public class NodeMenu : MonoBehaviour
             if (!node.isVariable) {
                 cm.AddButton("Convert to Variable", Color.blue / 2, () => {
                     node.MakeVariable();
-                    Populate(input);
+                    PopulateNode(input);
                 });
             }
 
@@ -107,6 +109,58 @@ public class NodeMenu : MonoBehaviour
                 Graph.instance.RemoveNode(node);
                 Close();
             });
+
+            cm.ReBuild();
+        }
+    }
+
+    public void PopulateEdge(Object input)
+    {
+        KeyboardHandler.instance.Close();
+        edge = input as Edge;
+        if (edge.isVariable) {
+            Close();
+            controlerModel.SetActive(false);
+            cm.AddButton("Undo conversion", Color.blue / 2, () => {
+                edge.UndoConversion();
+                PopulateEdge(input);
+            });
+
+            if (edge.isSelected) {
+                cm.AddButton("Remove selection", Color.yellow / 2, () => {
+                    edge.Deselect();
+                    PopulateEdge(input);
+                });
+            } else {
+                cm.AddButton("Select tripple", Color.yellow / 2, () => {
+                    edge.Select();
+                    PopulateEdge(input);
+                });
+            }
+            cm.AddButton("Rename", Color.red / 2, () => { KeyboardHandler.instance.Open(edge); });
+            cm.ReBuild();
+        } else {
+            Close();
+            controlerModel.SetActive(false);
+
+            if (!edge.isVariable) {
+                cm.AddButton("Convert to Variable", Color.blue / 2, () => {
+                    edge.MakeVariable();
+                    PopulateEdge(input);
+                });
+            }
+
+            if (edge.isSelected) {
+                cm.AddButton("Remove selection", Color.yellow / 2, () => {
+                    edge.Deselect();
+                    PopulateEdge(input);
+                });
+            } else {
+                cm.AddButton("Select tripple", Color.yellow / 2, () => {
+                    edge.Select();
+                    PopulateEdge(input);
+                });
+            }
 
             cm.ReBuild();
         }

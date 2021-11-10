@@ -15,6 +15,10 @@ public class Graph : MonoBehaviour
     public BaseLayoutAlgorithm layout = null;
     public Color defaultNodeColor;
     public Color defaultEdgeColor;
+    public Color edgeSelectedColor;
+    public Color edgeHoverColor;
+    public Color edgeGrabbedColor;
+
 
     public Color uriNodeColor;
     public Color literalNodeColor;
@@ -44,6 +48,19 @@ public class Graph : MonoBehaviour
         public string Subject = null;
         public string Predicate = null;
         public string Object = null;
+    }
+
+    public List<Triple> selection = new List<Triple>();
+
+    public void AddToSelection(Triple toAdd)
+    {
+        selection.Add(toAdd);
+    }
+
+    public void RemoveFromSelection(Triple toRemove)
+    {
+        // Todo: try catch?
+        selection.Remove(toRemove);
     }
 
     // NOTE: this is a development function
@@ -369,7 +386,6 @@ public class Graph : MonoBehaviour
         if (!edgeList.Find(edge => edge.Equals(args.Triple.Subject, args.Triple.Predicate, args.Triple.Object)))
         {
             Edge e = CreateEdge(args.Triple.Subject, args.Triple.Predicate, args.Triple.Object);
-            e.SetColor(defaultEdgeColor);
         }
 
         layout.CalculateLayout();
@@ -418,7 +434,6 @@ public class Graph : MonoBehaviour
         foreach (VDS.RDF.Triple triple in iGraph.Triples) {
             if (!edgeList.Find(edge => edge.Equals(triple.Subject, triple.Predicate, triple.Object))) {
                 Edge e = CreateEdge(triple.Subject, triple.Predicate, triple.Object);
-                e.SetColor(defaultEdgeColor);
             }
         }
 
@@ -549,6 +564,12 @@ public class Graph : MonoBehaviour
         edge.from = from;
         edge.to = to;
         edgeList.Add(edge);
+
+        edge.selectedColor = edgeSelectedColor;
+        edge.hoverColor = edgeHoverColor;
+        edge.grabbedColor = edgeGrabbedColor;
+        edge.SetDefaultColor(defaultEdgeColor);
+
         return edge;
     }
 
@@ -574,6 +595,11 @@ public class Graph : MonoBehaviour
         edge.iTo = to;
         edge.from = fromNode;
         edge.to = toNode;
+
+        edge.selectedColor = edgeSelectedColor;
+        edge.hoverColor = edgeHoverColor;
+        edge.grabbedColor = edgeGrabbedColor;
+        edge.SetDefaultColor(defaultEdgeColor);
         edgeList.Add(edge);
         return edge;
     }
@@ -634,6 +660,7 @@ public class Graph : MonoBehaviour
         node.SetURI(value);
         node.SetLabel(value);
         nodeList.Add(node);
+        node.SetDefaultColor(variableNodeColor);
         return node;
     }
 

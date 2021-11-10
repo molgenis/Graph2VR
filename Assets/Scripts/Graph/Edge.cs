@@ -5,20 +5,123 @@ using VDS.RDF;
 
 public class Edge : MonoBehaviour
 {
-    public string uri;
+    public string uri = "";
     public Node from;
     public Node to;
     public INode iFrom;
     public INode iNode;
     public INode iTo;
     public Transform arrow;
-
+    public new CapsuleCollider collider;
     private LineRenderer lineRenderer;
     private TMPro.TextMeshPro textFront;
     private TMPro.TextMeshPro textBack;
 
-    private string textShort;
-    private string textLong;
+    public bool isVariable = false;
+    public bool isSelected = false;
+    public bool isPointerHovered = false;
+    public bool isControllerHovered = false;
+    public bool isControllerGrabbed = false;
+
+    public Color defaultColor;
+    public Color selectedColor;
+    public Color hoverColor;
+    public Color grabbedColor;
+
+    private string textShort = "";
+    private string textLong = "";
+    public string label = "";
+    private Color cachedNodeColor; // color of the node, (before it gets converted to variable)
+
+    private void Update()
+    {
+        // TODO: trigger a update function, dont do this every frame.
+        if (isControllerHovered || isPointerHovered) {
+            SetColor(hoverColor);
+        }else if (isControllerGrabbed) {
+            SetColor(grabbedColor);
+        } else if(isSelected) {
+            SetColor(selectedColor);
+        } else {
+            SetColor(defaultColor);
+        }
+
+        if (from == null || to == null) {
+            return;
+        }
+        UpdatePosition();
+    }
+
+    public void Select()
+    {
+        isSelected = true;
+        from.Select();
+        to.Select();
+
+        if(iFrom!=null && iTo != null) {
+            Graph.instance.AddToSelection(new Graph.Triple {
+                Subject = from.isVariable ? from.label : iFrom.ToString(),
+                Predicate = isVariable ? label : iNode.ToString(),
+                Object = to.isVariable ? to.label : iTo.ToString()
+            });
+        }
+    }
+
+    public void Deselect()
+    {
+        isSelected = false;
+        from.Deselect();
+        to.Deselect();
+
+
+        // TODO: This needs to be fixed, probibly a check by value not reverence?
+        if (iFrom != null && iTo != null) {
+            Graph.instance.RemoveFromSelection(new Graph.Triple {
+                Subject = iFrom.ToString(),
+                Predicate = iNode.ToString(),
+                Object = iTo.ToString()
+            });
+        }
+    }
+
+    public void MakeVariable()
+    {
+        if (label == "") label = uri;
+        isVariable = true;
+        cachedNodeColor = defaultColor;
+        SetDefaultColor(Graph.instance.variableNodeColor);
+        if (label.EndsWith("/")) {
+            SetLabel("?" + label);
+        } else {
+            int indexBackSlash = label.LastIndexOf('/');
+            if (indexBackSlash == -1) {
+                SetLabel("?" + label);
+            } else {
+                SetLabel("?" + label.Remove(0, indexBackSlash+1));
+            }
+        }
+    }
+
+    public void UndoConversion()
+    {
+        isVariable = false;
+        SetDefaultColor(cachedNodeColor);
+        SetLabel("");
+    }
+
+
+    public void SetLabel(string label)
+    {
+        if (isVariable) {
+            if (label.StartsWith("?")) {
+                this.label = label.Replace("@" + Main.instance.languageCode, "");
+            } else {
+                this.label = "?" + label.Replace("@" + Main.instance.languageCode, "");
+            }
+        } else {
+            this.label = label.Replace("@" + Main.instance.languageCode, "");
+        }
+    }
 
     public bool Equals(INode Subject, INode Predicate, INode Object)
     {
@@ -35,6 +138,12 @@ public class Edge : MonoBehaviour
         return VDS.RDF.UriFactory.Create(this.uri);
     }
 
+    public void SetDefaultColor(Color color)
+    {
+        defaultColor = color;
+        SetColor(color);
+    }
+
     public void SetColor(Color color)
     {
         lineRenderer.material.color = color;
@@ -46,6 +155,7 @@ public class Edge : MonoBehaviour
         lineRenderer = GetComponent<LineRenderer>();
         lineRenderer.useWorldSpace = false;
         arrow = transform.Find("Arrow");
+        collider = transform.Find("Collider").GetComponent<CapsuleCollider>();
     }
 
     private void Start()
@@ -95,24 +205,17 @@ public class Edge : MonoBehaviour
         return new Vector2(yRotation, zRotation);
     }
 
-    private void Update()
-    {
-        if(from == null || to == null) {
-            return;
-        }
-        UpdatePosition();
-    }
-
     private void UpdatePosition()
     {
         transform.position = (from.transform.position + to.transform.position) * 0.5f;
         Vector3 fromPosition = from.transform.position - transform.position;
         Vector3 toPosition = to.transform.position - transform.position;
 
-        float distance = (((toPosition - fromPosition).magnitude) * (1 / textBack.transform.localScale.x)) * 0.8f;
+        float distance = ((toPosition - fromPosition).magnitude);
+        float textDistance = (distance * (1 / textBack.transform.localScale.x)) * 0.8f;
         Vector3 normal = (toPosition - fromPosition).normalized;
         lineRenderer.startWidth = lineRenderer.endWidth = 0.005f * transform.lossyScale.magnitude;
-        lineRenderer.SetPosition(0, transform.worldToLocalMatrix * fromPosition);
+        lineRenderer.SetPosition(0, transform.worldToLocalMatrix * (fromPosition + normal * (from.transform.lossyScale.x * 0.5f)));
         lineRenderer.SetPosition(1, transform.worldToLocalMatrix * (toPosition - (normal * ((to.transform.lossyScale.x * 0.5f) + (arrow.lossyScale.x * 0.05f)))));
         Vector2 rot = CalculateAngles(fromPosition, toPosition, true);
         textFront.transform.rotation = Quaternion.Euler(0, rot.x, rot.y); // note this is world rotation
@@ -120,16 +223,24 @@ public class Edge : MonoBehaviour
         rot = CalculateAngles(fromPosition, toPosition, false);
         textBack.transform.rotation = Quaternion.Euler(0, rot.x, rot.y);
         textBack.transform.localPosition = textBack.transform.localRotation * (Vector3.up * 0.025f);
-        textBack.rectTransform.sizeDelta = new Vector2(distance, 1);
-        textFront.rectTransform.sizeDelta = new Vector2(distance, 1);
+        textBack.rectTransform.sizeDelta = new Vector2(textDistance, 1);
+        textFront.rectTransform.sizeDelta = new Vector2(textDistance, 1);
         arrow.localPosition = (transform.worldToLocalMatrix * (toPosition - (normal * (to.transform.lossyScale.x * 0.5f)))) ;
         arrow.rotation = Quaternion.FromToRotation(Vector3.up, normal);
 
+        // Position the collider
+        collider.transform.rotation = Quaternion.Euler(0, rot.x, rot.y);
+        collider.transform.localPosition = Vector3.zero;
+        collider.height = distance;
+
         // Update text
-        if(to.state == Node.NodeState.Grabbed || to.state == Node.NodeState.Pointed) {
+        if (isPointerHovered || isControllerHovered || isControllerGrabbed) {
             textFront.text = textBack.text = textLong;
         } else {
             textFront.text = textBack.text = textShort;
+        }
+        if (label != "") {
+            textFront.text = textBack.text = label;
         }
     }
 }

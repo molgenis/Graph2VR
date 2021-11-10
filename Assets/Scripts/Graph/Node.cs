@@ -10,7 +10,7 @@ public class Node : MonoBehaviour
     public enum NodeState { None, Pointed, CloseToControler, Grabbed };
     public NodeState state = NodeState.None;
     public bool pinned = false;
-
+    public bool isSelected = false;
     public string uri = ""; // Full URI, empty if literal
     public string label = "";
     private string cachedNodeLabel = ""; // label of the node, (before it gets converted to variable)
@@ -37,7 +37,22 @@ public class Node : MonoBehaviour
         InvokeRepeating("SlowUpdate", 1, 1);
         Refine();
     }
-    
+
+
+    public void Select()
+    {
+        isSelected = true;
+        transform.Find("Selected").gameObject.SetActive(true);
+        transform.Find("Selected").gameObject.GetComponent<Renderer>().material.SetColor("_Color", Graph.instance.edgeSelectedColor);
+
+    }
+
+    public void Deselect()
+    {
+        isSelected = false;
+        transform.Find("Selected").gameObject.SetActive(false);
+    }
+
     public void Refine()
     {
         if (iNode == null) return;
@@ -86,7 +101,7 @@ public class Node : MonoBehaviour
                 SetLabel("?" + label);
             }else
             {
-                SetLabel("?" + label.Remove(0,indexBackSlash));
+                SetLabel("?" + label.Remove(0,indexBackSlash+1));
             }
         }
     }
@@ -101,7 +116,7 @@ public class Node : MonoBehaviour
     public void SetDefaultColor(Color color)
     {
         defaultColor = color;
-        GetComponent<Renderer>().material.color = color;
+        SetColor(color);
     }
 
     public void SetColor(Color color)
