@@ -58,12 +58,12 @@ public class NodeMenu : MonoBehaviour
 
             if (set != null) {
                 if (isOutgoingLink) {
-                    cm.AddButton("List incoming predicats", Color.blue / 2, () => {
+                    cm.AddButton("List incoming predicts", Color.blue / 2, () => {
                         isOutgoingLink = false;
                         PopulateNode(input);
                     });
                 } else {
-                    cm.AddButton("List outgoing predicats", Color.blue / 2, () => {
+                    cm.AddButton("List outgoing predicts", Color.blue / 2, () => {
                         isOutgoingLink = true;
                         PopulateNode(input);
                     });
@@ -94,7 +94,7 @@ public class NodeMenu : MonoBehaviour
             }
 
             if (node.uri != "") {
-                cm.AddButton("Collapse Incomming", new Color(1, 0.5f, 0.5f) / 2, () => {
+                cm.AddButton("Collapse Incoming", new Color(1, 0.5f, 0.5f) / 2, () => {
                     Graph.instance.CollapseIncomingGraph(node);
                 });
                 cm.AddButton("Collapse Outgoing", new Color(1, 0.5f, 0.5f) / 2, () => {
@@ -132,7 +132,7 @@ public class NodeMenu : MonoBehaviour
                     PopulateEdge(input);
                 });
             } else {
-                cm.AddButton("Select tripple", Color.yellow / 2, () => {
+                cm.AddButton("Select triple", Color.yellow / 2, () => {
                     edge.Select();
                     PopulateEdge(input);
                 });
@@ -155,8 +155,13 @@ public class NodeMenu : MonoBehaviour
                     edge.Deselect();
                     PopulateEdge(input);
                 });
+                cm.AddButton("Query similar patterns", Color.yellow / 2, () => {
+                    edge.Deselect();
+                    PopulateEdge(input);
+                });
+
             } else {
-                cm.AddButton("Select tripple", Color.yellow / 2, () => {
+                cm.AddButton("Select triple", Color.yellow / 2, () => {
                     edge.Select();
                     PopulateEdge(input);
                 });
