@@ -156,8 +156,8 @@ public class NodeMenu : MonoBehaviour
                     PopulateEdge(input);
                 });
                 cm.AddButton("Query similar patterns", Color.yellow / 2, () => {
-                    edge.Deselect();
-                    PopulateEdge(input);
+                    Graph.instance.QuerySimilarPatterns();
+                    // Do magic stuff here
                 });
 
             } else {

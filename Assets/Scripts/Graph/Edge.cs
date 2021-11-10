@@ -38,9 +38,9 @@ public class Edge : MonoBehaviour
         // TODO: trigger a update function, dont do this every frame.
         if (isControllerHovered || isPointerHovered) {
             SetColor(hoverColor);
-        }else if (isControllerGrabbed) {
+        } else if (isControllerGrabbed) {
             SetColor(grabbedColor);
-        } else if(isSelected) {
+        } else if (isSelected) {
             SetColor(selectedColor);
         } else {
             SetColor(defaultColor);
@@ -58,11 +58,11 @@ public class Edge : MonoBehaviour
         from.Select();
         to.Select();
 
-        if(iFrom!=null && iTo != null) {
+        if (iFrom != null && iTo != null) {
             Graph.instance.AddToSelection(new Graph.Triple {
-                Subject = from.isVariable ? from.label : iFrom.ToString(),
-                Predicate = isVariable ? label : iNode.ToString(),
-                Object = to.isVariable ? to.label : iTo.ToString()
+                Subject = from.isVariable ? from.label : "<" + iFrom.ToString() + ">",
+                Predicate = isVariable ? label : "<" + iNode.ToString() + ">",
+                Object = to.isVariable ? to.label : "<" + iTo.ToString() + ">"
             });
         }
     }
@@ -86,20 +86,12 @@ public class Edge : MonoBehaviour
 
     public void MakeVariable()
     {
-        if (label == "") label = uri;
         isVariable = true;
         cachedNodeColor = defaultColor;
         SetDefaultColor(Graph.instance.variableNodeColor);
-        if (label.EndsWith("/")) {
-            SetLabel("?" + label);
-        } else {
-            int indexBackSlash = label.LastIndexOf('/');
-            if (indexBackSlash == -1) {
-                SetLabel("?" + label);
-            } else {
-                SetLabel("?" + label.Remove(0, indexBackSlash+1));
-            }
-        }
+
+        string newLabel = Graph.instance.variableNameManager.GetVariableName(uri);
+        SetLabel(newLabel);
     }
 
     public void UndoConversion()
@@ -183,21 +175,21 @@ public class Edge : MonoBehaviour
     private string URIEnd(string uri)
     {
         var list = uri.Split('/', '#');
-        if(list.Length > 0) {
-            return list[list.Length-1];
+        if (list.Length > 0) {
+            return list[list.Length - 1];
         }
         return uri;
     }
 
     private Vector2 CalculateAngles(Vector3 fromPosition, Vector3 toPosition, bool isFront)
     {
-        if(Vector3.Distance(fromPosition, toPosition) == 0) {
+        if (Vector3.Distance(fromPosition, toPosition) == 0) {
             return Vector2.zero;
         }
         float height = (fromPosition.y - toPosition.y);
         float angle = -90;
         if (isFront) {
-            height = (toPosition.y - fromPosition.y); 
+            height = (toPosition.y - fromPosition.y);
             angle = 90;
         }
         float yRotation = angle + Mathf.Atan2(fromPosition.x, fromPosition.z) * (180 / Mathf.PI);
@@ -225,7 +217,7 @@ public class Edge : MonoBehaviour
         textBack.transform.localPosition = textBack.transform.localRotation * (Vector3.up * 0.025f);
         textBack.rectTransform.sizeDelta = new Vector2(textDistance, 1);
         textFront.rectTransform.sizeDelta = new Vector2(textDistance, 1);
-        arrow.localPosition = (transform.worldToLocalMatrix * (toPosition - (normal * (to.transform.lossyScale.x * 0.5f)))) ;
+        arrow.localPosition = (transform.worldToLocalMatrix * (toPosition - (normal * (to.transform.lossyScale.x * 0.5f))));
         arrow.rotation = Quaternion.FromToRotation(Vector3.up, normal);
 
         // Position the collider

@@ -42,6 +42,8 @@ public class Graph : MonoBehaviour
 
     private SparqlRemoteEndpoint endpoint;
 
+    public VariableNameManager variableNameManager;
+
     [System.Serializable]
     public class Triple
     {
@@ -50,7 +52,49 @@ public class Graph : MonoBehaviour
         public string Object = null;
     }
 
+    // FIXME: dont store selection in string, it will not reflect chages made after selections!
     public List<Triple> selection = new List<Triple>();
+
+
+
+    public void QuerySimilarPatterns()
+    {
+        Debug.Log("Triples");
+        string triples = "";
+        foreach (Triple triple in selection) {
+            triples += triple.Subject + " " + triple.Predicate + " " + triple.Object + " .\n";
+        }
+
+        string query = $@"
+            construct {{
+                {triples} 
+            }} where {{
+                {triples} 
+            }}";
+
+        Debug.Log(query);
+
+        endpoint.QueryWithResultGraph(query, (graph, state) => {
+            if (state == null) {
+                Debug.Log("All good");
+                Debug.Log(query);
+                Debug.Log(graph);
+                Debug.Log(state);
+            } else {
+                Debug.Log("There may be an error");
+                Debug.Log(query);
+                Debug.Log(graph);
+                Debug.Log(state);
+                Debug.Log(((AsyncError)state).Error);
+            }
+            /*
+            // To draw new elements to unity we need to be on the main Thread
+            UnityMainThreadDispatcher.Instance().Enqueue(() => {
+                currentGraph.Merge(graph);
+            });
+            */
+        }, null);
+    }
 
     public void AddToSelection(Triple toAdd)
     {
@@ -121,7 +165,7 @@ public class Graph : MonoBehaviour
             return results;
         } catch (Exception e) {
             Debug.Log("GetOutgoingPredicats error: " + e.Message);
-            Debug.Log("URI: "+URI);
+            Debug.Log("URI: " + URI);
             Debug.Log(query);
             Debug.Log(lastResults);
 
@@ -135,7 +179,7 @@ public class Graph : MonoBehaviour
         string query = "";
         if (URI == "") return null;
         try {
-            
+
             SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new System.Uri(Settings.Instance.SparqlEndpoint), BaseURI);
             query = "select distinct ?p (STR(COUNT(?s)) AS ?count) STR(?label) AS ?label where { ?s ?p <" + URI + "> . OPTIONAL { ?p rdfs:label ?label } FILTER(LANG(?label) = '' || LANGMATCHES(LANG(?label), '" + Main.instance.languageCode + "')) } LIMIT 100";
             lastResults = endpoint.QueryWithResultSet(query);
@@ -192,7 +236,7 @@ public class Graph : MonoBehaviour
         List<VDS.RDF.Triple> tmpList = new List<VDS.RDF.Triple>();
         IEnumerable<VDS.RDF.Triple> objects = currentGraph.GetTriplesWithObject(node.iNode);
         IEnumerable<VDS.RDF.Triple> subjects = currentGraph.GetTriplesWithSubject(node.iNode);
-        
+
         foreach (VDS.RDF.Triple triple in objects) {
             tmpList.Add(triple);
         }
@@ -224,7 +268,7 @@ public class Graph : MonoBehaviour
                         }}
                     }}
                 }}";
-        
+
         VDS.RDF.Graph results = (VDS.RDF.Graph)currentGraph.ExecuteQuery(query);
 
         foreach (VDS.RDF.Triple triple in results.Triples) {
@@ -293,9 +337,9 @@ public class Graph : MonoBehaviour
                 Debug.Log(state);
                 Debug.Log(((AsyncError)state).Error);
             }
+
             // To draw new elements to unity we need to be on the main Thread
-            UnityMainThreadDispatcher.Instance().Enqueue(() =>
-            {
+            UnityMainThreadDispatcher.Instance().Enqueue(() => {
                 currentGraph.Merge(graph);
             });
         }, null);
@@ -347,8 +391,7 @@ public class Graph : MonoBehaviour
     {
         int count = 0;
 
-        foreach(VDS.RDF.Triple t in triples)
-        {
+        foreach (VDS.RDF.Triple t in triples) {
             count++;
         }
 
@@ -359,12 +402,10 @@ public class Graph : MonoBehaviour
     {
         // Object and subject will get removed when we only have one triple. edge will also get removed then and only then.
         // This event is raised after deletion so we need to see if the object/subject is deleted in the resulting graph
-        if (NumTriples(currentGraph.GetTriples(args.Triple.Object)) == 0)
-        {
+        if (NumTriples(currentGraph.GetTriples(args.Triple.Object)) == 0) {
             Remove(nodeList.Find(graficalNode => graficalNode.iNode.Equals(args.Triple.Object)));
         }
-        if (NumTriples(currentGraph.GetTriples(args.Triple.Subject)) == 0)
-        {
+        if (NumTriples(currentGraph.GetTriples(args.Triple.Subject)) == 0) {
             Remove(nodeList.Find(graficalNode => graficalNode.iNode.Equals(args.Triple.Subject)));
         }
 
@@ -373,18 +414,15 @@ public class Graph : MonoBehaviour
     private void CurrentGraph_TripleAsserted(object sender, TripleEventArgs args)
     {
         // Add nodes
-        if (nodeList != null && !nodeList.Find(graficalNode => graficalNode.iNode.Equals(args.Triple.Object)))
-        {
+        if (nodeList != null && !nodeList.Find(graficalNode => graficalNode.iNode.Equals(args.Triple.Object))) {
             Node n = CreateNode(args.Triple.Object.ToString(), args.Triple.Object);
         }
-        if (nodeList != null && !nodeList.Find(graficalNode => graficalNode.iNode.Equals(args.Triple.Subject)))
-        {
+        if (nodeList != null && !nodeList.Find(graficalNode => graficalNode.iNode.Equals(args.Triple.Subject))) {
             Node n = CreateNode(args.Triple.Subject.ToString(), args.Triple.Subject);
         }
 
         // Add edges
-        if (!edgeList.Find(edge => edge.Equals(args.Triple.Subject, args.Triple.Predicate, args.Triple.Object)))
-        {
+        if (!edgeList.Find(edge => edge.Equals(args.Triple.Subject, args.Triple.Predicate, args.Triple.Object))) {
             Edge e = CreateEdge(args.Triple.Subject, args.Triple.Predicate, args.Triple.Object);
         }
 
@@ -425,7 +463,7 @@ public class Graph : MonoBehaviour
 
         // Add nodes
         foreach (INode node in iGraph.Nodes) {
-            if(nodeList!=null && !nodeList.Find(graficalNode => graficalNode.iNode.Equals(node))) {
+            if (nodeList != null && !nodeList.Find(graficalNode => graficalNode.iNode.Equals(node))) {
                 Node n = CreateNode(node.ToString(), node);
             }
         }
@@ -550,9 +588,10 @@ public class Graph : MonoBehaviour
     private void Awake()
     {
         instance = this;
+        variableNameManager = new VariableNameManager();
     }
 
-    public Edge CreateEdge(Node from, string uri,  Node to)
+    public Edge CreateEdge(Node from, string uri, Node to)
     {
         GameObject clone = Instantiate<GameObject>(edgePrefab);
         clone.transform.SetParent(transform);
@@ -584,7 +623,7 @@ public class Graph : MonoBehaviour
 
         Node fromNode = GetByINode(from);
         Node toNode = GetByINode(to);
-        if(fromNode == null || toNode == null) {
+        if (fromNode == null || toNode == null) {
             Debug.Log("The Subject and Object needs to be defined to create a edge");
             return null;
         }
@@ -638,7 +677,7 @@ public class Graph : MonoBehaviour
                 break;
             case NodeType.Uri:
                 // TODO: this should work?
-                node.SetURI( ((IUriNode)iNode).Uri.ToString() );
+                node.SetURI(((IUriNode)iNode).Uri.ToString());
                 //node.RequestLabel(endpoint);
                 node.SetDefaultColor(uriNodeColor);
                 break;
@@ -689,7 +728,7 @@ public class Graph : MonoBehaviour
 
     public void Remove(List<Node> nodes)
     {
-        for(int i=0; i< nodes.Count; i++) {
+        for (int i = 0; i < nodes.Count; i++) {
             Remove(nodes[i]);
         }
     }

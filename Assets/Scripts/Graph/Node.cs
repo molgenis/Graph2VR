@@ -90,20 +90,9 @@ public class Node : MonoBehaviour
         isVariable = true;
         cachedNodeColor = defaultColor;
         SetDefaultColor(Graph.instance.variableNodeColor);
-        if (label.EndsWith("/"))
-        {
-            SetLabel("?" + label);
-        } else
-        {
-            int indexBackSlash = label.LastIndexOf('/');
-            if(indexBackSlash == -1)
-            {
-                SetLabel("?" + label);
-            }else
-            {
-                SetLabel("?" + label.Remove(0,indexBackSlash+1));
-            }
-        }
+
+        string newLabel = Graph.instance.variableNameManager.GetVariableName(uri);
+        SetLabel(newLabel);
     }
 
     public void UndoConversion()
@@ -126,19 +115,13 @@ public class Node : MonoBehaviour
 
     public void SetLabel(string label)
     {
-        if (isVariable)
-        {
-            if (label.StartsWith("?"))
-            {
+        if (isVariable) {
+            if (label.StartsWith("?")) {
                 this.label = label.Replace("@" + Main.instance.languageCode, "");
-            }
-            else
-            {
+            } else {
                 this.label = "?" + label.Replace("@" + Main.instance.languageCode, "");
             }
-        }
-        else
-        {
+        } else {
             this.label = label.Replace("@" + Main.instance.languageCode, "");
             cachedNodeLabel = this.label;
         }
@@ -171,23 +154,23 @@ public class Node : MonoBehaviour
         string query = "prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>  select STR(?label) AS ?label where { <" + uri + "> rdfs:label ?label . FILTER(LANG(?label) = '' || LANGMATCHES(LANG(?label), '" + Main.instance.languageCode + "')) } LIMIT 1";
 
         endpoint.QueryWithResultSet(query, (results, state) => {
-            results[0].TryGetValue("label",  out INode label);
+            results[0].TryGetValue("label", out INode label);
             SetLabel(label.ToString());
         }, (object)this);
     }
-/*
-    public bool RequestIsClass(SparqlRemoteEndpoint endpoint)
-    {
-        string query = "prefix rdfs: http://www.w3.org/2000/01/rdf-schema#  ASK {{<" + uri + "> a owl:Class.} UNION {?anything a <" + uri + ">.}}";
-        try {
-            SparqlResultSet result = endpoint.QueryWithResultSet(query);
-            Debug.Log(result.Result.ToString());
-            return result.Result;
-        } catch { Debug.Log(uri); }
-        return false;
+    /*
+        public bool RequestIsClass(SparqlRemoteEndpoint endpoint)
+        {
+            string query = "prefix rdfs: http://www.w3.org/2000/01/rdf-schema#  ASK {{<" + uri + "> a owl:Class.} UNION {?anything a <" + uri + ">.}}";
+            try {
+                SparqlResultSet result = endpoint.QueryWithResultSet(query);
+                Debug.Log(result.Result.ToString());
+                return result.Result;
+            } catch { Debug.Log(uri); }
+            return false;
 
-    }
-    */
+        }
+        */
     private void UpdateDisplay()
     {
         string text = label;
@@ -203,7 +186,7 @@ public class Node : MonoBehaviour
     void Update()
     {
         transform.rotation = Quaternion.LookRotation(Camera.main.transform.position - transform.position, Vector3.up);
-        if(state == NodeState.Grabbed || state == Node.NodeState.Pointed) {
+        if (state == NodeState.Grabbed || state == Node.NodeState.Pointed) {
             textMesh.transform.localScale = Vector3.one * 0.6f;
         } else {
             textMesh.transform.localScale = Vector3.one * 0.3f;
@@ -212,16 +195,13 @@ public class Node : MonoBehaviour
 
     public void ToggleInfoPanel()
     {
-        if (infoPanel == null)
-        {
+        if (infoPanel == null) {
             infoPanel = Instantiate<Canvas>(Resources.Load<Canvas>("UI/ContextMenu"));
             infoPanel.renderMode = RenderMode.WorldSpace;
             infoPanel.worldCamera = GameObject.Find("Controller (right)").GetComponent<Camera>();
             ContextMenuHandler selectorHandler = infoPanel.GetComponent<ContextMenuHandler>();
             selectorHandler.Initiate(this);
-        }
-        else
-        {
+        } else {
             infoPanel.enabled = !infoPanel.enabled;
         }
 
@@ -230,4 +210,3 @@ public class Node : MonoBehaviour
         infoPanel.transform.position += infoPanel.transform.rotation * new Vector3(1.0f, 0, 0) * Mathf.Max(transform.lossyScale.x, gameObject.transform.lossyScale.y);
     }
 }
-
