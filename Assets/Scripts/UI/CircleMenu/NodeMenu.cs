@@ -122,10 +122,22 @@ public class NodeMenu : MonoBehaviour
             Close();
             controlerModel.SetActive(false);
             cm.AddButton("Undo conversion", Color.blue / 2, () => {
-                // edge.UndoConversion();
+                edge.UndoConversion();
                 PopulateEdge(input);
             });
-            //cm.AddButton("Rename", Color.red / 2, () => { KeyboardHandler.instance.Open(edge); });
+
+            if (edge.isSelected) {
+                cm.AddButton("Remove selection", Color.yellow / 2, () => {
+                    edge.Deselect();
+                    PopulateEdge(input);
+                });
+            } else {
+                cm.AddButton("Select tripple", Color.yellow / 2, () => {
+                    edge.Select();
+                    PopulateEdge(input);
+                });
+            }
+            cm.AddButton("Rename", Color.red / 2, () => { KeyboardHandler.instance.Open(edge); });
             cm.ReBuild();
         } else {
             Close();
@@ -133,7 +145,7 @@ public class NodeMenu : MonoBehaviour
 
             if (!edge.isVariable) {
                 cm.AddButton("Convert to Variable", Color.blue / 2, () => {
-                    // edge.MakeVariable();
+                    edge.MakeVariable();
                     PopulateEdge(input);
                 });
             }

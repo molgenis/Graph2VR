@@ -564,6 +564,12 @@ public class Graph : MonoBehaviour
         edge.from = from;
         edge.to = to;
         edgeList.Add(edge);
+
+        edge.selectedColor = edgeSelectedColor;
+        edge.hoverColor = edgeHoverColor;
+        edge.grabbedColor = edgeGrabbedColor;
+        edge.SetDefaultColor(defaultEdgeColor);
+
         return edge;
     }
 
@@ -654,6 +660,7 @@ public class Graph : MonoBehaviour
         node.SetURI(value);
         node.SetLabel(value);
         nodeList.Add(node);
+        node.SetDefaultColor(variableNodeColor);
         return node;
     }
 

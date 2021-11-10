@@ -18,6 +18,7 @@ public class KeyboardHandler : MonoBehaviour
     private Keyboard keyboard;
     private InputField inputField;
     private Node node;
+    private Edge edge;
     private string originalStringValue; // Use to restore string on cancel
     static public KeyboardHandler instance;
     
@@ -49,6 +50,22 @@ public class KeyboardHandler : MonoBehaviour
         inputField = null;
         this.node = node;
         originalStringValue = node.label;
+        UpdateLocation();
+    }
+
+    // Use this to edit a edge's label
+    public void Open(Edge edge)
+    {
+        keyboard.Enable();
+        keyboard.SetPlaceholderMessage("Please enter label name");
+
+        keyboard.OnUpdate.AddListener(HandleUpdate);
+        keyboard.OnSubmit.AddListener(HandleSubmit);
+        keyboard.OnCancel.AddListener(HandleCancel);
+        keyboard.SetText(edge.label);
+        inputField = null;
+        this.edge = edge;
+        originalStringValue = edge.label;
         UpdateLocation();
     }
 
@@ -84,10 +101,10 @@ public class KeyboardHandler : MonoBehaviour
         if (inputField != null)
         {
             inputField.text = text;
-        }
-        else if (node != null)
-        {
+        } else if (node != null) {
             node.SetLabel(text);
+        } else if (edge != null) {
+            edge.SetLabel(text);
         }
     }
 
@@ -103,10 +120,10 @@ public class KeyboardHandler : MonoBehaviour
         if (inputField != null)
         {
             inputField.text = originalStringValue;
-        }
-        else if (node != null)
-        {
+        } else if (node != null) {
             node.SetLabel(originalStringValue);
+        } else if (edge != null) {
+            edge.SetLabel(originalStringValue);
         }
         keyboard.SetText(originalStringValue);
         Close();

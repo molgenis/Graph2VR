@@ -5,7 +5,7 @@ using VDS.RDF;
 
 public class Edge : MonoBehaviour
 {
-    public string uri;
+    public string uri = "";
     public Node from;
     public Node to;
     public INode iFrom;
@@ -28,8 +28,10 @@ public class Edge : MonoBehaviour
     public Color hoverColor;
     public Color grabbedColor;
 
-    private string textShort;
-    private string textLong;
+    private string textShort = "";
+    private string textLong = "";
+    public string label = "";
+    private Color cachedNodeColor; // color of the node, (before it gets converted to variable)
 
     private void Update()
     {
@@ -50,29 +52,75 @@ public class Edge : MonoBehaviour
         UpdatePosition();
     }
 
-
     public void Select()
     {
         isSelected = true;
+        from.Select();
+        to.Select();
 
-
-        Graph.instance.AddToSelection(new Graph.Triple {
-            Subject = iFrom.ToString(),
-            Predicate = iNode.ToString(),
-            Object = iTo.ToString()
-        });
+        if(iFrom!=null && iTo != null) {
+            Graph.instance.AddToSelection(new Graph.Triple {
+                Subject = from.isVariable ? from.label : iFrom.ToString(),
+                Predicate = isVariable ? label : iNode.ToString(),
+                Object = to.isVariable ? to.label : iTo.ToString()
+            });
+        }
     }
 
     public void Deselect()
     {
         isSelected = false;
+        from.Deselect();
+        to.Deselect();
+
 
         // TODO: This needs to be fixed, probibly a check by value not reverence?
-        Graph.instance.RemoveFromSelection(new Graph.Triple {
-            Subject = iFrom.ToString(),
-            Predicate = iNode.ToString(),
-            Object = iTo.ToString()
-        });
+        if (iFrom != null && iTo != null) {
+            Graph.instance.RemoveFromSelection(new Graph.Triple {
+                Subject = iFrom.ToString(),
+                Predicate = iNode.ToString(),
+                Object = iTo.ToString()
+            });
+        }
+    }
+
+    public void MakeVariable()
+    {
+        if (label == "") label = uri;
+        isVariable = true;
+        cachedNodeColor = defaultColor;
+        SetDefaultColor(Graph.instance.variableNodeColor);
+        if (label.EndsWith("/")) {
+            SetLabel("?" + label);
+        } else {
+            int indexBackSlash = label.LastIndexOf('/');
+            if (indexBackSlash == -1) {
+                SetLabel("?" + label);
+            } else {
+                SetLabel("?" + label.Remove(0, indexBackSlash+1));
+            }
+        }
+    }
+
+    public void UndoConversion()
+    {
+        isVariable = false;
+        SetDefaultColor(cachedNodeColor);
+        SetLabel("");
+    }
+
+
+    public void SetLabel(string label)
+    {
+        if (isVariable) {
+            if (label.StartsWith("?")) {
+                this.label = label.Replace("@" + Main.instance.languageCode, "");
+            } else {
+                this.label = "?" + label.Replace("@" + Main.instance.languageCode, "");
+            }
+        } else {
+            this.label = label.Replace("@" + Main.instance.languageCode, "");
+        }
     }
 
     public bool Equals(INode Subject, INode Predicate, INode Object)
@@ -167,7 +215,7 @@ public class Edge : MonoBehaviour
         float textDistance = (distance * (1 / textBack.transform.localScale.x)) * 0.8f;
         Vector3 normal = (toPosition - fromPosition).normalized;
         lineRenderer.startWidth = lineRenderer.endWidth = 0.005f * transform.lossyScale.magnitude;
-        lineRenderer.SetPosition(0, transform.worldToLocalMatrix * fromPosition);
+        lineRenderer.SetPosition(0, transform.worldToLocalMatrix * (fromPosition + normal * (from.transform.lossyScale.x * 0.5f)));
         lineRenderer.SetPosition(1, transform.worldToLocalMatrix * (toPosition - (normal * ((to.transform.lossyScale.x * 0.5f) + (arrow.lossyScale.x * 0.05f)))));
         Vector2 rot = CalculateAngles(fromPosition, toPosition, true);
         textFront.transform.rotation = Quaternion.Euler(0, rot.x, rot.y); // note this is world rotation
@@ -190,6 +238,9 @@ public class Edge : MonoBehaviour
             textFront.text = textBack.text = textLong;
         } else {
             textFront.text = textBack.text = textShort;
+        }
+        if (label != "") {
+            textFront.text = textBack.text = label;
         }
     }
 }
