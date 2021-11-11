@@ -51,7 +51,8 @@ public class Graph : MonoBehaviour
     public void QuerySimilarPatterns()
     {
         string triples = "";
-        foreach (Edge edge in selection) {
+        foreach (Edge edge in selection)
+        {
             triples += edge.GetQueryString();
         }
 
@@ -64,13 +65,17 @@ public class Graph : MonoBehaviour
 
         Debug.Log(query);
 
-        endpoint.QueryWithResultGraph(query, (graph, state) => {
-            if (state == null) {
+        endpoint.QueryWithResultGraph(query, (graph, state) =>
+        {
+            if (state == null)
+            {
                 Debug.Log("All good");
                 Debug.Log(query);
                 Debug.Log(graph);
                 Debug.Log(state);
-            } else {
+            }
+            else
+            {
                 Debug.Log("There may be an error");
                 Debug.Log(query);
                 Debug.Log(graph);
@@ -78,7 +83,8 @@ public class Graph : MonoBehaviour
                 Debug.Log(((AsyncError)state).Error);
             }
             // To draw new elements to unity we need to be on the main Thread
-            UnityMainThreadDispatcher.Instance().Enqueue(() => {
+            UnityMainThreadDispatcher.Instance().Enqueue(() =>
+            {
                 currentGraph.Merge(graph);
             });
         }, null);
@@ -105,12 +111,14 @@ public class Graph : MonoBehaviour
 
         List<string> results = new List<string>();
         // Fill triples list 
-        foreach (SparqlResult result in lastResults) {
+        foreach (SparqlResult result in lastResults)
+        {
             result.TryGetValue("s", out INode s);
             result.TryGetValue("p", out INode p);
             result.TryGetValue("o", out INode o);
 
-            if (s != null) {
+            if (s != null)
+            {
                 results.Add(s.ToString());
             }
         }
@@ -123,35 +131,45 @@ public class Graph : MonoBehaviour
     {
         string query = "";
         if (URI == "") return null;
-        try {
+        try
+        {
             SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new System.Uri(Settings.Instance.SparqlEndpoint), BaseURI);
             query = "select distinct ?p (STR(COUNT(?o)) AS ?count) STR(?label) AS ?label where { <" + URI + "> ?p ?o . OPTIONAL { ?p rdfs:label ?label } FILTER(LANG(?label) = '' || LANGMATCHES(LANG(?label), '" + Main.instance.languageCode + "')) } LIMIT 100";
             lastResults = endpoint.QueryWithResultSet(query);
 
             Dictionary<string, Tuple<string, int>> results = new Dictionary<string, Tuple<string, int>>();
             // Fill triples list 
-            foreach (SparqlResult result in lastResults) {
+            foreach (SparqlResult result in lastResults)
+            {
                 //Debug.Log(result);
                 result.TryGetValue("p", out INode p);
                 result.TryGetValue("count", out INode count);
                 result.TryGetValue("label", out INode labelNode);
 
                 string label = "";
-                if (labelNode != null) {
+                if (labelNode != null)
+                {
                     label = labelNode.ToString();
                 }
-                if (p != null) {
-                    if (!results.ContainsKey(p.ToString())) {
+                if (p != null)
+                {
+                    if (!results.ContainsKey(p.ToString()))
+                    {
                         results.Add(p.ToString(), new Tuple<string, int>(label, int.Parse(count.ToString())));
-                    } else {
-                        if (!results[p.ToString()].Item1.Contains("@" + Main.instance.languageCode)) {
+                    }
+                    else
+                    {
+                        if (!results[p.ToString()].Item1.Contains("@" + Main.instance.languageCode))
+                        {
                             results[p.ToString()] = new Tuple<string, int>(label, int.Parse(count.ToString()));
                         }
                     }
                 }
             }
             return results;
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             Debug.Log("GetOutgoingPredicats error: " + e.Message);
             Debug.Log("URI: " + URI);
             Debug.Log(query);
@@ -166,29 +184,37 @@ public class Graph : MonoBehaviour
     {
         string query = "";
         if (URI == "") return null;
-        try {
+        try
+        {
 
             SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new System.Uri(Settings.Instance.SparqlEndpoint), BaseURI);
             query = "select distinct ?p (STR(COUNT(?s)) AS ?count) STR(?label) AS ?label where { ?s ?p <" + URI + "> . OPTIONAL { ?p rdfs:label ?label } FILTER(LANG(?label) = '' || LANGMATCHES(LANG(?label), '" + Main.instance.languageCode + "')) } LIMIT 100";
             lastResults = endpoint.QueryWithResultSet(query);
             Dictionary<string, Tuple<string, int>> results = new Dictionary<string, Tuple<string, int>>();
             // Fill triples list 
-            foreach (SparqlResult result in lastResults) {
+            foreach (SparqlResult result in lastResults)
+            {
                 //Debug.Log(result);
                 result.TryGetValue("p", out INode p);
                 result.TryGetValue("count", out INode count);
                 result.TryGetValue("label", out INode labelNode);
                 string label = "";
-                if (labelNode != null) {
+                if (labelNode != null)
+                {
                     label = labelNode.ToString();
                 }
 
                 // NOTE: duplicate code, create function?
-                if (p != null) {
-                    if (!results.ContainsKey(p.ToString())) {
+                if (p != null)
+                {
+                    if (!results.ContainsKey(p.ToString()))
+                    {
                         results.Add(p.ToString(), new Tuple<string, int>(label, int.Parse(count.ToString())));
-                    } else {
-                        if (!results[p.ToString()].Item1.Contains("@" + Main.instance.languageCode)) {
+                    }
+                    else
+                    {
+                        if (!results[p.ToString()].Item1.Contains("@" + Main.instance.languageCode))
+                        {
                             results[p.ToString()] = new Tuple<string, int>(label, int.Parse(count.ToString()));
                         }
                     }
@@ -196,7 +222,9 @@ public class Graph : MonoBehaviour
             }
 
             return results;
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             Debug.Log("GetIncomingPredicats error: " + e.Message);
             Debug.Log("URI: " + URI);
             Debug.Log(query);
@@ -222,18 +250,21 @@ public class Graph : MonoBehaviour
     public void RemoveNode(Node node)
     {
         List<Triple> tmpList = new List<Triple>();
-        IEnumerable<Triple> objects = currentGraph.GetTriplesWithObject(node.iNode);
-        IEnumerable<Triple> subjects = currentGraph.GetTriplesWithSubject(node.iNode);
+        IEnumerable<Triple> objects = currentGraph.GetTriplesWithObject(node.graphNode);
+        IEnumerable<Triple> subjects = currentGraph.GetTriplesWithSubject(node.graphNode);
 
-        foreach (Triple triple in objects) {
+        foreach (Triple triple in objects)
+        {
             tmpList.Add(triple);
         }
 
-        foreach (Triple triple in subjects) {
+        foreach (Triple triple in subjects)
+        {
             tmpList.Add(triple);
         }
 
-        foreach (Triple triple in tmpList) {
+        foreach (Triple triple in tmpList)
+        {
             currentGraph.Retract(triple);
         }
     }
@@ -259,7 +290,8 @@ public class Graph : MonoBehaviour
 
         VDS.RDF.Graph results = (VDS.RDF.Graph)currentGraph.ExecuteQuery(query);
 
-        foreach (Triple triple in results.Triples) {
+        foreach (Triple triple in results.Triples)
+        {
             currentGraph.Retract(triple);
         }
 
@@ -286,7 +318,8 @@ public class Graph : MonoBehaviour
 
         VDS.RDF.Graph results = (VDS.RDF.Graph)currentGraph.ExecuteQuery(query);
 
-        foreach (Triple triple in results.Triples) {
+        foreach (Triple triple in results.Triples)
+        {
             currentGraph.Retract(triple);
         }
     }
@@ -294,7 +327,8 @@ public class Graph : MonoBehaviour
     public void ExpandGraph(Node node, string uri, bool isOutgoingLink)
     {
         string query = "";
-        if (isOutgoingLink) {
+        if (isOutgoingLink)
+        {
             // Select with label
             query = $@"
                 prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
@@ -308,7 +342,9 @@ public class Graph : MonoBehaviour
                         FILTER(LANG(?objectlabel) = '' || LANGMATCHES(LANG(?objectlabel), '{Main.instance.languageCode}'))
                     }}
                 }} LIMIT 20";
-        } else {
+        }
+        else
+        {
             query = $@"
             construct {{
                 ?subject <{uri}> <{node.GetURIAsString()}>
@@ -317,8 +353,10 @@ public class Graph : MonoBehaviour
             }}  LIMIT 20";
         }
         // Execute query
-        endpoint.QueryWithResultGraph(query, (graph, state) => {
-            if (state != null) {
+        endpoint.QueryWithResultGraph(query, (graph, state) =>
+        {
+            if (state != null)
+            {
                 Debug.Log("There may be an error");
                 Debug.Log(query);
                 Debug.Log(graph);
@@ -327,7 +365,8 @@ public class Graph : MonoBehaviour
             }
 
             // To draw new elements to unity we need to be on the main Thread
-            UnityMainThreadDispatcher.Instance().Enqueue(() => {
+            UnityMainThreadDispatcher.Instance().Enqueue(() =>
+            {
                 currentGraph.Merge(graph);
             });
         }, null);
@@ -338,7 +377,8 @@ public class Graph : MonoBehaviour
         //Get label?
 
         //Qname
-        if (currentGraph.NamespaceMap.ReduceToQName(uri, out string qname)) {
+        if (currentGraph.NamespaceMap.ReduceToQName(uri, out string qname))
+        {
             return qname;
         }
         return "";
@@ -362,13 +402,16 @@ public class Graph : MonoBehaviour
         endpoint = new SparqlRemoteEndpoint(new System.Uri(Settings.Instance.SparqlEndpoint), BaseURI);
 
         // Execute query
-        if (sparqlQuery.QueryType == SparqlQueryType.Construct) {
+        if (sparqlQuery.QueryType == SparqlQueryType.Construct)
+        {
             currentGraph = endpoint.QueryWithResultGraph(query);
             AddDefaultNameSpaces();
             BuildByIGraph(currentGraph);
             currentGraph.TripleAsserted += CurrentGraph_TripleAsserted;
             currentGraph.TripleRetracted += CurrentGraph_TripleRetracted;
-        } else {
+        }
+        else
+        {
             Debug.Log("Please use a Construct query");
         }
     }
@@ -377,7 +420,8 @@ public class Graph : MonoBehaviour
     {
         int count = 0;
 
-        foreach (Triple triple in triples) {
+        foreach (Triple triple in triples)
+        {
             count++;
         }
 
@@ -388,11 +432,13 @@ public class Graph : MonoBehaviour
     {
         // Object and subject will get removed when we only have one triple. edge will also get removed then and only then.
         // This event is raised after deletion so we need to see if the object/subject is deleted in the resulting graph
-        if (NumTriples(currentGraph.GetTriples(args.Triple.Object)) == 0) {
-            Remove(nodeList.Find(graficalNode => graficalNode.iNode.Equals(args.Triple.Object)));
+        if (NumTriples(currentGraph.GetTriples(args.Triple.Object)) == 0)
+        {
+            Remove(nodeList.Find(graficalNode => graficalNode.graphNode.Equals(args.Triple.Object)));
         }
-        if (NumTriples(currentGraph.GetTriples(args.Triple.Subject)) == 0) {
-            Remove(nodeList.Find(graficalNode => graficalNode.iNode.Equals(args.Triple.Subject)));
+        if (NumTriples(currentGraph.GetTriples(args.Triple.Subject)) == 0)
+        {
+            Remove(nodeList.Find(graficalNode => graficalNode.graphNode.Equals(args.Triple.Subject)));
         }
 
     }
@@ -400,15 +446,18 @@ public class Graph : MonoBehaviour
     private void CurrentGraph_TripleAsserted(object sender, TripleEventArgs args)
     {
         // Add nodes
-        if (nodeList != null && !nodeList.Find(graficalNode => graficalNode.iNode.Equals(args.Triple.Object))) {
+        if (nodeList != null && !nodeList.Find(graficalNode => graficalNode.graphNode.Equals(args.Triple.Object)))
+        {
             Node n = CreateNode(args.Triple.Object.ToString(), args.Triple.Object);
         }
-        if (nodeList != null && !nodeList.Find(graficalNode => graficalNode.iNode.Equals(args.Triple.Subject))) {
+        if (nodeList != null && !nodeList.Find(graficalNode => graficalNode.graphNode.Equals(args.Triple.Subject)))
+        {
             Node n = CreateNode(args.Triple.Subject.ToString(), args.Triple.Subject);
         }
 
         // Add edges
-        if (!edgeList.Find(edge => edge.Equals(args.Triple.Subject, args.Triple.Predicate, args.Triple.Object))) {
+        if (!edgeList.Find(edge => edge.Equals(args.Triple.Subject, args.Triple.Predicate, args.Triple.Object)))
+        {
             Edge e = CreateEdge(args.Triple.Subject, args.Triple.Predicate, args.Triple.Object);
         }
 
@@ -429,18 +478,22 @@ public class Graph : MonoBehaviour
     {
         // Remove all removed edges and nodes
         List<Node> nodesToRemove = new List<Node>();
-        foreach (Node node in nodeList) {
-            INode iNode = node.iNode;
+        foreach (Node node in nodeList)
+        {
+            INode iNode = node.graphNode;
             // is the node in the current graph?
             bool found = false;
 
-            foreach (INode currentNode in iGraph.Nodes) {
-                if (iNode.Equals(currentNode)) {
+            foreach (INode currentNode in iGraph.Nodes)
+            {
+                if (iNode.Equals(currentNode))
+                {
                     found = true;
                 }
             }
 
-            if (found == false) {
+            if (found == false)
+            {
                 //remove me
                 nodesToRemove.Add(node);
             }
@@ -448,15 +501,19 @@ public class Graph : MonoBehaviour
         Remove(nodesToRemove);
 
         // Add nodes
-        foreach (INode node in iGraph.Nodes) {
-            if (nodeList != null && !nodeList.Find(graficalNode => graficalNode.iNode.Equals(node))) {
+        foreach (INode node in iGraph.Nodes)
+        {
+            if (nodeList != null && !nodeList.Find(graficalNode => graficalNode.graphNode.Equals(node)))
+            {
                 Node n = CreateNode(node.ToString(), node);
             }
         }
 
         // Add edges
-        foreach (Triple triple in iGraph.Triples) {
-            if (!edgeList.Find(edge => edge.Equals(triple.Subject, triple.Predicate, triple.Object))) {
+        foreach (Triple triple in iGraph.Triples)
+        {
+            if (!edgeList.Find(edge => edge.Equals(triple.Subject, triple.Predicate, triple.Object)))
+            {
                 Edge e = CreateEdge(triple.Subject, triple.Predicate, triple.Object);
             }
         }
@@ -468,10 +525,12 @@ public class Graph : MonoBehaviour
     public void Clear()
     {
         // destroy all stuff
-        for (int i = 0; i < nodeList.Count; i++) {
+        for (int i = 0; i < nodeList.Count; i++)
+        {
             Destroy(nodeList[i].gameObject);
         }
-        for (int i = 0; i < edgeList.Count; i++) {
+        for (int i = 0; i < edgeList.Count; i++)
+        {
             Destroy(edgeList[i].gameObject);
         }
         nodeList.Clear();
@@ -517,7 +576,8 @@ public class Graph : MonoBehaviour
 
         Node fromNode = GetByINode(from);
         Node toNode = GetByINode(to);
-        if (fromNode == null || toNode == null) {
+        if (fromNode == null || toNode == null)
+        {
             Debug.Log("The Subject and Object needs to be defined to create a edge");
             return null;
         }
@@ -554,9 +614,10 @@ public class Graph : MonoBehaviour
     public Node CreateNode(string value, INode iNode)
     {
         Node node = CreateNode(value);
-        node.iNode = iNode;
+        node.graphNode = iNode;
 
-        switch (iNode.NodeType) {
+        switch (iNode.NodeType)
+        {
             case NodeType.Variable:
                 node.SetDefaultColor(variableNodeColor);
                 break;
@@ -599,18 +660,20 @@ public class Graph : MonoBehaviour
 
     public Node GetByINode(INode iNode)
     {
-        return nodeList.Find((Node node) => node.iNode.Equals(iNode));
+        return nodeList.Find((Node node) => node.graphNode.Equals(iNode));
     }
 
 
     public void Hide(Node node)
     {
-        if (node != null) {
+        if (node != null)
+        {
             node.gameObject.SetActive(false);
         }
         // NOTE: is it correct only to hide edges pointing to this node? how about edges pointing away from this node?
-        Edge e = edgeList.Find((Edge edge) => edge.graphObject.Equals(node.iNode));
-        if (e != null) {
+        Edge e = edgeList.Find((Edge edge) => edge.graphObject.Equals(node.graphNode));
+        if (e != null)
+        {
             e.gameObject.SetActive(false);
         }
     }
@@ -622,25 +685,28 @@ public class Graph : MonoBehaviour
 
     public void Remove(List<Node> nodes)
     {
-        for (int i = 0; i < nodes.Count; i++) {
+        for (int i = 0; i < nodes.Count; i++)
+        {
             Remove(nodes[i]);
         }
     }
 
     public void Remove(List<Edge> edges)
     {
-        for (int i = 0; i < edges.Count; i++) {
+        for (int i = 0; i < edges.Count; i++)
+        {
             Remove(edges[i]);
         }
     }
 
     public void Remove(Node node)
     {
-        if (node != null) {
+        if (node != null)
+        {
             // remove edges connected to this node
-            Edge e = edgeList.Find((Edge edge) => edge.graphObject.Equals(node.iNode));
+            Edge e = edgeList.Find((Edge edge) => edge.graphObject.Equals(node.graphNode));
             Remove(e);
-            e = edgeList.Find((Edge edge) => edge.graphSubject.Equals(node.iNode));
+            e = edgeList.Find((Edge edge) => edge.graphSubject.Equals(node.graphNode));
             Remove(e);
 
             // Destoy the node
@@ -651,7 +717,8 @@ public class Graph : MonoBehaviour
 
     public void Remove(Edge edge)
     {
-        if (edge != null) {
+        if (edge != null)
+        {
             edgeList.Remove(edge);
             Destroy(edge.gameObject);
         }

@@ -6,214 +6,227 @@ using VDS.RDF.Query;
 
 public class Node : MonoBehaviour
 {
-    private Canvas infoPanel;
-    public enum NodeState { None, Pointed, CloseToControler, Grabbed };
-    public NodeState state = NodeState.None;
-    public bool pinned = false;
-    public bool isSelected = false;
-    public string uri = ""; // Full URI, empty if literal
-    public string label = "";
-    private string cachedNodeLabel = ""; // label of the node, (before it gets converted to variable)
-    private Color cachedNodeColor; // color of the node, (before it gets converted to variable)
+  private Canvas infoPanel;
+  public bool pinned = false;
+  public bool isSelected = false;
+  public bool isPointerHovered = false;
+  public bool isControllerHovered = false;
+  public bool isControllerGrabbed = false;
 
-    public INode iNode;
-    public Color defaultColor;
+  public string uri = ""; // Full URI, empty if literal
+  public string label = "";
+  private string cachedNodeLabel = ""; // label of the node, (before it gets converted to variable)
+  private Color cachedNodeColor; // color of the node, (before it gets converted to variable)
 
-    private TMPro.TextMeshPro textMesh;
-    // Variables for the Force-directed algorithm
-    public Vector3 displacement;
+  public INode graphNode;
+  public Color defaultColor;
 
-    public bool isVariable { get; private set; } = false;
+  private TMPro.TextMeshPro textMesh;
+  // Variables for the Force-directed algorithm
+  public Vector3 displacement;
 
-    public void Awake()
+  public bool isVariable { get; private set; } = false;
+
+  public void Awake()
+  {
+    textMesh = GetComponentInChildren<TMPro.TextMeshPro>(true);
+  }
+
+  public void Start()
+  {
+    InvokeRepeating("UpdateDisplay", 1, 1);
+    RefineGraph();
+  }
+
+  void Update()
+  {
+    if (isControllerHovered || isPointerHovered)
     {
-        textMesh = GetComponentInChildren<TMPro.TextMeshPro>(true);
+      SetColor(hoverColor);
+    }
+    else if (isControllerGrabbed)
+    {
+      SetColor(grabbedColor);
+    }
+    else if (isSelected)
+    {
+      SetColor(selectedColor);
+    }
+    else
+    {
+      SetColor(defaultColor);
     }
 
-    public void Start()
+
+    transform.rotation = Quaternion.LookRotation(Camera.main.transform.position - transform.position, Vector3.up);
+    if (isControllerGrabbed || isPointerHovered)
     {
-        InvokeRepeating("SlowUpdate", 1, 1);
-        Refine();
+      textMesh.transform.localScale = Vector3.one * 0.6f;
     }
-
-
-    public void Select()
+    else
     {
-        isSelected = true;
-        transform.Find("Selected").gameObject.SetActive(true);
-        transform.Find("Selected").gameObject.GetComponent<Renderer>().material.SetColor("_Color", Graph.instance.edgeSelectedColor);
-
+      textMesh.transform.localScale = Vector3.one * 0.3f;
     }
+  }
+  public void Select()
+  {
+    isSelected = true;
+    transform.Find("Selected").gameObject.SetActive(true);
+    transform.Find("Selected").gameObject.GetComponent<Renderer>().material.SetColor("_Color", Graph.instance.edgeSelectedColor);
 
-    public void Deselect()
+  }
+
+  public void Deselect()
+  {
+    isSelected = false;
+    transform.Find("Selected").gameObject.SetActive(false);
+  }
+
+  public void RefineGraph()
+  {
+    if (graphNode == null)
     {
-        isSelected = false;
-        transform.Find("Selected").gameObject.SetActive(false);
+      return;
     }
-
-    public void Refine()
+    else
     {
-        if (iNode == null) return;
-        foreach (Triple t in iNode.Graph.GetTriplesWithSubject(iNode)) {
-            // rdfs:subClassOf -> relations
-            // owl:equivalentClass
-            // owl:Class, owl:ObjectProperty, owl:disjointWith
-            // rdfs:Resource, rdf:Property
-            // owl:DeprecatedClass, owl:DeprecatedProperty
-            // rdfs:Datatype, rdfs:Literal
-            // owl:DatatypeProperty
-            // owl:disjointWith, owl:unionOf, owl:intersectionOf, owl:ComplementOf
-
-            // rdfs:Label -- shown as text
-            // <url> / rdfs:Type / "image" -- show
-            // foaf: Image -- renderd on circle
-            // rdfs:Literal -- change color
-            // owl:Class, owl:ObjectProperty -- change to lightblue color
-
-            // http://vowl.visualdataweb.org/v2/#rdfsResource
-            // Filter out all common metadata, put in in this node (like labels, classes, image tags ) 
-            // (display detail on selection?)
-            // Remove those connecting nodes from graph (hide)
-
-            if (t.Predicate.ToString() == "http://www.w3.org/2000/01/rdf-schema#label") {
-                SetLabel(t.Object.ToString());
-                Graph.instance.Remove(Graph.instance.GetByINode(t.Object));
-            }
-
-        }
+      ConnectLabelToNode();
     }
+  }
 
-    public void MakeVariable()
+  private void ConnectLabelToNode()
+  {
+    foreach (Triple tripleWithSubject in graphNode.Graph.GetTriplesWithSubject(graphNode))
     {
-        isVariable = true;
-        cachedNodeColor = defaultColor;
-        SetDefaultColor(Graph.instance.variableNodeColor);
-
-        string newLabel = Graph.instance.variableNameManager.GetVariableName(uri);
-        SetLabel(newLabel);
+      if (IsLabelPredicate(tripleWithSubject.Predicate))
+      {
+        SetLabel(tripleWithSubject.Object.ToString());
+        Graph.instance.Remove(Graph.instance.GetByINode(tripleWithSubject.Object));
+        break;
+      }
     }
+  }
 
-    public void UndoConversion()
+  private boolean IsLabelPredicate(INode predicate)
+  {
+    return predicate.ToString() == "http://www.w3.org/2000/01/rdf-schema#label";
+  }
+
+  public void MakeVariable()
+  {
+    isVariable = true;
+    cachedNodeColor = defaultColor;
+    SetDefaultColor(Graph.instance.variableNodeColor);
+
+    string newLabel = Graph.instance.variableNameManager.GetVariableName(uri);
+    SetLabel(newLabel);
+  }
+
+  public void UndoConversion()
+  {
+    isVariable = false;
+    SetDefaultColor(cachedNodeColor);
+    SetLabel(cachedNodeLabel);
+  }
+
+  public void SetDefaultColor(Color color)
+  {
+    defaultColor = color;
+    SetColor(color);
+  }
+
+  public void SetColor(Color color)
+  {
+    GetComponent<Renderer>().material.color = color;
+  }
+
+  public void SetLabel(string label)
+  {
+    if (isVariable)
     {
-        isVariable = false;
-        SetDefaultColor(cachedNodeColor);
-        SetLabel(cachedNodeLabel);
+      this.label = GetVariableLabel();
     }
-
-    public void SetDefaultColor(Color color)
+    else
     {
-        defaultColor = color;
-        SetColor(color);
+      this.label = label.Replace("@" + Main.instance.languageCode, "");
+      cachedNodeLabel = this.label;
     }
+    UpdateDisplay();
+  }
 
-    public void SetColor(Color color)
+  private string SetVariableLabel(string label)
+  {
+    return getVariableLabelPrefix() + label.Replace("@" + Main.instance.languageCode, "");
+  }
+
+  private string getVariableLabelPrefix(string label)
+  {
+    return label.StartsWith("?") ? "" : "?";
+  }
+
+  public string GetLabel()
+  {
+    return this.label;
+  }
+
+  public string GetURIAsString()
+  {
+    return this.uri;
+  }
+
+  public void SetURI(string uri)
+  {
+    this.uri = uri;
+  }
+
+  public System.Uri GetURI()
+  {
+    return VDS.RDF.UriFactory.Create(this.uri);
+  }
+
+  public string GetQueryLabel()
+  {
+    if (isVariable)
     {
-        GetComponent<Renderer>().material.color = color;
+      return GetLabel();
     }
-
-    public void SetLabel(string label)
+    else
     {
-        if (isVariable) {
-            if (label.StartsWith("?")) {
-                this.label = label.Replace("@" + Main.instance.languageCode, "");
-            } else {
-                this.label = "?" + label.Replace("@" + Main.instance.languageCode, "");
-            }
-        } else {
-            this.label = label.Replace("@" + Main.instance.languageCode, "");
-            cachedNodeLabel = this.label;
-        }
-        UpdateDisplay();
+      return GetURIAsString();
     }
+  }
 
-    public string GetLabel()
+  private void UpdateDisplay()
+  {
+    textMesh.text = (label == "") ? uri : label;
+  }
+
+  public void ToggleInfoPanel()
+  {
+    if (infoPanel == null)
     {
-        return this.label;
+      InitiateInfoPanel();
     }
-
-    public string GetURIAsString()
+    else
     {
-        return this.uri;
+      infoPanel.enabled = !infoPanel.enabled;
     }
+    PositionInfoPanel();
+  }
 
-    public void SetURI(string uri)
-    {
-        this.uri = uri;
-    }
+  private void InitiateInfoPanel()
+  {
+    infoPanel = Instantiate<Canvas>(Resources.Load<Canvas>("UI/ContextMenu"));
+    infoPanel.renderMode = RenderMode.WorldSpace;
+    infoPanel.worldCamera = GameObject.Find("Controller (right)").GetComponent<Camera>();
+    ContextMenuHandler selectorHandler = infoPanel.GetComponent<ContextMenuHandler>();
+    selectorHandler.Initiate(this);
+  }
 
-    public System.Uri GetURI()
-    {
-        return VDS.RDF.UriFactory.Create(this.uri);
-    }
-
-    public string GetQueryLabel()
-    {
-        if (isVariable) {
-            return GetLabel();
-        } else {
-            return GetURIAsString();
-        }
-    }
-
-    public void RequestLabel(SparqlRemoteEndpoint endpoint)
-    {
-        // Depricated
-        string query = "prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>  select STR(?label) AS ?label where { <" + uri + "> rdfs:label ?label . FILTER(LANG(?label) = '' || LANGMATCHES(LANG(?label), '" + Main.instance.languageCode + "')) } LIMIT 1";
-
-        endpoint.QueryWithResultSet(query, (results, state) => {
-            results[0].TryGetValue("label", out INode label);
-            SetLabel(label.ToString());
-        }, (object)this);
-    }
-    /*
-        public bool RequestIsClass(SparqlRemoteEndpoint endpoint)
-        {
-            string query = "prefix rdfs: http://www.w3.org/2000/01/rdf-schema#  ASK {{<" + uri + "> a owl:Class.} UNION {?anything a <" + uri + ">.}}";
-            try {
-                SparqlResultSet result = endpoint.QueryWithResultSet(query);
-                Debug.Log(result.Result.ToString());
-                return result.Result;
-            } catch { Debug.Log(uri); }
-            return false;
-
-        }
-        */
-    private void UpdateDisplay()
-    {
-        string text = label;
-        if (label == "") text = uri;
-        textMesh.text = text;
-    }
-
-    void SlowUpdate()
-    {
-        UpdateDisplay();
-    }
-
-    void Update()
-    {
-        transform.rotation = Quaternion.LookRotation(Camera.main.transform.position - transform.position, Vector3.up);
-        if (state == NodeState.Grabbed || state == Node.NodeState.Pointed) {
-            textMesh.transform.localScale = Vector3.one * 0.6f;
-        } else {
-            textMesh.transform.localScale = Vector3.one * 0.3f;
-        }
-    }
-
-    public void ToggleInfoPanel()
-    {
-        if (infoPanel == null) {
-            infoPanel = Instantiate<Canvas>(Resources.Load<Canvas>("UI/ContextMenu"));
-            infoPanel.renderMode = RenderMode.WorldSpace;
-            infoPanel.worldCamera = GameObject.Find("Controller (right)").GetComponent<Camera>();
-            ContextMenuHandler selectorHandler = infoPanel.GetComponent<ContextMenuHandler>();
-            selectorHandler.Initiate(this);
-        } else {
-            infoPanel.enabled = !infoPanel.enabled;
-        }
-
-        infoPanel.transform.position = transform.position;
-        infoPanel.transform.rotation = Quaternion.LookRotation(transform.position - Camera.main.transform.position, Vector3.up);
-        infoPanel.transform.position += infoPanel.transform.rotation * new Vector3(1.0f, 0, 0) * Mathf.Max(transform.lossyScale.x, gameObject.transform.lossyScale.y);
-    }
+  private void PositionInfoPanel()
+  {
+    infoPanel.transform.position = transform.position;
+    infoPanel.transform.rotation = Quaternion.LookRotation(transform.position - Camera.main.transform.position, Vector3.up);
+    infoPanel.transform.position += infoPanel.transform.rotation * new Vector3(1.0f, 0, 0) * Mathf.Max(transform.lossyScale.x, gameObject.transform.lossyScale.y);
+  }
 }

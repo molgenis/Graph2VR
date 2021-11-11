@@ -1217,7 +1217,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95f908cd9b641b04a866ce7104905d41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leftControler: {fileID: 0}
+  leftController: {fileID: 0}
   rightControler: {fileID: 0}
   baseMaterial: {fileID: 2100000, guid: f9f74ce54d36249479f4f111fd209e9b, type: 2}
   size: 0.01
@@ -1541,7 +1541,7 @@ GameObject:
   - component: {fileID: 1530709275}
   m_Layer: 0
   m_Name: Controller (left)
-  m_TagString: LeftControler
+  m_TagString: LeftController
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
