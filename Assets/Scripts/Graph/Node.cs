@@ -18,8 +18,6 @@ public class Node : MonoBehaviour
 
     public INode iNode;
     public Color defaultColor;
-    public List<Node> connectedNodes = new List<Node>(); // DEPRECATED?
-    public List<Edge> connectedEdges = new List<Edge>(); // DEPRECATED?
 
     private TMPro.TextMeshPro textMesh;
     // Variables for the Force-directed algorithm
@@ -146,6 +144,15 @@ public class Node : MonoBehaviour
     public System.Uri GetURI()
     {
         return VDS.RDF.UriFactory.Create(this.uri);
+    }
+
+    public string GetQueryLabel()
+    {
+        if (isVariable) {
+            return GetLabel();
+        } else {
+            return GetURIAsString();
+        }
     }
 
     public void RequestLabel(SparqlRemoteEndpoint endpoint)

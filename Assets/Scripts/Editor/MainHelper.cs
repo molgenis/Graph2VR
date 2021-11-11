@@ -16,7 +16,7 @@ public class MainHelper : Editor
 
         text = EditorGUILayout.TextArea(text, GUILayout.Height(100));
 
-        if (GUILayout.Button("Send Query")) {
+        if (GUILayout.Button("Send Construct Query")) {
             Graph.instance.SendQuery(text);
         }
 

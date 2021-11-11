@@ -44,25 +44,15 @@ public class Graph : MonoBehaviour
 
     public VariableNameManager variableNameManager;
 
-    [System.Serializable]
-    public class Triple
-    {
-        public string Subject = null;
-        public string Predicate = null;
-        public string Object = null;
-    }
-
-    // FIXME: dont store selection in string, it will not reflect chages made after selections!
-    public List<Triple> selection = new List<Triple>();
-
-
+    // FIXME: don't store selection in string, it will not reflect changes made after selections!
+    // Change to VDS.RDF.Triple
+    public List<Edge> selection = new List<Edge>();
 
     public void QuerySimilarPatterns()
     {
-        Debug.Log("Triples");
         string triples = "";
-        foreach (Triple triple in selection) {
-            triples += triple.Subject + " " + triple.Predicate + " " + triple.Object + " .\n";
+        foreach (Edge edge in selection) {
+            triples += edge.GetQueryString();
         }
 
         string query = $@"
@@ -94,12 +84,12 @@ public class Graph : MonoBehaviour
         }, null);
     }
 
-    public void AddToSelection(Triple toAdd)
+    public void AddToSelection(Edge toAdd)
     {
         selection.Add(toAdd);
     }
 
-    public void RemoveFromSelection(Triple toRemove)
+    public void RemoveFromSelection(Edge toRemove)
     {
         // Todo: try catch?
         selection.Remove(toRemove);
@@ -231,19 +221,19 @@ public class Graph : MonoBehaviour
 
     public void RemoveNode(Node node)
     {
-        List<VDS.RDF.Triple> tmpList = new List<VDS.RDF.Triple>();
-        IEnumerable<VDS.RDF.Triple> objects = currentGraph.GetTriplesWithObject(node.iNode);
-        IEnumerable<VDS.RDF.Triple> subjects = currentGraph.GetTriplesWithSubject(node.iNode);
+        List<Triple> tmpList = new List<Triple>();
+        IEnumerable<Triple> objects = currentGraph.GetTriplesWithObject(node.iNode);
+        IEnumerable<Triple> subjects = currentGraph.GetTriplesWithSubject(node.iNode);
 
-        foreach (VDS.RDF.Triple triple in objects) {
+        foreach (Triple triple in objects) {
             tmpList.Add(triple);
         }
 
-        foreach (VDS.RDF.Triple triple in subjects) {
+        foreach (Triple triple in subjects) {
             tmpList.Add(triple);
         }
 
-        foreach (VDS.RDF.Triple triple in tmpList) {
+        foreach (Triple triple in tmpList) {
             currentGraph.Retract(triple);
         }
     }
@@ -269,7 +259,7 @@ public class Graph : MonoBehaviour
 
         VDS.RDF.Graph results = (VDS.RDF.Graph)currentGraph.ExecuteQuery(query);
 
-        foreach (VDS.RDF.Triple triple in results.Triples) {
+        foreach (Triple triple in results.Triples) {
             currentGraph.Retract(triple);
         }
 
@@ -296,7 +286,7 @@ public class Graph : MonoBehaviour
 
         VDS.RDF.Graph results = (VDS.RDF.Graph)currentGraph.ExecuteQuery(query);
 
-        foreach (VDS.RDF.Triple triple in results.Triples) {
+        foreach (Triple triple in results.Triples) {
             currentGraph.Retract(triple);
         }
     }
@@ -368,7 +358,7 @@ public class Graph : MonoBehaviour
         SparqlQuery sparqlQuery = parser.ParseFromString(query);
 
         // load pattern
-        GraphPattern pattern = sparqlQuery.RootGraphPattern;
+        GraphPattern graphPattern = sparqlQuery.RootGraphPattern;
         endpoint = new SparqlRemoteEndpoint(new System.Uri(Settings.Instance.SparqlEndpoint), BaseURI);
 
         // Execute query
@@ -378,18 +368,16 @@ public class Graph : MonoBehaviour
             BuildByIGraph(currentGraph);
             currentGraph.TripleAsserted += CurrentGraph_TripleAsserted;
             currentGraph.TripleRetracted += CurrentGraph_TripleRetracted;
-
         } else {
-            lastResults = endpoint.QueryWithResultSet(query);
-            BuildByResultSet(lastResults, pattern);
+            Debug.Log("Please use a Construct query");
         }
     }
 
-    private int NumTriples(IEnumerable<VDS.RDF.Triple> triples)
+    private int NumTriples(IEnumerable<Triple> triples)
     {
         int count = 0;
 
-        foreach (VDS.RDF.Triple t in triples) {
+        foreach (Triple triple in triples) {
             count++;
         }
 
@@ -467,7 +455,7 @@ public class Graph : MonoBehaviour
         }
 
         // Add edges
-        foreach (VDS.RDF.Triple triple in iGraph.Triples) {
+        foreach (Triple triple in iGraph.Triples) {
             if (!edgeList.Find(edge => edge.Equals(triple.Subject, triple.Predicate, triple.Object))) {
                 Edge e = CreateEdge(triple.Subject, triple.Predicate, triple.Object);
             }
@@ -475,98 +463,6 @@ public class Graph : MonoBehaviour
 
         // TODO: create resolve function
         layout.CalculateLayout();
-    }
-
-    // TODO: Can we get iNode's to put in to the node
-    private void BuildByResultSet(SparqlResultSet resultSet, GraphPattern pattern)
-    {
-        List<ITriplePattern> triplePattern = pattern.TriplePatterns;
-
-        // join pattern with query
-        foreach (TriplePattern triple in triplePattern) {
-            string constantSubject = triple.Subject.VariableName;
-            string constantPredicate = triple.Predicate.VariableName;
-            string constantObject = triple.Object.VariableName;
-
-            foreach (SparqlResult result in resultSet) {
-                Triple t = new Triple();
-
-                if (constantSubject == null) t.Subject = triple.Subject.ToString().TrimStart('<').TrimEnd('>');
-                else t.Subject = result.Value(constantSubject).ToString();
-
-                if (constantPredicate == null) t.Predicate = triple.Predicate.ToString().TrimStart('<').TrimEnd('>');
-                else t.Predicate = result.Value(constantPredicate).ToString();
-
-                if (constantObject == null) t.Object = triple.Object.ToString().TrimStart('<').TrimEnd('>');
-                else t.Object = result.Value(constantObject).ToString();
-
-                triples.Add(t);
-            }
-        }
-
-        foreach (Triple triple in triples) {
-
-            /*
-            // Drop alternate languages
-            if (o != null) {
-                if (o is ILiteralNode) {
-                    ILiteralNode oLiteral = o as ILiteralNode;
-                    if (oLiteral.Language.Length == 0 || oLiteral.Language.Equals(Main.instance.languageCode)) {
-                        triple.Object = oLiteral.Value;
-                    } else {
-                        continue;
-                    }
-                } else {
-                    triple.Object = o.ToString();
-                }
-            }
-            if (s != null) triple.Subject = s.ToString();
-            if (p != null) triple.Predicate = p.ToString();
-            */
-
-            // Create all Subject / Object nodes
-            string label = "";
-            if (triple.Predicate == "http://www.w3.org/2000/01/rdf-schema#label") {
-                //label = triple.Object;
-            }
-
-            // Find or Create a subject node
-            Node subjectNode = nodeList.Find(node => node.GetURIAsString() == triple.Subject);
-            if (subjectNode == null) {
-                subjectNode = CreateNode(triple.Subject);
-                if (label != "") {
-                    // We have a label, lets use it
-                    subjectNode.SetLabel(label);
-                }
-            }
-
-            // Always create a Object node, i dont think they need to be made unique?
-            Node objectNode = nodeList.Find(node => node.GetURIAsString() == triple.Object);
-            if (label == "") { // NOTE: Dont create a label node here
-                if (objectNode == null) {
-                    objectNode = CreateNode(triple.Object);
-                }
-            } else {
-                // We dont need to create a edge if this is a label node
-                continue;
-            }
-
-            // Find or Create a edge
-            Edge predicateEdge = edgeList.Find(edge => edge.from == subjectNode && edge.to == objectNode && edge.uri == triple.Predicate);
-            if (predicateEdge == null) {
-                predicateEdge = CreateEdge(subjectNode, triple.Predicate, objectNode);
-            }
-
-            // Add known connections to node's and edge's
-            if (subjectNode != null) {
-                if (predicateEdge != null) subjectNode.connectedEdges.Add(predicateEdge);
-                if (objectNode != null) subjectNode.connectedNodes.Add(objectNode);
-            }
-            if (objectNode != null) {
-                if (predicateEdge != null) objectNode.connectedEdges.Add(predicateEdge);
-                if (subjectNode != null) objectNode.connectedNodes.Add(subjectNode);
-            }
-        }
     }
 
     public void Clear()
@@ -598,8 +494,8 @@ public class Graph : MonoBehaviour
         clone.transform.localScale = Vector3.one;
         Edge edge = clone.AddComponent<Edge>();
         edge.uri = uri;
-        edge.from = from;
-        edge.to = to;
+        edge.displaySubject = from;
+        edge.displayObject = to;
         edgeList.Add(edge);
 
         edge.selectedColor = edgeSelectedColor;
@@ -627,11 +523,11 @@ public class Graph : MonoBehaviour
         }
 
         edge.uri = uri.ToString();
-        edge.iNode = uri;
-        edge.iFrom = from;
-        edge.iTo = to;
-        edge.from = fromNode;
-        edge.to = toNode;
+        edge.graphPredicate = uri;
+        edge.graphSubject = from;
+        edge.graphObject = to;
+        edge.displaySubject = fromNode;
+        edge.displayObject = toNode;
 
         edge.selectedColor = edgeSelectedColor;
         edge.hoverColor = edgeHoverColor;
@@ -713,7 +609,7 @@ public class Graph : MonoBehaviour
             node.gameObject.SetActive(false);
         }
         // NOTE: is it correct only to hide edges pointing to this node? how about edges pointing away from this node?
-        Edge e = edgeList.Find((Edge edge) => edge.iTo.Equals(node.iNode));
+        Edge e = edgeList.Find((Edge edge) => edge.graphObject.Equals(node.iNode));
         if (e != null) {
             e.gameObject.SetActive(false);
         }
@@ -742,9 +638,9 @@ public class Graph : MonoBehaviour
     {
         if (node != null) {
             // remove edges connected to this node
-            Edge e = edgeList.Find((Edge edge) => edge.iTo.Equals(node.iNode));
+            Edge e = edgeList.Find((Edge edge) => edge.graphObject.Equals(node.iNode));
             Remove(e);
-            e = edgeList.Find((Edge edge) => edge.iFrom.Equals(node.iNode));
+            e = edgeList.Find((Edge edge) => edge.graphSubject.Equals(node.iNode));
             Remove(e);
 
             // Destoy the node

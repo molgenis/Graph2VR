@@ -21,7 +21,7 @@ public class KeyboardHandler : MonoBehaviour
     private Edge edge;
     private string originalStringValue; // Use to restore string on cancel
     static public KeyboardHandler instance;
-    
+
 
     public void Open(InputField input)
     {
@@ -62,10 +62,10 @@ public class KeyboardHandler : MonoBehaviour
         keyboard.OnUpdate.AddListener(HandleUpdate);
         keyboard.OnSubmit.AddListener(HandleSubmit);
         keyboard.OnCancel.AddListener(HandleCancel);
-        keyboard.SetText(edge.label);
+        keyboard.SetText(edge.variableName);
         inputField = null;
         this.edge = edge;
-        originalStringValue = edge.label;
+        originalStringValue = edge.variableName;
         UpdateLocation();
     }
 
@@ -98,13 +98,12 @@ public class KeyboardHandler : MonoBehaviour
     public void HandleUpdate(string text)
     {
         keyboard.HideValidationMessage();
-        if (inputField != null)
-        {
+        if (inputField != null) {
             inputField.text = text;
         } else if (node != null) {
             node.SetLabel(text);
         } else if (edge != null) {
-            edge.SetLabel(text);
+            edge.variableName = text;
         }
     }
 
@@ -117,13 +116,12 @@ public class KeyboardHandler : MonoBehaviour
     public void HandleCancel()
     {
         // Restore the string to what it was when opening the VR keyboard
-        if (inputField != null)
-        {
+        if (inputField != null) {
             inputField.text = originalStringValue;
         } else if (node != null) {
             node.SetLabel(originalStringValue);
         } else if (edge != null) {
-            edge.SetLabel(originalStringValue);
+            edge.variableName = originalStringValue;
         }
         keyboard.SetText(originalStringValue);
         Close();

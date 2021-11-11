@@ -10,31 +10,31 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Dweiss {
-	[System.Serializable]
-	public class Settings : MonoBehaviour {  // Temporary removed baseclase ASettings
+namespace Dweiss
+{
+    [System.Serializable]
+    public class Settings : MonoBehaviour
+    {  // Temporary removed baseclase ASettings
         [Header("--Main settings--")]
         public string SparqlEndpoint = "https://dbpedia.org/sparql";
 
         public string StartingURI = "Biobank";
 
-        private new void Awake() {
-			// base.Awake ();
+        private void Awake()
+        {
+            // base.Awake ();
             SetupSingelton();
         }
 
-        string name = "";
+        new string name = "";
         #region  Singelton
         public static Settings _instance;
         public static Settings Instance { get { return _instance; } }
         private void SetupSingelton()
         {
-            if (_instance != null)
-            {
+            if (_instance != null) {
                 Debug.LogError("Error in settings. Multiple singeltons exists: " + _instance.name + " and now " + this.name);
-            }
-            else
-            {
+            } else {
                 _instance = this;
             }
         }

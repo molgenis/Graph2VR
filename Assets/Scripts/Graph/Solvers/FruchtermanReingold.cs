@@ -58,12 +58,12 @@ public class FruchtermanReingold : BaseLayoutAlgorithm
 
         // calculate attractive forces
         foreach (Edge edge in graph.edgeList) {
-            if (edge.to != null && edge.from != null) {
-                Vector3 delta = edge.to.transform.localPosition - edge.from.transform.localPosition;
+            if (edge.displayObject != null && edge.displaySubject != null) {
+                Vector3 delta = edge.displayObject.transform.localPosition - edge.displaySubject.transform.localPosition;
                 float FaForce = Fa(delta.magnitude);
                 Vector3 normal = delta.normalized;
-                edge.to.displacement -= normal * FaForce;
-                edge.from.displacement += normal * FaForce;
+                edge.displayObject.displacement -= normal * FaForce;
+                edge.displaySubject.displacement += normal * FaForce;
             }
         }
 
