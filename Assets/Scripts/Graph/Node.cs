@@ -56,14 +56,8 @@ public class Node : MonoBehaviour
   public string uri = ""; // Full URI, empty if literal
   public string label = "";
   private string cachedNodeLabel = ""; // label of the node, (before it gets converted to variable)
-  private Color cachedNodeColor; // color of the node, (before it gets converted to variable)
 
   public INode graphNode;
-  public Color defaultColor;
-
-  public Color selectedColor = Color.black;
-  public Color hoverColor = Color.black;
-  public Color grabbedColor = Color.black;
 
   private TMPro.TextMeshPro textMesh;
   // Variables for the Force-directed algorithm
@@ -83,14 +77,10 @@ public class Node : MonoBehaviour
 
   private void UpdateColor()
   {
-
-
     if (IsControllerHovered || IsPointerHovered) {
       SetColor(ColorSettings.instance.edgeHoverColor);
     } else if (IsControllerGrabbed) {
       SetColor(ColorSettings.instance.edgeGrabbedColor);
-    } else if (IsSelected) {
-      SetColor(ColorSettings.instance.edgeSelectedColor);
     } else if (IsVariable) {
       SetColor(ColorSettings.instance.variableColor);
     } else {
@@ -134,14 +124,14 @@ public class Node : MonoBehaviour
   {
     isSelected = true;
     transform.Find("Selected").gameObject.SetActive(true);
-    transform.Find("Selected").gameObject.GetComponent<Renderer>().material.SetColor("_Color", ColorSettings.instance.edgeSelectedColor);
-
+    UpdateColor();
   }
 
   public void Deselect()
   {
     isSelected = false;
     transform.Find("Selected").gameObject.SetActive(false);
+    UpdateColor();
   }
 
   public void RefineGraph()
@@ -172,24 +162,17 @@ public class Node : MonoBehaviour
   public void MakeVariable()
   {
     isVariable = true;
-    cachedNodeColor = defaultColor;
-    SetDefaultColor(ColorSettings.instance.variableColor);
 
     string newLabel = Graph.instance.variableNameManager.GetVariableName(uri);
     SetLabel(newLabel);
+    UpdateColor();
   }
 
   public void UndoConversion()
   {
     isVariable = false;
-    SetDefaultColor(cachedNodeColor);
     SetLabel(cachedNodeLabel);
-  }
-
-  public void SetDefaultColor(Color color)
-  {
-    defaultColor = color;
-    SetColor(color);
+    UpdateColor();
   }
 
   public void SetColor(Color color)
