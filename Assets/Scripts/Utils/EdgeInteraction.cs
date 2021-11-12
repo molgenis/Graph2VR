@@ -21,31 +21,31 @@ public class EdgeInteraction : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
   void IGrabInterface.ControllerEnter()
   {
-    edge.isControllerHovered = true;
+    edge.IsControllerHovered = true;
   }
 
   void IGrabInterface.ControllerExit()
   {
-    edge.isControllerHovered = false;
+    edge.IsControllerHovered = false;
   }
 
   void IGrabInterface.ControllerGrabBegin(GameObject newParent)
   {
-    edge.isControllerGrabbed = true;
+    edge.IsControllerGrabbed = true;
   }
 
   void IGrabInterface.ControllerGrabEnd()
   {
-    edge.isControllerGrabbed = false;
+    edge.IsControllerGrabbed = false;
   }
 
   void IPointerEnterHandler.OnPointerEnter(PointerEventData eventData)
   {
-    edge.isPointerHovered = true;
+    edge.IsPointerHovered = true;
   }
 
   void IPointerExitHandler.OnPointerExit(PointerEventData eventData)
   {
-    edge.isPointerHovered = false;
+    edge.IsPointerHovered = false;
   }
 }

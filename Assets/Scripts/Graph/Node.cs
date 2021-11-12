@@ -7,11 +7,51 @@ using VDS.RDF.Query;
 public class Node : MonoBehaviour
 {
   private Canvas infoPanel;
-  public bool pinned = false;
-  public bool isSelected = false;
-  public bool isPointerHovered = false;
-  public bool isControllerHovered = false;
-  public bool isControllerGrabbed = false;
+  private bool isVariable = false;
+  private bool isSelected = false;
+  private bool isPointerHovered = false;
+  private bool isControllerHovered = false;
+  private bool isControllerGrabbed = false;
+
+  public bool IsVariable {
+    get => isVariable;
+    set {
+      isVariable = value;
+      UpdateColor();
+    }
+  }
+
+  public bool IsSelected {
+    get => isSelected;
+    set {
+      isSelected = value;
+      UpdateColor();
+    }
+  }
+
+  public bool IsPointerHovered {
+    get => isPointerHovered;
+    set {
+      isPointerHovered = value;
+      UpdateColor();
+    }
+  }
+
+  public bool IsControllerHovered {
+    get => isControllerHovered;
+    set {
+      isControllerHovered = value;
+      UpdateColor();
+    }
+  }
+
+  public bool IsControllerGrabbed {
+    get => isControllerGrabbed;
+    set {
+      isControllerGrabbed = value;
+      UpdateColor();
+    }
+  }
 
   public string uri = ""; // Full URI, empty if literal
   public string label = "";
@@ -21,11 +61,13 @@ public class Node : MonoBehaviour
   public INode graphNode;
   public Color defaultColor;
 
+  public Color selectedColor = Color.black;
+  public Color hoverColor = Color.black;
+  public Color grabbedColor = Color.black;
+
   private TMPro.TextMeshPro textMesh;
   // Variables for the Force-directed algorithm
   public Vector3 displacement;
-
-  public bool isVariable { get; private set; } = false;
 
   public void Awake()
   {
@@ -36,35 +78,55 @@ public class Node : MonoBehaviour
   {
     InvokeRepeating("UpdateDisplay", 1, 1);
     RefineGraph();
+    UpdateColor();
+  }
+
+  private void UpdateColor()
+  {
+
+
+    if (IsControllerHovered || IsPointerHovered) {
+      SetColor(ColorSettings.instance.edgeHoverColor);
+    } else if (IsControllerGrabbed) {
+      SetColor(ColorSettings.instance.edgeGrabbedColor);
+    } else if (IsSelected) {
+      SetColor(ColorSettings.instance.edgeSelectedColor);
+    } else if (IsVariable) {
+      SetColor(ColorSettings.instance.variableColor);
+    } else {
+      if (graphNode != null) {
+        switch (graphNode.NodeType) {
+          case NodeType.Variable:
+            SetColor(ColorSettings.instance.variableColor);
+            break;
+          case NodeType.Blank:
+            uri = "";
+            SetColor(ColorSettings.instance.blankNodeColor);
+            break;
+          case NodeType.Literal:
+            SetLabel(((ILiteralNode)graphNode).Value);
+            uri = "";
+            SetColor(ColorSettings.instance.literalColor);
+            break;
+          case NodeType.Uri:
+            uri = ((IUriNode)graphNode).Uri.ToString();
+            SetColor(ColorSettings.instance.uriColor);
+            break;
+            // etc.
+        }
+      } else {
+        SetColor(ColorSettings.instance.defaultNodeColor);
+      }
+    }
   }
 
   void Update()
   {
-    if (isControllerHovered || isPointerHovered)
-    {
-      SetColor(hoverColor);
-    }
-    else if (isControllerGrabbed)
-    {
-      SetColor(grabbedColor);
-    }
-    else if (isSelected)
-    {
-      SetColor(selectedColor);
-    }
-    else
-    {
-      SetColor(defaultColor);
-    }
-
 
     transform.rotation = Quaternion.LookRotation(Camera.main.transform.position - transform.position, Vector3.up);
-    if (isControllerGrabbed || isPointerHovered)
-    {
+    if (isControllerGrabbed || isPointerHovered) {
       textMesh.transform.localScale = Vector3.one * 0.6f;
-    }
-    else
-    {
+    } else {
       textMesh.transform.localScale = Vector3.one * 0.3f;
     }
   }
@@ -72,7 +134,7 @@ public class Node : MonoBehaviour
   {
     isSelected = true;
     transform.Find("Selected").gameObject.SetActive(true);
-    transform.Find("Selected").gameObject.GetComponent<Renderer>().material.SetColor("_Color", Graph.instance.edgeSelectedColor);
+    transform.Find("Selected").gameObject.GetComponent<Renderer>().material.SetColor("_Color", ColorSettings.instance.edgeSelectedColor);
 
   }
 
@@ -84,22 +146,17 @@ public class Node : MonoBehaviour
 
   public void RefineGraph()
   {
-    if (graphNode == null)
-    {
+    if (graphNode == null) {
       return;
-    }
-    else
-    {
+    } else {
       ConnectLabelToNode();
     }
   }
 
   private void ConnectLabelToNode()
   {
-    foreach (Triple tripleWithSubject in graphNode.Graph.GetTriplesWithSubject(graphNode))
-    {
-      if (IsLabelPredicate(tripleWithSubject.Predicate))
-      {
+    foreach (Triple tripleWithSubject in graphNode.Graph.GetTriplesWithSubject(graphNode)) {
+      if (IsLabelPredicate(tripleWithSubject.Predicate)) {
         SetLabel(tripleWithSubject.Object.ToString());
         Graph.instance.Remove(Graph.instance.GetByINode(tripleWithSubject.Object));
         break;
@@ -107,7 +164,7 @@ public class Node : MonoBehaviour
     }
   }
 
-  private boolean IsLabelPredicate(INode predicate)
+  private bool IsLabelPredicate(INode predicate)
   {
     return predicate.ToString() == "http://www.w3.org/2000/01/rdf-schema#label";
   }
@@ -116,7 +173,7 @@ public class Node : MonoBehaviour
   {
     isVariable = true;
     cachedNodeColor = defaultColor;
-    SetDefaultColor(Graph.instance.variableNodeColor);
+    SetDefaultColor(ColorSettings.instance.variableColor);
 
     string newLabel = Graph.instance.variableNameManager.GetVariableName(uri);
     SetLabel(newLabel);
@@ -142,24 +199,21 @@ public class Node : MonoBehaviour
 
   public void SetLabel(string label)
   {
-    if (isVariable)
-    {
-      this.label = GetVariableLabel();
-    }
-    else
-    {
+    if (isVariable) {
+      this.label = GetVariableLabel(label);
+    } else {
       this.label = label.Replace("@" + Main.instance.languageCode, "");
       cachedNodeLabel = this.label;
     }
     UpdateDisplay();
   }
 
-  private string SetVariableLabel(string label)
+  private string GetVariableLabel(string label)
   {
-    return getVariableLabelPrefix() + label.Replace("@" + Main.instance.languageCode, "");
+    return GetVariableLabelPrefix(label) + label.Replace("@" + Main.instance.languageCode, "");
   }
 
-  private string getVariableLabelPrefix(string label)
+  private string GetVariableLabelPrefix(string label)
   {
     return label.StartsWith("?") ? "" : "?";
   }
@@ -186,12 +240,9 @@ public class Node : MonoBehaviour
 
   public string GetQueryLabel()
   {
-    if (isVariable)
-    {
+    if (isVariable) {
       return GetLabel();
-    }
-    else
-    {
+    } else {
       return GetURIAsString();
     }
   }
@@ -203,12 +254,9 @@ public class Node : MonoBehaviour
 
   public void ToggleInfoPanel()
   {
-    if (infoPanel == null)
-    {
+    if (infoPanel == null) {
       InitiateInfoPanel();
-    }
-    else
-    {
+    } else {
       infoPanel.enabled = !infoPanel.enabled;
     }
     PositionInfoPanel();

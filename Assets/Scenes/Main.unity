@@ -184,6 +184,41 @@ LightingSettings:
   m_PVRFilteringAtrousPositionSigmaDirect: 0.5
   m_PVRFilteringAtrousPositionSigmaIndirect: 2
   m_PVRFilteringAtrousPositionSigmaAO: 1
+--- !u!21 &337230551
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Sprites/Default
+  m_Shader: {fileID: 10753, guid: 0000000000000000f000000000000000, type: 0}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _AlphaTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - PixelSnap: 0
+    - _EnableExternalAlpha: 0
+    m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Flip: {r: 1, g: 1, b: 1, a: 1}
+    - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
+  m_BuildTextureStacks: []
 --- !u!1 &371214488
 GameObject:
   m_ObjectHideFlags: 0
@@ -552,41 +587,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
---- !u!21 &995963524
-Material:
-  serializedVersion: 6
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Sprites/Default
-  m_Shader: {fileID: 10753, guid: 0000000000000000f000000000000000, type: 0}
-  m_ShaderKeywords: 
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs:
-    - _AlphaTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _MainTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Floats:
-    - PixelSnap: 0
-    - _EnableExternalAlpha: 0
-    m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Flip: {r: 1, g: 1, b: 1, a: 1}
-    - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
-  m_BuildTextureStacks: []
 --- !u!114 &1056966111 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1227651350, guid: 4d293c8e162f3874b982baadd71153d2, type: 3}
@@ -608,6 +608,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1503421652}
   - component: {fileID: 1503421653}
+  - component: {fileID: 1503421657}
   - component: {fileID: 1503421654}
   - component: {fileID: 1503421651}
   - component: {fileID: 1503421655}
@@ -674,15 +675,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   layout: {fileID: 1503421655}
-  defaultNodeColor: {r: 0, g: 0.2588235, b: 0.6, a: 1}
-  defaultEdgeColor: {r: 0, g: 0, b: 0, a: 0.7019608}
-  edgeSelectedColor: {r: 0.990566, g: 0.5562042, b: 0, a: 0.68235296}
-  edgeHoverColor: {r: 1, g: 1, b: 1, a: 0.2627451}
-  edgeGrabbedColor: {r: 1, g: 0, b: 0, a: 0.4392157}
-  uriNodeColor: {r: 0, g: 0.2588235, b: 0.6, a: 1}
-  literalNodeColor: {r: 0.4009434, g: 0.65936005, b: 1, a: 1}
-  variableNodeColor: {r: 0, g: 0.6, b: 0.11185942, a: 1}
-  blankNodeColor: {r: 1, g: 0.59999996, b: 0, a: 1}
   BaseURI: https://github.com/PjotrSvetachov/GraphVR/example-graph
   edgePrefab: {fileID: 7414521966326491276, guid: 0fb57c9021752b44c9584cf451ad4f22, type: 3}
   nodePrefab: {fileID: 8140518496034193294, guid: cc359b16d405dae408c5a6fb5fae847a, type: 3}
@@ -726,7 +718,28 @@ MonoBehaviour:
     needsReinit: 0
   bsphere: {fileID: 1056966111}
   isActive: 0
---- !u!43 &1571453057
+--- !u!114 &1503421657
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1503421650}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9a6af4dad69e8844ac308d4903719a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultNodeColor: {r: 0, g: 0.25882354, b: 0.6, a: 1}
+  defaultEdgeColor: {r: 0, g: 0, b: 0, a: 0.69411767}
+  edgeSelectedColor: {r: 0.9921569, g: 0.5568628, b: 0, a: 0.72156864}
+  edgeHoverColor: {r: 1, g: 1, b: 1, a: 0.19215687}
+  edgeGrabbedColor: {r: 1, g: 0, b: 0, a: 0.33333334}
+  uriColor: {r: 0, g: 0.25882354, b: 0.6, a: 1}
+  literalColor: {r: 0, g: 0.39547157, b: 1, a: 1}
+  variableColor: {r: 1, g: 0.9577489, b: 0, a: 1}
+  blankNodeColor: {r: 1, g: 0.6, b: 0, a: 1}
+--- !u!43 &1754114144
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -982,6 +995,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 192944, guid: 4d293c8e162f3874b982baadd71153d2, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 420908, guid: 4d293c8e162f3874b982baadd71153d2, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1029,15 +1046,19 @@ PrefabInstance:
     - target: {fileID: 2348914, guid: 4d293c8e162f3874b982baadd71153d2, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 995963524}
+      objectReference: {fileID: 337230551}
     - target: {fileID: 3380982, guid: 4d293c8e162f3874b982baadd71153d2, type: 3}
       propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: 1571453057}
+      objectReference: {fileID: 1754114144}
     - target: {fileID: 1227651350, guid: 4d293c8e162f3874b982baadd71153d2, type: 3}
       propertyPath: graph
       value: 
       objectReference: {fileID: 1503421654}
+    - target: {fileID: 1678439078, guid: 4d293c8e162f3874b982baadd71153d2, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 114000010110554832, guid: 4d293c8e162f3874b982baadd71153d2, type: 3}
       propertyPath: onTransformUpdated.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 

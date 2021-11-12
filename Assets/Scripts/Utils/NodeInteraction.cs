@@ -24,17 +24,17 @@ public class NodeInteraction : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
   void IGrabInterface.ControllerEnter()
   {
-    node.isControllerHovered = true;
+    node.IsControllerHovered = true;
   }
 
   void IGrabInterface.ControllerExit()
   {
-    node.isControllerHovered = false;
+    node.IsControllerHovered = false;
   }
 
   void IGrabInterface.ControllerGrabBegin(GameObject newParent)
   {
-    node.isControllerGrabbed = true;
+    node.IsControllerGrabbed = true;
 
     this.transform.SetParent(newParent.transform, true);
     graph.layout.Stop();
@@ -42,7 +42,7 @@ public class NodeInteraction : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
   void IGrabInterface.ControllerGrabEnd()
   {
-    node.isControllerGrabbed = false;
+    node.IsControllerGrabbed = false;
 
     this.transform.SetParent(originalParent, true);
     graph.layout.CalculateLayout();
@@ -50,11 +50,11 @@ public class NodeInteraction : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
   void IPointerEnterHandler.OnPointerEnter(PointerEventData eventData)
   {
-    node.isPointerHovered = true;
+    node.IsPointerHovered = true;
   }
 
   void IPointerExitHandler.OnPointerExit(PointerEventData eventData)
   {
-    node.isPointerHovered = false;
+    node.IsPointerHovered = false;
   }
 }
