@@ -177,7 +177,7 @@ public class Edge : MonoBehaviour
     if (IsVariable) {
       return variableName;
     } else {
-      return uri;
+      return "<" + uri + ">";
     }
   }
 

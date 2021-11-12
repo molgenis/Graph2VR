@@ -226,8 +226,14 @@ public class Node : MonoBehaviour
     if (isVariable) {
       return GetLabel();
     } else {
-      return GetURIAsString();
+      switch (graphNode.NodeType) {
+        case NodeType.Literal:
+          return "\"" + label + "\"";
+        case NodeType.Uri:
+          return "<" + GetURIAsString() + ">";
+      }
     }
+    return "\"" + label + "\"";
   }
 
   private void UpdateDisplay()
