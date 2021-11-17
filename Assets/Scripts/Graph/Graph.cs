@@ -49,9 +49,7 @@ public class Graph : MonoBehaviour
                 {triples} 
             }} where {{
                 {triples} 
-            }}";
-
-    Debug.Log(query);
+            }} LIMIT 100";
 
     endpoint.QueryWithResultGraph(query, (graph, state) => {
       if (state == null) {
