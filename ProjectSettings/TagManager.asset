@@ -6,6 +6,7 @@ TagManager:
   tags:
   - LeftController
   - RightControler
+  - Graph
   layers:
   - Default
   - TransparentFX

@@ -6,17 +6,19 @@ using VDS.RDF;
 
 public class ContextMenuHandler : MonoBehaviour
 {
-    public GameObject ContentPanel;
-    public GameObject labelPrefab;
-    InputField inputPrefab;
+  public GameObject ContentPanel;
+  public GameObject labelPrefab;
+  InputField inputPrefab;
 
-    // Start is called before the first frame update
-    List<GameObject> labels = new List<GameObject>();
-    public delegate void OnItemIsSelected(string button);
+  // Start is called before the first frame update
+  List<GameObject> labels = new List<GameObject>();
+  public delegate void OnItemIsSelected(string button);
 
 
-    public void Initiate(Node node)
-    {
+  public void Initiate(Node node)
+  {
+    // Todo: reimplement with the new multiple graph system
+    /*
         labelPrefab = Resources.Load<GameObject>("UI/Label");
         Graph.instance.GetDescriptionAsync(node.uri, (graph, state) => {
             UnityMainThreadDispatcher.Instance().Enqueue( () =>{
@@ -69,19 +71,20 @@ public class ContextMenuHandler : MonoBehaviour
                 }
             });
         });
-    }
+        */
+  }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+  // Update is called once per frame
+  void Update()
+  {
 
-    public void AddLabel(string labelText)
-    {
-        GameObject label = Instantiate<GameObject>(labelPrefab);
-        label.transform.SetParent(ContentPanel.transform, false);
-        label.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = labelText;
-        labels.Add(label);
-    }
+  }
+
+  public void AddLabel(string labelText)
+  {
+    GameObject label = Instantiate<GameObject>(labelPrefab);
+    label.transform.SetParent(ContentPanel.transform, false);
+    label.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = labelText;
+    labels.Add(label);
+  }
 }
