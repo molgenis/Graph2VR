@@ -125,6 +125,7 @@ public class Node : MonoBehaviour
   {
     isSelected = true;
     transform.Find("Selected").gameObject.SetActive(true);
+    transform.Find("Selected").gameObject.GetComponent<Renderer>().material.SetColor("_EmissionColor", ColorSettings.instance.nodeSelectedColor);
     UpdateColor();
   }
 
