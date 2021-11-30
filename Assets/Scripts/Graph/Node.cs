@@ -120,6 +120,12 @@ public class Node : MonoBehaviour
     } else {
       textMesh.transform.localScale = Vector3.one * 0.3f;
     }
+
+    // Clamp position
+    if (transform.position.y < 0) {
+      transform.position = new Vector3(transform.position.x, 0, transform.position.z);
+    }
+
   }
   public void Select()
   {
