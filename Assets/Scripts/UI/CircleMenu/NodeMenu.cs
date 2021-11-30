@@ -6,6 +6,7 @@ using Valve.VR;
 
 public class NodeMenu : MonoBehaviour
 {
+  public Graph graph;
   private CircleMenu cm = null;
   public bool isOutgoingLink = true;
   private Dictionary<string, System.Tuple<string, int>> set;
@@ -24,9 +25,9 @@ public class NodeMenu : MonoBehaviour
   {
     if (node != null) {
       if (isOutgoingLink) {
-        set = Graph.instance.GetOutgoingPredicats(node.GetURIAsString());
+        set = graph.GetOutgoingPredicats(node.GetURIAsString());
       } else {
-        set = Graph.instance.GetIncomingPredicats(node.GetURIAsString());
+        set = graph.GetIncomingPredicats(node.GetURIAsString());
       }
     }
   }
@@ -42,6 +43,7 @@ public class NodeMenu : MonoBehaviour
   {
     KeyboardHandler.instance.Close();
     node = input as Node;
+    graph = node.graph;
     if (node.IsVariable) {
       Close();
       controlerModel.SetActive(false);
@@ -80,7 +82,7 @@ public class NodeMenu : MonoBehaviour
           // TODO: add qname als alt.
 
           cm.AddButton(label, color, () => {
-            Graph.instance.ExpandGraph(node, item.Key, isOutgoingLink);
+            graph.ExpandGraph(node, item.Key, isOutgoingLink);
             Close();
           }, item.Value.Item2);
         }
@@ -95,18 +97,18 @@ public class NodeMenu : MonoBehaviour
 
       if (node.uri != "") {
         cm.AddButton("Collapse Incoming", new Color(1, 0.5f, 0.5f) / 2, () => {
-          Graph.instance.CollapseIncomingGraph(node);
+          graph.CollapseIncomingGraph(node);
         });
         cm.AddButton("Collapse Outgoing", new Color(1, 0.5f, 0.5f) / 2, () => {
-          Graph.instance.CollapseOutgoingGraph(node);
+          graph.CollapseOutgoingGraph(node);
         });
         cm.AddButton("Collapse All", new Color(1, 0.5f, 0.5f) / 2, () => {
-          Graph.instance.CollapseGraph(node);
+          graph.CollapseGraph(node);
         });
       }
 
       cm.AddButton("Close", Color.red / 2, () => {
-        Graph.instance.RemoveNode(node);
+        graph.RemoveNode(node);
         Close();
       });
 
@@ -132,7 +134,7 @@ public class NodeMenu : MonoBehaviour
           PopulateEdge(input);
         });
         cm.AddButton("Query similar patterns", Color.yellow / 2, () => {
-          Graph.instance.QuerySimilarPatterns();
+          graph.QuerySimilarPatterns();
         });
       } else {
         cm.AddButton("Select triple", Color.yellow / 2, () => {
@@ -159,7 +161,7 @@ public class NodeMenu : MonoBehaviour
           PopulateEdge(input);
         });
         cm.AddButton("Query similar patterns", Color.yellow / 2, () => {
-          Graph.instance.QuerySimilarPatterns();
+          graph.QuerySimilarPatterns();
         });
 
       } else {

@@ -6,6 +6,7 @@ using VDS.RDF.Query;
 
 public class Node : MonoBehaviour
 {
+  public Graph graph;
   private Canvas infoPanel;
   private bool isVariable = false;
   private bool isSelected = false;
@@ -148,7 +149,7 @@ public class Node : MonoBehaviour
     foreach (Triple tripleWithSubject in graphNode.Graph.GetTriplesWithSubject(graphNode)) {
       if (IsLabelPredicate(tripleWithSubject.Predicate)) {
         SetLabel(tripleWithSubject.Object.ToString());
-        Graph.instance.Remove(Graph.instance.GetByINode(tripleWithSubject.Object));
+        graph.Remove(graph.GetByINode(tripleWithSubject.Object));
         break;
       }
     }
@@ -163,7 +164,7 @@ public class Node : MonoBehaviour
   {
     isVariable = true;
 
-    string newLabel = Graph.instance.variableNameManager.GetVariableName(uri);
+    string newLabel = graph.variableNameManager.GetVariableName(uri);
     SetLabel(newLabel);
     UpdateColor();
   }

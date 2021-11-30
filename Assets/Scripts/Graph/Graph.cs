@@ -14,7 +14,6 @@ public class Graph : MonoBehaviour
 {
   public BaseLayoutAlgorithm layout = null;
 
-  public static Graph instance;
   public string BaseURI = "https://github.com/PjotrSvetachov/GraphVR/example-graph";
   public GameObject edgePrefab;
   public GameObject nodePrefab;
@@ -468,7 +467,6 @@ public class Graph : MonoBehaviour
 
   private void Awake()
   {
-    instance = this;
     variableNameManager = new VariableNameManager();
   }
 
@@ -480,6 +478,7 @@ public class Graph : MonoBehaviour
     clone.transform.localRotation = Quaternion.identity;
     clone.transform.localScale = Vector3.one;
     Edge edge = clone.AddComponent<Edge>();
+    edge.graph = this;
     edge.uri = uri;
     edge.displaySubject = from;
     edge.displayObject = to;
@@ -502,7 +501,7 @@ public class Graph : MonoBehaviour
       Debug.Log("The Subject and Object needs to be defined to create a edge");
       return null;
     }
-
+    edge.graph = this;
     edge.uri = uri.ToString();
     edge.graphPredicate = uri;
     edge.graphSubject = from;
@@ -522,6 +521,7 @@ public class Graph : MonoBehaviour
     clone.transform.localRotation = Quaternion.identity;
     clone.transform.localScale = Vector3.one * 0.05f;
     Node node = clone.AddComponent<Node>();
+    node.graph = this;
     node.SetURI(value);
     node.SetLabel(value);
     nodeList.Add(node);
@@ -532,29 +532,6 @@ public class Graph : MonoBehaviour
   {
     Node node = CreateNode(value);
     node.graphNode = iNode;
-    /*
-    switch (iNode.NodeType) {
-      case NodeType.Variable:
-        node.SetDefaultColor(ColorSettings.instance.variableColor);
-        break;
-      case NodeType.Blank:
-        node.SetURI("");
-        node.SetDefaultColor(ColorSettings.instance.blankNodeColor);
-        break;
-      case NodeType.Literal:
-        node.SetLabel(((ILiteralNode)iNode).Value);
-        node.SetURI("");
-        node.SetDefaultColor(ColorSettings.instance.literalColor);
-        break;
-      case NodeType.Uri:
-        // TODO: this should work?
-        node.SetURI(((IUriNode)iNode).Uri.ToString());
-        //node.RequestLabel(endpoint);
-        node.SetDefaultColor(ColorSettings.instance.uriColor);
-        break;
-        // etc.
-    }
-    */
     return node;
   }
 
@@ -567,6 +544,7 @@ public class Graph : MonoBehaviour
     clone.transform.localRotation = Quaternion.identity;
     clone.transform.localScale = Vector3.one * 0.05f;
     Node node = clone.AddComponent<Node>();
+    node.graph = this;
     node.SetURI(value);
     node.SetLabel(value);
     nodeList.Add(node);

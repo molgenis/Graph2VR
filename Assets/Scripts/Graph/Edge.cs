@@ -6,6 +6,7 @@ using VDS.RDF;
 public class Edge : MonoBehaviour
 {
   public string uri = "";
+  public Graph graph;
   public Node displaySubject;
   public Node displayObject;
   public INode graphSubject;
@@ -91,7 +92,7 @@ public class Edge : MonoBehaviour
     textFront = transform.Find("FrontText").GetComponent<TMPro.TextMeshPro>();
     textBack = transform.Find("BackText").GetComponent<TMPro.TextMeshPro>();
 
-    string qname = Graph.instance.GetShortName(uri);
+    string qname = graph.GetShortName(uri);
     if (qname != "") {
       textShort = textLong = qname;
     } else {
@@ -134,7 +135,7 @@ public class Edge : MonoBehaviour
     displayObject.Select();
 
     if (graphSubject != null && graphObject != null) {
-      Graph.instance.AddToSelection(this);
+      graph.AddToSelection(this);
     }
   }
 
@@ -145,7 +146,7 @@ public class Edge : MonoBehaviour
     displayObject.Deselect();
 
     if (graphSubject != null && graphObject != null) {
-      Graph.instance.AddToSelection(this);
+      graph.AddToSelection(this);
     }
   }
 
@@ -157,7 +158,7 @@ public class Edge : MonoBehaviour
 
   private IVariableNode GetVariableInode()
   {
-    variableName = Graph.instance.variableNameManager.GetVariableName(uri);
+    variableName = graph.variableNameManager.GetVariableName(uri);
     return nodeFactory.CreateVariableNode(variableName);
   }
 

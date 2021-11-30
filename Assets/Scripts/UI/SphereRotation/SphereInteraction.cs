@@ -53,8 +53,7 @@ public class SphereInteraction : MonoBehaviour
     // Reset the initial values of the rotation at 90 degree thresholds.
     if (rotation.eulerAngles.x > 90.0f && rotation.eulerAngles.x < 270.0f ||
         rotation.eulerAngles.y > 90.0f && rotation.eulerAngles.y < 270.0f ||
-        rotation.eulerAngles.z > 90.0f && rotation.eulerAngles.z < 270.0f)
-    {
+        rotation.eulerAngles.z > 90.0f && rotation.eulerAngles.z < 270.0f) {
       lefToRight = right - left;
       bsphere.Update();
       leftToCenter = bsphere.transform.position - left;
@@ -72,21 +71,36 @@ public class SphereInteraction : MonoBehaviour
 
   void Update()
   {
+    // TODO: maybe have one Sphere interaction for every Graph
+    // TODO: fix jump in grabbing a graph
+
     bool zoomAction = gripAction.GetState(SteamVR_Input_Sources.LeftHand) && gripAction.GetState(SteamVR_Input_Sources.RightHand);
-    if (!isActive && zoomAction)
-    {
-      StartInteraction();
-      isActive = true;
+    GameObject closest = null;
+
+    if (zoomAction) {
+      GameObject[] graphs = GameObject.FindGameObjectsWithTag("Graph");
+      float closestDistance = float.MaxValue;
+      foreach (GameObject graph in graphs) {
+        float distance = Vector3.Distance(leftController.position, graph.GetComponent<SphereInteraction>().bsphere.transform.position);
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closest = graph;
+        }
+      }
     }
-    if (isActive && !zoomAction)
-    {
-      StopInteraction();
-      isActive = false;
-    }
-    if (isActive)
-    {
-      UpdateInteraction();
+
+    if (closest != null && Object.ReferenceEquals(closest.GetComponent<SphereInteraction>(), this)) {
+      if (!isActive && zoomAction) {
+        StartInteraction();
+        isActive = true;
+      }
+      if (isActive && !zoomAction) {
+        StopInteraction();
+        isActive = false;
+      }
+      if (isActive) {
+        UpdateInteraction();
+      }
     }
   }
-
 }
