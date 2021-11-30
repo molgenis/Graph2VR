@@ -120,11 +120,18 @@ public class Node : MonoBehaviour
     } else {
       textMesh.transform.localScale = Vector3.one * 0.3f;
     }
+
+    // Clamp position
+    if (transform.position.y < 0) {
+      transform.position = new Vector3(transform.position.x, 0, transform.position.z);
+    }
+
   }
   public void Select()
   {
     isSelected = true;
     transform.Find("Selected").gameObject.SetActive(true);
+    transform.Find("Selected").gameObject.GetComponent<Renderer>().material.SetColor("_EmissionColor", ColorSettings.instance.nodeSelectedColor);
     UpdateColor();
   }
 

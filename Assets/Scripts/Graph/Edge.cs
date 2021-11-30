@@ -220,7 +220,7 @@ public class Edge : MonoBehaviour
     // Position the collider
     collider.transform.rotation = Quaternion.Euler(0, rot.x, rot.y);
     collider.transform.localPosition = Vector3.zero;
-    collider.height = distance;
+    collider.height = distance * 0.85f;
 
     // Update text
     if (IsVariable) {

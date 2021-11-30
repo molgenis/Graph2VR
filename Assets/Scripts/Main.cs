@@ -25,6 +25,7 @@ public class Main : MonoBehaviour
   public Graph CreateGraph()
   {
     GameObject clone = Instantiate(graphPrefab);
+    clone.transform.position = new Vector3(0, 1, 0);
     return clone.GetComponent<Graph>();
   }
 }
