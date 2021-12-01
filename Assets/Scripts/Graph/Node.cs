@@ -14,41 +14,57 @@ public class Node : MonoBehaviour
   private bool isControllerHovered = false;
   private bool isControllerGrabbed = false;
 
-  public bool IsVariable {
+  public List<Node> connections = new List<Node>();
+  public void AddConnection(Node node)
+  {
+    if (!connections.Contains(node)) connections.Add(node);
+  }
+
+  public bool IsVariable
+  {
     get => isVariable;
-    set {
+    set
+    {
       isVariable = value;
       UpdateColor();
     }
   }
 
-  public bool IsSelected {
+  public bool IsSelected
+  {
     get => isSelected;
-    set {
+    set
+    {
       isSelected = value;
       UpdateColor();
     }
   }
 
-  public bool IsPointerHovered {
+  public bool IsPointerHovered
+  {
     get => isPointerHovered;
-    set {
+    set
+    {
       isPointerHovered = value;
       UpdateColor();
     }
   }
 
-  public bool IsControllerHovered {
+  public bool IsControllerHovered
+  {
     get => isControllerHovered;
-    set {
+    set
+    {
       isControllerHovered = value;
       UpdateColor();
     }
   }
 
-  public bool IsControllerGrabbed {
+  public bool IsControllerGrabbed
+  {
     get => isControllerGrabbed;
-    set {
+    set
+    {
       isControllerGrabbed = value;
       UpdateColor();
     }
@@ -78,15 +94,24 @@ public class Node : MonoBehaviour
 
   private void UpdateColor()
   {
-    if (IsControllerHovered || IsPointerHovered) {
+    if (IsControllerHovered || IsPointerHovered)
+    {
       SetColor(ColorSettings.instance.edgeHoverColor);
-    } else if (IsControllerGrabbed) {
+    }
+    else if (IsControllerGrabbed)
+    {
       SetColor(ColorSettings.instance.edgeGrabbedColor);
-    } else if (IsVariable) {
+    }
+    else if (IsVariable)
+    {
       SetColor(ColorSettings.instance.variableColor);
-    } else {
-      if (graphNode != null) {
-        switch (graphNode.NodeType) {
+    }
+    else
+    {
+      if (graphNode != null)
+      {
+        switch (graphNode.NodeType)
+        {
           case NodeType.Variable:
             SetColor(ColorSettings.instance.variableColor);
             break;
@@ -105,7 +130,9 @@ public class Node : MonoBehaviour
             break;
             // etc.
         }
-      } else {
+      }
+      else
+      {
         SetColor(ColorSettings.instance.defaultNodeColor);
       }
     }
@@ -115,14 +142,18 @@ public class Node : MonoBehaviour
   {
 
     transform.rotation = Quaternion.LookRotation(Camera.main.transform.position - transform.position, Vector3.up);
-    if (isControllerGrabbed || isPointerHovered) {
+    if (isControllerGrabbed || isPointerHovered)
+    {
       textMesh.transform.localScale = Vector3.one * 0.6f;
-    } else {
+    }
+    else
+    {
       textMesh.transform.localScale = Vector3.one * 0.3f;
     }
 
     // Clamp position
-    if (transform.position.y < 0) {
+    if (transform.position.y < 0)
+    {
       transform.position = new Vector3(transform.position.x, 0, transform.position.z);
     }
 
@@ -144,17 +175,22 @@ public class Node : MonoBehaviour
 
   public void RefineGraph()
   {
-    if (graphNode == null) {
+    if (graphNode == null)
+    {
       return;
-    } else {
+    }
+    else
+    {
       ConnectLabelToNode();
     }
   }
 
   private void ConnectLabelToNode()
   {
-    foreach (Triple tripleWithSubject in graphNode.Graph.GetTriplesWithSubject(graphNode)) {
-      if (IsLabelPredicate(tripleWithSubject.Predicate)) {
+    foreach (Triple tripleWithSubject in graphNode.Graph.GetTriplesWithSubject(graphNode))
+    {
+      if (IsLabelPredicate(tripleWithSubject.Predicate))
+      {
         SetLabel(tripleWithSubject.Object.ToString());
         graph.Remove(graph.GetByINode(tripleWithSubject.Object));
         break;
@@ -190,9 +226,12 @@ public class Node : MonoBehaviour
 
   public void SetLabel(string label)
   {
-    if (isVariable) {
+    if (isVariable)
+    {
       this.label = GetVariableLabel(label);
-    } else {
+    }
+    else
+    {
       this.label = label.Replace("@" + Main.instance.languageCode, "");
       cachedNodeLabel = this.label;
     }
@@ -231,10 +270,14 @@ public class Node : MonoBehaviour
 
   public string GetQueryLabel()
   {
-    if (isVariable) {
+    if (isVariable)
+    {
       return GetLabel();
-    } else {
-      switch (graphNode.NodeType) {
+    }
+    else
+    {
+      switch (graphNode.NodeType)
+      {
         case NodeType.Literal:
           return "\"" + label + "\"";
         case NodeType.Uri:
@@ -251,9 +294,12 @@ public class Node : MonoBehaviour
 
   public void ToggleInfoPanel()
   {
-    if (infoPanel == null) {
+    if (infoPanel == null)
+    {
       InitiateInfoPanel();
-    } else {
+    }
+    else
+    {
       infoPanel.enabled = !infoPanel.enabled;
     }
     PositionInfoPanel();
