@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 662167465230485843}
   - component: {fileID: 5025660550470303715}
   - component: {fileID: 5344976936667274483}
-  - component: {fileID: 5361161087665296338}
   - component: {fileID: 6731151899422153761}
   m_Layer: 0
   m_Name: Graph
@@ -49,6 +48,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   layout: {fileID: 5344976936667274483}
+  boundingSphere: {fileID: 3973317721660415443}
   BaseURI: https://github.com/PjotrSvetachov/GraphVR/example-graph
   edgePrefab: {fileID: 7414521966326491276, guid: 0fb57c9021752b44c9584cf451ad4f22, type: 3}
   nodePrefab: {fileID: 8140518496034193294, guid: cc359b16d405dae408c5a6fb5fae847a, type: 3}
@@ -88,23 +88,6 @@ MonoBehaviour:
   Temperature: 0
   C_CONSTANT: 1
   AREA_CONSTANT: 1
---- !u!114 &5361161087665296338
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 280358173420448884}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ab8aab9f2e9b6647925b0d12a71ddc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gripAction:
-    actionPath: /actions/default/in/GrabGrip
-    needsReinit: 0
-  bsphere: {fileID: 3973317721660415443}
-  isActive: 0
 --- !u!114 &6731151899422153761
 MonoBehaviour:
   m_ObjectHideFlags: 0

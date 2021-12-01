@@ -13,6 +13,7 @@ using System.Threading;
 public class Graph : MonoBehaviour
 {
   public BaseLayoutAlgorithm layout = null;
+  public BoundingSphere boundingSphere;
 
   public string BaseURI = "https://github.com/PjotrSvetachov/GraphVR/example-graph";
   public GameObject edgePrefab;

@@ -10,13 +10,15 @@ public class BoundingSphere : MonoBehaviour
   {
     transform.SetParent(null);
   }
-  // Update is called once per frame
+
   public void Update()
   {
     // Calc center
     Vector3 center = Vector3.zero;
-    if (graph.nodeList.Count > 0) {
-      foreach (Node node in graph.nodeList) {
+    if (graph.nodeList.Count > 0)
+    {
+      foreach (Node node in graph.nodeList)
+      {
         center += node.transform.position;
       }
       center = center / graph.nodeList.Count;
@@ -25,9 +27,11 @@ public class BoundingSphere : MonoBehaviour
       float far = 0f;
 
       // Calc farpoint from center
-      foreach (Node node in graph.nodeList) {
+      foreach (Node node in graph.nodeList)
+      {
         float d = Vector3.Distance(center, node.transform.position);
-        if (d > far) {
+        if (d > far)
+        {
           far = d;
           farpoint = node.transform.position;
         }
