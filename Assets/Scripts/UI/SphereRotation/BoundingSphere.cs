@@ -6,6 +6,7 @@ public class BoundingSphere : MonoBehaviour
 {
   public Graph graph;
   public float size = 1;
+  public bool isFlat = false;
   public void Start()
   {
     transform.SetParent(null);
@@ -38,7 +39,7 @@ public class BoundingSphere : MonoBehaviour
       }
       size = Vector3.Distance(farpoint, center);
       transform.position = center;
-      transform.localScale = Vector3.one * size * 2;
+      transform.localScale = new Vector3(1, 1, isFlat ? 0.1f : 1f) * size * 2;
     }
   }
 }

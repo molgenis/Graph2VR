@@ -14,28 +14,19 @@ public class Graph : MonoBehaviour
 {
   public BaseLayoutAlgorithm layout = null;
   public BoundingSphere boundingSphere;
-
   public string BaseURI = "https://github.com/PjotrSvetachov/GraphVR/example-graph";
   public GameObject edgePrefab;
   public GameObject nodePrefab;
   public Canvas menu;
   public int expandGraphAddLimit = 100;
-
   public HashSet<Triple> triples = new HashSet<Triple>();
   public List<Edge> edgeList = new List<Edge>();
   public List<Node> nodeList = new List<Node>();
-
   public List<string> translatablePredicates = new List<string>();
-
   private SparqlResultSet lastResults = null;
   IGraph currentGraph = null;
-
   private SparqlRemoteEndpoint endpoint;
-
   public VariableNameManager variableNameManager;
-
-  // FIXME: don't store selection in string, it will not reflect changes made after selections!
-  // Change to VDS.RDF.Triple
   public List<Edge> selection = new List<Edge>();
 
   public void QuerySimilarPatterns()
@@ -51,31 +42,16 @@ public class Graph : MonoBehaviour
                 {triples} 
             }} where {{
                 {triples} 
-            }} LIMIT 100";
+            }} LIMIT " + expandGraphAddLimit;
 
-    endpoint.QueryWithResultGraph(query, (graph, state) =>
-    {
-      if (state == null)
-      {
-        Debug.Log("All good");
-        Debug.Log(query);
-        Debug.Log(graph);
-        Debug.Log(state);
-      }
-      else
-      {
-        Debug.Log("There may be an error");
-        Debug.Log(query);
-        Debug.Log(graph);
-        Debug.Log(state);
-        Debug.Log(((AsyncError)state).Error);
-      }
-      // To draw new elements to unity we need to be on the main Thread
-      UnityMainThreadDispatcher.Instance().Enqueue(() =>
-      {
-        currentGraph.Merge(graph);
-      });
-    }, null);
+    // TODO: create a set of multple graphs
+    Graph newGraph = Main.instance.CreateGraph();
+    newGraph.transform.position = transform.position + new Vector3(0, 0, 2);
+    newGraph.SendQuery(query);
+    newGraph.gameObject.GetComponent<FruchtermanReingold>().enabled = false;
+    newGraph.gameObject.GetComponent<SpatialGrid2D>().enabled = true;
+    newGraph.layout = newGraph.gameObject.GetComponent<SpatialGrid2D>();
+    newGraph.boundingSphere.isFlat = true;
   }
 
   public void AddToSelection(Edge toAdd)
@@ -667,9 +643,9 @@ public class Graph : MonoBehaviour
     if (node != null)
     {
       // remove edges connected to this node
-      Edge e = edgeList.Find((Edge edge) => edge.graphObject.Equals(node.graphNode));
+      Edge e = edgeList.Find((Edge edge) => edge.graphObject == null ? false : edge.graphObject.Equals(node.graphNode));
       Remove(e);
-      e = edgeList.Find((Edge edge) => edge.graphSubject.Equals(node.graphNode));
+      e = edgeList.Find((Edge edge) => edge.graphSubject == null ? false : edge.graphSubject.Equals(node.graphNode));
       Remove(e);
 
       // Destoy the node
