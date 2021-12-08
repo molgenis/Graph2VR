@@ -368,15 +368,29 @@ public class Graph : MonoBehaviour
     // Execute query
     if (sparqlQuery.QueryType == SparqlQueryType.Construct)
     {
-      currentGraph = endpoint.QueryWithResultGraph(query);
-      AddDefaultNameSpaces();
-      BuildByIGraph(currentGraph);
-      currentGraph.TripleAsserted += CurrentGraph_TripleAsserted;
-      currentGraph.TripleRetracted += CurrentGraph_TripleRetracted;
+      try
+      {
+        currentGraph = endpoint.QueryWithResultGraph(query);
+        AddDefaultNameSpaces();
+        BuildByIGraph(currentGraph);
+        currentGraph.TripleAsserted += CurrentGraph_TripleAsserted;
+        currentGraph.TripleRetracted += CurrentGraph_TripleRetracted;
+      }
+      catch (VDS.RDF.Query.RdfQueryException error)
+      {
+        Debug.Log("No database connection found");
+        Debug.Log(error);
+      }
     }
     else
     {
       Debug.Log("Please use a Construct query");
+    }
+
+    // Remove graph if no triples where found
+    if (currentGraph == null || currentGraph.Triples == null || currentGraph.Triples.Count == 0)
+    {
+      Destroy(gameObject);
     }
   }
 
