@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using Valve.VR;
 
 public class CircleMenuButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
@@ -30,13 +29,16 @@ public class CircleMenuButton : MonoBehaviour, IPointerEnterHandler, IPointerExi
 
     // Auto scale down if angle is outside of 0 ... 180
     float scaleFactor = 0;
-    if (angle < 0) {
+    if (angle < 0)
+    {
       scaleFactor = 1 - (Mathf.Clamp(-angle, 0, falloff) / falloff);
     }
-    if (angle >= 0 && angle <= 180) {
+    if (angle >= 0 && angle <= 180)
+    {
       scaleFactor = 1;
     }
-    if (angle > 180) {
+    if (angle > 180)
+    {
       scaleFactor = 1 - (Mathf.Clamp(angle - 180, 0, falloff) / falloff);
     }
     transform.localScale = Vector3.one * scaleFactor;

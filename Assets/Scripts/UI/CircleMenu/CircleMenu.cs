@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using Valve.VR;
 
 public class CircleMenu : MonoBehaviour
 {
@@ -53,7 +52,8 @@ public class CircleMenu : MonoBehaviour
     if (!isBuild) return;
 
     // position slider nob via sliderValue
-    if (sliderNob != null) {
+    if (sliderNob != null)
+    {
       float sliderAngle = (sliderValue * 180) * (Mathf.Deg2Rad);
       sliderNob.transform.localPosition = new Vector3(Mathf.Sin(-sliderAngle), Mathf.Cos(-sliderAngle), 0) * 17;
       sliderNob.transform.localRotation = Quaternion.Euler(0, 180, 0);
@@ -68,11 +68,13 @@ public class CircleMenu : MonoBehaviour
 
   public void Close()
   {
-    foreach (Transform child in transform) {
+    foreach (Transform child in transform)
+    {
       Destroy(child.gameObject);
     }
     sliderLine = gameObject.GetComponent<LineRenderer>();
-    if (sliderLine != null) {
+    if (sliderLine != null)
+    {
       Destroy(sliderLine);
     }
 
@@ -100,7 +102,8 @@ public class CircleMenu : MonoBehaviour
     index = 0;
     float angle = 0;
 
-    foreach (CircleButton button in buttons) {
+    foreach (CircleButton button in buttons)
+    {
       float slice = angleStep * 0.5f * Mathf.Deg2Rad;
       angle = angle + angleStep;
 
@@ -144,7 +147,8 @@ public class CircleMenu : MonoBehaviour
       collider.convex = true;
 
       // Number object
-      if (button.number != -1) {
+      if (button.number != -1)
+      {
         GameObject number = new GameObject("Button-number-" + index);
         number.transform.parent = clone.transform;
         number.transform.localPosition = Vector3.zero;
@@ -182,12 +186,14 @@ public class CircleMenu : MonoBehaviour
     }
     totalCalculatedAngle = angle - 180;
 
-    if (totalCalculatedAngle > 0) {
+    if (totalCalculatedAngle > 0)
+    {
       sliderNob = Instantiate(sliderNobPrefab, transform);
       sliderNob.GetComponent<CircleMenuSliderNob>().Set(this);
 
       sliderLine = gameObject.GetComponent<LineRenderer>();
-      if (sliderLine == null) {
+      if (sliderLine == null)
+      {
         sliderLine = gameObject.AddComponent<LineRenderer>();
       }
 
@@ -200,13 +206,17 @@ public class CircleMenu : MonoBehaviour
       sliderLine.useWorldSpace = false;
 
       // Set slider track
-      for (int i = 0; i < sliderPathResolution; i++) {
+      for (int i = 0; i < sliderPathResolution; i++)
+      {
         float sliderAngle = -(i / (float)sliderPathResolution) * totalAngle * Mathf.Deg2Rad;
         sliderLine.SetPosition(i, new Vector2(Mathf.Sin(sliderAngle), Mathf.Cos(sliderAngle)) * 17);
       }
-    } else {
+    }
+    else
+    {
       sliderLine = gameObject.GetComponent<LineRenderer>();
-      if (sliderLine != null) {
+      if (sliderLine != null)
+      {
         Destroy(sliderLine);
       }
     }

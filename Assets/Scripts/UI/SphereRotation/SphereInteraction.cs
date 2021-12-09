@@ -1,11 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Valve.VR;
+using UnityEngine.InputSystem;
 
 public class SphereInteraction : MonoBehaviour
 {
-  public SteamVR_Action_Boolean gripAction = SteamVR_Input.GetAction<SteamVR_Action_Boolean>("GrabGrip");
   public bool isActive = false;
 
   Transform leftController;
@@ -73,7 +72,7 @@ public class SphereInteraction : MonoBehaviour
   void Update()
   {
     GameObject closest = null;
-    bool zoomAction = gripAction.GetState(SteamVR_Input_Sources.LeftHand) && gripAction.GetState(SteamVR_Input_Sources.RightHand);
+    bool zoomAction = ControlerInput.instance.gripLeft && ControlerInput.instance.gripRight;
 
     if (!isActive && zoomAction)
     {
