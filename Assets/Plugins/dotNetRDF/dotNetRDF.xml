@@ -3522,6 +3522,14 @@
             <param name="other">Other Multiset.</param>
             <returns></returns>
         </member>
+        <member name="M:VDS.RDF.Query.Algebra.BaseMultiset.Merge(VDS.RDF.Query.Algebra.BaseMultiset)">
+            <summary>
+            Does a merge of this multiset and another multiset, avoiding adding duplicate sets to this multiset.
+            </summary>
+            <param name="other">The multiset to be merged into this multiset.</param>
+            <returns>This multiset.</returns>
+            <remarks>The merge operation adds only sets from <paramref name="other"/> that do not exist in this multiset.</remarks>
+        </member>
         <member name="M:VDS.RDF.Query.Algebra.BaseMultiset.ContainsValue(System.String,VDS.RDF.INode)">
             <summary>
             Determines whether the Multiset contains the given Value for the given Variable.
@@ -21476,6 +21484,12 @@
             Represents a IRI expression.
             </summary>
         </member>
+        <member name="M:VDS.RDF.Query.Builder.Expressions.IriExpression.#ctor(System.Uri)">
+            <summary>
+            Wraps the <paramref name="iri"/> as a constant IRI expression.
+            </summary>
+            <param name="iri"></param>
+        </member>
         <member name="M:VDS.RDF.Query.Builder.Expressions.IriExpression.#ctor(VDS.RDF.Query.Expressions.ISparqlExpression)">
             <summary>
             Wraps the <paramref name="expression"/> as an IRI expression.
@@ -21604,6 +21618,11 @@
             Gets the <see cref="T:VDS.RDF.Query.Expressions.Primary.VariableTerm"/> represented by this variable expression.
             </summary>
         </member>
+        <member name="T:VDS.RDF.Query.Builder.GraphPatternBuilder">
+            <summary>
+            Class for building graph patterns.
+            </summary>
+        </member>
         <member name="M:VDS.RDF.Query.Builder.GraphPatternBuilder.#ctor">
             <summary>
             Creates a builder of a normal graph patterns.
@@ -21682,7 +21701,7 @@
         </member>
         <member name="P:VDS.RDF.Query.Builder.IAggregateBuilder.Distinct">
             <summary>
-            Gets a builder which builds a DISTICT aggregate.
+            Gets a builder which builds a DISTINCT aggregate.
             </summary>
         </member>
         <member name="M:VDS.RDF.Query.Builder.IAggregateBuilder.Sample(VDS.RDF.Query.Expressions.Primary.VariableTerm)">
@@ -22594,6 +22613,83 @@
             Builds a SPARQL constructor function call.
             </summary>
         </member>
+        <member name="T:VDS.RDF.Query.Builder.IPatternItemFactory">
+            <summary>
+            Interface for creating <see cref="T:VDS.RDF.Query.Patterns.PatternItem"/> instances.
+            </summary>
+        </member>
+        <member name="M:VDS.RDF.Query.Builder.IPatternItemFactory.CreateVariablePattern(System.String)">
+            <summary>
+            Create a variable pattern item.
+            </summary>
+            <param name="variableName">The name of the variable.</param>
+            <returns></returns>
+        </member>
+        <member name="M:VDS.RDF.Query.Builder.IPatternItemFactory.CreateNodeMatchPattern(System.String,VDS.RDF.INamespaceMapper)">
+            <summary>
+            Create a URI node pattern.
+            </summary>
+            <param name="qName">The CURIE representation of the URI.</param>
+            <param name="namespaceMapper">The mapper to use when resolving the prefix part of the CURIE.</param>
+            <returns></returns>
+        </member>
+        <member name="M:VDS.RDF.Query.Builder.IPatternItemFactory.CreateNodeMatchPattern(System.Uri)">
+            <summary>
+            Create a URI node pattern.
+            </summary>
+            <param name="uri">The URI for the pattern item.</param>
+            <returns></returns>
+        </member>
+        <member name="M:VDS.RDF.Query.Builder.IPatternItemFactory.CreateNodeMatchPattern(VDS.RDF.INode)">
+            <summary>
+            Create a pattern item that matches the specified node.
+            </summary>
+            <param name="node">The node to match.</param>
+            <returns></returns>
+        </member>
+        <member name="M:VDS.RDF.Query.Builder.IPatternItemFactory.CreateBlankNodeMatchPattern(System.String)">
+            <summary>
+            Create a pattern item that matches a specific blank node.
+            </summary>
+            <param name="blankNodeIdentifier">The blank node identifier to match.</param>
+            <returns></returns>
+        </member>
+        <member name="M:VDS.RDF.Query.Builder.IPatternItemFactory.CreateLiteralNodeMatchPattern(System.Object)">
+            <summary>
+            Create a pattern item that matches a literal value.
+            </summary>
+            <param name="literal">The value to match as a literal.</param>
+            <returns></returns>
+            <remarks>If <paramref name="literal"/> is a <see cref="T:System.DateTime"/> or <see cref="T:System.DateTimeOffset"/> then the literal pattern will use the appropriate XML Schema-compatible string representation as the literal value. For all other types, the value returned by the ToString method will be used as the literal value.</remarks>
+        </member>
+        <member name="M:VDS.RDF.Query.Builder.IPatternItemFactory.CreateLiteralNodeMatchPattern(System.Object,System.Uri)">
+            <summary>
+            Create a pattern item that matches a literal value with its associated datatype.
+            </summary>
+            <param name="literal">The literal value to match.</param>
+            <param name="datatype">The literal datatype URI to match.</param>
+            <returns></returns>
+            <remarks>If <paramref name="literal"/> is a <see cref="T:System.DateTime"/> or <see cref="T:System.DateTimeOffset"/> then the literal pattern will use the appropriate XML Schema-compatible string representation as the literal value. For all other types, the value returned by the ToString method will be used as the literal value.</remarks>
+        </member>
+        <member name="M:VDS.RDF.Query.Builder.IPatternItemFactory.CreateLiteralNodeMatchPattern(System.Object,System.String)">
+            <summary>
+            Create a pattern item that matches a literal value with an associated language tag.
+            </summary>
+            <param name="literal">The literal value to match.</param>
+            <param name="langSpec">The language tag to match.</param>
+            <returns></returns>
+            <remarks>If <paramref name="literal"/> is a <see cref="T:System.DateTime"/> or <see cref="T:System.DateTimeOffset"/> then the literal pattern will use the appropriate XML Schema-compatible string representation as the literal value. For all other types, the value returned by the ToString method will be used as the literal value.</remarks>
+        </member>
+        <member name="M:VDS.RDF.Query.Builder.IPatternItemFactory.CreatePatternItem(System.Type,System.String,VDS.RDF.INamespaceMapper)">
+            <summary>
+            Create a pattern item that matches a node of a specific type.
+            </summary>
+            <param name="nodeType">The type of node to match. Must be one of <see cref="T:VDS.RDF.IBlankNode"/>, <see cref="T:VDS.RDF.ILiteralNode"/>, <see cref="T:VDS.RDF.IUriNode"/> or <see cref="T:VDS.RDF.IVariableNode"/>.</param>
+            <param name="patternString">The string value of the pattern item.</param>
+            <param name="namespaceMapper">The namespace mapper to use when resolving any prefixes in <paramref name="patternString"/>.</param>
+            <returns></returns>
+            <remarks>It is recommended to use one of the CreateXxxNodeMatchPattern methods in preference to this method.</remarks>
+        </member>
         <member name="T:VDS.RDF.Query.Builder.IQueryBuilder">
             <summary>
             Interface for building SPARQL queries. 
@@ -22757,6 +22853,27 @@
             <summary>
             Sets a <see cref="T:VDS.RDF.Query.Patterns.PatternItem"/> as <see cref="P:VDS.RDF.Query.Patterns.IMatchTriplePattern.Subject"/>.
             </summary>
+        </member>
+        <member name="T:VDS.RDF.Query.Builder.ITriplePatternBuilderInternal">
+            <summary>
+            Additional methods and properties that can be used by extensions of the <see cref="T:VDS.RDF.Query.Builder.ITriplePatternBuilder"/> interface.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Query.Builder.ITriplePatternBuilderInternal.PatternItemFactory">
+            <summary>
+            Gets the pattern item factory used by the builder.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Query.Builder.ITriplePatternBuilderInternal.Prefixes">
+            <summary>
+            Gets the prefix manager, which allows adding prefixes to the query or graph pattern.
+            </summary>
+        </member>
+        <member name="M:VDS.RDF.Query.Builder.ITriplePatternBuilderInternal.AddPattern(VDS.RDF.Query.Patterns.TriplePattern)">
+            <summary>
+            Add TriplePattern to the builder.
+            </summary>
+            <param name="triplePattern"></param>
         </member>
         <member name="T:VDS.RDF.Query.Builder.PatternItemFactory">
             <summary>
@@ -23034,7 +23151,22 @@
             </summary>
         </member>
         <member name="T:VDS.RDF.Query.Builder.TriplePatternBuilder">
-            <inheritdoc />
+            <summary>
+            Provides methods for building triple patterns.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Query.Builder.TriplePatternBuilder.Patterns">
+            <summary>
+            Gets the triple patterns.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Query.Builder.TriplePatternBuilder.PatternItemFactory">
+            <summary>
+            Gets the pattern item factory.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Query.Builder.TriplePatternBuilder.Prefixes">
+            <inheritdoc/>
         </member>
         <member name="M:VDS.RDF.Query.Builder.TriplePatternBuilder.#ctor(VDS.RDF.INamespaceMapper)">
             <summary>
@@ -23060,15 +23192,8 @@
         <member name="M:VDS.RDF.Query.Builder.TriplePatternBuilder.Subject(VDS.RDF.Query.Patterns.PatternItem)">
             <inheritdoc/>
         </member>
-        <member name="P:VDS.RDF.Query.Builder.TriplePatternBuilder.Patterns">
-            <summary>
-            Gets the triple patterns.
-            </summary>
-        </member>
-        <member name="P:VDS.RDF.Query.Builder.TriplePatternBuilder.PatternItemFactory">
-            <summary>
-            Gets the pattern item factory.
-            </summary>
+        <member name="M:VDS.RDF.Query.Builder.TriplePatternBuilder.AddPattern(VDS.RDF.Query.Patterns.TriplePattern)">
+            <inheritdoc />
         </member>
         <member name="T:VDS.RDF.Query.Builder.TriplePatternObjectPart">
             <summary>
@@ -31687,6 +31812,15 @@
             <param name="y">Another Enumerable.</param>
             <returns></returns>
         </member>
+        <member name="M:VDS.RDF.Extensions.ChunkBy``1(System.Collections.Generic.IEnumerable{``0},System.Int32)">
+            <summary>
+            Splits a sequence into bounded chunks.
+            </summary>
+            <typeparam name="T">Type Parameter.</typeparam>
+            <param name="source">An Enumerable.</param>
+            <param name="size">Max Chunk Size.</param>
+            <returns></returns>
+        </member>
         <member name="M:VDS.RDF.Extensions.WithSubject(System.Collections.Generic.IEnumerable{VDS.RDF.Triple},VDS.RDF.INode)">
             <summary>
             Gets the Subset of Triples from an existing Enumerable that have a given Subject.
@@ -34088,7 +34222,7 @@
         </member>
         <member name="P:VDS.RDF.GraphPersistenceWrapper.SupportsTriplePersistence">
             <summary>
-            Used to indicate whether the persistence mechansim can persist batches of Triples.
+            Used to indicate whether the persistence mechanism can persist batches of Triples.
             </summary>
             <remarks>
             <para>
@@ -34235,7 +34369,7 @@
         </member>
         <member name="T:VDS.RDF.FileGraphPersistenceWrapper">
             <summary>
-            The File Graph Persistence Wrapper is a wrapper around antoher Graph that will be persisted to a file.
+            The File Graph Persistence Wrapper is a wrapper around another Graph that will be persisted to a file.
             </summary>
         </member>
         <member name="M:VDS.RDF.FileGraphPersistenceWrapper.#ctor(VDS.RDF.IGraph,System.String)">
@@ -34247,7 +34381,7 @@
         </member>
         <member name="M:VDS.RDF.FileGraphPersistenceWrapper.#ctor(System.String)">
             <summary>
-            Creates a new File Graph Persistence Wrapper around a new emtpy Graph.
+            Creates a new File Graph Persistence Wrapper around a new empty Graph.
             </summary>
             <param name="filename">File to persist to.</param>
             <remarks>
@@ -57564,7 +57698,7 @@
             </summary>
             <param name="t">Triple.</param>
         </member>
-        <member name="M:VDS.RDF.SubTreeIndexedTripleCollection.Index(VDS.RDF.INode,VDS.RDF.Triple,VDS.Common.Collections.MultiDictionary{VDS.RDF.INode,VDS.Common.Collections.MultiDictionary{VDS.RDF.Triple,System.Collections.Generic.List{VDS.RDF.Triple}}},System.Func{VDS.RDF.Triple,System.Int32},System.Collections.Generic.IComparer{VDS.RDF.Triple})">
+        <member name="M:VDS.RDF.SubTreeIndexedTripleCollection.Index(VDS.RDF.INode,VDS.RDF.Triple,VDS.Common.Collections.MultiDictionary{VDS.RDF.INode,VDS.Common.Collections.MultiDictionary{VDS.RDF.Triple,System.Collections.Generic.HashSet{VDS.RDF.Triple}}},System.Func{VDS.RDF.Triple,System.Int32},System.Collections.Generic.IComparer{VDS.RDF.Triple})">
             <summary>
             Helper for indexing triples.
             </summary>
@@ -57580,7 +57714,7 @@
             </summary>
             <param name="t">Triple.</param>
         </member>
-        <member name="M:VDS.RDF.SubTreeIndexedTripleCollection.Unindex(VDS.RDF.INode,VDS.RDF.Triple,VDS.Common.Collections.MultiDictionary{VDS.RDF.INode,VDS.Common.Collections.MultiDictionary{VDS.RDF.Triple,System.Collections.Generic.List{VDS.RDF.Triple}}})">
+        <member name="M:VDS.RDF.SubTreeIndexedTripleCollection.Unindex(VDS.RDF.INode,VDS.RDF.Triple,VDS.Common.Collections.MultiDictionary{VDS.RDF.INode,VDS.Common.Collections.MultiDictionary{VDS.RDF.Triple,System.Collections.Generic.HashSet{VDS.RDF.Triple}}})">
             <summary>
             Helper for unindexing triples.
             </summary>
@@ -58061,7 +58195,7 @@
             </summary>
             <param name="t">Triple.</param>
         </member>
-        <member name="M:VDS.RDF.TreeIndexedTripleCollection.IndexSimple(VDS.RDF.INode,VDS.RDF.Triple,VDS.Common.Collections.MultiDictionary{VDS.RDF.INode,System.Collections.Generic.List{VDS.RDF.Triple}})">
+        <member name="M:VDS.RDF.TreeIndexedTripleCollection.IndexSimple(VDS.RDF.INode,VDS.RDF.Triple,VDS.Common.Collections.MultiDictionary{VDS.RDF.INode,System.Collections.Generic.HashSet{VDS.RDF.Triple}})">
             <summary>
             Helper for indexing triples.
             </summary>
@@ -58069,7 +58203,7 @@
             <param name="t">Triple.</param>
             <param name="index">Index to insert into.</param>
         </member>
-        <member name="M:VDS.RDF.TreeIndexedTripleCollection.IndexCompound(VDS.RDF.Triple,VDS.Common.Collections.MultiDictionary{VDS.RDF.Triple,System.Collections.Generic.List{VDS.RDF.Triple}})">
+        <member name="M:VDS.RDF.TreeIndexedTripleCollection.IndexCompound(VDS.RDF.Triple,VDS.Common.Collections.MultiDictionary{VDS.RDF.Triple,System.Collections.Generic.HashSet{VDS.RDF.Triple}})">
             <summary>
             Helper for indexing triples.
             </summary>
@@ -58082,7 +58216,7 @@
             </summary>
             <param name="t">Triple.</param>
         </member>
-        <member name="M:VDS.RDF.TreeIndexedTripleCollection.UnindexSimple(VDS.RDF.INode,VDS.RDF.Triple,VDS.Common.Collections.MultiDictionary{VDS.RDF.INode,System.Collections.Generic.List{VDS.RDF.Triple}})">
+        <member name="M:VDS.RDF.TreeIndexedTripleCollection.UnindexSimple(VDS.RDF.INode,VDS.RDF.Triple,VDS.Common.Collections.MultiDictionary{VDS.RDF.INode,System.Collections.Generic.HashSet{VDS.RDF.Triple}})">
             <summary>
             Helper for unindexing triples.
             </summary>
@@ -58090,7 +58224,7 @@
             <param name="t">Triple.</param>
             <param name="index">Index to remove from.</param>
         </member>
-        <member name="M:VDS.RDF.TreeIndexedTripleCollection.UnindexCompound(VDS.RDF.Triple,VDS.Common.Collections.MultiDictionary{VDS.RDF.Triple,System.Collections.Generic.List{VDS.RDF.Triple}})">
+        <member name="M:VDS.RDF.TreeIndexedTripleCollection.UnindexCompound(VDS.RDF.Triple,VDS.Common.Collections.MultiDictionary{VDS.RDF.Triple,System.Collections.Generic.HashSet{VDS.RDF.Triple}})">
             <summary>
             Helper for unindexing triples.
             </summary>
@@ -75480,11 +75614,6 @@
             </summary>
             <remarks>The value may be a relative or an absolute IRI or null.</remarks>
         </member>
-        <member name="P:VDS.RDF.JsonLd.JsonLdContext.HasBase">
-            <summary>
-            Returns true if the Base property of this context has been explicitly set.
-            </summary>
-        </member>
         <member name="P:VDS.RDF.JsonLd.JsonLdContext.OriginalBase">
             <summary>
             Get the base IRI that this context was originally created with.
@@ -75537,7 +75666,7 @@
             <summary>
             Remove the base IRI from this context.
             </summary>
-            <remarks>Sets <see cref="P:VDS.RDF.JsonLd.JsonLdContext.Base"/> to null and <see cref="P:VDS.RDF.JsonLd.JsonLdContext.HasBase"/> to false.</remarks>
+            <remarks>Sets <see cref="P:VDS.RDF.JsonLd.JsonLdContext.Base"/> to null and <see cref="!:HasBase"/> to false.</remarks>
         </member>
         <member name="M:VDS.RDF.JsonLd.JsonLdContext.Clone">
             <summary>
@@ -76495,6 +76624,11 @@
         <member name="T:VDS.RDF.JsonLd.Processors.JsonLdUtils">
             <summary>
             Various utility methods used by the JSON-LD processor and algorithm implementations
+            </summary>
+        </member>
+        <member name="F:VDS.RDF.JsonLd.Processors.JsonLdUtils.KeywordSet">
+            <summary>
+            Provides a hashed index of JSON-LD keywords for faster resolution in the parser.
             </summary>
         </member>
         <member name="M:VDS.RDF.JsonLd.Processors.JsonLdUtils.EnsureArray(Newtonsoft.Json.Linq.JToken)">
