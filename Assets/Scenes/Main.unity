@@ -1639,9 +1639,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   languageCode: en
-  initialSparqlQueryString: construct {<http://www.semanticweb.org/alexander/ontologies/2021/6/untitled-ontology-479#child>
-    ?p ?o. } where { <http://www.semanticweb.org/alexander/ontologies/2021/6/untitled-ontology-479#child>
-    ?p ?o. } LIMIT 25
+  initialSparqlQueryString: construct {<http://dbpedia.org/resource/Biobank> ?p ?o.
+    } where { <http://dbpedia.org/resource/Biobank> ?p ?o. } LIMIT 25
   mainGraph: {fileID: 0}
   graphPrefab: {fileID: 280358173420448884, guid: 4b47d999b2a37494baf875b5db9ccd16, type: 3}
 --- !u!114 &1503421654
@@ -2140,6 +2139,10 @@ PrefabInstance:
     - target: {fileID: 4755552072976458, guid: ab3ba7ff6ff00b24c8e78d1c15757f43, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114197126443554526, guid: ab3ba7ff6ff00b24c8e78d1c15757f43, type: 3}
+      propertyPath: SparqlEndpoint
+      value: http://dbpedia.org/sparql
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ab3ba7ff6ff00b24c8e78d1c15757f43, type: 3}
