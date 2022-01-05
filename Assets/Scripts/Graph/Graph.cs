@@ -29,14 +29,8 @@ public class Graph : MonoBehaviour
   public VariableNameManager variableNameManager;
   public List<Edge> selection = new List<Edge>();
 
-  public void QuerySimilarPatterns()
+  public void QuerySimilarWithTriples(string triples, Vector3 position, Quaternion rotation)
   {
-    string triples = "";
-    foreach (Edge edge in selection)
-    {
-      triples += edge.GetQueryString();
-    }
-
     string query = $@"
             construct {{
                 {triples} 
@@ -44,14 +38,51 @@ public class Graph : MonoBehaviour
                 {triples} 
             }} LIMIT " + expandGraphAddLimit;
 
-    // TODO: create a set of multple graphs
     Graph newGraph = Main.instance.CreateGraph();
-    newGraph.transform.position = transform.position + new Vector3(0, 0, 2);
+    newGraph.transform.position = position;
+    newGraph.transform.rotation = rotation;
     newGraph.SendQuery(query);
     newGraph.gameObject.GetComponent<FruchtermanReingold>().enabled = false;
     newGraph.gameObject.GetComponent<SpatialGrid2D>().enabled = true;
     newGraph.layout = newGraph.gameObject.GetComponent<SpatialGrid2D>();
     newGraph.boundingSphere.isFlat = true;
+  }
+
+  public void QuerySimilarPatternsSingleLayer()
+  {
+    string triples = "";
+    foreach (Edge edge in selection)
+    {
+      triples += edge.GetQueryString();
+    }
+
+    QuerySimilarWithTriples(triples, new Vector3(0, 0, 2), Quaternion.identity);
+  }
+
+  public void QuerySimilarPatternsMultipleLayers()
+  {
+    string triples = "";
+    foreach (Edge edge in selection)
+    {
+      triples += edge.GetQueryString();
+    }
+
+    SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new System.Uri(Settings.Instance.SparqlEndpoint), BaseURI);
+    lastResults = endpoint.QueryWithResultSet(
+        "select * where { " + triples + " } LIMIT 50"
+        );
+
+    Vector3 offset = new Vector3(0, 0, 2);
+    foreach (SparqlResult result in lastResults)
+    {
+      string constructQuery = triples;
+      foreach (var row in result)
+      {
+        constructQuery = constructQuery.Replace("?" + row.Key, "<" + row.Value + ">");
+      }
+      offset += new Vector3(0, 0, 1);
+      QuerySimilarWithTriples(constructQuery, offset, Quaternion.identity);
+    }
   }
 
   public void AddToSelection(Edge toAdd)
