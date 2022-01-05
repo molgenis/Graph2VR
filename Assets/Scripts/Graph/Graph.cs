@@ -29,7 +29,7 @@ public class Graph : MonoBehaviour
   public VariableNameManager variableNameManager;
   public List<Edge> selection = new List<Edge>();
 
-  public void QuerySimilarWithTriples(string triples, Vector3 position, Quaternion rotation)
+  public Graph QuerySimilarWithTriples(string triples, Vector3 position, Quaternion rotation)
   {
     string query = $@"
             construct {{
@@ -42,10 +42,7 @@ public class Graph : MonoBehaviour
     newGraph.transform.position = position;
     newGraph.transform.rotation = rotation;
     newGraph.SendQuery(query);
-    newGraph.gameObject.GetComponent<FruchtermanReingold>().enabled = false;
-    newGraph.gameObject.GetComponent<SpatialGrid2D>().enabled = true;
-    newGraph.layout = newGraph.gameObject.GetComponent<SpatialGrid2D>();
-    newGraph.boundingSphere.isFlat = true;
+    return newGraph;
   }
 
   public void QuerySimilarPatternsSingleLayer()
@@ -72,7 +69,8 @@ public class Graph : MonoBehaviour
         "select * where { " + triples + " } LIMIT 50"
         );
 
-    Vector3 offset = new Vector3(0, 0, 2);
+    //    this.boundingSphere.w
+    Vector3 offset = this.boundingSphere.transform.position + new Vector3(0, 0, this.boundingSphere.size);
     foreach (SparqlResult result in lastResults)
     {
       string constructQuery = triples;
@@ -81,7 +79,18 @@ public class Graph : MonoBehaviour
         constructQuery = constructQuery.Replace("?" + row.Key, "<" + row.Value + ">");
       }
       offset += new Vector3(0, 0, 1);
-      QuerySimilarWithTriples(constructQuery, offset, Quaternion.identity);
+
+      Graph newGraph = QuerySimilarWithTriples(constructQuery, offset, Quaternion.identity);
+
+      newGraph.gameObject.GetComponent<FruchtermanReingold>().enabled = false;
+
+      SemanticPlanes planes = newGraph.gameObject.GetComponent<SemanticPlanes>();
+      planes.parentGraph = this;
+      planes.variableNameLookup = lastResults;
+      planes.enabled = true;
+      newGraph.layout = planes;
+      newGraph.boundingSphere.isFlat = true;
+      planes.CalculateLayout();
     }
   }
 

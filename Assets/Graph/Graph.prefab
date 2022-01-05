@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5025660550470303715}
   - component: {fileID: 5344976936667274483}
   - component: {fileID: 6731151899422153761}
+  - component: {fileID: 5505322461697077691}
   m_Layer: 0
   m_Name: Graph
   m_TagString: Graph
@@ -85,6 +86,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1724d9d17ea0e8142834c5f02bd090a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  parentGraph: {fileID: 0}
   Temperature: 0
   C_CONSTANT: 1
   AREA_CONSTANT: 1
@@ -100,6 +102,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4df08d377962781449a0b5b495bf3670, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  parentGraph: {fileID: 0}
   pushDistance: 0.5
   pullDistance: 1
   pushForce: 1
@@ -111,6 +114,19 @@ MonoBehaviour:
   bottom: 0
   drag: 0.5
   effectPower: 1
+--- !u!114 &5505322461697077691
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 280358173420448884}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19fd765c9fc818e4dab6c257b7ce5374, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parentGraph: {fileID: 0}
 --- !u!1 &2456422186608186236
 GameObject:
   m_ObjectHideFlags: 0
@@ -207,3 +223,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   graph: {fileID: 662167465230485843}
   size: 1
+  isFlat: 0
