@@ -45,7 +45,8 @@ public class NodeInteraction : MonoBehaviour, IPointerEnterHandler, IPointerExit
     node.IsControllerGrabbed = false;
 
     this.transform.SetParent(originalParent, true);
-    graph.layout.CalculateLayout();
+    // NOTE: make some button to trigger the solver again. We dont always want it to solve. Sometimes we want the move the nodes ourself
+    // graph.layout.CalculateLayout(); 
   }
 
   void IPointerEnterHandler.OnPointerEnter(PointerEventData eventData)

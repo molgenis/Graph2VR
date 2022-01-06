@@ -52,7 +52,6 @@ public class Graph : MonoBehaviour
     {
       triples += edge.GetQueryString();
     }
-
     QuerySimilarWithTriples(triples, new Vector3(0, 0, 2), Quaternion.identity);
   }
 
@@ -64,13 +63,17 @@ public class Graph : MonoBehaviour
       triples += edge.GetQueryString();
     }
 
+    // FIXME: test code
+    // triples = " ?variable1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?variable2 .";
+    // triples += "?variable1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.semanticweb.org/alexander/ontologies/2021/6/untitled-ontology-479#Study> .";
+
     SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new System.Uri(Settings.Instance.SparqlEndpoint), BaseURI);
     lastResults = endpoint.QueryWithResultSet(
-        "select * where { " + triples + " } LIMIT 50"
+        "select distinct * where { " + triples + " } LIMIT 50"
         );
 
-    //    this.boundingSphere.w
-    Vector3 offset = this.boundingSphere.transform.position + new Vector3(0, 0, this.boundingSphere.size);
+    Quaternion rotation = Camera.main.transform.rotation;
+    Vector3 offset = transform.position + (rotation * new Vector3(0, 0, 1 + this.boundingSphere.size));
     foreach (SparqlResult result in lastResults)
     {
       string constructQuery = triples;
@@ -78,19 +81,22 @@ public class Graph : MonoBehaviour
       {
         constructQuery = constructQuery.Replace("?" + row.Key, "<" + row.Value + ">");
       }
-      offset += new Vector3(0, 0, 1);
 
       Graph newGraph = QuerySimilarWithTriples(constructQuery, offset, Quaternion.identity);
-
-      newGraph.gameObject.GetComponent<FruchtermanReingold>().enabled = false;
-
-      SemanticPlanes planes = newGraph.gameObject.GetComponent<SemanticPlanes>();
-      planes.parentGraph = this;
-      planes.variableNameLookup = lastResults;
-      planes.enabled = true;
-      newGraph.layout = planes;
-      newGraph.boundingSphere.isFlat = true;
-      planes.CalculateLayout();
+      if (newGraph.nodeList.Count > 0)
+      {
+        offset += rotation * new Vector3(0, 0, 0.5f);
+        newGraph.gameObject.GetComponent<FruchtermanReingold>().enabled = false;
+        SemanticPlanes planes = newGraph.gameObject.GetComponent<SemanticPlanes>();
+        planes.lookDirection = rotation;
+        planes.parentGraph = this;
+        planes.variableNameLookup = lastResults;
+        planes.enabled = true;
+        newGraph.layout = planes;
+        newGraph.boundingSphere.isFlat = true;
+        planes.CalculateLayout();
+        newGraph.boundingSphere.GetComponent<Renderer>().forceRenderingOff = true;
+      }
     }
   }
 

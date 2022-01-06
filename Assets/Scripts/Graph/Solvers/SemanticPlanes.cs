@@ -6,9 +6,11 @@ using VDS.RDF.Query;
 public class SemanticPlanes : BaseLayoutAlgorithm
 {
   public SparqlResultSet variableNameLookup;
+  public Quaternion lookDirection = Quaternion.identity;
   public override void CalculateLayout()
   {
-    Debug.Log("SemanticPlanes CalculateLayout");
+    Vector3 normal = lookDirection * Vector3.forward;
+    Plane plane = new Plane(normal, transform.position);
 
     // Selected edges is main graph
     Dictionary<string, Vector3> uriToPosition = new Dictionary<string, Vector3>();
@@ -16,8 +18,10 @@ public class SemanticPlanes : BaseLayoutAlgorithm
     {
       string subjectName = edge.displaySubject.IsVariable ? edge.displaySubject.GetLabel() : edge.displaySubject.uri;
       string objectName = edge.displayObject.IsVariable ? edge.displayObject.GetLabel() : edge.displayObject.uri;
-      uriToPosition.Add(subjectName, edge.displaySubject.transform.localPosition);
-      uriToPosition.Add(objectName, edge.displayObject.transform.localPosition);
+      if (!uriToPosition.ContainsKey(subjectName))
+        uriToPosition.Add(subjectName, edge.displaySubject.transform.localPosition);
+      if (!uriToPosition.ContainsKey(objectName))
+        uriToPosition.Add(objectName, edge.displayObject.transform.localPosition);
     }
 
     // Set positions we know
@@ -57,7 +61,7 @@ public class SemanticPlanes : BaseLayoutAlgorithm
       }
 
       // flatten graph
-      node.transform.localPosition = new Vector3(node.transform.localPosition.x, node.transform.localPosition.y, 0);
+      node.transform.position = plane.ClosestPointOnPlane(node.transform.position);
     }
 
   }
@@ -67,3 +71,4 @@ public class SemanticPlanes : BaseLayoutAlgorithm
 
   }
 }
+
