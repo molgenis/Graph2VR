@@ -7,6 +7,17 @@ public class SemanticPlanes : BaseLayoutAlgorithm
 {
   public SparqlResultSet variableNameLookup;
   public Quaternion lookDirection = Quaternion.identity;
+
+  public string GetIdentifier(Node node)
+  {
+    string identifier = node.uri;
+    if (node.IsVariable || node.uri == "" || node.uri == null)
+    {
+      identifier = node.GetLabel();
+    }
+    return identifier;
+  }
+
   public override void CalculateLayout()
   {
     Vector3 normal = lookDirection * Vector3.forward;
@@ -16,8 +27,9 @@ public class SemanticPlanes : BaseLayoutAlgorithm
     Dictionary<string, Vector3> uriToPosition = new Dictionary<string, Vector3>();
     foreach (Edge edge in parentGraph.selection)
     {
-      string subjectName = edge.displaySubject.IsVariable ? edge.displaySubject.GetLabel() : edge.displaySubject.uri;
-      string objectName = edge.displayObject.IsVariable ? edge.displayObject.GetLabel() : edge.displayObject.uri;
+      string subjectName = GetIdentifier(edge.displaySubject);
+      string objectName = GetIdentifier(edge.displayObject);
+
       if (!uriToPosition.ContainsKey(subjectName))
         uriToPosition.Add(subjectName, edge.displaySubject.transform.localPosition);
       if (!uriToPosition.ContainsKey(objectName))

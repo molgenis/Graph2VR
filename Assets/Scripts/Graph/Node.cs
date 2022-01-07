@@ -207,7 +207,7 @@ public class Node : MonoBehaviour
   {
     isVariable = true;
 
-    string newLabel = graph.variableNameManager.GetVariableName(uri);
+    string newLabel = graph.variableNameManager.GetVariableName(graphNode);
     SetLabel(newLabel);
     UpdateColor();
   }
@@ -276,15 +276,8 @@ public class Node : MonoBehaviour
     }
     else
     {
-      switch (graphNode.NodeType)
-      {
-        case NodeType.Literal:
-          return "\"" + label + "\"";
-        case NodeType.Uri:
-          return "<" + GetURIAsString() + ">";
-      }
+      return graph.RealNodeValue(graphNode);
     }
-    return "\"" + label + "\"";
   }
 
   private void UpdateDisplay()

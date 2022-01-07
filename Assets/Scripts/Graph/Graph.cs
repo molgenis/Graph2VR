@@ -55,6 +55,27 @@ public class Graph : MonoBehaviour
     QuerySimilarWithTriples(triples, new Vector3(0, 0, 2), Quaternion.identity);
   }
 
+  public string RealNodeValue(INode node)
+  {
+    switch (node.NodeType)
+    {
+      case NodeType.GraphLiteral:
+      case NodeType.Literal:
+        string value = (node as ILiteralNode).Value;
+        string dataType = (node as ILiteralNode).DataType?.ToString();
+        if (dataType == "" || dataType == null) return $"\"{value}\"";
+        else return $"\"{value}\"^^<{dataType}>";
+      case NodeType.Uri:
+        return $"<{(node as IUriNode).Uri.ToString()}>";
+      case NodeType.Blank:
+        return "_:blankNode";
+      // return (node as IBlankNode).InternalID;
+      case NodeType.Variable:
+        return (node as IVariableNode).VariableName; // TODO: do we need a '?' here?
+    }
+    return "";
+  }
+
   public void QuerySimilarPatternsMultipleLayers()
   {
     string triples = "";
@@ -68,6 +89,7 @@ public class Graph : MonoBehaviour
     // triples += "?variable1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.semanticweb.org/alexander/ontologies/2021/6/untitled-ontology-479#Study> .";
 
     SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new System.Uri(Settings.Instance.SparqlEndpoint), BaseURI);
+
     lastResults = endpoint.QueryWithResultSet(
         "select distinct * where { " + triples + " } LIMIT 50"
         );
@@ -77,9 +99,9 @@ public class Graph : MonoBehaviour
     foreach (SparqlResult result in lastResults)
     {
       string constructQuery = triples;
-      foreach (var row in result)
+      foreach (var node in result)
       {
-        constructQuery = constructQuery.Replace("?" + row.Key, "<" + row.Value + ">");
+        constructQuery = constructQuery.Replace("?" + node.Key, RealNodeValue(node.Value));
       }
 
       Graph newGraph = QuerySimilarWithTriples(constructQuery, offset, Quaternion.identity);

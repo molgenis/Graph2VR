@@ -34,41 +34,51 @@ public class Edge : MonoBehaviour
   private bool isControllerHovered = false;
   private bool isControllerGrabbed = false;
 
-  public bool IsVariable {
+  public bool IsVariable
+  {
     get => isVariable;
-    set {
+    set
+    {
       isVariable = value;
       UpdateColor();
     }
   }
 
-  public bool IsSelected {
+  public bool IsSelected
+  {
     get => isSelected;
-    set {
+    set
+    {
       isSelected = value;
       UpdateColor();
     }
   }
 
-  public bool IsPointerHovered {
+  public bool IsPointerHovered
+  {
     get => isPointerHovered;
-    set {
+    set
+    {
       isPointerHovered = value;
       UpdateColor();
     }
   }
 
-  public bool IsControllerHovered {
+  public bool IsControllerHovered
+  {
     get => isControllerHovered;
-    set {
+    set
+    {
       isControllerHovered = value;
       UpdateColor();
     }
   }
 
-  public bool IsControllerGrabbed {
+  public bool IsControllerGrabbed
+  {
     get => isControllerGrabbed;
-    set {
+    set
+    {
       isControllerGrabbed = value;
       UpdateColor();
     }
@@ -93,9 +103,12 @@ public class Edge : MonoBehaviour
     textBack = transform.Find("BackText").GetComponent<TMPro.TextMeshPro>();
 
     string qname = graph.GetShortName(uri);
-    if (qname != "") {
+    if (qname != "")
+    {
       textShort = textLong = qname;
-    } else {
+    }
+    else
+    {
       textShort = Utils.GetShortLabelFromUri(uri);
       textLong = uri;
     }
@@ -107,22 +120,32 @@ public class Edge : MonoBehaviour
 
   private void UpdateColor()
   {
-    if (IsControllerHovered || IsPointerHovered) {
+    if (IsControllerHovered || IsPointerHovered)
+    {
       SetColor(ColorSettings.instance.edgeHoverColor);
-    } else if (IsControllerGrabbed) {
+    }
+    else if (IsControllerGrabbed)
+    {
       SetColor(ColorSettings.instance.edgeGrabbedColor);
-    } else if (IsSelected) {
+    }
+    else if (IsSelected)
+    {
       SetColor(ColorSettings.instance.edgeSelectedColor);
-    } else if (IsVariable) {
+    }
+    else if (IsVariable)
+    {
       SetColor(ColorSettings.instance.variableColor);
-    } else {
+    }
+    else
+    {
       SetColor(ColorSettings.instance.defaultEdgeColor);
     }
   }
 
   private void Update()
   {
-    if (displaySubject == null || displayObject == null) {
+    if (displaySubject == null || displayObject == null)
+    {
       return;
     }
     UpdatePosition();
@@ -134,7 +157,8 @@ public class Edge : MonoBehaviour
     displaySubject.Select();
     displayObject.Select();
 
-    if (graphSubject != null && graphObject != null) {
+    if (graphSubject != null && graphObject != null)
+    {
       graph.AddToSelection(this);
     }
   }
@@ -145,8 +169,9 @@ public class Edge : MonoBehaviour
     displaySubject.Deselect();
     displayObject.Deselect();
 
-    if (graphSubject != null && graphObject != null) {
-      graph.AddToSelection(this);
+    if (graphSubject != null && graphObject != null)
+    {
+      graph.RemoveFromSelection(this);
     }
   }
 
@@ -158,7 +183,7 @@ public class Edge : MonoBehaviour
 
   private IVariableNode GetVariableInode()
   {
-    variableName = graph.variableNameManager.GetVariableName(uri);
+    variableName = graph.variableNameManager.GetVariableName(graphPredicate);
     return nodeFactory.CreateVariableNode(variableName);
   }
 
@@ -175,9 +200,12 @@ public class Edge : MonoBehaviour
 
   public string GetQueryLabel()
   {
-    if (IsVariable) {
+    if (IsVariable)
+    {
       return variableName;
-    } else {
+    }
+    else
+    {
       return "<" + uri + ">";
     }
   }
@@ -223,23 +251,30 @@ public class Edge : MonoBehaviour
     collider.height = distance * 0.85f;
 
     // Update text
-    if (IsVariable) {
+    if (IsVariable)
+    {
       textFront.text = textBack.text = variableName;
-    } else if (IsPointerHovered || IsControllerHovered || IsControllerGrabbed) {
+    }
+    else if (IsPointerHovered || IsControllerHovered || IsControllerGrabbed)
+    {
       textFront.text = textBack.text = textLong;
-    } else {
+    }
+    else
+    {
       textFront.text = textBack.text = textShort;
     }
   }
 
   private Vector2 CalculateAngles(Vector3 fromPosition, Vector3 toPosition, bool isFront)
   {
-    if (Vector3.Distance(fromPosition, toPosition) == 0) {
+    if (Vector3.Distance(fromPosition, toPosition) == 0)
+    {
       return Vector2.zero;
     }
     float height = (fromPosition.y - toPosition.y);
     float angle = -90;
-    if (isFront) {
+    if (isFront)
+    {
       height = (toPosition.y - fromPosition.y);
       angle = 90;
     }
