@@ -29,6 +29,11 @@ public class Graph : MonoBehaviour
   public VariableNameManager variableNameManager;
   public List<Edge> selection = new List<Edge>();
 
+
+  public List<Graph> subGraphs = new List<Graph>();
+  public Graph parentGraph = null;
+  public string creationQuery = "";
+
   public Graph QuerySimilarWithTriples(string triples, Vector3 position, Quaternion rotation)
   {
     string query = $@"
@@ -39,6 +44,8 @@ public class Graph : MonoBehaviour
             }} LIMIT " + expandGraphAddLimit;
 
     Graph newGraph = Main.instance.CreateGraph();
+    newGraph.parentGraph = this;
+    subGraphs.Add(newGraph);
     newGraph.transform.position = position;
     newGraph.transform.rotation = rotation;
     newGraph.SendQuery(query);
@@ -89,10 +96,8 @@ public class Graph : MonoBehaviour
     // triples += "?variable1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.semanticweb.org/alexander/ontologies/2021/6/untitled-ontology-479#Study> .";
 
     SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new System.Uri(Settings.Instance.SparqlEndpoint), BaseURI);
-
-    lastResults = endpoint.QueryWithResultSet(
-        "select distinct * where { " + triples + " } LIMIT 50"
-        );
+    string query = "select distinct * where { " + triples + " } LIMIT 50";
+    lastResults = endpoint.QueryWithResultSet(query);
 
     Quaternion rotation = Camera.main.transform.rotation;
     Vector3 offset = transform.position + (rotation * new Vector3(0, 0, 1 + this.boundingSphere.size));
@@ -107,6 +112,7 @@ public class Graph : MonoBehaviour
       Graph newGraph = QuerySimilarWithTriples(constructQuery, offset, Quaternion.identity);
       if (newGraph.nodeList.Count > 0)
       {
+        newGraph.creationQuery = query;
         offset += rotation * new Vector3(0, 0, 0.5f);
         newGraph.gameObject.GetComponent<FruchtermanReingold>().enabled = false;
         SemanticPlanes planes = newGraph.gameObject.GetComponent<SemanticPlanes>();
@@ -427,14 +433,22 @@ public class Graph : MonoBehaviour
     Clear();
     // load sparql query
     SparqlQueryParser parser = new SparqlQueryParser();
-    SparqlQuery sparqlQuery = parser.ParseFromString(query);
+    SparqlQuery sparqlQuery = null;
+    try
+    {
+      sparqlQuery = parser.ParseFromString(query);
 
-    // load pattern
-    GraphPattern graphPattern = sparqlQuery.RootGraphPattern;
-    endpoint = new SparqlRemoteEndpoint(new System.Uri(Settings.Instance.SparqlEndpoint), BaseURI);
-
+      // load pattern
+      GraphPattern graphPattern = sparqlQuery.RootGraphPattern;
+      endpoint = new SparqlRemoteEndpoint(new System.Uri(Settings.Instance.SparqlEndpoint), BaseURI);
+    }
+    catch (RdfParseException error)
+    {
+      Debug.Log("Error parsing query");
+      Debug.Log(error);
+    }
     // Execute query
-    if (sparqlQuery.QueryType == SparqlQueryType.Construct)
+    if (sparqlQuery != null && sparqlQuery.QueryType == SparqlQueryType.Construct)
     {
       try
       {
@@ -444,7 +458,7 @@ public class Graph : MonoBehaviour
         currentGraph.TripleAsserted += CurrentGraph_TripleAsserted;
         currentGraph.TripleRetracted += CurrentGraph_TripleRetracted;
       }
-      catch (VDS.RDF.Query.RdfQueryException error)
+      catch (RdfQueryException error)
       {
         Debug.Log("No database connection found");
         Debug.Log(error);
@@ -744,4 +758,43 @@ public class Graph : MonoBehaviour
       Destroy(edge.gameObject);
     }
   }
+
+  public void Remove()
+  {
+    if (boundingSphere != null) Destroy(boundingSphere.gameObject);
+    if (gameObject != null) Destroy(gameObject);
+  }
+
+  public void RemoveSubGraphs()
+  {
+    foreach (Graph graph in subGraphs)
+    {
+      if (graph != null) graph.Remove();
+    }
+    subGraphs.Clear();
+  }
+
+  public void RemoveGraphsOfSameQuery()
+  {
+    if (parentGraph != null)
+    {
+      foreach (Graph graph in parentGraph.subGraphs)
+      {
+        if (graph != null && graph.creationQuery == creationQuery) graph.Remove();
+      }
+    }
+  }
+
+  public void SwitchLayout<T>()
+  {
+    foreach (BaseLayoutAlgorithm baseLayout in GetComponents<BaseLayoutAlgorithm>())
+    {
+      baseLayout.enabled = false;
+    }
+
+    BaseLayoutAlgorithm activeLayout = GetComponent<T>() as BaseLayoutAlgorithm;
+    layout = activeLayout;
+    activeLayout.enabled = true;
+  }
+
 }
