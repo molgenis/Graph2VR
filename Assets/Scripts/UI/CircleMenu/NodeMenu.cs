@@ -37,10 +37,9 @@ public class NodeMenu : MonoBehaviour
         string label = item.Value.Item1;
         if (label == "")
         {
-          label = item.Key;
+          label = graph.GetShortName(item.Key) != "" ? graph.GetShortName(item.Key) : item.Key;
           color = Color.gray * 0.75f;
         }
-        // TODO: add qname als alt.
 
         cm.AddButton(label, color, () =>
         {
@@ -57,10 +56,9 @@ public class NodeMenu : MonoBehaviour
         string label = item.Value.Item1;
         if (label == "")
         {
-          label = item.Key;
+          label = graph.GetShortName(item.Key) != "" ? graph.GetShortName(item.Key) : item.Key;
           color = Color.gray * 0.75f;
         }
-        // TODO: add qname als alt.
 
         cm.AddButton(label, color, () =>
         {

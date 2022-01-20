@@ -33,6 +33,7 @@ public class Edge : MonoBehaviour
   private bool isPointerHovered = false;
   private bool isControllerHovered = false;
   private bool isControllerGrabbed = false;
+  private bool isSubclassOfRelation = false;
 
   public bool IsVariable
   {
@@ -83,6 +84,16 @@ public class Edge : MonoBehaviour
       UpdateColor();
     }
   }
+
+  public bool IsSubclassOfRelation
+   {
+     get => uri.Equals("http://www.w3.org/2000/01/rdf-schema#subClassOf", System.StringComparison.OrdinalIgnoreCase);
+     set
+     {
+       isSubclassOfRelation = uri.Equals("http://www.w3.org/2000/01/rdf-schema#subClassOf", System.StringComparison.OrdinalIgnoreCase);
+       UpdateColor();
+     }
+   }
 
   private void Awake()
   {
@@ -135,6 +146,10 @@ public class Edge : MonoBehaviour
     else if (IsVariable)
     {
       SetColor(ColorSettings.instance.variableColor);
+    }
+    else if (IsSubclassOfRelation)
+    {
+      SetColor(ColorSettings.instance.defaultEdgeColor, ColorSettings.instance.arrowheadSubclassOfColor);
     }
     else
     {
@@ -219,6 +234,12 @@ public class Edge : MonoBehaviour
   {
     lineRenderer.material.color = color;
     arrow.GetComponent<Renderer>().material.color = color;
+  }
+
+  public void SetColor(Color lineRenderercolor, Color Arrowheadcolor)
+  {
+    lineRenderer.material.color = lineRenderercolor;
+    arrow.GetComponent<Renderer>().material.color = Arrowheadcolor;
   }
 
   private void UpdatePosition()
