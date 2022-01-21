@@ -265,99 +265,6 @@ public class NodeMenu : MonoBehaviour
     }
 
     cm.ReBuild();
-
-
-    /*
-    if (node.IsVariable)
-    {
-      Close();
-      controlerModel.SetActive(false);
-      cm.AddButton("Undo conversion", Color.blue / 2, () =>
-      {
-        node.UndoConversion();
-        PopulateNode(input);
-      });
-      cm.AddButton("Rename", Color.red / 2, () => { KeyboardHandler.instance.Open(node); });
-      cm.ReBuild();
-    }
-    else
-    {
-      GetPredicats();
-      Close();
-      controlerModel.SetActive(false);
-
-      if (set != null)
-      {
-        if (isOutgoingLink)
-        {
-          cm.AddButton("List incoming predicts", Color.blue / 2, () =>
-          {
-            isOutgoingLink = false;
-            PopulateNode(input);
-          });
-        }
-        else
-        {
-          cm.AddButton("List outgoing predicts", Color.blue / 2, () =>
-          {
-            isOutgoingLink = true;
-            PopulateNode(input);
-          });
-        }
-
-        foreach (KeyValuePair<string, System.Tuple<string, int>> item in set)
-        {
-          Color color = Color.gray;
-          string label = item.Value.Item1;
-          if (label == "")
-          {
-            label = item.Key;
-            color = Color.gray * 0.75f;
-          }
-          // TODO: add qname als alt.
-
-          cm.AddButton(label, color, () =>
-          {
-            graph.ExpandGraph(node, item.Key, isOutgoingLink);
-            Close();
-          }, item.Value.Item2);
-        }
-      }
-
-      if (!node.IsVariable)
-      {
-        cm.AddButton("Convert to Variable", Color.blue / 2, () =>
-        {
-          node.MakeVariable();
-          PopulateNode(input);
-        });
-      }
-
-      if (node.uri != "")
-      {
-        cm.AddButton("Collapse Incoming", new Color(1, 0.5f, 0.5f) / 2, () =>
-        {
-          graph.CollapseIncomingGraph(node);
-        });
-        cm.AddButton("Collapse Outgoing", new Color(1, 0.5f, 0.5f) / 2, () =>
-        {
-          graph.CollapseOutgoingGraph(node);
-        });
-        cm.AddButton("Collapse All", new Color(1, 0.5f, 0.5f) / 2, () =>
-        {
-          graph.CollapseGraph(node);
-        });
-      }
-
-      cm.AddButton("Close", Color.red / 2, () =>
-      {
-        graph.RemoveNode(node);
-        Close();
-      });
-
-      cm.ReBuild();
-    }
-    */
   }
 
   public void PopulateEdge(Object input)
@@ -492,6 +399,18 @@ public class NodeMenu : MonoBehaviour
       cm.Close();
       KeyboardHandler.instance.Close();
       controlerModel.SetActive(true);
+    }
+  }
+
+  public void Clear()
+  {
+    node = null;
+    subMenu = "";
+    edge = null;
+    graph = null;
+    if (cm != null)
+    {
+      cm.Close();
     }
   }
 }

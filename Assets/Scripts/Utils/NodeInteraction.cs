@@ -19,6 +19,7 @@ public class NodeInteraction : MonoBehaviour, IPointerEnterHandler, IPointerExit
   public void OnPointerClick(PointerEventData eventData)
   {
     Node node = GetComponent<Node>();
+    GameObject.FindGameObjectWithTag("LeftController").BroadcastMessage("Clear", SendMessageOptions.DontRequireReceiver);
     GameObject.FindGameObjectWithTag("LeftController").BroadcastMessage("PopulateNode", node, SendMessageOptions.DontRequireReceiver);
   }
 

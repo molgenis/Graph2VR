@@ -15,6 +15,7 @@ public class EdgeInteraction : MonoBehaviour, IPointerEnterHandler, IPointerExit
   public void OnPointerClick(PointerEventData eventData)
   {
     Edge edge = GetComponent<Edge>();
+    GameObject.FindGameObjectWithTag("LeftController").BroadcastMessage("Clear", SendMessageOptions.DontRequireReceiver);
     GameObject.FindGameObjectWithTag("LeftController").BroadcastMessage("PopulateEdge", edge, SendMessageOptions.DontRequireReceiver);
   }
 

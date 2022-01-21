@@ -87,6 +87,7 @@ public class CircleMenu : MonoBehaviour
 
     buttons.Clear();
     isBuild = false;
+    sliderValue = 0;
   }
 
   public float GetMenuAngle()
