@@ -5,7 +5,6 @@ using Valve.VR;
 
 public class CircleMenuSliderNob : MonoBehaviour
 {
-  private SteamVR_Action_Boolean pinchAction = SteamVR_Input.GetAction<SteamVR_Action_Boolean>("GrabPinch");
   private SteamVR_Action_Boolean gripAction = SteamVR_Input.GetAction<SteamVR_Action_Boolean>("GrabGrip");
 
   GameObject controler;
@@ -15,12 +14,11 @@ public class CircleMenuSliderNob : MonoBehaviour
   {
     this.menu = menu;
     controler = GameObject.FindGameObjectWithTag("RightControler");
-    pinchAction[SteamVR_Input_Sources.RightHand].onChange += SteamVR_Behaviour_GrabOrPinch_OnChange;
-    gripAction[SteamVR_Input_Sources.RightHand].onChange += SteamVR_Behaviour_GrabOrPinch_OnChange;
+    gripAction[SteamVR_Input_Sources.RightHand].onChange += SteamVR_Behaviour_Grab_OnChange;
   }
 
   bool actionPressed = false;
-  private void SteamVR_Behaviour_GrabOrPinch_OnChange(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState)
+  private void SteamVR_Behaviour_Grab_OnChange(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState)
   {
     actionPressed = newState;
     if (newState == false)
