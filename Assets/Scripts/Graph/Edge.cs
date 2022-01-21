@@ -261,8 +261,12 @@ public class Edge : MonoBehaviour
     rot = CalculateAngles(fromPosition, toPosition, false);
     textBack.transform.rotation = Quaternion.Euler(0, rot.x, rot.y);
     textBack.transform.localPosition = textBack.transform.localRotation * (Vector3.up * 0.025f);
-    textBack.rectTransform.sizeDelta = new Vector2(textDistance, 1);
-    textFront.rectTransform.sizeDelta = new Vector2(textDistance, 1);
+    // only scale text every 60 frames for performance reasons
+    if (GetInstanceID() % 60 == Time.frameCount % 60)
+    {
+      textBack.rectTransform.sizeDelta = new Vector2(textDistance, 1);
+      textFront.rectTransform.sizeDelta = new Vector2(textDistance, 1);
+    }
     arrow.localPosition = (transform.worldToLocalMatrix * (toPosition - (normal * (displayObject.transform.lossyScale.x * 0.5f))));
     arrow.rotation = Quaternion.FromToRotation(Vector3.up, normal);
 
