@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using Dweiss;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 using VDS.RDF;
 using VDS.RDF.Query;
 
@@ -162,7 +164,7 @@ public class Node : MonoBehaviour
   {
     isSelected = true;
     transform.Find("Selected").gameObject.SetActive(true);
-    transform.Find("Selected").gameObject.GetComponent<Renderer>().material.SetColor("_EmissionColor", ColorSettings.instance.nodeSelectedColor);
+    transform.Find("Selected").gameObject.GetComponentInChildren<Renderer>().material.SetColor("_EmissionColor", ColorSettings.instance.nodeSelectedColor);
     UpdateColor();
   }
 
@@ -182,6 +184,7 @@ public class Node : MonoBehaviour
     else
     {
       ConnectLabelToNode();
+      ConnectLabelToImage();
     }
   }
 
@@ -203,6 +206,53 @@ public class Node : MonoBehaviour
     return predicate.ToString() == "http://www.w3.org/2000/01/rdf-schema#label";
   }
 
+  private void ConnectLabelToImage()
+  {
+    foreach (Triple tripleWithSubject in graphNode.Graph.GetTriplesWithSubject(graphNode))
+    {
+      if (IsImagePredicate(tripleWithSubject.Predicate))
+      {
+        // Todo: we might want to modify the mesh when we are certain that the texture exists and is not a 404 url
+        Mesh m = new Mesh();
+        m.vertices = new Vector3[]{
+          new Vector3(-1, -1.5f, 0),
+          new Vector3(1, -1.5f, 0),
+          new Vector3(1, 0.5f, 0),
+          new Vector3(-1, 0.5f, 0)
+        };
+
+        m.uv = new Vector2[]{
+          new Vector2(0, 0),
+          new Vector2(0, 1),
+          new Vector2(1, 1),
+          new Vector2(1, 0),
+        };
+        m.triangles = new int[] { 0, 1, 2, 0, 2, 3 };
+        m.RecalculateBounds();
+        m.RecalculateNormals();
+        MeshFilter filter = GetComponentInChildren<MeshFilter>();
+        filter.mesh = m;
+
+        StartCoroutine(FetchTexture(tripleWithSubject.Object.ToString()));
+        graph.Remove(graph.GetByINode(tripleWithSubject.Object));
+        // Do not break, node can have multiple images, some of them can be 404 url's so lets go through all of them
+        //break;
+      }
+    }
+  }
+
+  private bool IsImagePredicate(INode predicate)
+  {
+    foreach (string pred in Settings.Instance.ImagePredicates)
+    {
+      if (predicate.ToString().Equals(pred))
+      {
+        return true;
+      }
+    }
+    return false;
+  }
+
   public void MakeVariable()
   {
     isVariable = true;
@@ -221,7 +271,28 @@ public class Node : MonoBehaviour
 
   public void SetColor(Color color)
   {
-    GetComponent<Renderer>().material.color = color;
+    GetComponentInChildren<Renderer>().material.color = color;
+  }
+
+  public IEnumerator FetchTexture(string url)
+  {
+    UnityWebRequest www = UnityWebRequestTexture.GetTexture(url);
+    yield return www.SendWebRequest();
+
+    if (www.result != UnityWebRequest.Result.Success)
+    {
+      Debug.Log(www.error);
+    }
+    else
+    {
+      GetComponentInChildren<Renderer>().material.mainTexture = ((DownloadHandlerTexture)www.downloadHandler).texture;
+
+      // handle aspect ratio
+      float width = 2.0f;
+      float aspect = (float)((DownloadHandlerTexture)www.downloadHandler).texture.width / ((DownloadHandlerTexture)www.downloadHandler).texture.height;
+      float height = width / aspect;
+      GetComponentInChildren<Renderer>().gameObject.transform.localScale = new Vector3(width, height, 1.0f);
+    }
   }
 
   public void SetLabel(string label)

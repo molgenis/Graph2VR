@@ -20,6 +20,8 @@ namespace Dweiss
 
         public string StartingURI = "Biobank";
 
+        public string[] ImagePredicates = {"http://xmlns.com/foaf/0.1/depiction"};
+
         private void Awake()
         {
             // base.Awake ();
