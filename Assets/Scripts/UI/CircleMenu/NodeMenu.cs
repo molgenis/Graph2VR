@@ -31,40 +31,44 @@ public class NodeMenu : MonoBehaviour
   public void PopulateIncomingMenu()
   {
     Dictionary<string, System.Tuple<string, int>> set = graph.GetIncomingPredicats(node.GetURIAsString());
-    if (set != null) foreach (KeyValuePair<string, System.Tuple<string, int>> item in set)
+    if (set != null)
+    {
+      foreach (KeyValuePair<string, System.Tuple<string, int>> item in set)
       {
         Color color = Color.gray;
         string label = item.Value.Item1;
         if (label == "")
         {
-          label = graph.GetShortName(item.Key) != "" ? graph.GetShortName(item.Key) : item.Key;
+          label = graph.GetShortName(item.Key);
           color = Color.gray * 0.75f;
         }
-
-        cm.AddButton(label, color, () =>
+        cm.AddButton(label, item.Key, color, () =>
         {
           graph.ExpandGraph(node, item.Key, false);
         }, item.Value.Item2);
       }
+    }
   }
   public void PopulateOutgoingMenu()
   {
     Dictionary<string, System.Tuple<string, int>> set = graph.GetOutgoingPredicats(node.GetURIAsString());
-    if (set != null) foreach (KeyValuePair<string, System.Tuple<string, int>> item in set)
+    if (set != null)
+    {
+      foreach (KeyValuePair<string, System.Tuple<string, int>> item in set)
       {
         Color color = Color.gray;
         string label = item.Value.Item1;
         if (label == "")
         {
-          label = graph.GetShortName(item.Key) != "" ? graph.GetShortName(item.Key) : item.Key;
+          label = graph.GetShortName(item.Key);
           color = Color.gray * 0.75f;
         }
-
-        cm.AddButton(label, color, () =>
+        cm.AddButton(label, item.Key, color, () =>
         {
           graph.ExpandGraph(node, item.Key, true);
         }, item.Value.Item2);
       }
+    }
   }
 
   public void PopulateNodeMenu()

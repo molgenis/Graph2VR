@@ -29,6 +29,7 @@ public class CircleMenu : MonoBehaviour
   {
     // Settings
     public string label;
+    public string hoveredLabel;
     public Color color;
     public Action callback;
     public int number;
@@ -64,7 +65,12 @@ public class CircleMenu : MonoBehaviour
 
   public void AddButton(string label, Color color, Action callback, int number = -1)
   {
-    buttons.Add(new CircleButton { label = label, color = color, callback = callback, number = number });
+    buttons.Add(new CircleButton { label = label, hoveredLabel = label, color = color, callback = callback, number = number });
+  }
+
+  public void AddButton(string label, string hoveredLabel, Color color, Action callback, int number = -1)
+  {
+    buttons.Add(new CircleButton { label = label, hoveredLabel = hoveredLabel, color = color, callback = callback, number = number });
   }
 
   public void Close()
@@ -121,7 +127,7 @@ public class CircleMenu : MonoBehaviour
       textObject.transform.parent = clone.transform;
       TextMeshPro text = textObject.AddComponent<TextMeshPro>();
       text.text = button.label;
-      text.fontSizeMax = 10;
+      text.fontSizeMax = 8;
       text.fontSizeMin = 4;
       text.enableWordWrapping = false;
       text.overflowMode = TextOverflowModes.Ellipsis;
@@ -131,7 +137,7 @@ public class CircleMenu : MonoBehaviour
 
       RectTransform textTransform = (RectTransform)textObject.transform;
       textTransform.pivot = new Vector2(0, 0.5f);
-      textTransform.sizeDelta = new Vector2(7f, 2f);
+      textTransform.sizeDelta = new Vector2(7f, 1.5f);
       textTransform.localScale = new Vector3(1, 1, 1);
       textTransform.localPosition = new Vector3(0, 2.5f, 0.1f);
       textTransform.localRotation = Quaternion.Euler(0, 180, 90);

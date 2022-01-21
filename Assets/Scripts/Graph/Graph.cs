@@ -100,7 +100,7 @@ public class Graph : MonoBehaviour
     lastResults = endpoint.QueryWithResultSet(query);
 
     Quaternion rotation = Camera.main.transform.rotation;
-    Vector3 offset = transform.position + (rotation * new Vector3(0, 0, 1 + this.boundingSphere.size));
+    Vector3 offset = transform.position + (rotation * new Vector3(0, 0, 1 + boundingSphere.size));
     foreach (SparqlResult result in lastResults)
     {
       string constructQuery = triples;
@@ -212,7 +212,6 @@ public class Graph : MonoBehaviour
       Debug.Log("URI: " + URI);
       Debug.Log(query);
       Debug.Log(lastResults);
-
     }
     return null;
   }
@@ -267,10 +266,8 @@ public class Graph : MonoBehaviour
       Debug.Log("URI: " + URI);
       Debug.Log(query);
       Debug.Log(lastResults);
-
     }
     return null;
-
   }
 
   public void GetDescriptionAsync(string URI, GraphCallback callback)
@@ -332,7 +329,6 @@ public class Graph : MonoBehaviour
     {
       currentGraph.Retract(triple);
     }
-
   }
 
   public void CollapseOutgoingGraph(Node node)
@@ -369,17 +365,17 @@ public class Graph : MonoBehaviour
     {
       // Select with label
       query = $@"
-                prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-                construct {{
-                    <{node.GetURIAsString()}> <{uri}> ?object .
-                    ?object rdfs:label ?objectlabel
-                }} where {{
-                    <{node.GetURIAsString()}> <{uri}> ?object .
-                    OPTIONAL {{
-                        ?object rdfs:label ?objectlabel .
-                        FILTER(LANG(?objectlabel) = '' || LANGMATCHES(LANG(?objectlabel), '{Main.instance.languageCode}'))
-                    }}
-                }} LIMIT " + expandGraphAddLimit;
+            prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+            construct {{
+                <{node.GetURIAsString()}> <{uri}> ?object .
+                ?object rdfs:label ?objectlabel
+            }} where {{
+                <{node.GetURIAsString()}> <{uri}> ?object .
+                OPTIONAL {{
+                    ?object rdfs:label ?objectlabel .
+                    FILTER(LANG(?objectlabel) = '' || LANGMATCHES(LANG(?objectlabel), '{Main.instance.languageCode}'))
+                }}
+            }} LIMIT " + expandGraphAddLimit;
     }
     else
     {
@@ -410,16 +406,30 @@ public class Graph : MonoBehaviour
     }, null);
   }
 
+  // Return a short name if posible
   public string GetShortName(string uri)
   {
-    //Get label?
-
-    //Qname
+    // Try to get Qname
     if (currentGraph.NamespaceMap.ReduceToQName(uri, out string qname))
     {
       return qname;
     }
-    return "";
+
+    // Try to get the part after the last '#'
+    string[] splittedHashUri = uri.Split('#');
+    if (splittedHashUri.Length != 1)
+    {
+      return splittedHashUri[splittedHashUri.Length - 1];
+    }
+
+    // Try to get the part after the last'/'
+    string[] splittedBackslashUri = uri.Split('/');
+    if (splittedBackslashUri.Length != 1)
+    {
+      return splittedBackslashUri[splittedBackslashUri.Length - 1];
+    }
+
+    return uri;
   }
 
   private string CleanInfo(string str)
@@ -500,7 +510,6 @@ public class Graph : MonoBehaviour
     {
       Remove(nodeList.Find(graficalNode => graficalNode.graphNode.Equals(args.Triple.Subject)));
     }
-
   }
 
   private void CurrentGraph_TripleAsserted(object sender, TripleEventArgs args)
