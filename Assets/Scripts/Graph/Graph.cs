@@ -14,7 +14,7 @@ public class Graph : MonoBehaviour
 {
   public BaseLayoutAlgorithm layout = null;
   public BoundingSphere boundingSphere;
-  public string BaseURI = "https://github.com/PjotrSvetachov/GraphVR/example-graph";
+  public string BaseURI = "http://dbpedia.org"; //"https://github.com/PjotrSvetachov/GraphVR/example-graph";
   public GameObject edgePrefab;
   public GameObject nodePrefab;
   public Canvas menu;
@@ -172,7 +172,7 @@ public class Graph : MonoBehaviour
     try
     {
       SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new System.Uri(Settings.Instance.SparqlEndpoint), BaseURI);
-      query = "select distinct ?p (STR(COUNT(?o)) AS ?count) STR(?label) AS ?label where { <" + URI + "> ?p ?o . OPTIONAL { ?p rdfs:label ?label } FILTER(LANG(?label) = '' || LANGMATCHES(LANG(?label), '" + Main.instance.languageCode + "')) } ORDER BY ?label ?p LIMIT 100";
+      query = "prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> select distinct ?p (STR(COUNT(?o)) AS ?count) STR(?label) AS ?label where { <" + URI + "> ?p ?o . OPTIONAL { ?p rdfs:label ?label } FILTER(LANG(?label) = '' || LANGMATCHES(LANG(?label), '" + Main.instance.languageCode + "')) } ORDER BY ?label ?p LIMIT 100";
       lastResults = endpoint.QueryWithResultSet(query);
 
       Dictionary<string, Tuple<string, int>> results = new Dictionary<string, Tuple<string, int>>();
@@ -391,6 +391,7 @@ public class Graph : MonoBehaviour
     {
       if (state != null)
       {
+        //Todo: Fix this error - it still occurrs sometimes (graph = null)
         Debug.Log("There may be an error");
         Debug.Log(query);
         Debug.Log(graph);
@@ -535,7 +536,7 @@ public class Graph : MonoBehaviour
 
   private void AddDefaultNameSpaces()
   {
-    currentGraph.NamespaceMap.AddNamespace("rdf", new Uri("http://www.w3.org/1999/02/22-rdf-syntax-ns#%22"));
+    currentGraph.NamespaceMap.AddNamespace("rdf", new Uri("http://www.w3.org/1999/02/22-rdf-syntax-ns#"));
     currentGraph.NamespaceMap.AddNamespace("owl", new Uri("http://www.w3.org/2002/07/owl#"));
 
     // For nice demo's

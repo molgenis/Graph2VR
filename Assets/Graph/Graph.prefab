@@ -50,7 +50,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   layout: {fileID: 5344976936667274483}
   boundingSphere: {fileID: 3973317721660415443}
-  BaseURI: https://github.com/PjotrSvetachov/GraphVR/example-graph
+  BaseURI: http://dbpedia.org
   edgePrefab: {fileID: 7414521966326491276, guid: 0fb57c9021752b44c9584cf451ad4f22, type: 3}
   nodePrefab: {fileID: 8140518496034193294, guid: cc359b16d405dae408c5a6fb5fae847a, type: 3}
   menu: {fileID: 0}
@@ -62,6 +62,9 @@ MonoBehaviour:
   - http://www.w3.org/2000/01/rdf-schema#comment
   - http://dbpedia.org/ontology/abstract
   selection: []
+  subGraphs: []
+  parentGraph: {fileID: 0}
+  creationQuery: 
 --- !u!114 &5025660550470303715
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -127,6 +130,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parentGraph: {fileID: 0}
+  lookDirection: {x: 0, y: 0, z: 0, w: 1}
 --- !u!1 &2456422186608186236
 GameObject:
   m_ObjectHideFlags: 0

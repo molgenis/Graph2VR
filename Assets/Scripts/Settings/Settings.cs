@@ -17,10 +17,13 @@ namespace Dweiss
     {  // Temporary removed baseclase ASettings
         [Header("--Main settings--")]
         public string SparqlEndpoint = "https://dbpedia.org/sparql";
+        //public string BaseURI = "";
+                                //"https://github.com/PjotrSvetachov/GraphVR/example-graph";
+                                // "http://dbpedia.org";
 
         public string StartingURI = "Biobank";
 
-        public string[] ImagePredicates = {"http://xmlns.com/foaf/0.1/depiction"};
+        public string[] ImagePredicates = {"http://xmlns.com/foaf/0.1/depiction", "http://xmlns.com/foaf/0.1/Image", "http://xmlns.com/foaf/0.1/depiction", "http://xmlns.com/foaf/0.1/thumbnail", "http://dbpedia.org/property/photo" };
 
         private void Awake()
         {
