@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-
+﻿
 /*******************************************************
  * Copyright (C) 2017 Doron Weiss  - All Rights Reserved
  * You may use, distribute and modify this code under the
@@ -8,9 +6,7 @@ using System.Collections.Generic;
  * 
  * See https://abnormalcreativity.wixsite.com/home for more info
  *******************************************************/
-using UnityEngine;
 using UnityEditor;
-using System.IO;
 
 namespace Dweiss
 {

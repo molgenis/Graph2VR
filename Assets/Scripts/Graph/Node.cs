@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using VDS.RDF;
-using VDS.RDF.Query;
 
 public class Node : MonoBehaviour
 {
