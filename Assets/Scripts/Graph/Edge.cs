@@ -103,30 +103,27 @@ public class Edge : MonoBehaviour
 
     private void Start()
     {
-        transform.localPosition = (displaySubject.transform.localPosition + displayObject.transform.localPosition) * 0.5f;
+        InitializeTexts();
+        UpdatePosition();
+        UpdateColor();
+    }
 
-        Vector3 fromPosition = displaySubject.transform.localPosition - transform.localPosition;
-        Vector3 toPosition = displayObject.transform.localPosition - transform.localPosition;
-
+    private void InitializeTexts()
+    {
         textFront = transform.Find("FrontText").GetComponent<TMPro.TextMeshPro>();
         textBack = transform.Find("BackText").GetComponent<TMPro.TextMeshPro>();
 
-        string qname = graph.GetShortName(uri);
-        if (qname != "")
+        string shortName = graph.GetShortName(uri);
+        if (shortName != "")
         {
-            textShort = textLong = qname;
+            textShort = textLong = shortName;
         }
         else
         {
             textShort = Utils.GetShortLabelFromUri(uri);
             textLong = uri;
         }
-
-        // Calculate Text rotations
-        UpdatePosition();
-        UpdateColor();
     }
-
     private void UpdateColor()
     {
         if (IsControllerHovered || IsPointerHovered)
@@ -245,35 +242,61 @@ public class Edge : MonoBehaviour
         transform.position = (displaySubject.transform.position + displayObject.transform.position) * 0.5f;
         Vector3 fromPosition = displaySubject.transform.position - transform.position;
         Vector3 toPosition = displayObject.transform.position - transform.position;
-
-        // Calculate the postions of display parts
         float distance = ((toPosition - fromPosition).magnitude);
-        float textDistance = (distance * (1 / textBack.transform.localScale.x)) * 0.8f;
         Vector3 normal = (toPosition - fromPosition).normalized;
+        Vector2 backRotation = calculateBackAngles(fromPosition, toPosition);
+
+        UpdateLineRenderer(fromPosition, toPosition, distance, normal);
+        UpdateArrow(fromPosition, toPosition, normal);
+        PositionCollider(backRotation, distance);
+        RotateText(fromPosition, toPosition, backRotation);
+        UpdateText(distance);
+    }
+
+    private void UpdateArrow(Vector3 fromPosition, Vector3 toPosition, Vector3 normal)
+    {
+        arrow.localPosition = (transform.worldToLocalMatrix * (toPosition - (normal * (displayObject.transform.lossyScale.x * 0.5f))));
+        arrow.rotation = Quaternion.FromToRotation(Vector3.up, normal);
+
+    }
+
+    private void UpdateLineRenderer(Vector3 fromPosition, Vector3 toPosition, float distance, Vector3 normal)
+    {
         lineRenderer.startWidth = lineRenderer.endWidth = 0.005f * transform.lossyScale.magnitude;
         lineRenderer.SetPosition(0, transform.worldToLocalMatrix * (fromPosition + normal * (displaySubject.transform.lossyScale.x * 0.5f)));
         lineRenderer.SetPosition(1, transform.worldToLocalMatrix * (toPosition - (normal * ((displayObject.transform.lossyScale.x * 0.5f) + (arrow.lossyScale.x * 0.05f)))));
-        Vector2 rot = CalculateAngles(fromPosition, toPosition, true);
-        textFront.transform.rotation = Quaternion.Euler(0, rot.x, rot.y); // note this is world rotation
+
+    }
+
+    private void PositionCollider(Vector2 backRotation, float distance)
+    {
+        collider.transform.rotation = Quaternion.Euler(0, backRotation.x, backRotation.y);
+        collider.transform.localPosition = Vector3.zero;
+        collider.height = distance * 0.85f;
+    }
+
+    private void RotateText(Vector3 fromPosition, Vector3 toPosition, Vector2 backRotation)
+    {
+
+        Vector2 frontRotation = calculateFrontAngles(fromPosition, toPosition);
+        textFront.transform.rotation = Quaternion.Euler(0, frontRotation.x, frontRotation.y); // note this is world rotation
         textFront.transform.localPosition = textFront.transform.localRotation * (Vector3.up * 0.025f); // note this is local position
-        rot = CalculateAngles(fromPosition, toPosition, false);
-        textBack.transform.rotation = Quaternion.Euler(0, rot.x, rot.y);
+        textBack.transform.rotation = Quaternion.Euler(0, backRotation.x, backRotation.y);
         textBack.transform.localPosition = textBack.transform.localRotation * (Vector3.up * 0.025f);
+
+    }
+
+    private void UpdateText(float distance)
+    {
+        float textDistance = (distance * (1 / textBack.transform.localScale.x)) * 0.8f;
+
         // only scale text every 60 frames for performance reasons
         if (GetInstanceID() % 60 == Time.frameCount % 60)
         {
             textBack.rectTransform.sizeDelta = new Vector2(textDistance, 1);
             textFront.rectTransform.sizeDelta = new Vector2(textDistance, 1);
         }
-        arrow.localPosition = (transform.worldToLocalMatrix * (toPosition - (normal * (displayObject.transform.lossyScale.x * 0.5f))));
-        arrow.rotation = Quaternion.FromToRotation(Vector3.up, normal);
 
-        // Position the collider
-        collider.transform.rotation = Quaternion.Euler(0, rot.x, rot.y);
-        collider.transform.localPosition = Vector3.zero;
-        collider.height = distance * 0.85f;
-
-        // Update text
         if (IsVariable)
         {
             textFront.text = textBack.text = variableName;
@@ -287,7 +310,6 @@ public class Edge : MonoBehaviour
             textFront.text = textBack.text = textShort;
         }
     }
-
     private Vector2 CalculateAngles(Vector3 fromPosition, Vector3 toPosition, bool isFront)
     {
         if (Vector3.Distance(fromPosition, toPosition) == 0)
@@ -304,5 +326,15 @@ public class Edge : MonoBehaviour
         float yRotation = angle + Mathf.Atan2(fromPosition.x, fromPosition.z) * (180 / Mathf.PI);
         float zRotation = Mathf.Asin(height / Vector3.Distance(fromPosition, toPosition)) * (180 / Mathf.PI);
         return new Vector2(yRotation, zRotation);
+    }
+
+    private Vector2 calculateFrontAngles(Vector3 fromPosition, Vector3 toPosition)
+    {
+        return CalculateAngles(fromPosition, toPosition, true);
+    }
+
+    private Vector2 calculateBackAngles(Vector3 fromPosition, Vector3 toPosition)
+    {
+        return CalculateAngles(fromPosition, toPosition, false);
     }
 }
