@@ -11,10 +11,8 @@
  * Attribution is not required, but it is always welcomed!
  * -------------------------------------*/
 
-using System;
 using UnityEngine;
 using System.Collections.Generic;
-using System.IO;
 using UnityEditor;
 
 namespace Tayx.Graphy

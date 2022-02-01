@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class Utils
+﻿public class Utils
 {
     // Get the TUI from the URI
     static public string GetShortLabelFromUri(string uri)
