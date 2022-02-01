@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.Jobs;
 using UnityEngine;
 using Unity.Collections;
+using Unity.Burst;
 
 public class FruchtermanReingold : BaseLayoutAlgorithm
 {
@@ -41,7 +42,7 @@ public class FruchtermanReingold : BaseLayoutAlgorithm
     float k = (C_CONSTANT * Mathf.Sqrt(AREA_CONSTANT / graph.nodeList.Count));
     return 0.001f * (k * k) / (x * x * x);
   }
-
+  [BurstCompile]
   struct CalculateForcesJob : IJobParallelFor
   {
     [ReadOnly]
