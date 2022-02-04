@@ -243,6 +243,7 @@ public class Graph : MonoBehaviour
             string query = "select distinct ?p (STR(COUNT(?s)) AS ?count) STR(?label) AS ?label where { ?s ?p <" + URI +
             "> . OPTIONAL { ?p rdfs:label ?label } FILTER(LANG(?label) = '' || LANGMATCHES(LANG(?label), '" +
             Main.instance.languageCode + "')) } ORDER BY ?label ?p LIMIT 100";
+            lastResults = endpoint.QueryWithResultSet(query);
             return GetPredicatsList();
         }
         catch (Exception e)
