@@ -40,6 +40,7 @@ public class Edge : MonoBehaviour
         {
             isVariable = value;
             UpdateColor();
+            UpdateEdgeText();
         }
     }
 
@@ -50,7 +51,7 @@ public class Edge : MonoBehaviour
         {
             isSelected = value;
             UpdateColor();
-        }
+    }
     }
 
     public bool IsPointerHovered
@@ -60,6 +61,7 @@ public class Edge : MonoBehaviour
         {
             isPointerHovered = value;
             UpdateColor();
+            UpdateEdgeText();
         }
     }
 
@@ -70,6 +72,7 @@ public class Edge : MonoBehaviour
         {
             isControllerHovered = value;
             UpdateColor();
+            UpdateEdgeText();
         }
     }
 
@@ -80,6 +83,7 @@ public class Edge : MonoBehaviour
         {
             isControllerGrabbed = value;
             UpdateColor();
+            UpdateEdgeText();
         }
     }
 
@@ -111,7 +115,6 @@ public class Edge : MonoBehaviour
     private void InitializeTexts()
     {
         textFront = transform.Find("FrontText").GetComponent<TMPro.TextMeshPro>();
-        textBack = transform.Find("BackText").GetComponent<TMPro.TextMeshPro>();
 
         string shortName = graph.GetShortName(uri);
         if (shortName != "")
@@ -123,6 +126,7 @@ public class Edge : MonoBehaviour
             textShort = Utils.GetShortLabelFromUri(uri);
             textLong = uri;
         }
+        UpdateEdgeText();
     }
     private void UpdateColor()
     {
@@ -244,13 +248,13 @@ public class Edge : MonoBehaviour
         Vector3 toPosition = displayObject.transform.position - transform.position;
         float distance = ((toPosition - fromPosition).magnitude);
         Vector3 normal = (toPosition - fromPosition).normalized;
-        Vector2 backRotation = calculateBackAngles(fromPosition, toPosition);
+        Vector2 textRotation = CalculateAngles(fromPosition, toPosition);
 
         UpdateLineRenderer(fromPosition, toPosition, distance, normal);
         UpdateArrow(fromPosition, toPosition, normal);
-        PositionCollider(backRotation, distance);
-        RotateText(fromPosition, toPosition, backRotation);
-        UpdateText(distance);
+        PositionCollider(textRotation, distance);
+        RotateText(textRotation);
+        UpdateTextSize(distance);
     }
 
     private void UpdateArrow(Vector3 fromPosition, Vector3 toPosition, Vector3 normal)
@@ -275,66 +279,55 @@ public class Edge : MonoBehaviour
         collider.height = distance * 0.85f;
     }
 
-    private void RotateText(Vector3 fromPosition, Vector3 toPosition, Vector2 backRotation)
+    private void RotateText(Vector2 frontRotation)
     {
-
-        Vector2 frontRotation = calculateFrontAngles(fromPosition, toPosition);
         textFront.transform.rotation = Quaternion.Euler(0, frontRotation.x, frontRotation.y); // note this is world rotation
         textFront.transform.localPosition = textFront.transform.localRotation * (Vector3.up * 0.025f); // note this is local position
-        textBack.transform.rotation = Quaternion.Euler(0, backRotation.x, backRotation.y);
-        textBack.transform.localPosition = textBack.transform.localRotation * (Vector3.up * 0.025f);
+        // Rotate the text to face the camera
+        if (Vector3.Dot(textFront.transform.forward, Camera.main.transform.forward) < 0)
+        {
+            textFront.transform.localRotation *= Quaternion.AngleAxis(180, Vector3.up);
+        }
 
     }
 
-    private void UpdateText(float distance)
+    private void UpdateTextSize(float distance)
     {
-        float textDistance = (distance * (1 / textBack.transform.localScale.x)) * 0.8f;
+        float textDistance = (distance * (1 / textFront.transform.localScale.x)) * 0.8f;
 
         // only scale text every 60 frames for performance reasons
         if (GetInstanceID() % 60 == Time.frameCount % 60)
         {
-            textBack.rectTransform.sizeDelta = new Vector2(textDistance, 1);
-            textFront.rectTransform.sizeDelta = new Vector2(textDistance, 1);
+          textFront.rectTransform.sizeDelta = new Vector2(textDistance, 1);
         }
+    }
 
+    private void UpdateEdgeText()
+    {
         if (IsVariable)
         {
-            textFront.text = textBack.text = variableName;
+          textFront.text = variableName;
         }
         else if (IsPointerHovered || IsControllerHovered || IsControllerGrabbed)
         {
-            textFront.text = textBack.text = textLong;
+          textFront.text = textLong;
         }
         else
         {
-            textFront.text = textBack.text = textShort;
+          textFront.text = textShort;
         }
     }
-    private Vector2 CalculateAngles(Vector3 fromPosition, Vector3 toPosition, bool isFront)
+
+    private Vector2 CalculateAngles(Vector3 fromPosition, Vector3 toPosition)
     {
         if (Vector3.Distance(fromPosition, toPosition) == 0)
         {
             return Vector2.zero;
         }
-        float height = (fromPosition.y - toPosition.y);
-        float angle = -90;
-        if (isFront)
-        {
-            height = (toPosition.y - fromPosition.y);
-            angle = 90;
-        }
+        float height = (toPosition.y - fromPosition.y);
+        float angle = 90;
         float yRotation = angle + Mathf.Atan2(fromPosition.x, fromPosition.z) * (180 / Mathf.PI);
         float zRotation = Mathf.Asin(height / Vector3.Distance(fromPosition, toPosition)) * (180 / Mathf.PI);
         return new Vector2(yRotation, zRotation);
-    }
-
-    private Vector2 calculateFrontAngles(Vector3 fromPosition, Vector3 toPosition)
-    {
-        return CalculateAngles(fromPosition, toPosition, true);
-    }
-
-    private Vector2 calculateBackAngles(Vector3 fromPosition, Vector3 toPosition)
-    {
-        return CalculateAngles(fromPosition, toPosition, false);
     }
 }

@@ -229,7 +229,7 @@ public class Node : MonoBehaviour
         m.triangles = new int[] { 0, 1, 2, 0, 2, 3 };
         m.RecalculateBounds();
         m.RecalculateNormals();
-        MeshFilter filter = GetComponentInChildren<MeshFilter>();
+        MeshFilter filter = GetComponent<MeshFilter>();
         filter.mesh = m;
 
         StartCoroutine(FetchTexture(tripleWithSubject.Object.ToString()));
@@ -270,7 +270,7 @@ public class Node : MonoBehaviour
 
   public void SetColor(Color color)
   {
-    GetComponentInChildren<Renderer>().material.color = color;
+    GetComponent<Renderer>().material.color = color;
   }
 
   public IEnumerator FetchTexture(string url)
@@ -284,13 +284,14 @@ public class Node : MonoBehaviour
     }
     else
     {
-      GetComponentInChildren<Renderer>().material.mainTexture = ((DownloadHandlerTexture)www.downloadHandler).texture;
+      GetComponent<Renderer>().material.mainTexture = ((DownloadHandlerTexture)www.downloadHandler).texture;
 
       // handle aspect ratio
-      float width = 2.0f;
+      float scale = 0.1f;
+      float width = 2.0f*scale;
       float aspect = (float)((DownloadHandlerTexture)www.downloadHandler).texture.width / ((DownloadHandlerTexture)www.downloadHandler).texture.height;
       float height = width / aspect;
-      GetComponentInChildren<Renderer>().gameObject.transform.localScale = new Vector3(width, height, 1.0f);
+      GetComponent<Renderer>().gameObject.transform.localScale = new Vector3(width, height, scale);
     }
   }
 
