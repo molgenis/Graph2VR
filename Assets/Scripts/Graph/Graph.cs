@@ -503,20 +503,15 @@ public class Graph : MonoBehaviour
 
     }
 
-    private int countTriples(IEnumerable<Triple> triples)
-    {
-        return triples.Count();
-    }
-
     private void CurrentGraph_TripleRetracted(object sender, TripleEventArgs args)
     {
         // Object and subject will get removed when we only have one triple. edge will also get removed then and only then.
         // This event is raised after deletion so we need to see if the object/subject is deleted in the resulting graph
-        if (countTriples(currentGraph.GetTriples(args.Triple.Object)) == 0)
+        if (currentGraph.GetTriples(args.Triple.Object).Count() == 0)
         {
             Remove(nodeList.Find(graphicalNode => graphicalNode.graphNode.Equals(args.Triple.Object)));
         }
-        if (countTriples(currentGraph.GetTriples(args.Triple.Subject)) == 0)
+        if (currentGraph.GetTriples(args.Triple.Subject).Count() == 0)
         {
             Remove(nodeList.Find(graphicalNode => graphicalNode.graphNode.Equals(args.Triple.Subject)));
         }
@@ -756,21 +751,21 @@ public class Graph : MonoBehaviour
         }
     }
 
-    public void Remove(Node node)
+  public void Remove(Node node)
+  {
+    if (node != null)
     {
-        if (node != null)
-        {
-            // remove edges connected to this node
-            Edge e = edgeList.Find((Edge edge) => edge.graphObject == null ? false : edge.graphObject.Equals(node.graphNode));
-            Remove(e);
-            e = edgeList.Find((Edge edge) => edge.graphSubject == null ? false : edge.graphSubject.Equals(node.graphNode));
-            Remove(e);
+      // remove edges connected to this node
+      List<Edge> foundEdges = edgeList.FindAll((Edge edge) => edge.graphObject == null ? false : edge.graphObject.Equals(node.graphNode));
+      Remove(foundEdges);
+      foundEdges = edgeList.FindAll((Edge edge) => edge.graphSubject == null ? false : edge.graphSubject.Equals(node.graphNode));
+      Remove(foundEdges);
 
-            // Destoy the node
-            nodeList.Remove(node);
-            Destroy(node.gameObject);
-        }
+      // Destoy the node
+      nodeList.Remove(node);
+      Destroy(node.gameObject);
     }
+  }
 
     public void Remove(Edge edge)
     {
