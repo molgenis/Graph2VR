@@ -12,7 +12,7 @@ public class Main : MonoBehaviour
   void Start()
   {
     mainGraph = CreateGraph();
-    mainGraph.SendQuery(initialSparqlQueryString);
+    mainGraph.CreateGraphBySparqlQuery(initialSparqlQueryString);
   }
 
   private void Awake()

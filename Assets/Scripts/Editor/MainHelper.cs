@@ -13,18 +13,21 @@ public class MainHelper : Editor
 
     text = EditorGUILayout.TextArea(text, GUILayout.Height(100));
 
-    if (GUILayout.Button("Send Construct Query")) {
-      Main.instance.mainGraph.SendQuery(text);
+    if (GUILayout.Button("Send Construct Query"))
+    {
+      Main.instance.mainGraph.CreateGraphBySparqlQuery(text);
     }
 
-    if (GUILayout.Button("Send Construct Query to new Graph")) {
-      Main.instance.mainGraph.SendQuery(text);
+    if (GUILayout.Button("Send Construct Query to new Graph"))
+    {
+      Main.instance.mainGraph.CreateGraphBySparqlQuery(text);
       Graph graph = Main.instance.CreateGraph();
-      graph.SendQuery(text);
+      graph.CreateGraphBySparqlQuery(text);
 
     }
 
-    if (GUILayout.Button("Clear")) {
+    if (GUILayout.Button("Clear"))
+    {
       Main.instance.mainGraph.Clear();
     }
 
