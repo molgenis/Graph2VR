@@ -9,7 +9,7 @@ using Dweiss;
 public class QueryService : MonoBehaviour
 {
   public string BaseURI = "http://dbpedia.org"; //"https://github.com/PjotrSvetachov/GraphVR/example-graph";
-  public int expandGraphAddLimit = 100;
+  public int queryLimit = 25;
   const string prefixes = @"
     prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
     prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>";
@@ -61,7 +61,7 @@ public class QueryService : MonoBehaviour
                     ?object rdfs:label ?objectlabel .
                     FILTER(LANG(?objectlabel) = '' || LANGMATCHES(LANG(?objectlabel), '{Main.instance.languageCode}'))
                 }}
-            }} LIMIT " + expandGraphAddLimit;
+            }} LIMIT " + queryLimit;
     }
     else
     {
@@ -71,7 +71,7 @@ public class QueryService : MonoBehaviour
                 ?subject <{uri}> <{nodeUriString}>
             }} where {{
                 ?subject <{uri}> <{nodeUriString}>
-            }}  LIMIT " + expandGraphAddLimit;
+            }}  LIMIT " + queryLimit;
     }
   }
 
@@ -89,7 +89,7 @@ public class QueryService : MonoBehaviour
                 {triples} 
             }} where {{
                 {triples} 
-            }} LIMIT " + expandGraphAddLimit;
+            }} LIMIT {queryLimit}";
 
     if (IsConstructSparqlQuery(query))
     {
@@ -214,7 +214,7 @@ public class QueryService : MonoBehaviour
       {prefixes}
       select distinct * where {{
         {triples}
-      }} LIMIT 50";
+      }} LIMIT {queryLimit}";
     return endPoint.QueryWithResultSet(query);
   }
 

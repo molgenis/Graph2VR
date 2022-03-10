@@ -13,6 +13,7 @@ public class NodeMenu : MonoBehaviour
   public GameObject controlerModel;
   public SteamVR_Action_Boolean clickAction = null;
   public string subMenu = "";
+  public GameObject limitSlider;
 
   public void Start()
   {
@@ -31,6 +32,8 @@ public class NodeMenu : MonoBehaviour
     Dictionary<string, System.Tuple<string, int>> set = graph.GetIncomingPredicats(node.GetURIAsString());
     if (set != null)
     {
+      limitSlider.SetActive(true);
+
       foreach (KeyValuePair<string, System.Tuple<string, int>> item in set)
       {
         Color color = Color.gray;
@@ -52,6 +55,8 @@ public class NodeMenu : MonoBehaviour
     Dictionary<string, System.Tuple<string, int>> set = graph.GetOutgoingPredicats(node.GetURIAsString());
     if (set != null)
     {
+      limitSlider.SetActive(true);
+
       foreach (KeyValuePair<string, System.Tuple<string, int>> item in set)
       {
         Color color = Color.gray;
@@ -71,6 +76,7 @@ public class NodeMenu : MonoBehaviour
 
   public void PopulateNodeMenu()
   {
+    limitSlider.SetActive(false);
     if (node.uri != "")
     {
       cm.AddButton("Collapse Incoming", new Color(1, 0.5f, 0.5f) / 2, () =>
@@ -184,6 +190,7 @@ public class NodeMenu : MonoBehaviour
   public void PopulateNode(Object input)
   {
     controlerModel.SetActive(false);
+    limitSlider.SetActive(false);
     cm.Close();
     KeyboardHandler.instance.Close();
     node = input as Node;
@@ -268,6 +275,7 @@ public class NodeMenu : MonoBehaviour
   public void PopulateEdge(Object input)
   {
     KeyboardHandler.instance.Close();
+    limitSlider.SetActive(false);
     edge = input as Edge;
     graph = edge.graph;
 
@@ -346,6 +354,7 @@ public class NodeMenu : MonoBehaviour
 
         if (edge.IsSelected)
         {
+          limitSlider.SetActive(true);
           cm.AddButton("Remove selection", Color.yellow / 2, () =>
           {
             edge.Deselect();
@@ -388,6 +397,7 @@ public class NodeMenu : MonoBehaviour
 
   public void Close()
   {
+    limitSlider.SetActive(false);
     node = null;
     subMenu = "";
     edge = null;
