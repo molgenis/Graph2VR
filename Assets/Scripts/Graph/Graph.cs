@@ -105,15 +105,15 @@ public class Graph : MonoBehaviour
       Graph newGraph = QuerySimilarWithTriples(constructQuery, offset, Quaternion.identity);
       if (newGraph.nodeList.Count > 0)
       {
-        CreateNewGraph(newGraph, query, offset, rotation);
+        offset += rotation * new Vector3(0, 0, 0.5f);
+        CreateNewGraph(newGraph, query, rotation);
       }
     }
   }
 
-  private void CreateNewGraph(Graph newGraph, string query, Vector3 offset, Quaternion rotation)
+  private void CreateNewGraph(Graph newGraph, string query, Quaternion rotation)
   {
     newGraph.creationQuery = query;
-    offset += rotation * new Vector3(0, 0, 0.5f);
     newGraph.gameObject.GetComponent<FruchtermanReingold>().enabled = false;
     SemanticPlanes planes = newGraph.gameObject.GetComponent<SemanticPlanes>();
     planes.lookDirection = rotation;
