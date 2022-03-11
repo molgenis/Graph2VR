@@ -118,9 +118,10 @@ public class SpatialGrid2D : BaseLayoutAlgorithm
         }
 
         // pull along edges
-        foreach (Node connected in node.connections)
+        foreach (Edge connectedEdge in node.connections)
         {
-          if (connected != null && !Object.Equals(node, connected))
+          Node connected = connectedEdge.displaySubject == node ? connectedEdge.displayObject : connectedEdge.displaySubject;
+          if (!Object.Equals(node, connected))
           {
             float distance = Vector3.Distance(node.transform.localPosition, connected.transform.localPosition);
             if (distance > pullDistance)

@@ -15,10 +15,10 @@ public class Node : MonoBehaviour
   private bool isControllerHovered = false;
   private bool isControllerGrabbed = false;
 
-  public List<Node> connections = new List<Node>();
-  public void AddConnection(Node node)
+  public List<Edge> connections = new List<Edge>();
+  public void AddConnection(Edge edge)
   {
-    if (!connections.Contains(node)) connections.Add(node);
+    if (!connections.Contains(edge)) connections.Add(edge);
   }
 
   public bool IsVariable

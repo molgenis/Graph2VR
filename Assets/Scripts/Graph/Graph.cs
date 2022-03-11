@@ -13,11 +13,9 @@ public class Graph : MonoBehaviour
   public GameObject nodePrefab;
   public Canvas menu;
 
-  public HashSet<Triple> triples = new HashSet<Triple>();
   public List<Edge> edgeList = new List<Edge>();
   public List<Node> nodeList = new List<Node>();
   public List<string> translatablePredicates = new List<string>();
-  IGraph currentGraph = null;
   private SparqlResultSet lastResults = null;
   public VariableNameManager variableNameManager;
   public List<Edge> selection = new List<Edge>();
@@ -236,57 +234,31 @@ public class Graph : MonoBehaviour
     CollapseOutgoingGraph(node);
   }
 
-  public void RemoveNode(Node node)
-  {
-    List<Triple> triples = new List<Triple>();
-    IEnumerable<Triple> objects = currentGraph.GetTriplesWithObject(node.graphNode);
-    IEnumerable<Triple> subjects = currentGraph.GetTriplesWithSubject(node.graphNode);
-
-    foreach (Triple triple in objects)
-    {
-      triples.Add(triple);
-    }
-
-    foreach (Triple triple in subjects)
-    {
-      triples.Add(triple);
-    }
-
-    foreach (Triple triple in triples)
-    {
-      currentGraph.Retract(triple);
-    }
-  }
-
   public void CollapseIncomingGraph(Node node)
   {
-    IGraph results = QueryService.Instance.CollapseIncomingGraph(node);
-    UpdateDisplayedGraph();
-
-    foreach (Triple triple in results.Triples)
+    // Reverse iterate so we can savely remove items from the list while doing the iteration
+    for (int i = node.connections.Count - 1; i >= 0; i--)
     {
-      currentGraph.Retract(triple);
+      Edge edge = node.connections[i];
+      if (edge.displayObject == node && edge.displaySubject.connections.Count == 1)
+      {
+        Remove(edge.displaySubject);
+        node.connections.Remove(edge);
+      }
     }
   }
 
   public void CollapseOutgoingGraph(Node node)
   {
-    IGraph results = QueryService.Instance.CollapseOutgoingGraph(node);
-    UpdateDisplayedGraph();
-
-    foreach (Triple triple in results.Triples)
+    // Reverse iterate so we can savely remove items from the list while doing the iteration
+    for (int i = node.connections.Count - 1; i >= 0; i--)
     {
-      currentGraph.Retract(triple);
-    }
-  }
-
-  public void UpdateDisplayedGraph()
-  {
-    if (currentGraph != null)
-    {
-      currentGraph.TripleAsserted += CurrentGraph_TripleAsserted;
-      currentGraph.TripleRetracted += CurrentGraph_TripleRetracted;
-      BuildByIGraph(currentGraph);
+      Edge edge = node.connections[i];
+      if (edge.displaySubject == node && edge.displayObject.connections.Count == 1)
+      {
+        Remove(edge.displayObject);
+        node.connections.Remove(edge);
+      }
     }
   }
 
@@ -306,7 +278,10 @@ public class Graph : MonoBehaviour
       // To draw new elements to unity we need to be on the main Thread
       UnityMainThreadDispatcher.Instance().Enqueue(() =>
       {
-        currentGraph.Merge(graph);
+        foreach(Triple triple in graph.Triples)
+        {
+          AddTriple(triple);
+        }
       });
     }));
   }
@@ -315,7 +290,7 @@ public class Graph : MonoBehaviour
   // Return a short name if possible
   public string GetShortName(string uri)
   {
-    if (currentGraph.NamespaceMap.ReduceToQName(uri, out string qName))
+    if (QueryService.Instance.defaultNamespace.ReduceToQName(uri, out string qName))
     {
       return qName;
     }
@@ -345,112 +320,69 @@ public class Graph : MonoBehaviour
 
   public void CreateGraphByTriples(string triples)
   {
-    Clear();
-    currentGraph = QueryService.Instance.QueryByTriples(triples);
-    UpdateDisplayedGraph();
-    DestroyGraphWithoutTriples();
-  }
-  public void CreateGraphBySparqlQuery(string query)
-  {
-    Clear();
-    currentGraph = QueryService.Instance.ExecuteQuery(query);
-    UpdateDisplayedGraph();
-    DestroyGraphWithoutTriples();
-  }
-
-  private void DestroyGraphWithoutTriples()
-  {
-    if (currentGraph == null || currentGraph.Triples == null || currentGraph.Triples.Count == 0)
+    IGraph graph = QueryService.Instance.QueryByTriples(triples);
+    if (graph == null || graph.Triples == null || graph.Triples.Count == 0)
     {
       Destroy(gameObject);
     }
+    else
+    {
+      BuildByIGraph(graph);
+    }
   }
-
-  private void CurrentGraph_TripleRetracted(object sender, TripleEventArgs args)
+  public void CreateGraphBySparqlQuery(string query)
   {
-    // Object and subject will get removed when we only have one triple. edge will also get removed then and only then.
-    // This event is raised after deletion so we need to see if the object/subject is deleted in the resulting graph
-    if (currentGraph.GetTriples(args.Triple.Object).Count() == 0)
+    IGraph graph = QueryService.Instance.ExecuteQuery(query);
+    if (graph == null || graph.Triples == null || graph.Triples.Count == 0)
     {
-      Remove(nodeList.Find(graphicalNode => graphicalNode.graphNode.Equals(args.Triple.Object)));
-    }
-    if (currentGraph.GetTriples(args.Triple.Subject).Count() == 0)
+      Destroy(gameObject);
+    } else
     {
-      Remove(nodeList.Find(graphicalNode => graphicalNode.graphNode.Equals(args.Triple.Subject)));
+      BuildByIGraph(graph);
     }
   }
 
-  private void CurrentGraph_TripleAsserted(object sender, TripleEventArgs args)
+  private void AddTriple(Triple triple)
   {
     // Add objects
-    if (nodeList != null && !nodeList.Find(graphicalNode => graphicalNode.graphNode.Equals(args.Triple.Object)))
+    if (!nodeList.Find(graphicalNode => graphicalNode.graphNode.Equals(triple.Object)))
     {
-      Node n = CreateNode(args.Triple.Object.ToString(), args.Triple.Object);
+      Node n = CreateNode(triple.Object.ToString(), triple.Object);
     }
 
     // Add subjects
-    if (nodeList != null && !nodeList.Find(graphicalNode => graphicalNode.graphNode.Equals(args.Triple.Subject)))
+    if (!nodeList.Find(graphicalNode => graphicalNode.graphNode.Equals(triple.Subject)))
     {
-      Node n = CreateNode(args.Triple.Subject.ToString(), args.Triple.Subject);
+      Node n = CreateNode(triple.Subject.ToString(), triple.Subject);
     }
 
     // Add edges
-    if (!edgeList.Find(edge => edge.Equals(args.Triple.Subject, args.Triple.Predicate, args.Triple.Object)))
+    if (!edgeList.Find(edge => edge.Equals(triple.Subject, triple.Predicate, triple.Object)))
     {
-      Edge e = CreateEdge(args.Triple.Subject, args.Triple.Predicate, args.Triple.Object);
+      Edge e = CreateEdge(triple.Subject, triple.Predicate, triple.Object);
     }
 
     layout.CalculateLayout();
   }
 
-
+  // Builds a new graph out of an IGraph, deletes the old one
   private void BuildByIGraph(IGraph iGraph)
   {
-    List<Node> nodesToRemove = new List<Node>();
-    foreach (Node node in nodeList)
-    {
-      INode iNode = node.graphNode;
-      bool found = FindNodeInGraph(iGraph, iNode);
-      if (found == false)
-      {
-        nodesToRemove.Add(node);
-      }
-    }
-    Remove(nodesToRemove);
-
+    Clear();
     // Add nodes
     foreach (INode node in iGraph.Nodes)
     {
-      if (nodeList != null && !nodeList.Find(graphicalNode => graphicalNode.graphNode.Equals(node)))
-      {
-        Node n = CreateNode(node.ToString(), node);
-      }
+      Node n = CreateNode(node.ToString(), node);
     }
 
     // Add edges
     foreach (Triple triple in iGraph.Triples)
     {
-      if (!edgeList.Find(edge => edge.Equals(triple.Subject, triple.Predicate, triple.Object)))
-      {
-        Edge e = CreateEdge(triple.Subject, triple.Predicate, triple.Object);
-      }
+      Edge e = CreateEdge(triple.Subject, triple.Predicate, triple.Object);
     }
 
-    // TODO: create resolve function
     layout.CalculateLayout();
   }
-  private Boolean FindNodeInGraph(IGraph iGraph, INode iNode)
-  {
-    foreach (INode currentNode in iGraph.Nodes)
-    {
-      if (iNode.Equals(currentNode))
-      {
-        return true;
-      }
-    }
-    return false;
-  }
-
   public void Clear()
   {
     for (int i = 0; i < nodeList.Count; i++)
@@ -463,7 +395,6 @@ public class Graph : MonoBehaviour
     }
     nodeList.Clear();
     edgeList.Clear();
-    triples.Clear();
   }
 
   private void Awake()
@@ -475,11 +406,10 @@ public class Graph : MonoBehaviour
   {
     GameObject clone = GetEdgeClone();
 
-    from.AddConnection(to);
-    to.AddConnection(from);
-
     Edge edge = InitializeEdge(clone, uri, from, to);
     edgeList.Add(edge);
+    from.AddConnection(edge);
+    to.AddConnection(edge);
     return edge;
   }
 
@@ -495,8 +425,6 @@ public class Graph : MonoBehaviour
       Debug.Log("The Subject and Object needs to be defined to create a edge");
       return null;
     }
-    fromNode.AddConnection(toNode);
-    toNode.AddConnection(fromNode);
 
     Edge edge = InitializeEdge(clone, uri.ToString(), fromNode, toNode);
     edge.graphPredicate = uri;
@@ -504,6 +432,10 @@ public class Graph : MonoBehaviour
     edge.graphObject = to;
 
     edgeList.Add(edge);
+
+    fromNode.AddConnection(edge);
+    toNode.AddConnection(edge);
+
     return edge;
   }
   private Edge InitializeEdge(GameObject clone, string uri, Node from, Node to)
@@ -526,7 +458,7 @@ public class Graph : MonoBehaviour
     return clone;
   }
 
-  public Node CreateNode(string value)
+  public Node CreateNode(string value, INode iNode)
   {
     GameObject clone = Instantiate<GameObject>(nodePrefab);
     clone.transform.SetParent(transform);
@@ -538,12 +470,6 @@ public class Graph : MonoBehaviour
     node.SetURI(value);
     node.SetLabel(value);
     nodeList.Add(node);
-    return node;
-  }
-
-  public Node CreateNode(string value, INode iNode)
-  {
-    Node node = CreateNode(value);
     node.graphNode = iNode;
     return node;
   }
@@ -589,44 +515,26 @@ public class Graph : MonoBehaviour
     Hide(GetByINode(node));
   }
 
-  public void Remove(List<Node> nodes)
-  {
-    for (int i = 0; i < nodes.Count; i++)
-    {
-      Remove(nodes[i]);
-    }
-  }
-
-  public void Remove(List<Edge> edges)
-  {
-    for (int i = 0; i < edges.Count; i++)
-    {
-      Remove(edges[i]);
-    }
-  }
-
   public void Remove(Node node)
   {
     if (node != null)
     {
-      // remove edges connected to this node
-      List<Edge> foundEdges = edgeList.FindAll((Edge edge) => edge.graphObject == null ? false : edge.graphObject.Equals(node.graphNode));
-      Remove(foundEdges);
-      foundEdges = edgeList.FindAll((Edge edge) => edge.graphSubject == null ? false : edge.graphSubject.Equals(node.graphNode));
-      Remove(foundEdges);
+      // remove all the edges connected to this node
+      // Reverse iterate so we can savely remove items from the list while doing the iteration
+      for (int i = node.connections.Count - 1; i >= 0; i--)
+      {
+        Edge edge = node.connections[i];
+        // remove the edge in nodes connections
+        edge.displayObject.connections.Remove(edge);
+        edge.displaySubject.connections.Remove(edge);
+
+        edgeList.Remove(edge);
+        Destroy(edge.gameObject);
+      }
 
       // Destoy the node
       nodeList.Remove(node);
       Destroy(node.gameObject);
-    }
-  }
-
-  public void Remove(Edge edge)
-  {
-    if (edge != null)
-    {
-      edgeList.Remove(edge);
-      Destroy(edge.gameObject);
     }
   }
 
