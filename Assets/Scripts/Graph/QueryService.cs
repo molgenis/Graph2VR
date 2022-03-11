@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using VDS.RDF;
 using VDS.RDF.Parsing;
@@ -208,13 +209,23 @@ public class QueryService : MonoBehaviour
     endPoint.QueryWithResultGraph(query, callback, null);
   }
 
-  public SparqlResultSet QuerySimilarPatternsMultipleLayers(string triples, out string query)
+  public SparqlResultSet QuerySimilarPatternsMultipleLayers(string triples, List<string> orderByList, out string query)
   {
+    // TODO: make sure 'orderByList' do still exist
+    string order = "";
+    if (orderByList.Count > 0)
+    {
+      order += "Order By ";
+      foreach (string name in orderByList)
+      {
+        order += $"DESC({name}) ";
+      }
+    }
     query = $@"
       {prefixes}
       select distinct * where {{
         {triples}
-      }} LIMIT {queryLimit}";
+      }} {order} LIMIT {queryLimit}";
     return endPoint.QueryWithResultSet(query);
   }
 

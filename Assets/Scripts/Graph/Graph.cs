@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using VDS.RDF;
 using VDS.RDF.Query;
@@ -16,6 +15,7 @@ public class Graph : MonoBehaviour
   public List<Edge> edgeList = new List<Edge>();
   public List<Node> nodeList = new List<Node>();
   public List<string> translatablePredicates = new List<string>();
+  public List<string> orderBy = new List<string>();
   private SparqlResultSet lastResults = null;
   public VariableNameManager variableNameManager;
   public List<Edge> selection = new List<Edge>();
@@ -88,7 +88,7 @@ public class Graph : MonoBehaviour
     // FIXME: test code
     // triples = " ?variable1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?variable2 .";
     // triples += "?variable1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.semanticweb.org/alexander/ontologies/2021/6/untitled-ontology-479#Study> .";
-    lastResults = QueryService.Instance.QuerySimilarPatternsMultipleLayers(triples, out string query);
+    lastResults = QueryService.Instance.QuerySimilarPatternsMultipleLayers(triples, orderBy, out string query);
 
     Quaternion rotation = Camera.main.transform.rotation;
     Vector3 offset = transform.position + (rotation * new Vector3(0, 0, 1 + boundingSphere.size));
@@ -278,7 +278,7 @@ public class Graph : MonoBehaviour
       // To draw new elements to unity we need to be on the main Thread
       UnityMainThreadDispatcher.Instance().Enqueue(() =>
       {
-        foreach(Triple triple in graph.Triples)
+        foreach (Triple triple in graph.Triples)
         {
           AddTriple(triple);
         }
@@ -336,7 +336,8 @@ public class Graph : MonoBehaviour
     if (graph == null || graph.Triples == null || graph.Triples.Count == 0)
     {
       Destroy(gameObject);
-    } else
+    }
+    else
     {
       BuildByIGraph(graph);
     }

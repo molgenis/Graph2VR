@@ -27,6 +27,7 @@ public class NodeMenu : MonoBehaviour
       Close();
     }
   }
+
   public void PopulateIncomingMenu()
   {
     Dictionary<string, System.Tuple<string, int>> set = graph.GetIncomingPredicats(node.GetURIAsString());
@@ -50,6 +51,7 @@ public class NodeMenu : MonoBehaviour
       }
     }
   }
+
   public void PopulateOutgoingMenu()
   {
     Dictionary<string, System.Tuple<string, int>> set = graph.GetOutgoingPredicats(node.GetURIAsString());
@@ -198,78 +200,85 @@ public class NodeMenu : MonoBehaviour
 
     if (subMenu != "")
     {
-      // We are in a sub menu
-      cm.AddButton("Back", Color.blue / 2, () =>
-      {
-        subMenu = "";
-        cm.Close();
-        PopulateNode(input);
-      });
-
-      if (node != null)
-      {
-        if (subMenu == "Incoming")
-        {
-          PopulateIncomingMenu();
-        }
-        if (subMenu == "Outgoing")
-        {
-          PopulateOutgoingMenu();
-        }
-      }
-      if (subMenu == "Node")
-      {
-        PopulateNodeMenu();
-      }
-      if (subMenu == "Graph")
-      {
-        PopulateGraphMenu();
-      }
-      if (subMenu == "Settings")
-      {
-        PopulateSettingsMenu();
-      }
-
+      PopulateNodeDisplaySubMenus(input);
     }
     else
     {
-      // Where are in the main menu
-      cm.AddButton("List incoming predicates", Color.green / 2, () =>
+      PopulateNodeDisplayMainMenu(input);
+    }
+    cm.ReBuild();
+  }
+
+  private void PopulateNodeDisplayMainMenu(Object input)
+  {
+    cm.AddButton("List incoming predicates", Color.green / 2, () =>
+    {
+      subMenu = "Incoming";
+      cm.Close();
+      PopulateNode(input);
+    });
+    if (node.graphNode.NodeType == NodeType.Uri || node.graphNode.NodeType == NodeType.Variable)
+    {
+      cm.AddButton("List outgoing predicates", Color.green / 2, () =>
       {
-        subMenu = "Incoming";
-        cm.Close();
-        PopulateNode(input);
-      });
-      if (node.graphNode.NodeType == NodeType.Uri || node.graphNode.NodeType == NodeType.Variable)
-      {
-        cm.AddButton("List outgoing predicates", Color.green / 2, () =>
-        {
-          subMenu = "Outgoing";
-          cm.Close();
-          PopulateNode(input);
-        });
-      }
-      cm.AddButton("Settings", Color.yellow / 2, () =>
-      {
-        subMenu = "Settings";
-        cm.Close();
-        PopulateNode(input);
-      });
-      cm.AddButton("Node operations", Color.red / 2, () =>
-      {
-        subMenu = "Node";
-        cm.Close();
-        PopulateNode(input);
-      });
-      cm.AddButton("Graph operations", Color.red / 2, () =>
-      {
-        subMenu = "Graph";
+        subMenu = "Outgoing";
         cm.Close();
         PopulateNode(input);
       });
     }
+    cm.AddButton("Settings", Color.yellow / 2, () =>
+    {
+      subMenu = "Settings";
+      cm.Close();
+      PopulateNode(input);
+    });
+    cm.AddButton("Node operations", Color.red / 2, () =>
+    {
+      subMenu = "Node";
+      cm.Close();
+      PopulateNode(input);
+    });
+    cm.AddButton("Graph operations", Color.red / 2, () =>
+    {
+      subMenu = "Graph";
+      cm.Close();
+      PopulateNode(input);
+    });
+  }
 
-    cm.ReBuild();
+  public void PopulateNodeDisplaySubMenus(Object input)
+  {
+    // We are in a sub menu
+    cm.AddButton("Back", Color.blue / 2, () =>
+    {
+      subMenu = "";
+      cm.Close();
+      PopulateNode(input);
+    });
+
+    if (node != null)
+    {
+      if (subMenu == "Incoming")
+      {
+        PopulateIncomingMenu();
+      }
+      if (subMenu == "Outgoing")
+      {
+        PopulateOutgoingMenu();
+      }
+    }
+    if (subMenu == "Node")
+    {
+      PopulateNodeMenu();
+    }
+    if (subMenu == "Graph")
+    {
+      PopulateGraphMenu();
+    }
+    if (subMenu == "Settings")
+    {
+      PopulateSettingsMenu();
+    }
   }
 
   public void PopulateEdge(Object input)
@@ -281,119 +290,169 @@ public class NodeMenu : MonoBehaviour
 
     if (subMenu != "")
     {
-      // We are in a sub menu
-      cm.AddButton("Back", Color.blue / 2, () =>
-      {
-        subMenu = "";
-        cm.Close();
-        PopulateEdge(input);
-      });
-
-      if (subMenu == "Graph")
-      {
-        PopulateGraphMenu();
-      }
-      if (subMenu == "Settings")
-      {
-        PopulateSettingsMenu();
-      }
-
+      PopulateEdgeDisplaySubMenus(input);
     }
     else
     {
-      if (edge.IsVariable)
+      PopulateEdgeDisplayMainMenu(input);
+    }
+    cm.ReBuild();
+  }
+
+  public void PopulateOrderByMenu()
+  {
+    int count = 1;
+
+    foreach (string variable in graph.orderBy)
+    {
+      cm.AddButton(count + " - " + variable, Color.green / 2, () =>
       {
+        graph.orderBy.Remove(variable);
         cm.Close();
-        controlerModel.SetActive(false);
-        cm.AddButton("Undo conversion", Color.blue / 2, () =>
-        {
-          edge.UndoConversion();
-          PopulateEdge(input);
-        });
-
-        if (edge.IsSelected)
-        {
-          limitSlider.SetActive(true);
-          cm.AddButton("Remove selection", Color.yellow / 2, () =>
-          {
-            edge.Deselect();
-            PopulateEdge(input);
-          });
-          cm.AddButton("Query similar patterns", Color.yellow / 2, () =>
-          {
-            graph.QuerySimilarPatternsMultipleLayers();
-          });
-          cm.AddButton("Query similar patterns (single layer)", Color.yellow / 2, () =>
-          {
-            graph.QuerySimilarPatternsSingleLayer();
-          });
-        }
-        else
-        {
-          cm.AddButton("Select triple", Color.yellow / 2, () =>
-          {
-            edge.Select();
-            PopulateEdge(input);
-          });
-        }
-        cm.AddButton("Rename", Color.red / 2, () => { KeyboardHandler.instance.Open(edge); });
-        cm.ReBuild();
-      }
-      else
-      {
-        cm.Close();
-        controlerModel.SetActive(false);
-
-        if (!edge.IsVariable)
-        {
-          cm.AddButton("Convert to Variable", Color.blue / 2, () =>
-          {
-            edge.MakeVariable();
-            PopulateEdge(input);
-          });
-        }
-
-        if (edge.IsSelected)
-        {
-          limitSlider.SetActive(true);
-          cm.AddButton("Remove selection", Color.yellow / 2, () =>
-          {
-            edge.Deselect();
-            PopulateEdge(input);
-          });
-          cm.AddButton("Query similar patterns", Color.yellow / 2, () =>
-          {
-            graph.QuerySimilarPatternsMultipleLayers();
-          });
-          cm.AddButton("Query similar patterns (single layer)", Color.yellow / 2, () =>
-          {
-            graph.QuerySimilarPatternsSingleLayer();
-          });
-        }
-        else
-        {
-          cm.AddButton("Select triple", Color.yellow / 2, () =>
-          {
-            edge.Select();
-            PopulateEdge(input);
-          });
-        }
-      }
-
-      cm.AddButton("Settings", Color.yellow / 2, () =>
-      {
-        subMenu = "Settings";
-        cm.Close();
-        PopulateEdge(input);
+        PopulateEdge(edge);
       });
-      cm.AddButton("Graph operations", Color.red / 2, () =>
+      count++;
+    }
+
+    HashSet<string> addNameList = SelectedVariableNames();
+    foreach (string variable in graph.orderBy)
+    {
+      addNameList.Remove(variable);
+    }
+
+    foreach (string variable in addNameList)
+    {
+      cm.AddButton("Select " + variable, Color.yellow / 2, () =>
+          {
+            graph.orderBy.Remove(variable);
+            graph.orderBy.Insert(graph.orderBy.Count, variable);
+            cm.Close();
+            PopulateEdge(edge);
+          });
+    }
+  }
+
+  private HashSet<string> SelectedVariableNames()
+  {
+    HashSet<string> variables = new HashSet<string>();
+    List<Edge> selected = graph.selection.FindAll((edge) => edge.IsVariable || edge.displayObject.IsVariable || edge.displaySubject.IsVariable);
+    foreach (Edge edge in selected)
+    {
+      if (edge.IsVariable) variables.Add(edge.variableName);
+      if (edge.displayObject.IsVariable) variables.Add(edge.displayObject.label);
+      if (edge.displaySubject.IsVariable) variables.Add(edge.displaySubject.label);
+    }
+    return variables;
+  }
+
+  private bool GraphHasSelectedVariable()
+  {
+    return graph.selection.Find((edge) => edge.IsVariable || edge.displayObject.IsVariable || edge.displaySubject.IsVariable) != null;
+  }
+
+  private void PopulateEdgeDisplayMainMenu(Object input)
+  {
+    controlerModel.SetActive(false);
+    cm.Close();
+    if (GraphHasSelectedVariable())
+    {
+      cm.AddButton("Order By", Color.white / 2, () =>
       {
-        subMenu = "Graph";
+        subMenu = "OrderBy";
         cm.Close();
         PopulateEdge(input);
       });
     }
-    cm.ReBuild();
+    if (edge.IsVariable)
+    {
+      cm.AddButton("Undo conversion", Color.blue / 2, () =>
+      {
+        graph.orderBy.Remove(edge.variableName);
+        edge.UndoConversion();
+        PopulateEdge(input);
+      });
+      cm.AddButton("Rename", Color.red / 2, () =>
+      {
+        KeyboardHandler.instance.Open(edge);
+      });
+    }
+    else
+    {
+      if (!edge.IsVariable)
+      {
+        cm.AddButton("Convert to Variable", Color.blue / 2, () =>
+        {
+          edge.MakeVariable();
+          edge.Select();
+          PopulateEdge(input);
+        });
+      }
+    }
+
+    if (edge.IsSelected)
+    {
+      limitSlider.SetActive(true);
+      cm.AddButton("Remove selection", Color.yellow / 2, () =>
+      {
+        graph.orderBy.Remove(edge.variableName);
+        edge.Deselect();
+        PopulateEdge(input);
+      });
+      cm.AddButton("Query similar patterns", Color.yellow / 2, () =>
+      {
+        graph.QuerySimilarPatternsMultipleLayers();
+      });
+      cm.AddButton("Query similar patterns (single layer)", Color.yellow / 2, () =>
+      {
+        graph.QuerySimilarPatternsSingleLayer();
+      });
+    }
+    else
+    {
+      cm.AddButton("Select triple", Color.yellow / 2, () =>
+      {
+        edge.Select();
+        PopulateEdge(input);
+      });
+    }
+
+
+    cm.AddButton("Settings", Color.yellow / 2, () =>
+    {
+      subMenu = "Settings";
+      cm.Close();
+      PopulateEdge(input);
+    });
+    cm.AddButton("Graph operations", Color.red / 2, () =>
+    {
+      subMenu = "Graph";
+      cm.Close();
+      PopulateEdge(input);
+    });
+  }
+
+  private void PopulateEdgeDisplaySubMenus(Object input)
+  {
+    // We are in a sub menu
+    cm.AddButton("Back", Color.blue / 2, () =>
+    {
+      subMenu = "";
+      cm.Close();
+      PopulateEdge(input);
+    });
+
+    if (subMenu == "Graph")
+    {
+      PopulateGraphMenu();
+    }
+    if (subMenu == "Settings")
+    {
+      PopulateSettingsMenu();
+    }
+    if (subMenu == "OrderBy")
+    {
+      PopulateOrderByMenu();
+    }
   }
 
   public void Close()
