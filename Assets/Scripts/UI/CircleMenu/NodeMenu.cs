@@ -313,6 +313,7 @@ public class NodeMenu : MonoBehaviour
 
         if (edge.IsSelected)
         {
+          limitSlider.SetActive(true);
           cm.AddButton("Remove selection", Color.yellow / 2, () =>
           {
             edge.Deselect();
