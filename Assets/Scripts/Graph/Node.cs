@@ -1,6 +1,7 @@
-﻿using Dweiss;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Dweiss;
 using UnityEngine;
 using UnityEngine.Networking;
 using VDS.RDF;
@@ -107,35 +108,36 @@ public class Node : MonoBehaviour
     {
       SetColor(ColorSettings.instance.variableColor);
     }
+    else if (graphNode != null)
+    {
+      UpdateColorByNodeType();
+    }
     else
     {
-      if (graphNode != null)
-      {
-        switch (graphNode.NodeType)
-        {
-          case NodeType.Variable:
-            SetColor(ColorSettings.instance.variableColor);
-            break;
-          case NodeType.Blank:
-            uri = "";
-            SetColor(ColorSettings.instance.blankNodeColor);
-            break;
-          case NodeType.Literal:
-            SetLabel(((ILiteralNode)graphNode).Value);
-            uri = "";
-            SetColor(ColorSettings.instance.literalColor);
-            break;
-          case NodeType.Uri:
-            uri = ((IUriNode)graphNode).Uri.ToString();
-            SetColor(ColorSettings.instance.uriColor);
-            break;
-            // etc.
-        }
-      }
-      else
-      {
-        SetColor(ColorSettings.instance.defaultNodeColor);
-      }
+      SetColor(ColorSettings.instance.defaultNodeColor);
+    }
+  }
+
+  private void UpdateColorByNodeType()
+  {
+    switch (graphNode.NodeType)
+    {
+      case NodeType.Variable:
+        SetColor(ColorSettings.instance.variableColor);
+        break;
+      case NodeType.Blank:
+        uri = "";
+        SetColor(ColorSettings.instance.blankNodeColor);
+        break;
+      case NodeType.Literal:
+        SetLabel(((ILiteralNode)graphNode).Value);
+        uri = "";
+        SetColor(ColorSettings.instance.literalColor);
+        break;
+      case NodeType.Uri:
+        uri = ((IUriNode)graphNode).Uri.ToString();
+        SetColor(ColorSettings.instance.uriColor);
+        break;
     }
   }
 
@@ -189,14 +191,11 @@ public class Node : MonoBehaviour
 
   private void ConnectLabelToNode()
   {
-    foreach (Triple tripleWithSubject in graphNode.Graph.GetTriplesWithSubject(graphNode))
+    Triple tripleWithSubject = graphNode.Graph.GetTriplesWithSubject(graphNode).Where(triple => IsLabelPredicate(triple.Predicate)).FirstOrDefault();
+    if (tripleWithSubject != null)
     {
-      if (IsLabelPredicate(tripleWithSubject.Predicate))
-      {
-        SetLabel(tripleWithSubject.Object.ToString());
-        graph.Remove(graph.GetByINode(tripleWithSubject.Object));
-        break;
-      }
+      SetLabel(tripleWithSubject.Object.ToString());
+      graph.Remove(graph.GetByINode(tripleWithSubject.Object));
     }
   }
 
@@ -288,7 +287,7 @@ public class Node : MonoBehaviour
 
       // handle aspect ratio
       float scale = 0.1f;
-      float width = 2.0f*scale;
+      float width = 2.0f * scale;
       float aspect = (float)((DownloadHandlerTexture)www.downloadHandler).texture.width / ((DownloadHandlerTexture)www.downloadHandler).texture.height;
       float height = width / aspect;
       GetComponent<Renderer>().gameObject.transform.localScale = new Vector3(width, height, scale);

@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Dweiss;
 using UnityEngine;
 using VDS.RDF;
 using VDS.RDF.Parsing;
 using VDS.RDF.Query;
 using VDS.RDF.Query.Patterns;
-using Dweiss;
 
 public class QueryService : MonoBehaviour
 {
   public string BaseURI = "http://dbpedia.org"; //"https://github.com/PjotrSvetachov/GraphVR/example-graph";
   public int queryLimit = 25;
-  const string prefixes = @"
+  const string PREFIXES = @"
     prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
     prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>";
 
@@ -21,7 +22,12 @@ public class QueryService : MonoBehaviour
   private void Awake()
   {
     SetupSingelton();
+    AddDefaultNamespaces();
     this.endPoint = GetEndPoint();
+  }
+
+  private void AddDefaultNamespaces()
+  {
     defaultNamespace.AddNamespace("rdf", new Uri("http://www.w3.org/1999/02/22-rdf-syntax-ns#"));
     defaultNamespace.AddNamespace("owl", new Uri("http://www.w3.org/2002/07/owl#"));
     // For nice demo's
@@ -52,7 +58,7 @@ public class QueryService : MonoBehaviour
     {
       // Select with label
       return $@"
-            {prefixes}
+            {PREFIXES}
             construct {{
                 <{nodeUriString}> <{uri}> ?object .
                 ?object rdfs:label ?objectlabel
@@ -67,7 +73,7 @@ public class QueryService : MonoBehaviour
     else
     {
       return $@"
-            {prefixes}
+            {PREFIXES}
             construct {{
                 ?subject <{uri}> <{nodeUriString}>
             }} where {{
@@ -85,7 +91,7 @@ public class QueryService : MonoBehaviour
   public IGraph QueryByTriples(string triples)
   {
     string query = $@"
-            {prefixes}
+            {PREFIXES}
             construct {{
                 {triples} 
             }} where {{
@@ -106,7 +112,7 @@ public class QueryService : MonoBehaviour
   public IGraph CollapseIncomingGraph(Node node)
   {
     string query = $@"
-            {prefixes}
+            {PREFIXES}
             construct {{
                 ?s ?p2 <{node.GetURIAsString()}> .
             }} where {{
@@ -127,7 +133,7 @@ public class QueryService : MonoBehaviour
   public IGraph CollapseOutgoingGraph(Node node)
   {
     string query = $@"
-            {prefixes}
+            {PREFIXES}
             construct {{
                 <{node.GetURIAsString()}> ?p ?o .
             }} where {{
@@ -149,7 +155,7 @@ public class QueryService : MonoBehaviour
   public SparqlResultSet GetOutgoingPredicats(string URI)
   {
     string query = $@"
-      {prefixes}
+      {PREFIXES}
       select distinct ?p (STR(COUNT(?o)) AS ?count) STR(?label) AS ?label 
       where {{
         <{URI}> ?p ?o .
@@ -165,7 +171,7 @@ public class QueryService : MonoBehaviour
   public SparqlResultSet GetIncomingPredicats(string URI)
   {
     string query = $@"
-      {prefixes}
+      {PREFIXES}
       select distinct ?p (STR(COUNT(?s)) AS ?count) STR(?label) AS ?label 
       where {{ 
         ?s ?p <{URI}> . 
@@ -212,21 +218,25 @@ public class QueryService : MonoBehaviour
   public SparqlResultSet QuerySimilarPatternsMultipleLayers(string triples, List<string> orderByList, out string query)
   {
     // TODO: make sure 'orderByList' do still exist
-    string order = "";
-    if (orderByList.Count > 0)
-    {
-      order += "Order By ";
-      foreach (string name in orderByList)
-      {
-        order += $"DESC({name}) ";
-      }
-    }
+    string order = GetOrderByString(orderByList);
     query = $@"
-      {prefixes}
+      {PREFIXES}
       select distinct * where {{
         {triples}
       }} {order} LIMIT {queryLimit}";
     return endPoint.QueryWithResultSet(query);
+  }
+
+  private static string GetOrderByString(List<string> orderByList)
+  {
+    if (orderByList.Count > 0)
+    {
+      return orderByList.Aggregate("Order By", (accum, name) => accum += $"DESC({name}) ");
+    }
+    else
+    {
+      return "";
+    }
   }
 
   private SparqlRemoteEndpoint GetEndPoint()
