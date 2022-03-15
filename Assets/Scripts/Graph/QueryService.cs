@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using Dweiss;
 using UnityEngine;
@@ -215,7 +217,7 @@ public class QueryService : MonoBehaviour
     endPoint.QueryWithResultGraph(query, callback, null);
   }
 
-  public SparqlResultSet QuerySimilarPatternsMultipleLayers(string triples, List<string> orderByList, out string query)
+  public SparqlResultSet QuerySimilarPatternsMultipleLayers(string triples, OrderedDictionary orderByList, out string query)
   {
     // TODO: make sure 'orderByList' do still exist
     string order = GetOrderByString(orderByList);
@@ -227,11 +229,16 @@ public class QueryService : MonoBehaviour
     return endPoint.QueryWithResultSet(query);
   }
 
-  private static string GetOrderByString(List<string> orderByList)
+  private static string GetOrderByString(OrderedDictionary orderByList)
   {
     if (orderByList.Count > 0)
     {
-      return orderByList.Aggregate("Order By ", (accum, name) => accum += $"DESC({name}) ");
+      string result = "Order By ";
+      foreach (DictionaryEntry order in orderByList)
+      {
+        result += $"{order.Value}({order.Key}) ";
+      }
+      return result;
     }
     else
     {

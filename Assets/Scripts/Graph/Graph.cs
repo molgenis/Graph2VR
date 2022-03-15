@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using UnityEngine;
 using VDS.RDF;
@@ -16,7 +17,7 @@ public class Graph : MonoBehaviour
   public List<Edge> edgeList = new List<Edge>();
   public List<Node> nodeList = new List<Node>();
   public List<string> translatablePredicates = new List<string>();
-  public List<string> orderBy = new List<string>();
+  public OrderedDictionary orderBy = new OrderedDictionary();
   private SparqlResultSet lastResults = null;
   public VariableNameManager variableNameManager;
   public List<Edge> selection = new List<Edge>();
@@ -574,7 +575,7 @@ public class Graph : MonoBehaviour
   {
     if (parentGraph != null)
     {
-    //Todo: Keep modified graphs
+      //Todo: Keep modified graphs
       string tmp = this.creationQuery;
       this.creationQuery = null;
       foreach (Graph graph in parentGraph.subGraphs)
@@ -584,7 +585,7 @@ public class Graph : MonoBehaviour
     }
   }
 
-    public void SwitchLayout<T>()
+  public void SwitchLayout<T>()
   {
     foreach (BaseLayoutAlgorithm baseLayout in GetComponents<BaseLayoutAlgorithm>())
     {

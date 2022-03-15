@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using Valve.VR;
 using VDS.RDF;
@@ -303,11 +304,17 @@ public class NodeMenu : MonoBehaviour
   {
     int count = 1;
 
-    foreach (string variable in graph.orderBy)
+    foreach (DictionaryEntry order in graph.orderBy)
     {
-      cm.AddButton(count + " - " + variable, Color.green / 2, () =>
+      string label = count + " - " + order.Key;
+      cm.AddButton(label, label, Color.green / 2, () =>
       {
-        graph.orderBy.Remove(variable);
+        graph.orderBy.Remove(order.Key);
+        cm.Close();
+        PopulateEdge(edge);
+      }, order.Value.ToString(), () =>
+      {
+        graph.orderBy[order.Key] = order.Value.ToString() == "ASC" ? "DESC" : "ASC";
         cm.Close();
         PopulateEdge(edge);
       });
@@ -315,20 +322,20 @@ public class NodeMenu : MonoBehaviour
     }
 
     HashSet<string> addNameList = SelectedVariableNames();
-    foreach (string variable in graph.orderBy)
+    foreach (DictionaryEntry order in graph.orderBy)
     {
-      addNameList.Remove(variable);
+      addNameList.Remove(order.Key.ToString());
     }
 
     foreach (string variable in addNameList)
     {
-      cm.AddButton("Select " + variable, Color.yellow / 2, () =>
-          {
-            graph.orderBy.Remove(variable);
-            graph.orderBy.Insert(graph.orderBy.Count, variable);
-            cm.Close();
-            PopulateEdge(edge);
-          });
+      cm.AddButton("Order by " + variable, Color.gray / 2, () =>
+        {
+          graph.orderBy.Remove(variable);
+          graph.orderBy.Add(variable, "ASC");
+          cm.Close();
+          PopulateEdge(edge);
+        });
     }
   }
 
