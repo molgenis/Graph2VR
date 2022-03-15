@@ -513,46 +513,26 @@ public class Graph : MonoBehaviour
     return nodeList.Find((Node node) => node.graphNode.Equals(iNode));
   }
 
-
-  public void Hide(Node node)
+  public void Remove(Node node, bool removeEmptyLeaves = false)
   {
     if (node != null)
     {
-      node.gameObject.SetActive(false);
-    }
-    // NOTE: is it correct only to hide edges pointing to this node? how about edges pointing away from this node?
-    Edge e = edgeList.Find((Edge edge) => edge.graphObject.Equals(node.graphNode));
-    if (e != null)
-    {
-      e.gameObject.SetActive(false);
-    }
-  }
+      for (int i = node.connections.Count - 1; i >= 0; i--)
+      {
+        Edge edge = node.connections[i];
+        edge.displayObject.connections.Remove(edge);
+        edge.displaySubject.connections.Remove(edge);
+        edgeList.Remove(edge);
+        Destroy(edge.gameObject);
+        Node otherNode = edge.displayObject == node ? edge.displaySubject : edge.displayObject;
+        if(removeEmptyLeaves && otherNode.connections.Count == 0)
+        {
+          Remove(otherNode);
+        }
+      }
 
-  public void Hide(INode node)
-  {
-    Hide(GetByINode(node));
-  }
-
-  public void Remove(Node node)
-  {
-    if (node != null)
-    {
-      RemoveEdgeForNode(node);
       nodeList.Remove(node);
       Destroy(node.gameObject);
-    }
-  }
-
-  private void RemoveEdgeForNode(Node node)
-  {
-    // Reverse iterate so we can savely remove items from the list while doing the iteration
-    for (int i = node.connections.Count - 1; i >= 0; i--)
-    {
-      Edge edge = node.connections[i];
-      edge.displayObject.connections.Remove(edge);
-      edge.displaySubject.connections.Remove(edge);
-      edgeList.Remove(edge);
-      Destroy(edge.gameObject);
     }
   }
 

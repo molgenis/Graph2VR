@@ -98,7 +98,7 @@ public class NodeMenu : MonoBehaviour
 
     cm.AddButton("Close node", new Color(1, 0.5f, 0.5f) / 2, () =>
       {
-        graph.Remove(node);
+        graph.Remove(node, true);
         Close();
       });
 
