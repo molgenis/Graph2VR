@@ -574,14 +574,17 @@ public class Graph : MonoBehaviour
   {
     if (parentGraph != null)
     {
+    //Todo: Keep modified graphs
+      string tmp = this.creationQuery;
+      this.creationQuery = null;
       foreach (Graph graph in parentGraph.subGraphs)
       {
-        if (graph != null && graph.creationQuery == creationQuery) graph.Remove();
+        if (graph != null && graph.creationQuery != null && graph.creationQuery == creationQuery) graph.Remove();
       }
     }
   }
 
-  public void SwitchLayout<T>()
+    public void SwitchLayout<T>()
   {
     foreach (BaseLayoutAlgorithm baseLayout in GetComponents<BaseLayoutAlgorithm>())
     {
