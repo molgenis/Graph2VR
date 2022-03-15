@@ -435,7 +435,7 @@ public class Graph : MonoBehaviour
     return edge;
   }
 
-  public Edge CreateEdge(INode from, INode uri, INode to)
+  public void CreateEdge(INode from, INode uri, INode to)
   {
     Node fromNode = GetByINode(from);
     Node toNode = GetByINode(to);
@@ -443,7 +443,7 @@ public class Graph : MonoBehaviour
     if (fromNode == null || toNode == null)
     {
       Debug.Log("The Subject and Object needs to be defined to create a edge");
-      return null;
+      return;
     }
 
     Edge edge = InitializeEdge(uri.ToString(), fromNode, toNode);
@@ -454,8 +454,6 @@ public class Graph : MonoBehaviour
     edgeList.Add(edge);
     fromNode.AddConnection(edge);
     toNode.AddConnection(edge);
-
-    return edge;
   }
   private Edge InitializeEdge(string uri, Node from, Node to)
   {
@@ -478,7 +476,7 @@ public class Graph : MonoBehaviour
     return clone;
   }
 
-  public Node CreateNode(string value, INode iNode)
+  public void CreateNode(string value, INode iNode)
   {
     GameObject clone = Instantiate<GameObject>(nodePrefab);
     clone.transform.SetParent(transform);
@@ -487,7 +485,6 @@ public class Graph : MonoBehaviour
     clone.transform.localScale = Vector3.one * 0.05f;
     Node node = CreateNodeFromClone(value, clone);
     node.graphNode = iNode;
-    return node;
   }
 
   public Node CreateNode(string value, Vector3 position)
