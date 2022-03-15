@@ -231,7 +231,7 @@ public class QueryService : MonoBehaviour
   {
     if (orderByList.Count > 0)
     {
-      return orderByList.Aggregate("Order By", (accum, name) => accum += $"DESC({name}) ");
+      return orderByList.Aggregate("Order By ", (accum, name) => accum += $"DESC({name}) ");
     }
     else
     {
