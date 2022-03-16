@@ -12,7 +12,6 @@ using VDS.RDF.Query.Patterns;
 
 public class QueryService : MonoBehaviour
 {
-  public string BaseURI = "http://dbpedia.org"; //"https://github.com/PjotrSvetachov/GraphVR/example-graph";
   public int queryLimit = 25;
   const string PREFIXES = @"
     prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
@@ -248,7 +247,7 @@ public class QueryService : MonoBehaviour
 
   private SparqlRemoteEndpoint GetEndPoint()
   {
-    return new SparqlRemoteEndpoint(new Uri(Settings.Instance.SparqlEndpoint), BaseURI);
+    return new SparqlRemoteEndpoint(new Uri(Settings.Instance.SparqlEndpoint), Settings.Instance.BaseURI);
   }
 
   #region  Singleton
