@@ -11,7 +11,7 @@ using UnityEngine;
 namespace Dweiss
 {
   [System.Serializable]
-  public class Settings : MonoBehaviour
+  public class Settings : ASettings
   {  // Temporary removed baseclase ASettings
     [Header("--Main settings--")]
     public string SparqlEndpoint = "https://dbpedia.org/sparql";
@@ -21,7 +21,7 @@ namespace Dweiss
 
     public string StartingURI = "Biobank";
 
-    public string[] ImagePredicates = { "http://xmlns.com/foaf/0.1/depiction", "http://xmlns.com/foaf/0.1/Image", "http://xmlns.com/foaf/0.1/depiction", "http://xmlns.com/foaf/0.1/thumbnail", "http://dbpedia.org/property/photo" };
+    public string[] ImagePredicates = { "http://xmlns.com/foaf/0.1/depiction", "http://xmlns.com/foaf/0.1/Image", "http://xmlns.com/foaf/0.1/thumbnail", "http://dbpedia.org/property/photo" };
 
     private void Awake()
     {

@@ -513,10 +513,13 @@ public class Graph : MonoBehaviour
     return nodeList.Find((Node node) => node.graphNode.Equals(iNode));
   }
 
+  // Removes a node from the graph. This will also remove all the edges leading to this node.
+  // Settings to removeEmptyLeaves to true will remove any connected node that only has this node as a connection.
   public void Remove(Node node, bool removeEmptyLeaves = false)
   {
     if (node != null)
     {
+      // Reverse iterate so we can savely remove items from the list while doing the iteration
       for (int i = node.connections.Count - 1; i >= 0; i--)
       {
         Edge edge = node.connections[i];
