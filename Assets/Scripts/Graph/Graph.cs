@@ -558,13 +558,11 @@ public class Graph : MonoBehaviour
   {
     if (parentGraph != null)
     {
-      //Todo: Keep modified graphs
-      string tmp = this.creationQuery;
-      this.creationQuery = null;
       foreach (Graph graph in parentGraph.subGraphs)
       {
-        if (graph != null && graph.creationQuery != null && graph.creationQuery == creationQuery) graph.Remove();
+        if (graph != this && graph.creationQuery != null && graph.creationQuery == creationQuery) graph.Remove();
       }
+      this.creationQuery = null;
     }
   }
 
