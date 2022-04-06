@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Valve.VR;
 using VDS.RDF;
 
 public class NodeMenu : MonoBehaviour
@@ -12,7 +11,6 @@ public class NodeMenu : MonoBehaviour
   private Edge edge = null;
 
   public GameObject controlerModel;
-  public SteamVR_Action_Boolean clickAction = null;
   public string subMenu = "";
   public GameObject limitSlider;
 
@@ -23,10 +21,13 @@ public class NodeMenu : MonoBehaviour
 
   public void Update()
   {
+    // TODO: reimplement closing the menu
+    /*
     if (clickAction.GetStateDown(SteamVR_Input_Sources.LeftHand) == true)
     {
       Close();
     }
+    */
   }
 
   public void PopulateIncomingMenu()
