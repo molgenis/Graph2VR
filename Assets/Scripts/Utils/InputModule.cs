@@ -16,6 +16,7 @@ public class InputModule : BaseInputModule
     Data = new PointerEventData(eventSystem);
   }
 
+  private bool lastTriggerState = false;
   public override void Process()
   {
     Data.Reset();
@@ -29,16 +30,16 @@ public class InputModule : BaseInputModule
 
     HandlePointerExitAndEnter(Data, CurrentSelectedObject);
 
-    if (ControlerInput.instance.triggerRight == false)
+    if (ControlerInput.instance.triggerRight == true && lastTriggerState == false)
     {
       processPress();
+      lastTriggerState = ControlerInput.instance.triggerRight;
     }
-
-    if (ControlerInput.instance.triggerRight == true)
+    else if (ControlerInput.instance.triggerRight == false && lastTriggerState == true)
     {
       processRelease();
+      lastTriggerState = ControlerInput.instance.triggerRight;
     }
-
   }
 
   private void processPress()

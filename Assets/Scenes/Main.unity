@@ -876,7 +876,7 @@ MonoBehaviour:
   axisLeft: {x: 0, y: 0}
   axisRight: {x: 0, y: 0}
   gripActionLeft:
-    m_UseReference: 1
+    m_UseReference: 0
     m_Action:
       m_Name: Grip Action Left
       m_Type: 0
@@ -929,7 +929,7 @@ MonoBehaviour:
         m_Id: 746bec38-ef20-4839-953e-151e4e7bdb36
         m_Path: <XRController>{LeftHand}/trigger
         m_Interactions: 
-        m_Processors: 
+        m_Processors: AxisDeadzone
         m_Groups: 
         m_Action: Trigger Action Left
         m_Flags: 0
@@ -948,8 +948,8 @@ MonoBehaviour:
       - m_Name: 
         m_Id: faf2b6a3-c9f1-4286-877e-9f6dcac17a73
         m_Path: <XRController>{RightHand}/trigger
-        m_Interactions: 
-        m_Processors: 
+        m_Interactions: Press(behavior=2)
+        m_Processors: AxisDeadzone
         m_Groups: 
         m_Action: Trigger Action Right
         m_Flags: 0
@@ -969,7 +969,7 @@ MonoBehaviour:
         m_Id: a1ea76f4-3465-445b-b96e-2e8e7af7adf8
         m_Path: <XRController>{LeftHand}/joystick
         m_Interactions: 
-        m_Processors: 
+        m_Processors: StickDeadzone
         m_Groups: 
         m_Action: Left Axis
         m_Flags: 0
@@ -997,7 +997,7 @@ MonoBehaviour:
         m_Id: 3355d497-3a76-4fbf-b029-0f13d1b409c4
         m_Path: <XRController>{RightHand}/joystick
         m_Interactions: 
-        m_Processors: 
+        m_Processors: StickDeadzone
         m_Groups: 
         m_Action: Right Axis
         m_Flags: 0
@@ -1039,6 +1039,11 @@ Camera:
   m_CorrespondingSourceObject: {fileID: 6007703616832934291, guid: 97869828da070e047b842768e2686dc1, type: 3}
   m_PrefabInstance: {fileID: 2114014559}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &1536544817 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6007703615058727583, guid: 97869828da070e047b842768e2686dc1, type: 3}
+  m_PrefabInstance: {fileID: 2114014559}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1805997880 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6007703615058219551, guid: 97869828da070e047b842768e2686dc1, type: 3}
@@ -1062,6 +1067,11 @@ MonoBehaviour:
   m_TrackingType: 0
   m_UpdateType: 0
   m_UseRelativeTransform: 0
+--- !u!4 &1805997884 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6007703615058671171, guid: 97869828da070e047b842768e2686dc1, type: 3}
+  m_PrefabInstance: {fileID: 2114014559}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1812040979
 GameObject:
   m_ObjectHideFlags: 0
@@ -1130,6 +1140,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4584098405492057436, guid: 97869828da070e047b842768e2686dc1, type: 3}
+      propertyPath: leftController
+      value: 
+      objectReference: {fileID: 1805997884}
+    - target: {fileID: 4584098405492057436, guid: 97869828da070e047b842768e2686dc1, type: 3}
+      propertyPath: rightControler
+      value: 
+      objectReference: {fileID: 1536544817}
     - target: {fileID: 6006723395369206453, guid: 97869828da070e047b842768e2686dc1, type: 3}
       propertyPath: m_IsActive
       value: 1
