@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5987724217963503345}
   - component: {fileID: 5926846574481551007}
   - component: {fileID: 6007703616432736851}
+  - component: {fileID: 373069261}
   m_Layer: 0
   m_Name: Camera
   m_TagString: MainCamera
@@ -119,6 +120,24 @@ MonoBehaviour:
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
+--- !u!114 &373069261
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6006723395369206453}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a2a9c34df4095f47b9ca8f975175f5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Device: 0
+  m_PoseSource: 2
+  m_PoseProviderComponent: {fileID: 0}
+  m_TrackingType: 0
+  m_UpdateType: 0
+  m_UseRelativeTransform: 0
 --- !u!1 &6007703614898700292
 GameObject:
   m_ObjectHideFlags: 0
@@ -341,6 +360,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6007703615058671171}
   - component: {fileID: 6007703615780769615}
+  - component: {fileID: 1805997883}
   m_Layer: 0
   m_Name: Controller (left)
   m_TagString: LeftController
@@ -379,6 +399,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b88e17e44e0c2384280d5bc4a74c5ee9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1805997883
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6007703615058219551}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a2a9c34df4095f47b9ca8f975175f5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Device: 1
+  m_PoseSource: 4
+  m_PoseProviderComponent: {fileID: 0}
+  m_TrackingType: 0
+  m_UpdateType: 0
+  m_UseRelativeTransform: 0
 --- !u!1 &6007703615058413357
 GameObject:
   m_ObjectHideFlags: 0
@@ -423,6 +461,7 @@ GameObject:
   - component: {fileID: 6007703616832934288}
   - component: {fileID: 6007703616832934290}
   - component: {fileID: 6007703616432736848}
+  - component: {fileID: 1536544811}
   m_Layer: 0
   m_Name: Controller (right)
   m_TagString: RightControler
@@ -548,6 +587,24 @@ MonoBehaviour:
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
+--- !u!114 &1536544811
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6007703615058450489}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a2a9c34df4095f47b9ca8f975175f5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Device: 1
+  m_PoseSource: 5
+  m_PoseProviderComponent: {fileID: 0}
+  m_TrackingType: 0
+  m_UpdateType: 0
+  m_UseRelativeTransform: 0
 --- !u!1 &6007703615058462837
 GameObject:
   m_ObjectHideFlags: 0
@@ -675,7 +732,7 @@ LineRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6007703615058463561}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -843,8 +900,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95f908cd9b641b04a866ce7104905d41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leftController: {fileID: 0}
-  rightControler: {fileID: 0}
+  leftController: {fileID: 6007703615058671171}
+  rightControler: {fileID: 6007703615058727583}
   baseMaterial: {fileID: 2100000, guid: f9f74ce54d36249479f4f111fd209e9b, type: 2}
   size: 0.015
   scaleFactor: 1
