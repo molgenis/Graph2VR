@@ -366,6 +366,29 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &373069256 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6006723395369206453, guid: 97869828da070e047b842768e2686dc1, type: 3}
+  m_PrefabInstance: {fileID: 2114014559}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &373069261
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 373069256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a2a9c34df4095f47b9ca8f975175f5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Device: 0
+  m_PoseSource: 2
+  m_PoseProviderComponent: {fileID: 0}
+  m_TrackingType: 0
+  m_UpdateType: 0
+  m_UseRelativeTransform: 0
 --- !u!1 &420006875
 GameObject:
   m_ObjectHideFlags: 0
@@ -462,10 +485,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b8bd091c78d6a74c806451598586798, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  zoomGraph: {fileID: 1503421650}
-  gripAction:
-    actionPath: /actions/default/in/GrabGrip
-    needsReinit: 0
 --- !u!1 &492886757
 GameObject:
   m_ObjectHideFlags: 0
@@ -866,8 +885,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   languageCode: en
-  initialSparqlQueryString: select distinct <http://dbpedia.org/resource/Biobank>
-    as ?s ?p ?o where { <http://dbpedia.org/resource/Biobank> ?p ?o } LIMIT 100
   mainGraph: {fileID: 0}
   graphPrefab: {fileID: 280358173420448884, guid: 4b47d999b2a37494baf875b5db9ccd16, type: 3}
 --- !u!114 &1503421654
@@ -925,6 +942,52 @@ MonoBehaviour:
   nodeOwlDatatypeColor: {r: 0.6, g: 0.8, b: 0.4, a: 0}
   DeprecatedColor: {r: 0.8, g: 0.8, b: 0.8, a: 0}
   arrowheadSubclassOfColor: {r: 1, g: 1, b: 1, a: 1}
+--- !u!1 &1536544805 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6007703615058450489, guid: 97869828da070e047b842768e2686dc1, type: 3}
+  m_PrefabInstance: {fileID: 2114014559}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1536544811
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1536544805}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a2a9c34df4095f47b9ca8f975175f5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Device: 1
+  m_PoseSource: 5
+  m_PoseProviderComponent: {fileID: 0}
+  m_TrackingType: 0
+  m_UpdateType: 0
+  m_UseRelativeTransform: 0
+--- !u!1 &1805997880 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6007703615058219551, guid: 97869828da070e047b842768e2686dc1, type: 3}
+  m_PrefabInstance: {fileID: 2114014559}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1805997883
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1805997880}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a2a9c34df4095f47b9ca8f975175f5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Device: 1
+  m_PoseSource: 4
+  m_PoseProviderComponent: {fileID: 0}
+  m_TrackingType: 0
+  m_UpdateType: 0
+  m_UseRelativeTransform: 0
 --- !u!1 &1812040979
 GameObject:
   m_ObjectHideFlags: 0
@@ -986,6 +1049,63 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &2114014559
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 6007703615058463561, guid: 97869828da070e047b842768e2686dc1, type: 3}
+      propertyPath: m_Name
+      value: '[CameraRig]'
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007703615058713265, guid: 97869828da070e047b842768e2686dc1, type: 3}
+      propertyPath: m_RootOrder
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007703615058713265, guid: 97869828da070e047b842768e2686dc1, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007703615058713265, guid: 97869828da070e047b842768e2686dc1, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.141
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007703615058713265, guid: 97869828da070e047b842768e2686dc1, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007703615058713265, guid: 97869828da070e047b842768e2686dc1, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007703615058713265, guid: 97869828da070e047b842768e2686dc1, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007703615058713265, guid: 97869828da070e047b842768e2686dc1, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007703615058713265, guid: 97869828da070e047b842768e2686dc1, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007703615058713265, guid: 97869828da070e047b842768e2686dc1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007703615058713265, guid: 97869828da070e047b842768e2686dc1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007703615058713265, guid: 97869828da070e047b842768e2686dc1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 97869828da070e047b842768e2686dc1, type: 3}
 --- !u!1 &1141087710156371
 GameObject:
   m_ObjectHideFlags: 0
@@ -1031,7 +1151,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SparqlEndpoint: https://dbpedia.org/sparql
-  StartingURI: Biobank
+  BaseURI: http://dbpedia.org
+  initialSparqlQueryString: construct {?s ?p ?o}  where  {?s ?p ?o} Limit 100
+  ImagePredicates:
+  - http://xmlns.com/foaf/0.1/depiction
+  - http://xmlns.com/foaf/0.1/Image
+  - http://xmlns.com/foaf/0.1/thumbnail
+  - http://dbpedia.org/property/photo
 --- !u!33 &859103716498335965
 MeshFilter:
   m_ObjectHideFlags: 0
