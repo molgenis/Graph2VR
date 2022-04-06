@@ -6,7 +6,6 @@
  * See https://abnormalcreativity.wixsite.com/home for more info
  *******************************************************/
 using UnityEngine;
-using System.Collections;
 using System.IO;
 
 namespace Dweiss
@@ -19,14 +18,10 @@ namespace Dweiss
         public const string FolderPath = "_FilesToCopy/";
         public const string SettingFolderPath = "Assets/" + FolderPath;
 
-        public const string SettingPath = SettingFolderPath + FileName;//FilesToCopy/Settings.txt";
+        public const string SettingPath = SettingFolderPath + FileName;//_FilesToCopy/Settings.txt";
 
         private bool _loadSettingInEditorPlay = true;
         public bool LoadSettingInEditorPlay { get { return _loadSettingInEditorPlay; } set { _loadSettingInEditorPlay = value; } }
-
-        private bool _autoSave = true;
-        public bool AutoSave { get { return _autoSave; } set { _autoSave = value; } }
-        
 
         public System.Action onValidateFunc;
 
@@ -44,18 +39,6 @@ namespace Dweiss
             SetScriptAwakeOrder<ASettings>(short.MinValue);
 #endif
         }
-
-        protected void OnValidate()
-        {
-#if UNITY_EDITOR
-            if (AutoSave && Application.isPlaying == false)
-            {
-                //Debug.Log("Auto save " + Application.isPlaying + " " );
-                SaveToFile(false);
-            }
-#endif
-        }
-
 
         // Use this for initialization
         protected void Awake()
@@ -85,13 +68,14 @@ namespace Dweiss
 
         private void LoadEditorSetting()
         {
-            if (LoadSettingInEditorPlay)
+            // Disable loading from json on play for now. This can make you loose your changes when forgetting to save.
+            /*if (LoadSettingInEditorPlay)
             {
                 var filePath = System.IO.Path.Combine(Application.dataPath, FolderPath + FileName);
                 
                 LoadSetting(filePath);
 
-            }
+            }*/
         }
         private string GetJsonFromFile(string path)
         {

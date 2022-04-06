@@ -1,10 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class BaseLayoutAlgorithm : MonoBehaviour
 {
   protected Graph graph;
+  public Graph parentGraph = null;
+
   public void Awake()
   {
     graph = GetComponent<Graph>();

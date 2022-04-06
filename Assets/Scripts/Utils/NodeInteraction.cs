@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class NodeInteraction : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler, IGrabInterface
@@ -19,6 +17,7 @@ public class NodeInteraction : MonoBehaviour, IPointerEnterHandler, IPointerExit
   public void OnPointerClick(PointerEventData eventData)
   {
     Node node = GetComponent<Node>();
+    GameObject.FindGameObjectWithTag("LeftController").BroadcastMessage("Clear", SendMessageOptions.DontRequireReceiver);
     GameObject.FindGameObjectWithTag("LeftController").BroadcastMessage("PopulateNode", node, SendMessageOptions.DontRequireReceiver);
   }
 
@@ -45,7 +44,8 @@ public class NodeInteraction : MonoBehaviour, IPointerEnterHandler, IPointerExit
     node.IsControllerGrabbed = false;
 
     this.transform.SetParent(originalParent, true);
-    graph.layout.CalculateLayout();
+    // NOTE: make some button to trigger the solver again. We dont always want it to solve. Sometimes we want the move the nodes ourself
+    // graph.layout.CalculateLayout(); 
   }
 
   void IPointerEnterHandler.OnPointerEnter(PointerEventData eventData)

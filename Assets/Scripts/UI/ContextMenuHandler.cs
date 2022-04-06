@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using VDS.RDF;
 
 public class ContextMenuHandler : MonoBehaviour
 {
@@ -20,7 +18,7 @@ public class ContextMenuHandler : MonoBehaviour
     // Todo: reimplement with the new multiple graph system
     /*
         labelPrefab = Resources.Load<GameObject>("UI/Label");
-        Graph.instance.GetDescriptionAsync(node.uri, (graph, state) => {
+        QueryService.Instance.GetDescriptionAsync(node.uri, (graph, state) => {
             UnityMainThreadDispatcher.Instance().Enqueue( () =>{
                 HashSet<INode> predicates = new HashSet<INode>();
                 foreach (Triple triple in graph.Triples)

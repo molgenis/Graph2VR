@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -28,9 +27,13 @@ public class CircleMenu : MonoBehaviour
   {
     // Settings
     public string label;
+    public string hoveredLabel;
     public Color color;
     public Action callback;
-    public int number;
+    public int number = -1;
+
+    public string additionalLabel = "";
+    public Action additionalCallback;
 
     // Generated values
     public GameObject instance;
@@ -63,7 +66,17 @@ public class CircleMenu : MonoBehaviour
 
   public void AddButton(string label, Color color, Action callback, int number = -1)
   {
-    buttons.Add(new CircleButton { label = label, color = color, callback = callback, number = number });
+    buttons.Add(new CircleButton { label = label, hoveredLabel = label, color = color, callback = callback, number = number });
+  }
+
+  public void AddButton(string label, string hoveredLabel, Color color, Action callback, int number = -1)
+  {
+    buttons.Add(new CircleButton { label = label, hoveredLabel = hoveredLabel, color = color, callback = callback, number = number });
+  }
+
+  public void AddButton(string label, string hoveredLabel, Color color, Action callback, string additionalLabel, Action additionalCallback)
+  {
+    buttons.Add(new CircleButton { label = label, hoveredLabel = hoveredLabel, color = color, callback = callback, additionalLabel = additionalLabel, additionalCallback = additionalCallback });
   }
 
   public void Close()
@@ -80,6 +93,7 @@ public class CircleMenu : MonoBehaviour
 
     buttons.Clear();
     isBuild = false;
+    sliderValue = 0;
   }
 
   public float GetMenuAngle()
@@ -120,7 +134,7 @@ public class CircleMenu : MonoBehaviour
       textObject.transform.parent = clone.transform;
       TextMeshPro text = textObject.AddComponent<TextMeshPro>();
       text.text = button.label;
-      text.fontSizeMax = 10;
+      text.fontSizeMax = 8;
       text.fontSizeMin = 4;
       text.enableWordWrapping = false;
       text.overflowMode = TextOverflowModes.Ellipsis;
@@ -130,7 +144,7 @@ public class CircleMenu : MonoBehaviour
 
       RectTransform textTransform = (RectTransform)textObject.transform;
       textTransform.pivot = new Vector2(0, 0.5f);
-      textTransform.sizeDelta = new Vector2(7f, 2f);
+      textTransform.sizeDelta = new Vector2(7f, 1.5f);
       textTransform.localScale = new Vector3(1, 1, 1);
       textTransform.localPosition = new Vector3(0, 2.5f, 0.1f);
       textTransform.localRotation = Quaternion.Euler(0, 180, 90);
@@ -146,39 +160,49 @@ public class CircleMenu : MonoBehaviour
       collider.sharedMesh = mesh.mesh;
       collider.convex = true;
 
-      // Number object
-      if (button.number != -1)
+      // additional object
+      if (button.number != -1 || button.additionalLabel != "")
       {
-        GameObject number = new GameObject("Button-number-" + index);
-        number.transform.parent = clone.transform;
-        number.transform.localPosition = Vector3.zero;
-        number.transform.localRotation = Quaternion.identity;
-        number.transform.localScale = Vector3.one;
+        GameObject additionalButton = new GameObject("additional-button-" + index);
+        additionalButton.transform.parent = clone.transform;
+        additionalButton.transform.localPosition = Vector3.zero;
+        additionalButton.transform.localRotation = Quaternion.identity;
+        additionalButton.transform.localScale = Vector3.one;
 
-        GameObject numberObject = new GameObject(button.number.ToString());
-        numberObject.transform.parent = number.transform;
-        TextMeshPro num = numberObject.AddComponent<TextMeshPro>();
-        num.text = button.number.ToString();
-        num.fontSizeMax = 10;
-        num.fontSizeMin = 6;
-        num.enableAutoSizing = true;
-        num.alignment = TextAlignmentOptions.Center;
+        GameObject additionalButtonObject = new GameObject(button.number.ToString());
+        additionalButtonObject.transform.parent = additionalButton.transform;
+        TextMeshPro displayText = additionalButtonObject.AddComponent<TextMeshPro>();
 
-        RectTransform numberTransform = (RectTransform)numberObject.transform;
-        numberTransform.pivot = new Vector2(0, 0.5f);
-        numberTransform.sizeDelta = new Vector2(2.6f, 3f);
-        numberTransform.localScale = new Vector3(1, 1, 1);
-        numberTransform.localPosition = new Vector3(0, 10.3f, 0.1f);
-        numberTransform.localRotation = Quaternion.Euler(0, 180, 90);
+        if (button.additionalLabel != "")
+        {
+          additionalButton.AddComponent<CircleMenuButton>().Set(this, angle, button, true);
+          displayText.text = button.additionalLabel;
+        }
+        else
+        {
+          displayText.text = button.number.ToString();
+        }
 
-        MeshRenderer nrender = number.AddComponent<MeshRenderer>();
+        displayText.fontSizeMax = 10;
+        displayText.fontSizeMin = 6;
+        displayText.enableAutoSizing = true;
+        displayText.alignment = TextAlignmentOptions.Center;
+
+        RectTransform additionalObjectTransform = (RectTransform)additionalButtonObject.transform;
+        additionalObjectTransform.pivot = new Vector2(0, 0.5f);
+        additionalObjectTransform.sizeDelta = new Vector2(2.6f, 3f);
+        additionalObjectTransform.localScale = new Vector3(1, 1, 1);
+        additionalObjectTransform.localPosition = new Vector3(0, 10.3f, 0.1f);
+        additionalObjectTransform.localRotation = Quaternion.Euler(0, 180, 90);
+
+        MeshRenderer nrender = additionalButton.AddComponent<MeshRenderer>();
         nrender.material = baseMaterial;
         nrender.material.color = button.color;
 
-        MeshFilter nmesh = number.AddComponent<MeshFilter>();
+        MeshFilter nmesh = additionalButton.AddComponent<MeshFilter>();
         nmesh.mesh = GenerateArcButton(slice, 10.3f, 13.3f, 0.2f);
 
-        MeshCollider ncollider = number.AddComponent<MeshCollider>();
+        MeshCollider ncollider = additionalButton.AddComponent<MeshCollider>();
         ncollider.sharedMesh = nmesh.mesh;
         ncollider.convex = true;
       }

@@ -4,7 +4,7 @@ GraphVR is an application to Visualize Graphs (SPARQL) as 3D Graphs in Virtual R
 The idea is to explore, analyze, and interact with the data in the graph intuitively.
 
 GraphVR has been built in Unity and is able to connect to a SPARQL endpoint using [dotNetRDF](https://dotnetrdf.org/).
-We got inspired by many diffferent tools to work with Linked data and to visualize Graphs.
+We got inspired by many different tools to work with Linked data and to visualize Graphs.
 Virtual Reality offers the user way more space to expand the graph, then a 2D computer screen.
 
 We tried to reduce the ways to interact with the graph to a few simple operations:

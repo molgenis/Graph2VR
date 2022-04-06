@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using VDS.RDF;
 
 public class Edge : MonoBehaviour
@@ -33,43 +31,68 @@ public class Edge : MonoBehaviour
   private bool isPointerHovered = false;
   private bool isControllerHovered = false;
   private bool isControllerGrabbed = false;
+  private bool isSubclassOfRelation = false;
 
-  public bool IsVariable {
+  public bool IsVariable
+  {
     get => isVariable;
-    set {
+    set
+    {
       isVariable = value;
       UpdateColor();
+      UpdateEdgeText();
     }
   }
 
-  public bool IsSelected {
+  public bool IsSelected
+  {
     get => isSelected;
-    set {
+    set
+    {
       isSelected = value;
       UpdateColor();
     }
   }
 
-  public bool IsPointerHovered {
+  public bool IsPointerHovered
+  {
     get => isPointerHovered;
-    set {
+    set
+    {
       isPointerHovered = value;
       UpdateColor();
+      UpdateEdgeText();
     }
   }
 
-  public bool IsControllerHovered {
+  public bool IsControllerHovered
+  {
     get => isControllerHovered;
-    set {
+    set
+    {
       isControllerHovered = value;
       UpdateColor();
+      UpdateEdgeText();
     }
   }
 
-  public bool IsControllerGrabbed {
+  public bool IsControllerGrabbed
+  {
     get => isControllerGrabbed;
-    set {
+    set
+    {
       isControllerGrabbed = value;
+      UpdateColor();
+      UpdateEdgeText();
+    }
+  }
+
+  public bool IsSubclassOfRelation
+  {
+    get => uri.Equals("http://www.w3.org/2000/01/rdf-schema#subClassOf", System.StringComparison.OrdinalIgnoreCase);
+    set
+    {
+      isSubclassOfRelation = uri.Equals("http://www.w3.org/2000/01/rdf-schema#subClassOf", System.StringComparison.OrdinalIgnoreCase);
       UpdateColor();
     }
   }
@@ -84,45 +107,59 @@ public class Edge : MonoBehaviour
 
   private void Start()
   {
-    transform.localPosition = (displaySubject.transform.localPosition + displayObject.transform.localPosition) * 0.5f;
-
-    Vector3 fromPosition = displaySubject.transform.localPosition - transform.localPosition;
-    Vector3 toPosition = displayObject.transform.localPosition - transform.localPosition;
-
-    textFront = transform.Find("FrontText").GetComponent<TMPro.TextMeshPro>();
-    textBack = transform.Find("BackText").GetComponent<TMPro.TextMeshPro>();
-
-    string qname = graph.GetShortName(uri);
-    if (qname != "") {
-      textShort = textLong = qname;
-    } else {
-      textShort = Utils.GetShortLabelFromUri(uri);
-      textLong = uri;
-    }
-
-    // Calculate Text rotations
+    InitializeTexts();
     UpdatePosition();
     UpdateColor();
   }
 
+  private void InitializeTexts()
+  {
+    textFront = transform.Find("FrontText").GetComponent<TMPro.TextMeshPro>();
+
+    string shortName = graph.GetShortName(uri);
+    if (shortName != "")
+    {
+      textShort = textLong = shortName;
+    }
+    else
+    {
+      textShort = Utils.GetShortLabelFromUri(uri);
+      textLong = uri;
+    }
+    UpdateEdgeText();
+  }
   private void UpdateColor()
   {
-    if (IsControllerHovered || IsPointerHovered) {
+    if (IsControllerHovered || IsPointerHovered)
+    {
       SetColor(ColorSettings.instance.edgeHoverColor);
-    } else if (IsControllerGrabbed) {
+    }
+    else if (IsControllerGrabbed)
+    {
       SetColor(ColorSettings.instance.edgeGrabbedColor);
-    } else if (IsSelected) {
+    }
+    else if (IsSelected)
+    {
       SetColor(ColorSettings.instance.edgeSelectedColor);
-    } else if (IsVariable) {
+    }
+    else if (IsVariable)
+    {
       SetColor(ColorSettings.instance.variableColor);
-    } else {
+    }
+    else if (IsSubclassOfRelation)
+    {
+      SetColor(ColorSettings.instance.defaultEdgeColor, ColorSettings.instance.arrowheadSubclassOfColor);
+    }
+    else
+    {
       SetColor(ColorSettings.instance.defaultEdgeColor);
     }
   }
 
   private void Update()
   {
-    if (displaySubject == null || displayObject == null) {
+    if (displaySubject == null || displayObject == null)
+    {
       return;
     }
     UpdatePosition();
@@ -134,7 +171,8 @@ public class Edge : MonoBehaviour
     displaySubject.Select();
     displayObject.Select();
 
-    if (graphSubject != null && graphObject != null) {
+    if (graphSubject != null && graphObject != null)
+    {
       graph.AddToSelection(this);
     }
   }
@@ -145,8 +183,9 @@ public class Edge : MonoBehaviour
     displaySubject.Deselect();
     displayObject.Deselect();
 
-    if (graphSubject != null && graphObject != null) {
-      graph.AddToSelection(this);
+    if (graphSubject != null && graphObject != null)
+    {
+      graph.RemoveFromSelection(this);
     }
   }
 
@@ -158,7 +197,7 @@ public class Edge : MonoBehaviour
 
   private IVariableNode GetVariableInode()
   {
-    variableName = graph.variableNameManager.GetVariableName(uri);
+    SetVariableName(graph.variableNameManager.GetVariableName(graphPredicate));
     return nodeFactory.CreateVariableNode(variableName);
   }
 
@@ -175,9 +214,12 @@ public class Edge : MonoBehaviour
 
   public string GetQueryLabel()
   {
-    if (IsVariable) {
+    if (IsVariable)
+    {
       return variableName;
-    } else {
+    }
+    else
+    {
       return "<" + uri + ">";
     }
   }
@@ -193,56 +235,103 @@ public class Edge : MonoBehaviour
     arrow.GetComponent<Renderer>().material.color = color;
   }
 
+  public void SetColor(Color lineRenderercolor, Color Arrowheadcolor)
+  {
+    lineRenderer.material.color = lineRenderercolor;
+    arrow.GetComponent<Renderer>().material.color = Arrowheadcolor;
+  }
+
   private void UpdatePosition()
   {
     transform.position = (displaySubject.transform.position + displayObject.transform.position) * 0.5f;
     Vector3 fromPosition = displaySubject.transform.position - transform.position;
     Vector3 toPosition = displayObject.transform.position - transform.position;
-
-    // Calculate the postions of display parts
     float distance = ((toPosition - fromPosition).magnitude);
-    float textDistance = (distance * (1 / textBack.transform.localScale.x)) * 0.8f;
     Vector3 normal = (toPosition - fromPosition).normalized;
-    lineRenderer.startWidth = lineRenderer.endWidth = 0.005f * transform.lossyScale.magnitude;
-    lineRenderer.SetPosition(0, transform.worldToLocalMatrix * (fromPosition + normal * (displaySubject.transform.lossyScale.x * 0.5f)));
-    lineRenderer.SetPosition(1, transform.worldToLocalMatrix * (toPosition - (normal * ((displayObject.transform.lossyScale.x * 0.5f) + (arrow.lossyScale.x * 0.05f)))));
-    Vector2 rot = CalculateAngles(fromPosition, toPosition, true);
-    textFront.transform.rotation = Quaternion.Euler(0, rot.x, rot.y); // note this is world rotation
-    textFront.transform.localPosition = textFront.transform.localRotation * (Vector3.up * 0.025f); // note this is local position
-    rot = CalculateAngles(fromPosition, toPosition, false);
-    textBack.transform.rotation = Quaternion.Euler(0, rot.x, rot.y);
-    textBack.transform.localPosition = textBack.transform.localRotation * (Vector3.up * 0.025f);
-    textBack.rectTransform.sizeDelta = new Vector2(textDistance, 1);
-    textFront.rectTransform.sizeDelta = new Vector2(textDistance, 1);
+    Vector2 textRotation = CalculateAngles(fromPosition, toPosition);
+
+    UpdateLineRenderer(fromPosition, toPosition, distance, normal);
+    UpdateArrow(fromPosition, toPosition, normal);
+    PositionCollider(textRotation, distance);
+    RotateText(textRotation);
+    UpdateTextSize(distance);
+  }
+
+  private void UpdateArrow(Vector3 fromPosition, Vector3 toPosition, Vector3 normal)
+  {
     arrow.localPosition = (transform.worldToLocalMatrix * (toPosition - (normal * (displayObject.transform.lossyScale.x * 0.5f))));
     arrow.rotation = Quaternion.FromToRotation(Vector3.up, normal);
 
-    // Position the collider
-    collider.transform.rotation = Quaternion.Euler(0, rot.x, rot.y);
+  }
+
+  private void UpdateLineRenderer(Vector3 fromPosition, Vector3 toPosition, float distance, Vector3 normal)
+  {
+    lineRenderer.startWidth = lineRenderer.endWidth = 0.005f * transform.lossyScale.magnitude;
+    lineRenderer.SetPosition(0, transform.worldToLocalMatrix * (fromPosition + normal * (displaySubject.transform.lossyScale.x * 0.5f)));
+    lineRenderer.SetPosition(1, transform.worldToLocalMatrix * (toPosition - (normal * ((displayObject.transform.lossyScale.x * 0.5f) + (arrow.lossyScale.x * 0.05f)))));
+
+  }
+
+  private void PositionCollider(Vector2 backRotation, float distance)
+  {
+    collider.transform.rotation = Quaternion.Euler(0, backRotation.x, backRotation.y);
     collider.transform.localPosition = Vector3.zero;
     collider.height = distance * 0.85f;
+  }
 
-    // Update text
-    if (IsVariable) {
-      textFront.text = textBack.text = variableName;
-    } else if (IsPointerHovered || IsControllerHovered || IsControllerGrabbed) {
-      textFront.text = textBack.text = textLong;
-    } else {
-      textFront.text = textBack.text = textShort;
+  private void RotateText(Vector2 frontRotation)
+  {
+    textFront.transform.rotation = Quaternion.Euler(0, frontRotation.x, frontRotation.y); // note this is world rotation
+    textFront.transform.localPosition = textFront.transform.localRotation * (Vector3.up * 0.025f); // note this is local position
+                                                                                                   // Rotate the text to face the camera
+    if (Vector3.Dot(textFront.transform.forward, Camera.main.transform.forward) < 0)
+    {
+      textFront.transform.localRotation *= Quaternion.AngleAxis(180, Vector3.up);
+    }
+
+  }
+
+  private void UpdateTextSize(float distance)
+  {
+    float textDistance = (distance * (1 / textFront.transform.localScale.x)) * 0.8f;
+
+    // only scale text every 60 frames for performance reasons
+    if (GetInstanceID() % 60 == Time.frameCount % 60)
+    {
+      textFront.rectTransform.sizeDelta = new Vector2(textDistance, 1);
     }
   }
 
-  private Vector2 CalculateAngles(Vector3 fromPosition, Vector3 toPosition, bool isFront)
+  private void UpdateEdgeText()
   {
-    if (Vector3.Distance(fromPosition, toPosition) == 0) {
+    if (IsVariable)
+    {
+      textFront.text = variableName;
+    }
+    else if (IsPointerHovered || IsControllerHovered || IsControllerGrabbed)
+    {
+      textFront.text = textLong;
+    }
+    else
+    {
+      textFront.text = textShort;
+    }
+  }
+
+  public void SetVariableName(string variableName)
+  {
+    this.variableName = variableName;
+    UpdateEdgeText();
+  }
+
+  private Vector2 CalculateAngles(Vector3 fromPosition, Vector3 toPosition)
+  {
+    if (Vector3.Distance(fromPosition, toPosition) == 0)
+    {
       return Vector2.zero;
     }
-    float height = (fromPosition.y - toPosition.y);
-    float angle = -90;
-    if (isFront) {
-      height = (toPosition.y - fromPosition.y);
-      angle = 90;
-    }
+    float height = (toPosition.y - fromPosition.y);
+    float angle = 90;
     float yRotation = angle + Mathf.Atan2(fromPosition.x, fromPosition.z) * (180 / Mathf.PI);
     float zRotation = Mathf.Asin(height / Vector3.Distance(fromPosition, toPosition)) * (180 / Mathf.PI);
     return new Vector2(yRotation, zRotation);

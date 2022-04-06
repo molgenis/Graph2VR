@@ -88,3 +88,9 @@ VirtuosoDocker/db/virtuoso.db
 VirtuosoDocker/db/virtuoso.log
 VirtuosoDocker/db/virtuoso.trx
 VirtuosoDocker/db/virtuoso.pxa
+
+# Local vscode settings
+.vscode/
+*.owl
+VirtuosoDocker/db/ToLoad/catalog-v001.xml
+VirtuosoDocker/db/ToLoad/Maelstrom.owl
