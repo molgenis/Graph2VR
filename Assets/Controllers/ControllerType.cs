@@ -45,7 +45,7 @@ public class ControllerType : MonoBehaviour
       {
         type = "quest";
       }
-      if (device.name == "Vive")
+      if (device.name == "HTC Vive Controller OpenXR")
       {
         type = "vive";
       }
