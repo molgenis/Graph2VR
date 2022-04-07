@@ -1035,7 +1035,7 @@ MonoBehaviour:
       - m_Name: 
         m_Id: 26cc6089-cb7d-48aa-a451-461f7e1ab00a
         m_Path: <XRController>{LeftHand}/trackpadClicked
-        m_Interactions: 
+        m_Interactions: Press(behavior=2)
         m_Processors: 
         m_Groups: 
         m_Action: Vive Trackpad Left Click
@@ -1055,7 +1055,7 @@ MonoBehaviour:
       - m_Name: 
         m_Id: 3d0ae4ab-42af-47bf-b1e5-fd819219e0bc
         m_Path: <XRController>{RightHand}/trackpadClicked
-        m_Interactions: 
+        m_Interactions: Press(behavior=2)
         m_Processors: 
         m_Groups: 
         m_Action: Vive Trackpad Right Click
