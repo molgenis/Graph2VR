@@ -1032,7 +1032,7 @@ MonoBehaviour:
       m_SingletonActionBindings:
       - m_Name: 
         m_Id: e7482c88-7023-4419-ad75-cc9985938855
-        m_Path: <XRController>{LeftHand}/touchpadClicked
+        m_Path: <XRController>{LeftHand}/trackpadClicked
         m_Interactions: 
         m_Processors: 
         m_Groups: 
@@ -1052,7 +1052,7 @@ MonoBehaviour:
       m_SingletonActionBindings:
       - m_Name: 
         m_Id: aaf011da-6f0c-4bb7-9cc6-9e878f2a92de
-        m_Path: <XRController>{RightHand}/touchpadClicked
+        m_Path: <XRController>{RightHand}/trackpadClicked
         m_Interactions: 
         m_Processors: 
         m_Groups: 
