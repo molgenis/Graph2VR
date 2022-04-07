@@ -9,6 +9,10 @@ public class ControlerInput : MonoBehaviour
   public bool gripRight = false;
   public bool triggerLeft = false;
   public bool triggerRight = false;
+
+  public bool viveLeftTrackpadClicked = false;
+  public bool viveRightTrackpadClicked = false;
+
   public Vector2 axisLeft = Vector2.zero;
   public Vector2 axisRight = Vector2.zero;
 
@@ -21,11 +25,11 @@ public class ControlerInput : MonoBehaviour
   public InputActionProperty leftAxis;
   public InputActionProperty rightAxis;
 
-  public InputActionProperty viveTouchpadLeftClick;
-  public InputActionProperty viveTouchpadRightClick;
+  public InputActionProperty viveTrackpadLeftClick;
+  public InputActionProperty viveTrackpadRightClick;
 
-  public InputActionProperty viveTouchpadLeftTouchReleased;
-  public InputActionProperty viveTouchpadRightTouchReleased;
+  public InputActionProperty viveTrackpadLeftTouchReleased;
+  public InputActionProperty viveTrackpadRightTouchReleased;
 
 
   void OnEnable()
@@ -45,15 +49,15 @@ public class ControlerInput : MonoBehaviour
     if (rightAxis.action != null) rightAxis.action.Enable();
     if (rightAxis.action != null) rightAxis.action.performed += RightAxis;
 
-    if (viveTouchpadLeftClick.action != null) viveTouchpadLeftClick.action.Enable();
-    if (viveTouchpadLeftClick.action != null) viveTouchpadLeftClick.action.performed += ViveTouchpadLeftClick;
-    if (viveTouchpadRightClick.action != null) viveTouchpadRightClick.action.Enable();
-    if (viveTouchpadRightClick.action != null) viveTouchpadRightClick.action.performed += ViveTouchpadRightClick;
+    if (viveTrackpadLeftClick.action != null) viveTrackpadLeftClick.action.Enable();
+    if (viveTrackpadLeftClick.action != null) viveTrackpadLeftClick.action.performed += ViveTrackpadLeftClick;
+    if (viveTrackpadRightClick.action != null) viveTrackpadRightClick.action.Enable();
+    if (viveTrackpadRightClick.action != null) viveTrackpadRightClick.action.performed += ViveTrackpadRightClick;
 
-    if (viveTouchpadLeftTouchReleased.action != null) viveTouchpadLeftTouchReleased.action.Enable();
-    if (viveTouchpadLeftTouchReleased.action != null) viveTouchpadLeftTouchReleased.action.performed += ViveTouchpadLeftTouchReleased;
-    if (viveTouchpadRightTouchReleased.action != null) viveTouchpadRightTouchReleased.action.Enable();
-    if (viveTouchpadRightTouchReleased.action != null) viveTouchpadRightTouchReleased.action.performed += ViveTouchpadRightTouchReleased;
+    if (viveTrackpadLeftTouchReleased.action != null) viveTrackpadLeftTouchReleased.action.Enable();
+    if (viveTrackpadLeftTouchReleased.action != null) viveTrackpadLeftTouchReleased.action.performed += ViveTrackpadLeftTouchReleased;
+    if (viveTrackpadRightTouchReleased.action != null) viveTrackpadRightTouchReleased.action.Enable();
+    if (viveTrackpadRightTouchReleased.action != null) viveTrackpadRightTouchReleased.action.performed += ViveTrackpadRightTouchReleased;
   }
 
   void OnDisable()
@@ -64,7 +68,6 @@ public class ControlerInput : MonoBehaviour
     if (triggerActionRight.action != null) gripActionRight.action.performed -= TriggerActionRight;
     if (leftAxis.action != null) leftAxis.action.performed -= LeftAxis;
     if (rightAxis.action != null) rightAxis.action.performed -= RightAxis;
-
   }
 
   void LeftAxis(InputAction.CallbackContext a)
@@ -93,25 +96,23 @@ public class ControlerInput : MonoBehaviour
     triggerRight = a.ReadValueAsButton();
   }
 
-  void ViveTouchpadLeftClick(InputAction.CallbackContext a)
+  void ViveTrackpadLeftClick(InputAction.CallbackContext a)
   {
-    Debug.Log("ViveTouchpadLeftClick");
+    viveLeftTrackpadClicked = a.ReadValueAsButton();
   }
 
-  void ViveTouchpadRightClick(InputAction.CallbackContext a)
+  void ViveTrackpadRightClick(InputAction.CallbackContext a)
   {
-    Debug.Log("ViveTouchpadRightClick");
+    viveRightTrackpadClicked = a.ReadValueAsButton();
   }
 
-  void ViveTouchpadLeftTouchReleased(InputAction.CallbackContext a)
+  void ViveTrackpadLeftTouchReleased(InputAction.CallbackContext a)
   {
-    Debug.Log("ViveTouchpadLeftTouchReleased");
     axisLeft = Vector2.zero;
   }
 
-  void ViveTouchpadRightTouchReleased(InputAction.CallbackContext a)
+  void ViveTrackpadRightTouchReleased(InputAction.CallbackContext a)
   {
-    Debug.Log("ViveTouchpadRightTouchReleased");
     axisRight = Vector2.zero;
   }
 

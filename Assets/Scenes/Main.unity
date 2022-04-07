@@ -1401,6 +1401,7 @@ GameObject:
   - component: {fileID: 8224157544659317811}
   - component: {fileID: 4276760002587655885}
   - component: {fileID: 5181255494507517958}
+  - component: {fileID: 8224157544659317812}
   m_Layer: 0
   m_Name: Hexagon
   m_TagString: Untagged
@@ -1569,6 +1570,20 @@ Transform:
   m_Father: {fileID: 3890227219954542740}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!64 &8224157544659317812
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2153605063740709277}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -4575734979276873811, guid: 1a6a8cd21a660ca4a93058ab80595875, type: 3}
 --- !u!1 &9201602883236213670
 GameObject:
   m_ObjectHideFlags: 0
