@@ -892,7 +892,7 @@ MonoBehaviour:
       - m_Name: 
         m_Id: d91527c9-ebca-499f-95bb-af868326af65
         m_Path: <XRController>{LeftHand}/grip
-        m_Interactions: 
+        m_Interactions: Press(behavior=2)
         m_Processors: 
         m_Groups: 
         m_Action: Grip Action Left
@@ -912,7 +912,7 @@ MonoBehaviour:
       - m_Name: 
         m_Id: 91e8e272-976c-4843-ba38-2fe61b9a5ac5
         m_Path: <XRController>{RightHand}/grip
-        m_Interactions: 
+        m_Interactions: Press(behavior=2)
         m_Processors: 
         m_Groups: 
         m_Action: Grip Action Right
@@ -978,8 +978,8 @@ MonoBehaviour:
         m_Action: Left Axis
         m_Flags: 0
       - m_Name: 
-        m_Id: a4bd8af0-b1e4-4a35-9f16-c6f54c927971
-        m_Path: <ViveWand>{LeftHand}/trackpad
+        m_Id: 96e941b6-aed7-4a5c-b21b-926b3f2dc431
+        m_Path: <XRController>{LeftHand}/touchpad
         m_Interactions: 
         m_Processors: 
         m_Groups: 
@@ -1006,8 +1006,8 @@ MonoBehaviour:
         m_Action: Right Axis
         m_Flags: 0
       - m_Name: 
-        m_Id: 61ff3207-d63d-4686-b6dc-78ca762985c5
-        m_Path: <ViveWand>{RightHand}/trackpad
+        m_Id: 52aa2215-039e-48c9-9ccd-db0d9820bf66
+        m_Path: <XRController>{RightHand}/touchpad
         m_Interactions: 
         m_Processors: 
         m_Groups: 
