@@ -9,11 +9,12 @@
 using UnityEditor;
 using UnityEngine;
 
+#if UNITY_EDITOR
 namespace Dweiss
 {
-    [CustomEditor(typeof(Settings))]
-    public class SettingsInspector : Editor
-    {
+  [CustomEditor(typeof(Settings))]
+  public class SettingsInspector : Editor
+  {
     public override void OnInspectorGUI()
     {
       DrawDefaultInspector();
@@ -44,3 +45,4 @@ namespace Dweiss
     }
   }
 }
+#endif
