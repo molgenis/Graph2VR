@@ -185,30 +185,31 @@ public class Node : MonoBehaviour
     else
     {
       ConnectLabelToNode();
-      ConnectLabelToImage();
+      ConnectImageToNode();
     }
   }
 
   private void ConnectLabelToNode()
   {
-    Triple tripleWithSubject = graphNode.Graph.GetTriplesWithSubject(graphNode).Where(triple => IsLabelPredicate(triple.Predicate)).FirstOrDefault();
-    if (tripleWithSubject != null)
+    Edge labelEdge = graph.edgeList.Find(edge => edge.displaySubject == this && IsLabelPredicate(edge.uri));
+    if (labelEdge != null)
     {
-      SetLabel(tripleWithSubject.Object.ToString());
-      graph.Remove(graph.GetByINode(tripleWithSubject.Object));
+      SetLabel(labelEdge.displayObject.uri);
+      graph.Remove(labelEdge.displayObject);
     }
   }
 
-  private bool IsLabelPredicate(INode predicate)
+  private bool IsLabelPredicate(string predicate)
   {
-    return predicate.ToString() == "http://www.w3.org/2000/01/rdf-schema#label";
+    return predicate == "http://www.w3.org/2000/01/rdf-schema#label";
   }
 
-  private void ConnectLabelToImage()
+  private void ConnectImageToNode()
   {
-    foreach (Triple tripleWithSubject in graphNode.Graph.GetTriplesWithSubject(graphNode))
+    List<Edge> imageEdge = graph.edgeList.FindAll(edge => edge.displaySubject);
+    foreach (Edge edge in imageEdge)
     {
-      if (IsImagePredicate(tripleWithSubject.Predicate))
+      if (IsImagePredicate(edge.uri))
       {
         // Todo: we might want to modify the mesh when we are certain that the texture exists and is not a 404 url
         Mesh m = new Mesh();
@@ -231,19 +232,19 @@ public class Node : MonoBehaviour
         MeshFilter filter = GetComponent<MeshFilter>();
         filter.mesh = m;
 
-        StartCoroutine(FetchTexture(tripleWithSubject.Object.ToString()));
-        graph.Remove(graph.GetByINode(tripleWithSubject.Object));
+        StartCoroutine(FetchTexture(edge.displayObject.uri));
+        graph.Remove(edge.displayObject);
         // Do not break, node can have multiple images, some of them can be 404 url's so lets go through all of them
         //break;
       }
     }
   }
 
-  private bool IsImagePredicate(INode predicate)
+  private bool IsImagePredicate(string predicate)
   {
     foreach (string pred in Settings.Instance.ImagePredicates)
     {
-      if (predicate.ToString().Equals(pred))
+      if (predicate.Equals(pred))
       {
         return true;
       }

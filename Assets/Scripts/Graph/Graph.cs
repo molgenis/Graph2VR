@@ -495,7 +495,10 @@ public class Graph : MonoBehaviour
     clone.transform.position = position;
     clone.transform.localRotation = Quaternion.identity;
     clone.transform.localScale = Vector3.one * 0.05f;
-    return CreateNodeFromClone(value, clone);
+    Node node = CreateNodeFromClone(value, clone);
+    NodeFactory nodeFactory = new NodeFactory();
+    node.graphNode = nodeFactory.CreateUriNode(new Uri(value));
+    return node;
   }
 
   private Node CreateNodeFromClone(string value, GameObject clone)

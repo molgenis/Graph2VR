@@ -21,7 +21,12 @@ namespace Dweiss
 
     public string BaseURI = "http://dbpedia.org"; //"https://github.com/PjotrSvetachov/GraphVR/example-graph";
 
+    // We can start with an single node or a query.
     public string initialSparqlQueryString = "construct {?s ?p ?o}  where  {?s ?p ?o} Limit 100";
+
+    public string initialSparqlURI = "";
+
+    public bool StartWithSingleNode = false;
 
     public string[] ImagePredicates = { "http://xmlns.com/foaf/0.1/depiction", "http://xmlns.com/foaf/0.1/Image", "http://xmlns.com/foaf/0.1/thumbnail", "http://dbpedia.org/property/photo" };
 
