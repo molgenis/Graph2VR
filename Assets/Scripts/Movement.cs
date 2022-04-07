@@ -45,7 +45,6 @@ public class Movement : MonoBehaviour
       if (ControlerInput.instance.axisRight.y < -0.5f && !teleportLock)
       {
         transform.position = teleportPoint.position;
-        ControlerInput.instance.VibrateRight();
         teleportLock = true;
       }
     }
