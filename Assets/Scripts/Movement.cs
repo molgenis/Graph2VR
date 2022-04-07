@@ -48,10 +48,10 @@ public class Movement : MonoBehaviour
         ControlerInput.instance.VibrateRight();
         teleportLock = true;
       }
-      if (ControlerInput.instance.axisRight.y > -0.3f)
-      {
-        teleportLock = false;
-      }
+    }
+    if (ControlerInput.instance.axisRight.y > -0.3f)
+    {
+      teleportLock = false;
     }
   }
 
@@ -64,10 +64,10 @@ public class Movement : MonoBehaviour
         transform.Rotate(0, -snapTurnAngle, 0);
         rightSnapLock = true;
       }
-      if (ControlerInput.instance.axisRight.x > -0.3f)
-      {
-        rightSnapLock = false;
-      }
+    }
+    if (ControlerInput.instance.axisRight.x > -0.3f)
+    {
+      rightSnapLock = false;
     }
   }
 
@@ -80,10 +80,10 @@ public class Movement : MonoBehaviour
         transform.Rotate(0, snapTurnAngle, 0);
         leftSnapLock = true;
       }
-      if (ControlerInput.instance.axisRight.x < 0.3f)
-      {
-        leftSnapLock = false;
-      }
+    }
+    if (ControlerInput.instance.axisRight.x < 0.3f)
+    {
+      leftSnapLock = false;
     }
   }
 }
