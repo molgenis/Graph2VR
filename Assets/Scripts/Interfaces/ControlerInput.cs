@@ -53,7 +53,6 @@ public class ControlerInput : MonoBehaviour
 
   void LeftAxis(InputAction.CallbackContext a)
   {
-
     axisLeft = (Vector2)a.ReadValueAsObject();
   }
   void RightAxis(InputAction.CallbackContext a)

@@ -223,7 +223,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fa1f4a717b562041b1a0b9d53fbf746, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useQuest: 0
   quest: {fileID: 6065154627063774769, guid: 25328cee1eb981d4baf508b458bf0f92, type: 3}
   vive: {fileID: 7754344497046883793, guid: 147dc75efe6043640af738e5c7cdd948, type: 3}
 --- !u!850595691 &332514825
@@ -740,7 +739,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fa1f4a717b562041b1a0b9d53fbf746, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useQuest: 0
   quest: {fileID: 6652435716174543251, guid: c17873d0af9b0274690aac62c13f2137, type: 3}
   vive: {fileID: 7754344497046883793, guid: 147dc75efe6043640af738e5c7cdd948, type: 3}
 --- !u!1 &1503421650
@@ -758,6 +756,7 @@ GameObject:
   - component: {fileID: 1503421654}
   - component: {fileID: 1503421655}
   - component: {fileID: 1503421658}
+  - component: {fileID: 1503421659}
   m_Layer: 0
   m_Name: Main
   m_TagString: Untagged
@@ -979,8 +978,8 @@ MonoBehaviour:
         m_Action: Left Axis
         m_Flags: 0
       - m_Name: 
-        m_Id: c267b702-e7b9-4758-9f1c-a01a53ec4dd7
-        m_Path: <XRController>{LeftHand}/touchpad
+        m_Id: a4bd8af0-b1e4-4a35-9f16-c6f54c927971
+        m_Path: <ViveWand>{LeftHand}/trackpad
         m_Interactions: 
         m_Processors: 
         m_Groups: 
@@ -1007,8 +1006,8 @@ MonoBehaviour:
         m_Action: Right Axis
         m_Flags: 0
       - m_Name: 
-        m_Id: 19c78457-16d8-4029-8ae1-a4bcb76263ae
-        m_Path: <XRController>{RightHand}/touchpad
+        m_Id: 61ff3207-d63d-4686-b6dc-78ca762985c5
+        m_Path: <ViveWand>{RightHand}/trackpad
         m_Interactions: 
         m_Processors: 
         m_Groups: 
@@ -1016,6 +1015,18 @@ MonoBehaviour:
         m_Flags: 0
       m_Flags: 0
     m_Reference: {fileID: 0}
+--- !u!114 &1503421659
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1503421650}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6eabe2a73c516614f8f9a91dadc5937e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!20 &1536544816 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 6007703616832934291, guid: 97869828da070e047b842768e2686dc1, type: 3}
