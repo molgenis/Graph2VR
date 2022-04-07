@@ -223,7 +223,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fa1f4a717b562041b1a0b9d53fbf746, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useQuest: 1
+  useQuest: 0
   quest: {fileID: 6065154627063774769, guid: 25328cee1eb981d4baf508b458bf0f92, type: 3}
   vive: {fileID: 7754344497046883793, guid: 147dc75efe6043640af738e5c7cdd948, type: 3}
 --- !u!850595691 &332514825
@@ -740,7 +740,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fa1f4a717b562041b1a0b9d53fbf746, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useQuest: 1
+  useQuest: 0
   quest: {fileID: 6652435716174543251, guid: c17873d0af9b0274690aac62c13f2137, type: 3}
   vive: {fileID: 7754344497046883793, guid: 147dc75efe6043640af738e5c7cdd948, type: 3}
 --- !u!1 &1503421650
@@ -1137,6 +1137,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7670894606415332068, guid: 97869828da070e047b842768e2686dc1, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8766431109611961353, guid: 97869828da070e047b842768e2686dc1, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 97869828da070e047b842768e2686dc1, type: 3}
 --- !u!1 &1141087710156371
@@ -1187,7 +1195,7 @@ MonoBehaviour:
   BaseURI: http://dbpedia.org
   initialSparqlQueryString: construct {?s ?p ?o}  where  {?s ?p ?o} Limit 100
   initialSparqlURI: https://dbpedia.org/resource/Mount_Everest
-  StartWithSingleNode: 1
+  StartWithSingleNode: 0
   ImagePredicates:
   - http://xmlns.com/foaf/0.1/depiction
   - http://xmlns.com/foaf/0.1/Image
