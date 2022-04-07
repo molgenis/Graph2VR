@@ -882,6 +882,8 @@ MonoBehaviour:
   gripRight: 0
   triggerLeft: 0
   triggerRight: 0
+  viveLeftTrackpadClicked: 0
+  viveRightTrackpadClicked: 0
   axisLeft: {x: 0, y: 0}
   axisRight: {x: 0, y: 0}
   gripActionLeft:
@@ -1020,83 +1022,83 @@ MonoBehaviour:
         m_Flags: 0
       m_Flags: 0
     m_Reference: {fileID: 0}
-  viveTouchpadLeftClick:
+  viveTrackpadLeftClick:
     m_UseReference: 0
     m_Action:
-      m_Name: Vive Touchpad Left Click
+      m_Name: Vive Trackpad Left Click
       m_Type: 0
       m_ExpectedControlType: 
-      m_Id: d7c395fb-adc6-4419-977c-b96a3112f3d1
+      m_Id: 6b4c5120-8d31-4006-b672-540fe839cfc0
       m_Processors: 
       m_Interactions: 
       m_SingletonActionBindings:
       - m_Name: 
-        m_Id: e7482c88-7023-4419-ad75-cc9985938855
+        m_Id: 26cc6089-cb7d-48aa-a451-461f7e1ab00a
         m_Path: <XRController>{LeftHand}/trackpadClicked
         m_Interactions: 
         m_Processors: 
         m_Groups: 
-        m_Action: Vive Touchpad Left Click
+        m_Action: Vive Trackpad Left Click
         m_Flags: 0
       m_Flags: 0
     m_Reference: {fileID: 0}
-  viveTouchpadRightClick:
+  viveTrackpadRightClick:
     m_UseReference: 0
     m_Action:
-      m_Name: Vive Touchpad Right Click
+      m_Name: Vive Trackpad Right Click
       m_Type: 0
       m_ExpectedControlType: 
-      m_Id: a4d13827-8b50-4863-8d03-2fb4df9ccd7f
+      m_Id: 58f3a4d9-8381-4c81-ab68-76d3f8e1b9e9
       m_Processors: 
       m_Interactions: 
       m_SingletonActionBindings:
       - m_Name: 
-        m_Id: aaf011da-6f0c-4bb7-9cc6-9e878f2a92de
+        m_Id: 3d0ae4ab-42af-47bf-b1e5-fd819219e0bc
         m_Path: <XRController>{RightHand}/trackpadClicked
         m_Interactions: 
         m_Processors: 
         m_Groups: 
-        m_Action: Vive Touchpad Right Click
+        m_Action: Vive Trackpad Right Click
         m_Flags: 0
       m_Flags: 0
     m_Reference: {fileID: 0}
-  viveTouchpadLeftTouchReleased:
+  viveTrackpadLeftTouchReleased:
     m_UseReference: 0
     m_Action:
-      m_Name: Vive Touchpad Left Touch Released
+      m_Name: Vive Trackpad Left Touch Released
       m_Type: 0
       m_ExpectedControlType: 
-      m_Id: 6fe6fcb6-ed5d-44c7-a237-e06ee95a6818
+      m_Id: 5992447a-ee43-482f-a6e1-39a58464a03b
       m_Processors: 
       m_Interactions: 
       m_SingletonActionBindings:
       - m_Name: 
-        m_Id: b7158357-dce8-4991-bac9-2d008dd588b4
+        m_Id: a47ab3e4-d88e-4007-9945-110c035a86fc
         m_Path: <XRController>{LeftHand}/touchpadTouched
         m_Interactions: Press(behavior=1)
         m_Processors: 
         m_Groups: 
-        m_Action: Vive Touchpad Left Touch Released
+        m_Action: Vive Trackpad Left Touch Released
         m_Flags: 0
       m_Flags: 0
     m_Reference: {fileID: 0}
-  viveTouchpadRightTouchReleased:
+  viveTrackpadRightTouchReleased:
     m_UseReference: 0
     m_Action:
-      m_Name: Vive Touchpad Right Touch Released
+      m_Name: Vive Trackpad Right Touch Released
       m_Type: 0
       m_ExpectedControlType: 
-      m_Id: d8fde012-fa2d-422b-8a9f-a45d690c62ab
+      m_Id: 506ea01a-088b-4278-a634-c0b833a02eb6
       m_Processors: 
       m_Interactions: 
       m_SingletonActionBindings:
       - m_Name: 
-        m_Id: a018d187-8a66-42cd-8243-e9a3e7c11a04
+        m_Id: f2fb78b6-c05e-4ba2-99ed-12ba931b713c
         m_Path: <XRController>{RightHand}/touchpadTouched
         m_Interactions: Press(behavior=1)
         m_Processors: 
         m_Groups: 
-        m_Action: Vive Touchpad Right Touch Released
+        m_Action: Vive Trackpad Right Touch Released
         m_Flags: 0
       m_Flags: 0
     m_Reference: {fileID: 0}
