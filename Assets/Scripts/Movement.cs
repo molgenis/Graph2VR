@@ -49,7 +49,7 @@ public class Movement : MonoBehaviour
         teleportLock = true;
       }
     }
-    if (ControlerInput.instance.axisRight.y > -0.3f)
+    if (ControlerInput.instance.axisRight.y > -0.3f || (isVive && !ControlerInput.instance.viveRightTrackpadClicked))
     {
       teleportLock = false;
     }
@@ -65,7 +65,7 @@ public class Movement : MonoBehaviour
         rightSnapLock = true;
       }
     }
-    if (ControlerInput.instance.axisRight.x > -0.3f)
+    if (ControlerInput.instance.axisRight.x > -0.3f || (isVive && !ControlerInput.instance.viveRightTrackpadClicked))
     {
       rightSnapLock = false;
     }
@@ -81,7 +81,7 @@ public class Movement : MonoBehaviour
         leftSnapLock = true;
       }
     }
-    if (ControlerInput.instance.axisRight.x < 0.3f)
+    if (ControlerInput.instance.axisRight.x < 0.3f || (isVive && !ControlerInput.instance.viveRightTrackpadClicked))
     {
       leftSnapLock = false;
     }
