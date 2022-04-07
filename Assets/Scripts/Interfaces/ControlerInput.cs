@@ -21,6 +21,9 @@ public class ControlerInput : MonoBehaviour
   public InputActionProperty leftAxis;
   public InputActionProperty rightAxis;
 
+  public InputActionProperty viveTouchpadLeftClick;
+  public InputActionProperty viveTouchpadRightClick;
+
 
   void OnEnable()
   {
