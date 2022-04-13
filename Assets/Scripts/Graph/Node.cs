@@ -118,26 +118,59 @@ public class Node : MonoBehaviour
     }
   }
 
+  public bool UpdateColorByVOWL()
+  {
+    List<Edge> nodeTypes = graph.edgeList.FindAll(
+      edge => edge.displaySubject == this &&
+      edge.uri == "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+    );
+
+    foreach (Edge edge in nodeTypes)
+    {
+      switch (edge.displayObject.uri)
+      {
+        case "http://www.w3.org/2002/07/owl#Thing":
+          SetColor(ColorSettings.instance.nodeOwlClassColor);
+          return true;
+        case "http://www.w3.org/2002/07/owl#Class":
+          SetColor(ColorSettings.instance.nodeOwlClassColor);
+          return true;
+        case "https://www.w3.org/1999/02/22-rdf-syntax-ns#subClassOf":
+          SetColor(ColorSettings.instance.arrowheadSubclassOfColor);
+          return true;
+        case "https://www.w3.org/1999/02/22-rdf-syntax-ns#Property":
+          SetColor(ColorSettings.instance.nodeRdfsClassColor);
+          return true;
+      }
+    }
+    return false;
+  }
+
   private void UpdateColorByNodeType()
   {
-    switch (graphNode.NodeType)
+    // First check VOWL color schema
+    if (!UpdateColorByVOWL())
     {
-      case NodeType.Variable:
-        SetColor(ColorSettings.instance.variableColor);
-        break;
-      case NodeType.Blank:
-        uri = "";
-        SetColor(ColorSettings.instance.blankNodeColor);
-        break;
-      case NodeType.Literal:
-        SetLabel(((ILiteralNode)graphNode).Value);
-        uri = "";
-        SetColor(ColorSettings.instance.literalColor);
-        break;
-      case NodeType.Uri:
-        uri = ((IUriNode)graphNode).Uri.ToString();
-        SetColor(ColorSettings.instance.uriColor);
-        break;
+      // If we didn't find a color in VOWL schema check the node type
+      switch (graphNode.NodeType)
+      {
+        case NodeType.Variable:
+          SetColor(ColorSettings.instance.variableColor);
+          break;
+        case NodeType.Blank:
+          uri = "";
+          SetColor(ColorSettings.instance.blankNodeColor);
+          break;
+        case NodeType.Literal:
+          SetLabel(((ILiteralNode)graphNode).Value);
+          uri = "";
+          SetColor(ColorSettings.instance.literalColor);
+          break;
+        case NodeType.Uri:
+          uri = ((IUriNode)graphNode).Uri.ToString();
+          SetColor(ColorSettings.instance.uriColor);
+          break;
+      }
     }
   }
 

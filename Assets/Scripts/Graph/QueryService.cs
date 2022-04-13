@@ -62,12 +62,17 @@ public class QueryService : MonoBehaviour
             {PREFIXES}
             construct {{
                 <{nodeUriString}> <{uri}> ?object .
-                ?object rdfs:label ?objectlabel
+                ?object rdfs:label ?objectlabel .
+                ?object a ?type .
             }} where {{
                 <{nodeUriString}> <{uri}> ?object .
                 OPTIONAL {{
                     ?object rdfs:label ?objectlabel .
                     FILTER(LANG(?objectlabel) = '' || LANGMATCHES(LANG(?objectlabel), '{Main.instance.languageCode}'))
+                }}
+                OPTIONAL {{
+                  ?object a ?type .
+                  FILTER(?type = owl:Thing || ?type = owl:Class || ?type = rdfs:subClassOf || ?type = rdf:Property)
                 }}
             }} LIMIT " + queryLimit;
     }
