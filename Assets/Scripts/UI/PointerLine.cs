@@ -14,8 +14,8 @@ public class PointerLine : MonoBehaviour
     {
       endpoint = hit.point;
     }
-    line.SetPosition(0, transform.position);
-    line.SetPosition(1, endpoint);
+    line.SetPosition(0, Vector3.zero);
+    line.SetPosition(1, transform.InverseTransformPoint(endpoint));
     endPoint.transform.position = endpoint;
 
   }
