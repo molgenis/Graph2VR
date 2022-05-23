@@ -1239,6 +1239,10 @@ PrefabInstance:
       propertyPath: teleportPoint
       value: 
       objectReference: {fileID: 1166314462}
+    - target: {fileID: 6007703616832934288, guid: 97869828da070e047b842768e2686dc1, type: 3}
+      propertyPath: isLeftController
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7670894606415332068, guid: 97869828da070e047b842768e2686dc1, type: 3}
       propertyPath: m_LocalPosition.z
       value: 0.1
@@ -1295,6 +1299,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SparqlEndpoint: https://dbpedia.org/sparql
   BaseURI: http://dbpedia.org
+  DefaultNodeCreationURI: http://www.w3.org/2002/07/owl#Nothing
+  DefaultEdgeCreationURI: http://www.w3.org/2002/07/owl#Nothing
   initialSparqlQueryString: construct {?s ?p ?o}  where  {?s ?p ?o} Limit 100
   initialSparqlURI: https://dbpedia.org/resource/Mount_Everest
   StartWithSingleNode: 0

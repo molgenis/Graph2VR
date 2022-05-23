@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Dweiss;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -14,12 +15,21 @@ public class GraphInteract : MonoBehaviour
   private LineRenderer lineRenderer;
   private bool IsDraggingLine = false;
   private Node EdgeBegin = null;
+  public bool isLeftController = true;
 
   // Start is called before the first frame update
   void Start()
   {
-    ControlerInput.instance.triggerActionRight.action.performed += Trigger;
-    ControlerInput.instance.gripActionRight.action.performed += Grip;
+    if (isLeftController)
+    {
+      ControlerInput.instance.triggerActionLeft.action.performed += Trigger;
+      ControlerInput.instance.gripActionLeft.action.performed += Grip;
+    }
+    else
+    {
+      ControlerInput.instance.triggerActionRight.action.performed += Trigger;
+      ControlerInput.instance.gripActionRight.action.performed += Grip;
+    }
 
     lineRenderer = gameObject.AddComponent<LineRenderer>();
     lineRenderer.material = Resources.Load<Material>("Materials/line");
@@ -40,11 +50,14 @@ public class GraphInteract : MonoBehaviour
     }
     else if (IsHoldingPinchButton)
     {
-      bool menuScrollbarActive = !GameObject.FindGameObjectWithTag("RightControler").transform.Find("Pointer").gameObject.activeSelf; // TODO: have some sort of a nice 'scene state' singleton? this will get buggy and confusing in time.
+      bool menuScrollbarActive = true;
+      menuScrollbarActive = !GameObject.FindGameObjectWithTag("RightControler").transform.Find("Offset").Find("Pointer").gameObject.activeSelf;
+
       if (!menuScrollbarActive && HoldBeginTime + 2 < Time.time)
       {
         IsHoldingPinchButton = false;
-        Node node = Main.instance.mainGraph.CreateNode("No label", transform.position);
+        Node node = Main.instance.mainGraph.CreateNode(Settings.Instance.DefaultNodeCreationURI, transform.position);
+        node.MakeVariable();
         Main.instance.mainGraph.nodeList.Add(node);
         // TODO: find out who needs to be the owner of the newly created node?
       }
@@ -167,7 +180,7 @@ public class GraphInteract : MonoBehaviour
           Node EdgeEnd = CurrentHoveredObject.GetComponent<Node>();
           if (EdgeBegin != null && EdgeEnd != null && EdgeBegin != EdgeEnd)
           {
-            Edge edge = EdgeBegin.graph.CreateEdge(EdgeBegin, "No label", EdgeEnd);
+            Edge edge = EdgeBegin.graph.CreateEdge(EdgeBegin, Settings.Instance.DefaultEdgeCreationURI, EdgeEnd);
             EdgeBegin.graph.edgeList.Add(edge);
           }
         }
@@ -177,3 +190,14 @@ public class GraphInteract : MonoBehaviour
     oldTrigger = newState;
   }
 }
+
+
+/*
+ * 
+ construct 
+ {?s ?p ?o} 
+  WHERE
+  {<https://dbpedia.org/resource/Donald_Trump> ?p ?o .} 
+  LIMIT 20
+
+ */
