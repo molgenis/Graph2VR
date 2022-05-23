@@ -708,6 +708,11 @@ Transform:
   m_Father: {fileID: 3890227219954542740}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1376126624 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6007703615058462837, guid: 97869828da070e047b842768e2686dc1, type: 3}
+  m_PrefabInstance: {fileID: 2114014559}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1503421650
 GameObject:
   m_ObjectHideFlags: 0
@@ -1144,6 +1149,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1114307708, guid: 97869828da070e047b842768e2686dc1, type: 3}
+      propertyPath: leftControlerModel
+      value: 
+      objectReference: {fileID: 1376126624}
     - target: {fileID: 6007703615058463561, guid: 97869828da070e047b842768e2686dc1, type: 3}
       propertyPath: m_Name
       value: '[CameraRig]'

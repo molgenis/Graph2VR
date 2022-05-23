@@ -6,6 +6,7 @@ public class SceneRayCaster : BaseRaycaster
 {
   public float maxDistance = 10;
   public LayerMask layer;
+  public GameObject leftControlerModel;
   public override Camera eventCamera
   {
     get
@@ -38,6 +39,7 @@ public class SceneRayCaster : BaseRaycaster
       if (ControlerInput.instance.triggerRight)
       {
         GameObject.FindGameObjectWithTag("LeftController").BroadcastMessage("Clear", SendMessageOptions.DontRequireReceiver);
+        leftControlerModel.SetActive(true);
       }
     }
   }
