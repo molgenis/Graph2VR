@@ -206,30 +206,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6390184}
   m_Mesh: {fileID: -4575734979276873811, guid: 1a6a8cd21a660ca4a93058ab80595875, type: 3}
---- !u!1 &197580110 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6007703615058413357, guid: 97869828da070e047b842768e2686dc1, type: 3}
-  m_PrefabInstance: {fileID: 2114014559}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &197580112
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 197580110}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2fa1f4a717b562041b1a0b9d53fbf746, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  quest: {fileID: 6065154627063774769, guid: 25328cee1eb981d4baf508b458bf0f92, type: 3}
-  vive: {fileID: 7754344497046883793, guid: 147dc75efe6043640af738e5c7cdd948, type: 3}
---- !u!1 &221964736 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6007703615058450489, guid: 97869828da070e047b842768e2686dc1, type: 3}
-  m_PrefabInstance: {fileID: 2114014559}
-  m_PrefabAsset: {fileID: 0}
 --- !u!850595691 &332514825
 LightingSettings:
   m_ObjectHideFlags: 0
@@ -678,87 +654,9 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
---- !u!1 &849165427 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6007703615058219551, guid: 97869828da070e047b842768e2686dc1, type: 3}
-  m_PrefabInstance: {fileID: 2114014559}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &849165431
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 849165427}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2fadf230d1919748a9aa21d40f74619, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_TrackingType: 0
-  m_UpdateType: 0
-  m_PositionInput:
-    m_UseReference: 0
-    m_Action:
-      m_Name: Position Input
-      m_Type: 0
-      m_ExpectedControlType: 
-      m_Id: e6760298-dfe4-47ef-bcf2-06f3aeb9f8f7
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings:
-      - m_Name: 
-        m_Id: f9570bd0-3b08-4585-8e22-59d610a40d3d
-        m_Path: <XRController>{LeftHand}/devicePosition
-        m_Interactions: 
-        m_Processors: 
-        m_Groups: 
-        m_Action: Position Input
-        m_Flags: 0
-      m_Flags: 0
-    m_Reference: {fileID: 0}
-  m_RotationInput:
-    m_UseReference: 0
-    m_Action:
-      m_Name: Rotation Input
-      m_Type: 0
-      m_ExpectedControlType: 
-      m_Id: 1acc6948-d231-4880-b69f-a2dc676b565c
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings:
-      - m_Name: 
-        m_Id: 1d977b78-1330-4ce7-824d-c61e0a84a4d0
-        m_Path: <XRController>{LeftHand}/deviceRotation
-        m_Interactions: 
-        m_Processors: 
-        m_Groups: 
-        m_Action: Rotation Input
-        m_Flags: 0
-      m_Flags: 0
-    m_Reference: {fileID: 0}
-  m_PositionAction:
-    m_Name: 
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: 
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
-  m_RotationAction:
-    m_Name: 
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: 
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
-  m_HasMigratedActions: 1
---- !u!4 &1166314462 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6007703615919559486, guid: 97869828da070e047b842768e2686dc1, type: 3}
+--- !u!20 &1114307707 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 1114307707, guid: 97869828da070e047b842768e2686dc1, type: 3}
   m_PrefabInstance: {fileID: 2114014559}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1218943309
@@ -810,25 +708,6 @@ Transform:
   m_Father: {fileID: 3890227219954542740}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1376126624 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6007703615058462837, guid: 97869828da070e047b842768e2686dc1, type: 3}
-  m_PrefabInstance: {fileID: 2114014559}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1376126626
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1376126624}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2fa1f4a717b562041b1a0b9d53fbf746, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  quest: {fileID: 6652435716174543251, guid: c17873d0af9b0274690aac62c13f2137, type: 3}
-  vive: {fileID: 7754344497046883793, guid: 147dc75efe6043640af738e5c7cdd948, type: 3}
 --- !u!1 &1503421650
 GameObject:
   m_ObjectHideFlags: 0
@@ -1197,84 +1076,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6eabe2a73c516614f8f9a91dadc5937e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!20 &1536544816 stripped
-Camera:
-  m_CorrespondingSourceObject: {fileID: 6007703616832934291, guid: 97869828da070e047b842768e2686dc1, type: 3}
-  m_PrefabInstance: {fileID: 2114014559}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1536544822
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 221964736}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2fadf230d1919748a9aa21d40f74619, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_TrackingType: 0
-  m_UpdateType: 0
-  m_PositionInput:
-    m_UseReference: 0
-    m_Action:
-      m_Name: Position Input
-      m_Type: 0
-      m_ExpectedControlType: 
-      m_Id: a8ffff67-013c-4804-ac00-0c1d7dc39918
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings:
-      - m_Name: 
-        m_Id: 6827a4d7-1ec3-48af-aec8-42962f1bb8a3
-        m_Path: <XRController>{RightHand}/devicePosition
-        m_Interactions: 
-        m_Processors: 
-        m_Groups: 
-        m_Action: Position Input
-        m_Flags: 0
-      m_Flags: 0
-    m_Reference: {fileID: 0}
-  m_RotationInput:
-    m_UseReference: 0
-    m_Action:
-      m_Name: Rotation Input
-      m_Type: 0
-      m_ExpectedControlType: 
-      m_Id: 8973b554-b316-41a0-9c80-308ec71fb569
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings:
-      - m_Name: 
-        m_Id: 0a916a67-c559-4d0a-b257-70e2b922cf04
-        m_Path: <XRController>{RightHand}/deviceRotation
-        m_Interactions: 
-        m_Processors: 
-        m_Groups: 
-        m_Action: Rotation Input
-        m_Flags: 0
-      m_Flags: 0
-    m_Reference: {fileID: 0}
-  m_PositionAction:
-    m_Name: 
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: 
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
-  m_RotationAction:
-    m_Name: 
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: 
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
-  m_HasMigratedActions: 1
 --- !u!1 &1812040979
 GameObject:
   m_ObjectHideFlags: 0
@@ -1305,7 +1106,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7cef75e6d1f1084a8c9fcee2e42772f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Camera: {fileID: 1536544816}
+  Camera: {fileID: 1114307707}
 --- !u!114 &1812040981
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1343,14 +1144,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1536544811, guid: 97869828da070e047b842768e2686dc1, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1805997883, guid: 97869828da070e047b842768e2686dc1, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6007703615058463561, guid: 97869828da070e047b842768e2686dc1, type: 3}
       propertyPath: m_Name
       value: '[CameraRig]'
@@ -1399,29 +1192,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6007703616432736854, guid: 97869828da070e047b842768e2686dc1, type: 3}
-      propertyPath: teleportPoint
+    - target: {fileID: 6007703615667292594, guid: 97869828da070e047b842768e2686dc1, type: 3}
+      propertyPath: m_Camera
       value: 
-      objectReference: {fileID: 1166314462}
-    - target: {fileID: 6007703616832934288, guid: 97869828da070e047b842768e2686dc1, type: 3}
-      propertyPath: isLeftController
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6007703616832934290, guid: 97869828da070e047b842768e2686dc1, type: 3}
-      propertyPath: layer.m_Bits
-      value: 823
-      objectReference: {fileID: 0}
-    - target: {fileID: 7598896656370363383, guid: 97869828da070e047b842768e2686dc1, type: 3}
-      propertyPath: layer.m_Bits
-      value: 2147483647
-      objectReference: {fileID: 0}
-    - target: {fileID: 7670894606415332068, guid: 97869828da070e047b842768e2686dc1, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8766431109611961353, guid: 97869828da070e047b842768e2686dc1, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0.1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 97869828da070e047b842768e2686dc1, type: 3}
