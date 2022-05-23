@@ -42,7 +42,7 @@ public class Movement : MonoBehaviour
   {
     if (isVive && ControlerInput.instance.viveRightTrackpadClicked || !isVive)
     {
-      if (ControlerInput.instance.axisRight.y < -0.5f && !teleportLock)
+      if ((ControlerInput.instance.axisRight.y < -0.5f || ControlerInput.instance.axisRight.y > 0.5f) && !teleportLock)
       {
         transform.position = teleportPoint.position;
         teleportLock = true;

@@ -21,13 +21,10 @@ public class NodeMenu : MonoBehaviour
 
   public void Update()
   {
-    // TODO: reimplement closing the menu
-    /*
-    if (clickAction.GetStateDown(SteamVR_Input_Sources.LeftHand) == true)
+    if (ControlerInput.instance.triggerLeft)
     {
       Close();
     }
-    */
   }
 
   public void PopulateIncomingMenu()

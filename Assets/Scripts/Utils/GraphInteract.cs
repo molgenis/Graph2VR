@@ -50,19 +50,12 @@ public class GraphInteract : MonoBehaviour
     }
     else if (IsHoldingPinchButton)
     {
-      bool menuScrollbarActive = true;
-      menuScrollbarActive = !GameObject.FindGameObjectWithTag("RightControler").transform.Find("Offset").Find("Pointer").gameObject.activeSelf;
-
-      if (!menuScrollbarActive && HoldBeginTime + 2 < Time.time)
+      if (HoldBeginTime + 2 < Time.time)
       {
-        IsHoldingPinchButton = false;
-        Node node = Main.instance.mainGraph.CreateNode(Settings.Instance.DefaultNodeCreationURI, transform.position);
-        node.MakeVariable();
-        Main.instance.mainGraph.nodeList.Add(node);
-        // TODO: find out who needs to be the owner of the newly created node?
+        CreateNewNode();
       }
-
     }
+
     Collider[] overlapping = Physics.OverlapSphere(transform.position, 0.03f);
     GameObject closestObject = null;
     foreach (Collider col in overlapping)
@@ -89,6 +82,14 @@ public class GraphInteract : MonoBehaviour
     }
 
     HandleHoveredObject(closestObject);
+  }
+
+  void CreateNewNode()
+  {
+    IsHoldingPinchButton = false;
+    Node node = Main.instance.mainGraph.CreateNode(Settings.Instance.DefaultNodeCreationURI, transform.position);
+    node.MakeVariable();
+    Main.instance.mainGraph.nodeList.Add(node);
   }
 
   void HandleHoveredObject(GameObject newHoveredObject)
@@ -190,14 +191,3 @@ public class GraphInteract : MonoBehaviour
     oldTrigger = newState;
   }
 }
-
-
-/*
- * 
- construct 
- {?s ?p ?o} 
-  WHERE
-  {<https://dbpedia.org/resource/Donald_Trump> ?p ?o .} 
-  LIMIT 20
-
- */
