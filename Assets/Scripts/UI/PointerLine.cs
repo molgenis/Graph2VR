@@ -17,5 +17,6 @@ public class PointerLine : MonoBehaviour
     line.SetPosition(0, transform.position);
     line.SetPosition(1, endpoint);
     endPoint.transform.position = endpoint;
+
   }
 }

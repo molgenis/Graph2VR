@@ -48,7 +48,7 @@ public class Movement : MonoBehaviour
         teleportLock = true;
       }
     }
-    if (ControlerInput.instance.axisRight.y > -0.3f || (isVive && !ControlerInput.instance.viveRightTrackpadClicked))
+    if ((ControlerInput.instance.axisRight.y > -0.3f && ControlerInput.instance.axisRight.y < 0.3f) || (isVive && !ControlerInput.instance.viveRightTrackpadClicked))
     {
       teleportLock = false;
     }
@@ -58,7 +58,7 @@ public class Movement : MonoBehaviour
   {
     if (isVive && ControlerInput.instance.viveRightTrackpadClicked || !isVive)
     {
-      if ((ControlerInput.instance.axisRight.y < -0.5f || ControlerInput.instance.axisRight.y > 0.5f) && !rightSnapLock)
+      if (ControlerInput.instance.axisRight.x < -0.5f && !rightSnapLock)
       {
         transform.Rotate(0, -snapTurnAngle, 0);
         rightSnapLock = true;
