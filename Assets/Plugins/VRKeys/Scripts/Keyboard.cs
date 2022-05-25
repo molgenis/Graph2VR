@@ -14,6 +14,7 @@ using UnityEngine.Events;
 using System;
 using System.Collections;
 using TMPro;
+using System.Collections.Generic;
 
 namespace VRKeys {
 
@@ -131,7 +132,13 @@ namespace VRKeys {
 		/// Initialization.
 		/// </summary>
 		private IEnumerator Start () {
-			XRDevice.SetTrackingSpaceType (TrackingSpaceType.RoomScale);
+			var subsystems = new List<XRInputSubsystem>();
+			SubsystemManager.GetInstances(subsystems);
+			foreach (var subsystem in subsystems)
+			{
+				subsystem.TrySetTrackingOriginMode(TrackingOriginModeFlags.Device);
+			}
+			//XRDevice.SetTrackingSpaceType (TrackingSpaceType.RoomScale);
 
 			playerSpace = new GameObject ("Keyboard");
 

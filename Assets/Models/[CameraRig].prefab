@@ -116,6 +116,7 @@ MonoBehaviour:
   layer:
     serializedVersion: 2
     m_Bits: 823
+  leftControlerModel: {fileID: 6007703615058462837}
 --- !u!20 &1114307707
 Camera:
   m_ObjectHideFlags: 0
@@ -1085,7 +1086,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   snapTurnAngle: 20
-  movementSpeed: 10
+  movementSpeed: 5
   teleportPoint: {fileID: 6007703615919559486}
 --- !u!1 &6007703615061147651
 GameObject:
@@ -2495,7 +2496,7 @@ LineRenderer:
     textureMode: 0
     shadowBias: 0.5
     generateLightingData: 0
-  m_UseWorldSpace: 1
+  m_UseWorldSpace: 0
   m_Loop: 0
 --- !u!114 &7598896656370363383
 MonoBehaviour:

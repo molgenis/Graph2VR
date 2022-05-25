@@ -26,6 +26,11 @@ public class Graph : MonoBehaviour
   public Graph parentGraph = null;
   public string creationQuery = "";
 
+  public void SetLastResults(SparqlResultSet lastResults)
+  {
+    this.lastResults = lastResults;
+  }
+
   public Graph QuerySimilarWithTriples(string triples, Vector3 position, Quaternion rotation)
   {
     Graph newGraph = Main.instance.CreateGraph();
@@ -158,74 +163,16 @@ public class Graph : MonoBehaviour
   }
   */
 
-  public Dictionary<string, Tuple<string, int>> GetOutgoingPredicats(string URI)
+  public void GetOutgoingPredicats(string URI, SparqlResultsCallback sparqlResultsCallback)
   {
-    if (URI == "") return null;
-    try
-    {
-      SparqlResultSet results = QueryService.Instance.GetOutgoingPredicats(URI);
-      lastResults = results; // FIXME: Is lastResults important?
-      return GetPredicatsList(results);
-    }
-    catch (Exception e)
-    {
-      Debug.Log("GetOutgoingPredicats error: " + e.Message);
-      Debug.Log("URI: " + URI);
-      Debug.Log(lastResults);
-    }
-    return null;
+    if (URI == "") return;
+    QueryService.Instance.GetOutgoingPredicats(URI, sparqlResultsCallback);
   }
 
-  public Dictionary<string, Tuple<string, int>> GetIncomingPredicats(string URI)
+  public void GetIncomingPredicats(string URI, SparqlResultsCallback sparqlResultsCallback)
   {
-    if (URI == "") return null;
-    try
-    {
-      SparqlResultSet results = QueryService.Instance.GetIncomingPredicats(URI);
-      lastResults = results;
-      return GetPredicatsList(results);
-    }
-    catch (Exception e)
-    {
-      Debug.Log("GetIncomingPredicats error: " + e.Message);
-      Debug.Log("URI: " + URI);
-      Debug.Log(lastResults);
-      return null;
-    }
-  }
-
-  private Dictionary<string, Tuple<string, int>> GetPredicatsList(SparqlResultSet sparqlResults)
-  {
-    return sparqlResults.Aggregate(new Dictionary<string, Tuple<string, int>>(), (accum, result) =>
-    {
-      result.TryGetValue("p", out INode predicate);
-      result.TryGetValue("count", out INode countNode);
-      result.TryGetValue("label", out INode labelNode);
-
-      string label = labelNode != null ? labelNode.ToString() : "";
-
-      if (predicate != null)
-      {
-        string predicateString = predicate.ToString();
-        int count = int.Parse(countNode.ToString());
-        Tuple<string, int> value = new Tuple<string, int>(label, count);
-        if (!accum.ContainsKey(predicateString))
-        {
-          accum.Add(predicateString, value);
-        }
-        else
-        {
-          // Why overwrite and not just skip?
-          accum[predicateString] = value;
-        }
-      }
-      return accum;
-    });
-  }
-
-  private Boolean DoesFirstResultContainLanguageCode(Dictionary<string, Tuple<string, int>> results, INode predicate)
-  {
-    return results[predicate.ToString()].Item1.Contains("@" + Main.instance.languageCode);
+    if (URI == "") return;
+    QueryService.Instance.GetIncomingPredicats(URI, sparqlResultsCallback);
   }
 
   public void CollapseGraph(Node node)
@@ -365,27 +312,27 @@ public class Graph : MonoBehaviour
 
   public void CreateGraphByTriples(string triples)
   {
-    IGraph graph = QueryService.Instance.QueryByTriples(triples);
-    if (graph == null || graph.Triples == null || graph.Triples.Count == 0)
-    {
-      Destroy(gameObject);
-    }
-    else
-    {
-      BuildByIGraph(graph);
-    }
+    QueryService.Instance.QueryByTriples(triples, RebuildGraphCallback);
   }
 
   public void CreateGraphBySparqlQuery(string query)
   {
-    IGraph graph = QueryService.Instance.ExecuteQuery(query);
-    if (graph == null || graph.Triples == null || graph.Triples.Count == 0)
+    QueryService.Instance.ExecuteQuery(query, RebuildGraphCallback);
+  }
+
+  private void RebuildGraphCallback(IGraph resultGraph, object state)
+  {
+    if (resultGraph == null || resultGraph.Triples == null || resultGraph.Triples.Count == 0)
     {
       Destroy(gameObject);
     }
     else
     {
-      BuildByIGraph(graph);
+      resultGraph.NamespaceMap.Import(QueryService.Instance.defaultNamespace);
+      UnityMainThreadDispatcher.Instance().Enqueue(() =>
+      {
+        BuildByIGraph(resultGraph);
+      });
     }
   }
 

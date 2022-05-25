@@ -20,8 +20,8 @@ namespace Dweiss
     // "http://dbpedia.org";
 
     public string BaseURI = "http://dbpedia.org"; //"https://github.com/PjotrSvetachov/GraphVR/example-graph";
-    public string DefaultNodeCreationURI = "http://www.w3.org/2002/07/owl#Nothing";
-    public string DefaultEdgeCreationURI = "http://www.w3.org/2002/07/owl#Nothing";
+    public string DefaultNodeCreationURI = "http://graph2vr.org/newNode#";
+    public string DefaultEdgeCreationURI = "http://graph2vr.org/newEdge#";
 
     // We can start with an single node or a query.
     public string initialSparqlQueryString = "construct {?s ?p ?o}  where  {?s ?p ?o} Limit 100";

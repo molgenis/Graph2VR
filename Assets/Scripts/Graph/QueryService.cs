@@ -36,20 +36,23 @@ public class QueryService : MonoBehaviour
     defaultNamespace.AddNamespace("dbpedia/ontology", new Uri("http://dbpedia.org/ontology/"));
   }
 
-  public IGraph ExecuteQuery(string query)
+  public void ExecuteQuery(string query, GraphCallback queryCallback)
   {
     try
     {
-      IGraph graph = endPoint.QueryWithResultGraph(query);
-      graph.NamespaceMap.Import(defaultNamespace);
-      return graph;
+      endPoint.QueryWithResultGraph(query, queryCallback, state: null);
     }
     catch (RdfQueryException error)
     {
       Debug.Log("No database connection found");
       Debug.Log(error);
-      return null;
     }
+  }
+
+  public void ExpandGraph(Node node, string uri, bool isOutgoingLink, GraphCallback queryCallback)
+  {
+    string query = GetExpandGraphQuery(node, uri, isOutgoingLink);
+    endPoint.QueryWithResultGraph(query, queryCallback, state: null);
   }
 
   private string GetExpandGraphQuery(Node node, string uri, bool isOutgoingLink)
@@ -88,13 +91,7 @@ public class QueryService : MonoBehaviour
     }
   }
 
-  public void ExpandGraph(Node node, string uri, bool isOutgoingLink, GraphCallback queryCallback)
-  {
-    string query = GetExpandGraphQuery(node, uri, isOutgoingLink);
-    endPoint.QueryWithResultGraph(query, queryCallback, null);
-  }
-
-  public IGraph QueryByTriples(string triples)
+  public void QueryByTriples(string triples, GraphCallback queryCallback)
   {
     string query = $@"
             {PREFIXES}
@@ -106,59 +103,15 @@ public class QueryService : MonoBehaviour
 
     if (IsConstructSparqlQuery(query))
     {
-      return ExecuteQuery(query);
+      ExecuteQuery(query, queryCallback);
     }
     else
     {
       Debug.Log("Please use a Construct query");
-      return null;
     }
   }
 
-  public IGraph CollapseIncomingGraph(Node node)
-  {
-    string query = $@"
-            {PREFIXES}
-            construct {{
-                ?s ?p2 <{node.GetURIAsString()}> .
-            }} where {{
-                ?s ?p2 <{node.GetURIAsString()}> .
-                FILTER NOT EXISTS {{
-                    {{
-                        ?s ?p3 ?o3 .
-                        Filter(?o3 != <{node.GetURIAsString()}>)
-                    }} UNION {{
-                        ?o4 ?p4 ?s .
-                        Filter(?o4 != <{node.GetURIAsString()}>)
-                    }}
-                }}
-            }}";
-    return ExecuteQuery(query);
-  }
-
-  public IGraph CollapseOutgoingGraph(Node node)
-  {
-    string query = $@"
-            {PREFIXES}
-            construct {{
-                <{node.GetURIAsString()}> ?p ?o .
-            }} where {{
-                  <{node.GetURIAsString()}> ?p ?o .
-                  FILTER NOT EXISTS {{
-                      {{
-                          ?o2 ?p2 ?o .
-                          Filter(?o2 != <{node.GetURIAsString()}>)
-                      }} UNION {{
-                          ?o ?p3 ?o3 .
-                          Filter(?o3 != <{node.GetURIAsString()}>)
-                      }}
-                  }}
-            }}";
-
-    return ExecuteQuery(query);
-  }
-
-  public SparqlResultSet GetOutgoingPredicats(string URI)
+  public void GetOutgoingPredicats(string URI, SparqlResultsCallback sparqlResultsCallback)
   {
     string query = $@"
       {PREFIXES}
@@ -171,10 +124,10 @@ public class QueryService : MonoBehaviour
         FILTER(LANG(?label) = '' || LANGMATCHES(LANG(?label), '{Main.instance.languageCode}')) 
       }}
       ORDER BY ?label ?p LIMIT 100";
-    return endPoint.QueryWithResultSet(query);
+    endPoint.QueryWithResultSet(query, sparqlResultsCallback, state: null);
   }
 
-  public SparqlResultSet GetIncomingPredicats(string URI)
+  public void GetIncomingPredicats(string URI, SparqlResultsCallback sparqlResultsCallback)
   {
     string query = $@"
       {PREFIXES}
@@ -187,7 +140,7 @@ public class QueryService : MonoBehaviour
         FILTER(LANG(?label) = '' || LANGMATCHES(LANG(?label), '{Main.instance.languageCode}')) 
       }} 
       ORDER BY ?label ?p LIMIT 100";
-    return endPoint.QueryWithResultSet(query);
+    endPoint.QueryWithResultSet(query, sparqlResultsCallback, state: null);
   }
 
   private Boolean IsConstructSparqlQuery(string query)

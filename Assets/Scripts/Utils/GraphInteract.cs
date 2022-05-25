@@ -1,7 +1,4 @@
 ﻿using Dweiss;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -16,7 +13,8 @@ public class GraphInteract : MonoBehaviour
   private bool IsDraggingLine = false;
   private Node EdgeBegin = null;
   public bool isLeftController = true;
-
+  private static int nodeCreationCounter = 1;
+  private static int edgeCreationCounter = 1;
   // Start is called before the first frame update
   void Start()
   {
@@ -87,7 +85,8 @@ public class GraphInteract : MonoBehaviour
   void CreateNewNode()
   {
     IsHoldingPinchButton = false;
-    Node node = Main.instance.mainGraph.CreateNode(Settings.Instance.DefaultNodeCreationURI, transform.position);
+    Node node = Main.instance.mainGraph.CreateNode(Settings.Instance.DefaultNodeCreationURI+nodeCreationCounter, transform.position);
+    nodeCreationCounter++;
     node.MakeVariable();
     Main.instance.mainGraph.nodeList.Add(node);
   }
@@ -181,7 +180,8 @@ public class GraphInteract : MonoBehaviour
           Node EdgeEnd = CurrentHoveredObject.GetComponent<Node>();
           if (EdgeBegin != null && EdgeEnd != null && EdgeBegin != EdgeEnd)
           {
-            Edge edge = EdgeBegin.graph.CreateEdge(EdgeBegin, Settings.Instance.DefaultEdgeCreationURI, EdgeEnd);
+            Edge edge = EdgeBegin.graph.CreateEdge(EdgeBegin, Settings.Instance.DefaultEdgeCreationURI + edgeCreationCounter, EdgeEnd);
+            edgeCreationCounter++;
             EdgeBegin.graph.edgeList.Add(edge);
           }
         }

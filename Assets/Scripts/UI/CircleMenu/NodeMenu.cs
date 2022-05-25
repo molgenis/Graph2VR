@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VDS.RDF;
+using VDS.RDF.Query;
 
 public class NodeMenu : MonoBehaviour
 {
@@ -27,14 +29,54 @@ public class NodeMenu : MonoBehaviour
     }
   }
 
+  private enum PopulateMenuState { unloaded, loading, loaded };
+  PopulateMenuState populateMenuState = PopulateMenuState.unloaded;
+  Dictionary<string, Tuple<string, int>> labelAndCountByUri = null;
+
+  public void PopulateOutgoingMenu()
+  {
+    if(populateMenuState == PopulateMenuState.unloaded)
+    {
+      graph.GetOutgoingPredicats(node.GetURIAsString(), PopulateMenuCallback);
+      populateMenuState = PopulateMenuState.loading;
+    }
+
+    if(populateMenuState == PopulateMenuState.loaded)
+    {
+      DrawDelayedMenuButtons();
+    }
+    else
+    {
+      cm.AddButton("Loading...", new Color(1, 1, 1) / 2, () => {});
+    }
+  }
+
   public void PopulateIncomingMenu()
   {
-    Dictionary<string, System.Tuple<string, int>> set = graph.GetIncomingPredicats(node.GetURIAsString());
-    if (set != null)
+    if (populateMenuState == PopulateMenuState.unloaded)
+    {
+      graph.GetIncomingPredicats(node.GetURIAsString(), PopulateMenuCallback);
+      populateMenuState = PopulateMenuState.loading;
+    }
+
+    if (populateMenuState == PopulateMenuState.loaded)
+    {
+      DrawDelayedMenuButtons();
+    }
+    else
+    {
+      cm.AddButton("Loading...", new Color(1, 1, 1) / 2, () => { });
+    }
+    
+  }
+
+private void DrawDelayedMenuButtons()
+{
+    //draw buttons
+    if (labelAndCountByUri != null)
     {
       limitSlider.SetActive(true);
-
-      foreach (KeyValuePair<string, System.Tuple<string, int>> item in set)
+      foreach (KeyValuePair<string, Tuple<string, int>> item in labelAndCountByUri)
       {
         Color color = Color.gray;
         string label = item.Value.Item1;
@@ -46,33 +88,27 @@ public class NodeMenu : MonoBehaviour
         cm.AddButton(label, item.Key, color, () =>
         {
           graph.ExpandGraph(node, item.Key, false);
-        }, item.Value.Item2);
+        }, number: item.Value.Item2);
       }
     }
   }
 
-  public void PopulateOutgoingMenu()
+  private void PopulateMenuCallback(SparqlResultSet results, object state)
   {
-    Dictionary<string, System.Tuple<string, int>> set = graph.GetOutgoingPredicats(node.GetURIAsString());
-    if (set != null)
+    try
     {
-      limitSlider.SetActive(true);
-
-      foreach (KeyValuePair<string, System.Tuple<string, int>> item in set)
-      {
-        Color color = Color.gray;
-        string label = item.Value.Item1;
-        if (label == "")
+        UnityMainThreadDispatcher.Instance().Enqueue(() =>
         {
-          label = graph.GetShortName(item.Key);
-          color = Color.gray * 0.75f;
-        }
-        cm.AddButton(label, item.Key, color, () =>
-        {
-          graph.ExpandGraph(node, item.Key, true);
-        }, item.Value.Item2);
+          graph.SetLastResults(results);
+          labelAndCountByUri = Utils.GetPredicatsList(results);
+          populateMenuState = PopulateMenuState.loaded;
+          PopulateNode(node);
+        });
       }
-    }
+      catch (Exception e)
+      {
+        Debug.Log("error: " + e.Message);
+      }
   }
 
   public void PopulateNodeMenu()
@@ -188,7 +224,7 @@ public class NodeMenu : MonoBehaviour
 
   }
 
-  public void PopulateNode(Object input)
+  public void PopulateNode(UnityEngine.Object input)
   {
     controlerModel.SetActive(false);
     limitSlider.SetActive(false);
@@ -208,7 +244,7 @@ public class NodeMenu : MonoBehaviour
     cm.ReBuild();
   }
 
-  private void PopulateNodeDisplayMainMenu(Object input)
+  private void PopulateNodeDisplayMainMenu(UnityEngine.Object input)
   {
     cm.AddButton("List incoming predicates", Color.green / 2, () =>
     {
@@ -245,12 +281,13 @@ public class NodeMenu : MonoBehaviour
     });
   }
 
-  public void PopulateNodeDisplaySubMenus(Object input)
+  public void PopulateNodeDisplaySubMenus(UnityEngine.Object input)
   {
     // We are in a sub menu
     cm.AddButton("Back", Color.blue / 2, () =>
     {
       subMenu = "";
+      populateMenuState = PopulateMenuState.unloaded;
       cm.Close();
       PopulateNode(input);
     });
@@ -280,7 +317,7 @@ public class NodeMenu : MonoBehaviour
     }
   }
 
-  public void PopulateEdge(Object input)
+  public void PopulateEdge(UnityEngine.Object input)
   {
     KeyboardHandler.instance.Close();
     limitSlider.SetActive(false);
@@ -355,7 +392,7 @@ public class NodeMenu : MonoBehaviour
     return graph.selection.Find((edge) => edge.IsVariable || edge.displayObject.IsVariable || edge.displaySubject.IsVariable) != null;
   }
 
-  private void PopulateEdgeDisplayMainMenu(Object input)
+  private void PopulateEdgeDisplayMainMenu(UnityEngine.Object input)
   {
     controlerModel.SetActive(false);
     cm.Close();
@@ -436,7 +473,7 @@ public class NodeMenu : MonoBehaviour
     });
   }
 
-  private void PopulateEdgeDisplaySubMenus(Object input)
+  private void PopulateEdgeDisplaySubMenus(UnityEngine.Object input)
   {
     // We are in a sub menu
     cm.AddButton("Back", Color.blue / 2, () =>
@@ -462,6 +499,7 @@ public class NodeMenu : MonoBehaviour
 
   public void Close()
   {
+    populateMenuState = PopulateMenuState.unloaded;
     limitSlider.SetActive(false);
     node = null;
     subMenu = "";
@@ -477,6 +515,7 @@ public class NodeMenu : MonoBehaviour
 
   public void Clear()
   {
+    populateMenuState = PopulateMenuState.unloaded;
     node = null;
     subMenu = "";
     edge = null;
