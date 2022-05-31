@@ -15,7 +15,7 @@ public class GraphInteract : MonoBehaviour
   public bool isLeftController = true;
   private static int nodeCreationCounter = 1;
   private static int edgeCreationCounter = 1;
-  // Start is called before the first frame update
+
   void Start()
   {
     if (isLeftController)
@@ -85,7 +85,7 @@ public class GraphInteract : MonoBehaviour
   void CreateNewNode()
   {
     IsHoldingPinchButton = false;
-    Node node = Main.instance.mainGraph.CreateNode(Settings.Instance.DefaultNodeCreationURI+nodeCreationCounter, transform.position);
+    Node node = Main.instance.mainGraph.CreateNode(Settings.Instance.DefaultNodeCreationURI + nodeCreationCounter, transform.position);
     nodeCreationCounter++;
     node.MakeVariable();
     Main.instance.mainGraph.nodeList.Add(node);

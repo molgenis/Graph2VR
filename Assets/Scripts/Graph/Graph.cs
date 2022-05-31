@@ -90,6 +90,8 @@ public class Graph : MonoBehaviour
     // FIXME: test code
     // triples = " ?variable1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?variable2 .";
     // triples += "?variable1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.semanticweb.org/alexander/ontologies/2021/6/untitled-ontology-479#Study> .";
+
+    // FIXME: still blocking
     lastResults = QueryService.Instance.QuerySimilarPatternsMultipleLayers(triples, orderBy, out string query);
 
     Quaternion rotation = Camera.main.transform.rotation;
@@ -103,15 +105,12 @@ public class Graph : MonoBehaviour
       }
 
       Graph newGraph = QuerySimilarWithTriples(constructQuery, offset, Quaternion.identity);
-      if (newGraph.nodeList.Count > 0)
-      {
-        offset += rotation * new Vector3(0, 0, 0.5f);
-        CreateNewGraph(newGraph, query, rotation);
-      }
+      offset += rotation * new Vector3(0, 0, 0.5f);
+      SetupNewGraph(newGraph, query, rotation);
     }
   }
 
-  private void CreateNewGraph(Graph newGraph, string query, Quaternion rotation)
+  private void SetupNewGraph(Graph newGraph, string query, Quaternion rotation)
   {
     newGraph.creationQuery = query;
     newGraph.gameObject.GetComponent<FruchtermanReingold>().enabled = false;
@@ -122,7 +121,6 @@ public class Graph : MonoBehaviour
     planes.enabled = true;
     newGraph.layout = planes;
     newGraph.boundingSphere.isFlat = true;
-    planes.CalculateLayout();
     newGraph.boundingSphere.GetComponent<Renderer>().forceRenderingOff = true;
   }
 
@@ -332,6 +330,12 @@ public class Graph : MonoBehaviour
       UnityMainThreadDispatcher.Instance().Enqueue(() =>
       {
         BuildByIGraph(resultGraph);
+
+        SemanticPlanes plane = gameObject.GetComponent<SemanticPlanes>();
+        if (plane.enabled && this.layout == plane)
+        {
+          plane.CalculateLayout();
+        }
       });
     }
   }
@@ -353,6 +357,7 @@ public class Graph : MonoBehaviour
 
     layout.CalculateLayout();
   }
+
   public void Clear()
   {
     foreach (Node node in nodeList)
@@ -478,7 +483,7 @@ public class Graph : MonoBehaviour
         edgeList.Remove(edge);
         Destroy(edge.gameObject);
         Node otherNode = edge.displayObject == node ? edge.displaySubject : edge.displayObject;
-        if(removeEmptyLeaves && otherNode.connections.Count == 0)
+        if (removeEmptyLeaves && otherNode.connections.Count == 0)
         {
           Remove(otherNode);
         }
