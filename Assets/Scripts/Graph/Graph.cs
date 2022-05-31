@@ -87,37 +87,39 @@ public class Graph : MonoBehaviour
   public void QuerySimilarPatternsMultipleLayers()
   {
     string triples = GetTriplesString();
-    // FIXME: test code
-    // triples = " ?variable1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?variable2 .";
-    // triples += "?variable1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.semanticweb.org/alexander/ontologies/2021/6/untitled-ontology-479#Study> .";
-
-    // FIXME: still blocking
-    lastResults = QueryService.Instance.QuerySimilarPatternsMultipleLayers(triples, orderBy, out string query);
-
-    Quaternion rotation = Camera.main.transform.rotation;
-    Vector3 offset = transform.position + (rotation * new Vector3(0, 0, 1 + boundingSphere.size));
-    foreach (SparqlResult result in lastResults)
+    void QuerySimilarPatternsMultipleLayersCallback(SparqlResultSet results, string query)
     {
-      string constructQuery = triples;
-      foreach (var node in result)
+      UnityMainThreadDispatcher.Instance().Enqueue(() =>
       {
-        constructQuery = constructQuery.Replace("?" + node.Key, RealNodeValue(node.Value));
-      }
+        lastResults = results;
+        Quaternion rotation = Camera.main.transform.rotation;
+        Vector3 offset = transform.position + (rotation * new Vector3(0, 0, 1 + boundingSphere.size));
+        foreach (SparqlResult result in results)
+        {
+          string constructQuery = triples;
+          foreach (var node in result)
+          {
+            constructQuery = constructQuery.Replace("?" + node.Key, RealNodeValue(node.Value));
+          }
 
-      Graph newGraph = QuerySimilarWithTriples(constructQuery, offset, Quaternion.identity);
-      offset += rotation * new Vector3(0, 0, 0.5f);
-      SetupNewGraph(newGraph, query, rotation);
+          Graph newGraph = QuerySimilarWithTriples(constructQuery, offset, Quaternion.identity);
+          offset += rotation * new Vector3(0, 0, 0.5f);
+          SetupNewGraph(newGraph, query, rotation, results);
+        }
+      });
     }
+
+    QueryService.Instance.QuerySimilarPatternsMultipleLayers(triples, orderBy, QuerySimilarPatternsMultipleLayersCallback);
   }
 
-  private void SetupNewGraph(Graph newGraph, string query, Quaternion rotation)
+  private void SetupNewGraph(Graph newGraph, string query, Quaternion rotation, SparqlResultSet results)
   {
     newGraph.creationQuery = query;
     newGraph.gameObject.GetComponent<FruchtermanReingold>().enabled = false;
     SemanticPlanes planes = newGraph.gameObject.GetComponent<SemanticPlanes>();
     planes.lookDirection = rotation;
     planes.parentGraph = this;
-    planes.variableNameLookup = lastResults;
+    planes.variableNameLookup = results;
     planes.enabled = true;
     newGraph.layout = planes;
     newGraph.boundingSphere.isFlat = true;
@@ -532,5 +534,4 @@ public class Graph : MonoBehaviour
     layout = activeLayout;
     activeLayout.enabled = true;
   }
-
 }

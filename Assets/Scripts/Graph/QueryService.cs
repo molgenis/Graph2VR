@@ -100,7 +100,6 @@ public class QueryService : MonoBehaviour
             }} where {{
                 {triples} 
             }} LIMIT {queryLimit}";
-
     if (IsConstructSparqlQuery(query))
     {
       ExecuteQuery(query, queryCallback);
@@ -174,17 +173,24 @@ public class QueryService : MonoBehaviour
     endPoint.QueryWithResultGraph(query, callback, null);
   }
 
-  public SparqlResultSet QuerySimilarPatternsMultipleLayers(string triples, OrderedDictionary orderByList, out string query)
+  public void QuerySimilarPatternsMultipleLayers(string triples, OrderedDictionary orderByList, Action<SparqlResultSet, string> callback)
   {
     // TODO: make sure 'orderByList' do still exist
     string order = GetOrderByString(orderByList);
-    query = $@"
+    string query = $@"
       {PREFIXES}
       select distinct * where {{
         {triples}
       }} {order} LIMIT {queryLimit}";
-    return endPoint.QueryWithResultSet(query);
+
+    endPoint.QueryWithResultSet(query, (SparqlResultSet results, object state) =>
+    {
+      callback(results, query);
+    }, null);
   }
+
+
+
 
   private static string GetOrderByString(OrderedDictionary orderByList)
   {

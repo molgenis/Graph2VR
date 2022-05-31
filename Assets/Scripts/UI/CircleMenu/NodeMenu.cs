@@ -35,19 +35,19 @@ public class NodeMenu : MonoBehaviour
 
   public void PopulateOutgoingMenu()
   {
-    if(populateMenuState == PopulateMenuState.unloaded)
+    if (populateMenuState == PopulateMenuState.unloaded)
     {
       graph.GetOutgoingPredicats(node.GetURIAsString(), PopulateMenuCallback);
       populateMenuState = PopulateMenuState.loading;
     }
 
-    if(populateMenuState == PopulateMenuState.loaded)
+    if (populateMenuState == PopulateMenuState.loaded)
     {
       DrawDelayedMenuButtons();
     }
     else
     {
-      cm.AddButton("Loading...", new Color(1, 1, 1) / 2, () => {});
+      cm.AddButton("Loading...", new Color(1, 1, 1) / 2, () => { });
     }
   }
 
@@ -67,11 +67,11 @@ public class NodeMenu : MonoBehaviour
     {
       cm.AddButton("Loading...", new Color(1, 1, 1) / 2, () => { });
     }
-    
+
   }
 
-private void DrawDelayedMenuButtons()
-{
+  private void DrawDelayedMenuButtons()
+  {
     //draw buttons
     if (labelAndCountByUri != null)
     {
@@ -97,18 +97,18 @@ private void DrawDelayedMenuButtons()
   {
     try
     {
-        UnityMainThreadDispatcher.Instance().Enqueue(() =>
-        {
-          graph.SetLastResults(results);
-          labelAndCountByUri = Utils.GetPredicatsList(results);
-          populateMenuState = PopulateMenuState.loaded;
-          PopulateNode(node);
-        });
-      }
-      catch (Exception e)
+      UnityMainThreadDispatcher.Instance().Enqueue(() =>
       {
-        Debug.Log("error: " + e.Message);
-      }
+        graph.SetLastResults(results);
+        labelAndCountByUri = Utils.GetPredicatsList(results);
+        populateMenuState = PopulateMenuState.loaded;
+        PopulateNode(node);
+      });
+    }
+    catch (Exception e)
+    {
+      Debug.Log("error: " + e.Message);
+    }
   }
 
   public void PopulateNodeMenu()
