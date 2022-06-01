@@ -418,6 +418,37 @@ public class Graph : MonoBehaviour
     edge.uri = uri;
     edge.displaySubject = from;
     edge.displayObject = to;
+
+    // Check if its self referencing
+    if (from.uri != null && from.uri != "" && from.uri == to.uri)
+    {
+      edge.lineType = Edge.LineType.Circle;
+      Debug.Log("Found self referencing edge");
+    }
+
+    // Check if edge overlaps with an other
+    List<Edge> foundCollisions = new List<Edge>();
+    foreach (Edge edgeToCheck in edgeList)
+    {
+      if((from.uri == edgeToCheck.displaySubject.uri && to.uri == edgeToCheck.displayObject.uri) || (to.uri == edgeToCheck.displaySubject.uri && from.uri == edgeToCheck.displayObject.uri))
+      {
+        foundCollisions.Add(edgeToCheck);
+        Debug.Log("Found overlapping edge");
+      }
+    }
+
+    if (foundCollisions.Count > 0)
+    {
+      int index = 0;
+      foundCollisions.Add(edge);
+      foreach (Edge foundEdge in foundCollisions)
+      {
+        foundEdge.lineType = Edge.LineType.Bend;
+        foundEdge.bendDirectionOffset = (360f / (foundCollisions.Count)) * index;
+        index++;
+      }
+    }
+
     return edge;
   }
 

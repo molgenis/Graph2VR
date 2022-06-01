@@ -10,7 +10,6 @@ public class Edge : MonoBehaviour
   public INode graphSubject;
   public INode graphPredicate;
   public INode graphObject;
-
   private Transform arrow;
   private new CapsuleCollider collider;
   private LineRenderer lineRenderer;
@@ -20,6 +19,15 @@ public class Edge : MonoBehaviour
   private string textShort = "";
   private string textLong = "";
   public string variableName = "";
+  public enum LineType { Direct, Bend, Circle }
+  public LineType lineType = LineType.Direct;
+  private Vector3 bendDirectionVector = Vector3.zero;
+  public float bendDirectionOffset = 0;
+
+  private void UpdateBendDirectionVector(Vector3 fromPosition, Vector3 toPosition, Vector3 normal)
+  {
+    bendDirectionVector = Quaternion.FromToRotation(transform.up, normal) * Quaternion.Euler(90, 0, bendDirectionOffset) * Vector3.up * 0.2f;
+  }
 
   // refactor: don't cache but get the correct color based on the type
   private Color cachedNodeColor; // color of the node, (before it gets converted to variable)
@@ -103,6 +111,8 @@ public class Edge : MonoBehaviour
     lineRenderer.useWorldSpace = false;
     arrow = transform.Find("Arrow");
     collider = transform.Find("Collider").GetComponent<CapsuleCollider>();
+
+    bendDirectionVector = Random.insideUnitSphere * 0.5f;
   }
 
   private void Start()
@@ -251,25 +261,72 @@ public class Edge : MonoBehaviour
     Vector2 textRotation = CalculateAngles(fromPosition, toPosition);
 
     UpdateLineRenderer(fromPosition, toPosition, distance, normal);
-    UpdateArrow(fromPosition, toPosition, normal);
+    
     PositionCollider(textRotation, distance);
     RotateText(textRotation);
     UpdateTextSize(distance);
+    UpdateBendDirectionVector(fromPosition, toPosition, normal);
   }
 
   private void UpdateArrow(Vector3 fromPosition, Vector3 toPosition, Vector3 normal)
   {
     arrow.localPosition = (transform.worldToLocalMatrix * (toPosition - (normal * (displayObject.transform.lossyScale.x * 0.5f))));
     arrow.rotation = Quaternion.FromToRotation(Vector3.up, normal);
-
   }
 
   private void UpdateLineRenderer(Vector3 fromPosition, Vector3 toPosition, float distance, Vector3 normal)
   {
     lineRenderer.startWidth = lineRenderer.endWidth = 0.005f * transform.lossyScale.magnitude;
-    lineRenderer.SetPosition(0, transform.worldToLocalMatrix * (fromPosition + normal * (displaySubject.transform.lossyScale.x * 0.5f)));
-    lineRenderer.SetPosition(1, transform.worldToLocalMatrix * (toPosition - (normal * ((displayObject.transform.lossyScale.x * 0.5f) + (arrow.lossyScale.x * 0.05f)))));
 
+    Vector3 from = transform.worldToLocalMatrix * (fromPosition + normal * (displaySubject.transform.lossyScale.x * 0.5f));
+    Vector3 to = transform.worldToLocalMatrix * (toPosition - (normal * ((displayObject.transform.lossyScale.x * 0.5f) + (arrow.lossyScale.x * 0.05f))));
+
+    if (lineType == LineType.Direct)
+    {
+      lineRenderer.positionCount = 2;
+      lineRenderer.SetPosition(0, from);
+      lineRenderer.SetPosition(1, to);
+      UpdateArrow(fromPosition, toPosition, normal);
+    }
+    else if (lineType == LineType.Bend)
+    {
+      int resolution = 16;
+      from = transform.worldToLocalMatrix * fromPosition;
+      to = transform.worldToLocalMatrix * (toPosition - (normal * ((displayObject.transform.lossyScale.x * 0.5f) + (arrow.lossyScale.x * 0.05f))));
+      lineRenderer.positionCount = resolution;
+      for(int i=0;i< lineRenderer.positionCount; i++)
+      {
+        float fraction = (float)i / (lineRenderer.positionCount-1);
+        Vector3 target = Vector3.Lerp(from, to, fraction);
+        lineRenderer.SetPosition(i, target + (bendDirectionVector * Mathf.Sin(fraction * Mathf.PI)));
+      }
+      Vector3 arrowNormal = (lineRenderer.GetPosition(resolution - 1) - lineRenderer.GetPosition(resolution - 2)).normalized;
+      arrow.localPosition = lineRenderer.GetPosition(resolution-1) + (arrowNormal * (arrow.lossyScale.x * 0.05f));
+      arrow.rotation = Quaternion.FromToRotation(Vector3.up, arrowNormal);
+    }
+    else
+    {
+      int resolution = 16;
+      from = transform.worldToLocalMatrix * fromPosition;
+      lineRenderer.positionCount = resolution;
+      for (int i = 0; i < lineRenderer.positionCount; i++)
+      {
+        float fraction = (float)i / (lineRenderer.positionCount - 1);
+        Vector3 sideNormal = Quaternion.FromToRotation(transform.up, bendDirectionVector.normalized) * Quaternion.Euler(90, 0, 0) * Vector3.up;
+        Vector3 p1 = bendDirectionVector + (sideNormal * bendDirectionVector.magnitude);
+        Vector3 p2 = bendDirectionVector + (-sideNormal * bendDirectionVector.magnitude);
+        lineRenderer.SetPosition(i,
+          Utils.CalculateCubicBezierPoint(fraction, from, from+p1, from+p2, from)
+          );
+      }
+      Vector3 arrowNormal = (lineRenderer.GetPosition(resolution - 1) - lineRenderer.GetPosition(resolution - 2)).normalized;
+      arrow.localPosition = lineRenderer.GetPosition(resolution - 1) + (arrowNormal * (arrow.lossyScale.x * 0.05f));
+      arrow.rotation = Quaternion.FromToRotation(Vector3.up, arrowNormal);
+    }
+
+    //bend to side if stacked
+
+    //bend around if subject == object
   }
 
   private void PositionCollider(Vector2 backRotation, float distance)
@@ -288,7 +345,6 @@ public class Edge : MonoBehaviour
     {
       textFront.transform.localRotation *= Quaternion.AngleAxis(180, Vector3.up);
     }
-
   }
 
   private void UpdateTextSize(float distance)
