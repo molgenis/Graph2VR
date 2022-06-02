@@ -413,7 +413,8 @@ public class Graph : MonoBehaviour
   private Edge InitializeEdge(string uri, Node from, Node to)
   {
     GameObject clone = GetEdgeClone();
-    Edge edge = clone.AddComponent<Edge>();
+    clone.name = "Edge: " + uri;
+    Edge edge = clone.GetComponent<Edge>();
     edge.graph = this;
     edge.uri = uri;
     edge.displaySubject = from;
@@ -442,7 +443,6 @@ public class Graph : MonoBehaviour
       }
     }
 
-
     if (foundCollisions.Count > 0)
     {
       int index = 0;
@@ -451,6 +451,7 @@ public class Graph : MonoBehaviour
       {
         foundEdge.lineType = Edge.LineType.Bend;
         foundEdge.bendDirectionOffset = (360f / (foundCollisions.Count)) * index;
+        foundEdge.UpdateEdgeDisplay();
         index++;
       }
     }
@@ -470,6 +471,7 @@ public class Graph : MonoBehaviour
   public void CreateNode(string value, INode iNode)
   {
     GameObject clone = Instantiate<GameObject>(nodePrefab);
+    clone.name = "Node " + value;
     clone.transform.SetParent(transform);
     clone.transform.localPosition = UnityEngine.Random.insideUnitSphere * 3f;
     clone.transform.localRotation = Quaternion.identity;
@@ -481,6 +483,7 @@ public class Graph : MonoBehaviour
   public Node CreateNode(string value, Vector3 position)
   {
     GameObject clone = Instantiate<GameObject>(nodePrefab);
+    clone.name = "Node " + value;
     clone.transform.SetParent(transform);
     clone.transform.position = position;
     clone.transform.localRotation = Quaternion.identity;

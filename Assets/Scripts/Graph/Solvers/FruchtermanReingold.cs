@@ -22,7 +22,8 @@ public class FruchtermanReingold : BaseLayoutAlgorithm
 
   void Update()
   {
-    if (Temperature > 0.01f) {
+    if (Temperature > 0.01f)
+    {
       FruchtermanReingoldIteration();
     }
   }
@@ -70,9 +71,9 @@ public class FruchtermanReingold : BaseLayoutAlgorithm
     {
       Vector3 displacement = Vector3.zero;
       Vector3 position = NodePositions[index];
-      for(int i = 0; i < NodePositions.Length; i++)
+      for (int i = 0; i < NodePositions.Length; i++)
       {
-        if(i != index)
+        if (i != index)
         {
           Vector3 delta = position - NodePositions[i];
           float FrForce = Fr(delta.magnitude);
@@ -91,10 +92,13 @@ public class FruchtermanReingold : BaseLayoutAlgorithm
     bool useSingleThread = false;
     if (useSingleThread)
     {
-      foreach (Node node in graph.nodeList) {
+      foreach (Node node in graph.nodeList)
+      {
         node.displacement = Vector3.zero;
-        foreach (Node neightbor in graph.nodeList) {
-          if (node != neightbor) {
+        foreach (Node neightbor in graph.nodeList)
+        {
+          if (node != neightbor)
+          {
             Vector3 delta = node.transform.localPosition - neightbor.transform.localPosition;
             float FrForce = Fr(delta.magnitude);
             node.displacement += delta.normalized * FrForce;
@@ -139,8 +143,10 @@ public class FruchtermanReingold : BaseLayoutAlgorithm
     }
 
     // calculate attractive forces
-    foreach (Edge edge in graph.edgeList) {
-      if (edge.displayObject != null && edge.displaySubject != null) {
+    foreach (Edge edge in graph.edgeList)
+    {
+      if (edge.displayObject != null && edge.displaySubject != null)
+      {
         Vector3 delta = edge.displayObject.transform.localPosition - edge.displaySubject.transform.localPosition;
         float FaForce = Fa(delta.magnitude);
         Vector3 normal = delta.normalized;
@@ -149,13 +155,19 @@ public class FruchtermanReingold : BaseLayoutAlgorithm
       }
     }
 
-    // Reposition the nodes, taking ionto account the temperature
+    // Reposition the nodes, taking into account the temperature
     float TotalDisplacement = 0.0f;
-    foreach (Node node in graph.nodeList) {
-      if (node != null) {
+    foreach (Node node in graph.nodeList)
+    {
+      if (node != null)
+      {
         float DisplacementMagitude = node.displacement.magnitude;
         TotalDisplacement = Mathf.Max(DisplacementMagitude, TotalDisplacement);
-        node.transform.localPosition += (node.displacement / DisplacementMagitude) * Mathf.Min(DisplacementMagitude, Temperature);
+        Vector3 movement = (node.displacement / DisplacementMagitude) * Mathf.Min(DisplacementMagitude, Temperature);
+        if (!float.IsNaN(movement.x) && !float.IsNaN(movement.y) && !float.IsNaN(movement.z))
+        {
+          node.transform.localPosition += movement;
+        }
       }
     }
 
