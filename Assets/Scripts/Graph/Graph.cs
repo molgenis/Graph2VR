@@ -430,12 +430,18 @@ public class Graph : MonoBehaviour
     List<Edge> foundCollisions = new List<Edge>();
     foreach (Edge edgeToCheck in edgeList)
     {
-      if((from.uri == edgeToCheck.displaySubject.uri && to.uri == edgeToCheck.displayObject.uri) || (to.uri == edgeToCheck.displaySubject.uri && from.uri == edgeToCheck.displayObject.uri))
+      if ((from.uri == edgeToCheck.displaySubject.uri && to.uri == edgeToCheck.displayObject.uri))
       {
         foundCollisions.Add(edgeToCheck);
-        Debug.Log("Found overlapping edge");
+        edgeToCheck.flippedDirection = false;
+      }
+      else if (to.uri == edgeToCheck.displaySubject.uri && from.uri == edgeToCheck.displayObject.uri)
+      {
+        foundCollisions.Add(edgeToCheck);
+        edgeToCheck.flippedDirection = true;
       }
     }
+
 
     if (foundCollisions.Count > 0)
     {
@@ -448,7 +454,6 @@ public class Graph : MonoBehaviour
         index++;
       }
     }
-
     return edge;
   }
 

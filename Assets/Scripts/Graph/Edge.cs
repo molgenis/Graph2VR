@@ -21,13 +21,10 @@ public class Edge : MonoBehaviour
   public string variableName = "";
   public enum LineType { Direct, Bend, Circle }
   public LineType lineType = LineType.Direct;
+
   private Vector3 bendDirectionVector = Vector3.zero;
   public float bendDirectionOffset = 0;
-
-  private void UpdateBendDirectionVector(Vector3 fromPosition, Vector3 toPosition, Vector3 normal)
-  {
-    bendDirectionVector = Quaternion.FromToRotation(transform.up, normal) * Quaternion.Euler(90, 0, bendDirectionOffset) * Vector3.up * 0.2f;
-  }
+  public bool flippedDirection = false;
 
   // refactor: don't cache but get the correct color based on the type
   private Color cachedNodeColor; // color of the node, (before it gets converted to variable)
@@ -261,11 +258,23 @@ public class Edge : MonoBehaviour
     Vector2 textRotation = CalculateAngles(fromPosition, toPosition);
 
     UpdateLineRenderer(fromPosition, toPosition, distance, normal);
-    
+
     PositionCollider(textRotation, distance);
     RotateText(textRotation);
     UpdateTextSize(distance);
     UpdateBendDirectionVector(fromPosition, toPosition, normal);
+  }
+
+  private void UpdateBendDirectionVector(Vector3 fromPosition, Vector3 toPosition, Vector3 normal)
+  {
+    if (flippedDirection)
+    {
+      bendDirectionVector = Quaternion.FromToRotation(transform.up, normal) * Quaternion.Euler(90, 0, bendDirectionOffset) * Vector3.up * 0.2f;
+    }
+    else
+    {
+      bendDirectionVector = Quaternion.FromToRotation(-transform.up, normal) * Quaternion.Euler(90, 0, bendDirectionOffset + 180) * Vector3.down * 0.2f;
+    }
   }
 
   private void UpdateArrow(Vector3 fromPosition, Vector3 toPosition, Vector3 normal)
@@ -294,14 +303,14 @@ public class Edge : MonoBehaviour
       from = transform.worldToLocalMatrix * fromPosition;
       to = transform.worldToLocalMatrix * (toPosition - (normal * ((displayObject.transform.lossyScale.x * 0.5f) + (arrow.lossyScale.x * 0.05f))));
       lineRenderer.positionCount = resolution;
-      for(int i=0;i< lineRenderer.positionCount; i++)
+      for (int i = 0; i < lineRenderer.positionCount; i++)
       {
-        float fraction = (float)i / (lineRenderer.positionCount-1);
+        float fraction = (float)i / (lineRenderer.positionCount - 1);
         Vector3 target = Vector3.Lerp(from, to, fraction);
         lineRenderer.SetPosition(i, target + (bendDirectionVector * Mathf.Sin(fraction * Mathf.PI)));
       }
       Vector3 arrowNormal = (lineRenderer.GetPosition(resolution - 1) - lineRenderer.GetPosition(resolution - 2)).normalized;
-      arrow.localPosition = lineRenderer.GetPosition(resolution-1) + (arrowNormal * (arrow.lossyScale.x * 0.05f));
+      arrow.localPosition = lineRenderer.GetPosition(resolution - 1) + (arrowNormal * (arrow.lossyScale.x * 0.05f));
       arrow.rotation = Quaternion.FromToRotation(Vector3.up, arrowNormal);
     }
     else
@@ -316,17 +325,13 @@ public class Edge : MonoBehaviour
         Vector3 p1 = bendDirectionVector + (sideNormal * bendDirectionVector.magnitude);
         Vector3 p2 = bendDirectionVector + (-sideNormal * bendDirectionVector.magnitude);
         lineRenderer.SetPosition(i,
-          Utils.CalculateCubicBezierPoint(fraction, from, from+p1, from+p2, from)
+          Utils.CalculateCubicBezierPoint(fraction, from, from + p1, from + p2, from)
           );
       }
       Vector3 arrowNormal = (lineRenderer.GetPosition(resolution - 1) - lineRenderer.GetPosition(resolution - 2)).normalized;
       arrow.localPosition = lineRenderer.GetPosition(resolution - 1) + (arrowNormal * (arrow.lossyScale.x * 0.05f));
       arrow.rotation = Quaternion.FromToRotation(Vector3.up, arrowNormal);
     }
-
-    //bend to side if stacked
-
-    //bend around if subject == object
   }
 
   private void PositionCollider(Vector2 backRotation, float distance)

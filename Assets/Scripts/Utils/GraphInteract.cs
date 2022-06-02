@@ -182,7 +182,6 @@ public class GraphInteract : MonoBehaviour
           {
             Edge edge = EdgeBegin.graph.CreateEdge(EdgeBegin, Settings.Instance.DefaultEdgeCreationURI + edgeCreationCounter, EdgeEnd);
             edgeCreationCounter++;
-            EdgeBegin.graph.edgeList.Add(edge);
           }
         }
         EdgeBegin = null;
