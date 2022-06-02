@@ -41,7 +41,7 @@ public class Edge : MonoBehaviour
   private bool isSubclassOfRelation = false;
   private Stopwatch throttle;
 
-  private static int bendResolution = 16;
+  private static int bendResolution = 10;
   public bool IsVariable
   {
     get => isVariable;
@@ -195,6 +195,11 @@ public class Edge : MonoBehaviour
     if (Camera.main.transform.position != oldCameraPosition && Camera.main.transform.rotation != oldCameraRotation)
     {
       UpdateEdgeTextRotations();
+
+      if (lineType == LineType.Circle)
+      {
+        textFront.transform.rotation = Quaternion.LookRotation(textFront.transform.position - Camera.main.transform.position, Vector3.up);
+      }
       oldCameraPosition = Camera.main.transform.position;
       oldCameraRotation = Camera.main.transform.rotation;
     }
@@ -282,21 +287,31 @@ public class Edge : MonoBehaviour
     Vector3 toPosition = displayObject.transform.position - transform.position;
     Vector2 textRotation = CalculateAngles(fromPosition, toPosition);
 
-    textFront.transform.rotation = Quaternion.Euler(0, textRotation.x, textRotation.y); // note this is world rotation
-    if (lineType == LineType.Direct)
+    Vector3 localBendCenter = lineRenderer.GetPosition((int)(lineRenderer.positionCount * 0.5f));
+
+    if (lineType == LineType.Circle)
     {
-      textFront.transform.localPosition = textFront.transform.localRotation * (Vector3.up * 0.025f); // note this is local position
-                                                                                                     // Rotate the text to face the camera
+      textFront.transform.rotation = Quaternion.identity;
+      textFront.transform.localPosition = localBendCenter + (bendDirectionVector.normalized * 0.025f);
     }
     else
     {
-      Vector3 localBendCenter = lineRenderer.GetPosition((int)(lineRenderer.positionCount * 0.5f));
-      textFront.transform.localPosition = localBendCenter + (textFront.transform.localRotation * (Vector3.up * 0.025f)); // note this is local position
-    }
+      textFront.transform.rotation = Quaternion.Euler(0, textRotation.x, textRotation.y); // note this is world rotation
+      if (lineType == LineType.Direct)
+      {
+        textFront.transform.localPosition = textFront.transform.localRotation * (Vector3.up * 0.025f); // note this is local position
+                                                                                                       // Rotate the text to face the camera
+      }
+      else
+      {
 
-    if (Vector3.Dot(textFront.transform.forward, Camera.main.transform.forward) < 0)
-    {
-      textFront.transform.localRotation *= Quaternion.AngleAxis(180, Vector3.up);
+        textFront.transform.localPosition = localBendCenter + (textFront.transform.localRotation * (Vector3.up * 0.025f)); // note this is local position
+      }
+
+      if (Vector3.Dot(textFront.transform.forward, Camera.main.transform.forward) < 0)
+      {
+        textFront.transform.localRotation *= Quaternion.AngleAxis(180, Vector3.up);
+      }
     }
   }
 
@@ -329,6 +344,7 @@ public class Edge : MonoBehaviour
 
   private void UpdateArrow(Vector3 fromPosition, Vector3 toPosition, Vector3 normal)
   {
+    arrow.gameObject.SetActive(true);
     arrow.localPosition = (transform.worldToLocalMatrix * (toPosition - (normal * (displayObject.transform.lossyScale.x * 0.5f))));
     arrow.rotation = Quaternion.FromToRotation(Vector3.up, normal);
   }
@@ -358,6 +374,7 @@ public class Edge : MonoBehaviour
         Vector3 target = Vector3.Lerp(from, to, fraction);
         lineRenderer.SetPosition(i, target + (bendDirectionVector * Mathf.Sin(fraction * Mathf.PI)));
       }
+      arrow.gameObject.SetActive(true);
       Vector3 arrowNormal = (lineRenderer.GetPosition(bendResolution - 1) - lineRenderer.GetPosition(bendResolution - 2)).normalized;
       arrow.localPosition = lineRenderer.GetPosition(bendResolution - 1) + (arrowNormal * (arrow.lossyScale.x * 0.05f));
       arrow.rotation = Quaternion.FromToRotation(Vector3.up, arrowNormal);
@@ -376,9 +393,7 @@ public class Edge : MonoBehaviour
           Utils.CalculateCubicBezierPoint(fraction, from, from + p1, from + p2, from)
           );
       }
-      Vector3 arrowNormal = (lineRenderer.GetPosition(bendResolution - 1) - lineRenderer.GetPosition(bendResolution - 2)).normalized;
-      arrow.localPosition = lineRenderer.GetPosition(bendResolution - 1) + (arrowNormal * (arrow.lossyScale.x * 0.05f));
-      arrow.rotation = Quaternion.FromToRotation(Vector3.up, arrowNormal);
+      arrow.gameObject.SetActive(false);
     }
   }
 
