@@ -17,12 +17,12 @@ public class PointerCorrections : MonoBehaviour
       if (name == "quest")
       {
         transform.localPosition = questOffset;
-        transform.rotation = Quaternion.Euler(questRotation);
+        transform.localRotation = Quaternion.Euler(questRotation);
       }
       else if (name == "vive")
       {
         transform.localPosition = viveOffset;
-        transform.rotation = Quaternion.Euler(viveRotation);
+        transform.localRotation = Quaternion.Euler(viveRotation);
       }
     });
   }
