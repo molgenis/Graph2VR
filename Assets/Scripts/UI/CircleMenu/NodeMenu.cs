@@ -499,6 +499,8 @@ public class NodeMenu : MonoBehaviour
 
   public void Close()
   {
+    if (node != null) node.IsActiveInMenu = false;
+    if (edge != null) edge.IsActiveInMenu = false;
     populateMenuState = PopulateMenuState.unloaded;
     limitSlider.SetActive(false);
     node = null;
@@ -515,6 +517,8 @@ public class NodeMenu : MonoBehaviour
 
   public void Clear()
   {
+    if (node != null) node.IsActiveInMenu = false;
+    if (edge != null) edge.IsActiveInMenu = false;
     populateMenuState = PopulateMenuState.unloaded;
     node = null;
     subMenu = "";

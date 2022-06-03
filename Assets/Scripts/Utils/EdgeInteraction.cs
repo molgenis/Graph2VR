@@ -4,15 +4,23 @@ using UnityEngine.EventSystems;
 public class EdgeInteraction : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler, IGrabInterface
 {
   private Edge edge;
+  private Graph graph;
 
   public void Start()
   {
     edge = GetComponent<Edge>();
+    graph = transform.parent.GetComponent<Graph>();
   }
 
   public void OnPointerClick(PointerEventData eventData)
   {
+    foreach (Edge graphEdge in graph.edgeList)
+    {
+      graphEdge.IsActiveInMenu = false;
+    }
     Edge edge = GetComponent<Edge>();
+    edge.IsActiveInMenu = true;
+
     GameObject.FindGameObjectWithTag("LeftController").BroadcastMessage("Clear", SendMessageOptions.DontRequireReceiver);
     GameObject.FindGameObjectWithTag("LeftController").BroadcastMessage("PopulateEdge", edge, SendMessageOptions.DontRequireReceiver);
   }

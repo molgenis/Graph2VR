@@ -12,6 +12,7 @@ public class Node : MonoBehaviour
   private Canvas infoPanel;
   private bool isVariable = false;
   private bool isSelected = false;
+  private bool isActiveInMenu = false;
   private bool isPointerHovered = false;
   private bool isControllerHovered = false;
   private bool isControllerGrabbed = false;
@@ -20,6 +21,16 @@ public class Node : MonoBehaviour
   public void AddConnection(Edge edge)
   {
     if (!connections.Contains(edge)) connections.Add(edge);
+  }
+
+  public bool IsActiveInMenu
+  {
+    get => isActiveInMenu;
+    set
+    {
+      isActiveInMenu = value;
+      UpdateColor();
+    }
   }
 
   public bool IsVariable
@@ -99,6 +110,10 @@ public class Node : MonoBehaviour
     if (IsControllerHovered || IsPointerHovered)
     {
       SetColor(ColorSettings.instance.edgeHoverColor);
+    }
+    else if (IsActiveInMenu)
+    {
+      SetColor(ColorSettings.instance.edgeGrabbedColor);
     }
     else if (IsControllerGrabbed)
     {

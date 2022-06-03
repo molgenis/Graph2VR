@@ -35,6 +35,7 @@ public class Edge : MonoBehaviour
 
   private bool isVariable = false;
   private bool isSelected = false;
+  private bool isActiveInMenu = false;
   private bool isPointerHovered = false;
   private bool isControllerHovered = false;
   private bool isControllerGrabbed = false;
@@ -59,6 +60,16 @@ public class Edge : MonoBehaviour
     set
     {
       isSelected = value;
+      UpdateColor();
+    }
+  }
+
+  public bool IsActiveInMenu
+  {
+    get => isActiveInMenu;
+    set
+    {
+      isActiveInMenu = value;
       UpdateColor();
     }
   }
@@ -149,6 +160,10 @@ public class Edge : MonoBehaviour
     if (IsControllerHovered || IsPointerHovered)
     {
       SetColor(ColorSettings.instance.edgeHoverColor);
+    }
+    else if (IsActiveInMenu)
+    {
+      SetColor(ColorSettings.instance.edgeGrabbedColor);
     }
     else if (IsControllerGrabbed)
     {
