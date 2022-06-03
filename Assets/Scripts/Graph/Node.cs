@@ -243,7 +243,7 @@ public class Node : MonoBehaviour
     if (labelEdge != null)
     {
       SetLabel(labelEdge.displayObject.uri);
-      graph.Remove(labelEdge.displayObject);
+      graph.RemoveNode(labelEdge.displayObject);
     }
   }
 
@@ -281,7 +281,7 @@ public class Node : MonoBehaviour
         filter.mesh = m;
 
         StartCoroutine(FetchTexture(edge.displayObject.uri));
-        graph.Remove(edge.displayObject);
+        graph.RemoveNode(edge.displayObject);
         // Do not break, node can have multiple images, some of them can be 404 url's so lets go through all of them
         //break;
       }

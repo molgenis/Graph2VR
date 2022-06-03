@@ -133,7 +133,7 @@ public class NodeMenu : MonoBehaviour
 
     cm.AddButton("Close node", new Color(1, 0.5f, 0.5f) / 2, () =>
     {
-      graph.Remove(node, true);
+      graph.RemoveNode(node, true);
       Close();
     });
 
@@ -432,6 +432,12 @@ public class NodeMenu : MonoBehaviour
       subMenu = "Graph";
       cm.Close();
       PopulateEdge(input);
+    });
+
+    cm.AddButton("Close Edge", new Color(1, 0.5f, 0.5f) / 2, () =>
+    {
+      graph.RemoveEdge(edge);
+      Close();
     });
 
     if (edge.IsVariable)

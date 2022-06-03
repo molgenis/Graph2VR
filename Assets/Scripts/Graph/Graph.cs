@@ -190,7 +190,7 @@ public class Graph : MonoBehaviour
   {
     if (edge.displayObject == node && edge.displaySubject.connections.Count == 1)
     {
-      Remove(edge.displaySubject);
+      RemoveNode(edge.displaySubject);
       node.connections.Remove(edge);
     }
   }
@@ -204,7 +204,7 @@ public class Graph : MonoBehaviour
   {
     if (edge.displaySubject == node && edge.displayObject.connections.Count == 1)
     {
-      Remove(edge.displayObject);
+      RemoveNode(edge.displayObject);
       node.connections.Remove(edge);
     }
   }
@@ -510,7 +510,7 @@ public class Graph : MonoBehaviour
 
   // Removes a node from the graph. This will also remove all the edges leading to this node.
   // Settings to removeEmptyLeaves to true will remove any connected node that only has this node as a connection.
-  public void Remove(Node node, bool removeEmptyLeaves = false)
+  public void RemoveNode(Node node, bool removeEmptyLeaves = false)
   {
     if (node != null)
     {
@@ -525,13 +525,21 @@ public class Graph : MonoBehaviour
         Node otherNode = edge.displayObject == node ? edge.displaySubject : edge.displayObject;
         if (removeEmptyLeaves && otherNode.connections.Count == 0)
         {
-          Remove(otherNode);
+          RemoveNode(otherNode);
         }
       }
 
       nodeList.Remove(node);
       Destroy(node.gameObject);
     }
+  }
+
+  public void RemoveEdge(Edge edge)
+  {
+    edge.displayObject.connections.Remove(edge);
+    edge.displaySubject.connections.Remove(edge);
+    edgeList.Remove(edge);
+    Destroy(edge.gameObject);
   }
 
   public void Remove()
