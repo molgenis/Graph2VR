@@ -14,15 +14,21 @@ public class EdgeInteraction : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
   public void OnPointerClick(PointerEventData eventData)
   {
+    Edge lastSelection = null;
+
     foreach (Edge graphEdge in graph.edgeList)
     {
+      if (graphEdge.IsActiveInMenu) lastSelection = graphEdge;
       graphEdge.IsActiveInMenu = false;
     }
     Edge edge = GetComponent<Edge>();
     edge.IsActiveInMenu = true;
 
-    GameObject.FindGameObjectWithTag("LeftController").BroadcastMessage("Clear", SendMessageOptions.DontRequireReceiver);
-    GameObject.FindGameObjectWithTag("LeftController").BroadcastMessage("PopulateEdge", edge, SendMessageOptions.DontRequireReceiver);
+    if (edge != lastSelection)
+    {
+      GameObject.FindGameObjectWithTag("LeftController").BroadcastMessage("Clear", SendMessageOptions.DontRequireReceiver);
+      GameObject.FindGameObjectWithTag("LeftController").BroadcastMessage("PopulateEdge", edge, SendMessageOptions.DontRequireReceiver);
+    }
   }
 
 

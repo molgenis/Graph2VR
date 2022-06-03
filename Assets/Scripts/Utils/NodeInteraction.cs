@@ -16,14 +16,19 @@ public class NodeInteraction : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
   public void OnPointerClick(PointerEventData eventData)
   {
+    Node lastSelection = null;
     foreach (Node graphNode in graph.nodeList)
     {
+      if (graphNode.IsActiveInMenu) lastSelection = graphNode;
       graphNode.IsActiveInMenu = false;
     }
     Node node = GetComponent<Node>();
     node.IsActiveInMenu = true;
-    GameObject.FindGameObjectWithTag("LeftController").BroadcastMessage("Clear", SendMessageOptions.DontRequireReceiver);
-    GameObject.FindGameObjectWithTag("LeftController").BroadcastMessage("PopulateNode", node, SendMessageOptions.DontRequireReceiver);
+    if (node != lastSelection)
+    {
+      GameObject.FindGameObjectWithTag("LeftController").BroadcastMessage("Clear", SendMessageOptions.DontRequireReceiver);
+      GameObject.FindGameObjectWithTag("LeftController").BroadcastMessage("PopulateNode", node, SendMessageOptions.DontRequireReceiver);
+    }
   }
 
   void IGrabInterface.ControllerEnter()

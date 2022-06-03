@@ -24,7 +24,7 @@ public class DisplaySelectedNodeInMenu : MonoBehaviour
     node = input as Node;
     textNode.text = node.label;
     displayNode.SetActive(true);
-    //glow.GetComponent<Renderer>().material = null;
+    glow.SetActive(false);
     displayNode.GetComponent<Renderer>().material.color = ColorSettings.instance.nodeGrabbedColor;
   }
 
@@ -33,7 +33,7 @@ public class DisplaySelectedNodeInMenu : MonoBehaviour
     edge = input as Edge;
     textEdge.text = edge.uri;
     displayEdge.SetActive(true);
-    //glow.GetComponent<Renderer>().material = null;
+    glow.SetActive(false);
     displayEdge.GetComponent<Renderer>().material.color = ColorSettings.instance.nodeGrabbedColor;
   }
 
@@ -44,8 +44,9 @@ public class DisplaySelectedNodeInMenu : MonoBehaviour
       if (!node.IsActiveInMenu)
       {
         textNode.text = "";
+        node = null;
+        if (edge == null) glow.SetActive(true);
         displayNode.SetActive(false);
-        //glow.transform.localScale = new Vector3(0.015f, 0.015f, 0.015f);
       }
     }
     if (edge != null)
@@ -53,8 +54,9 @@ public class DisplaySelectedNodeInMenu : MonoBehaviour
       if (!edge.IsActiveInMenu)
       {
         textEdge.text = "";
+        edge = null;
+        if (node == null) glow.SetActive(true);
         displayEdge.SetActive(false);
-        //glow.transform.localScale = new Vector3(0.015f, 0.015f, 0.015f);
       }
     }
   }
