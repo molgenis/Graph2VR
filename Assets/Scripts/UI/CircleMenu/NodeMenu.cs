@@ -114,6 +114,7 @@ public class NodeMenu : MonoBehaviour
   public void PopulateNodeMenu()
   {
     limitSlider.SetActive(false);
+
     if (node.uri != "")
     {
       cm.AddButton("Collapse Incoming", new Color(1, 0.5f, 0.5f) / 2, () =>
@@ -131,19 +132,14 @@ public class NodeMenu : MonoBehaviour
     }
 
     cm.AddButton("Close node", new Color(1, 0.5f, 0.5f) / 2, () =>
-      {
-        graph.Remove(node, true);
-        Close();
-      });
-
-    cm.AddButton("Add new Node (not implemented currently)", Color.grey, () =>
     {
+      graph.Remove(node, true);
       Close();
     });
 
     if (node.IsVariable)
     {
-      cm.AddButton("Undo conversion", Color.blue / 2, () =>
+      cm.AddButton("Undo variable conversion", Color.blue / 2, () =>
       {
         node.UndoConversion();
         PopulateNode(node);
@@ -158,7 +154,6 @@ public class NodeMenu : MonoBehaviour
         PopulateNode(node);
       });
     }
-
   }
 
   public void PopulateGraphMenu()
@@ -175,24 +170,17 @@ public class NodeMenu : MonoBehaviour
       graph.layout.CalculateLayout();
     });
 
+    /*
     cm.AddButton("Layout: Hierarchy (na)", Color.green / 2, () =>
     {
       Close();
     });
+    */
 
     cm.AddButton("Auto layout", Color.yellow / 2, () =>
     {
       graph.layout.CalculateLayout();
     });
-
-    cm.AddButton("Create Graph (na)", Color.green / 2, () =>
-    {
-      // Open keyboard
-      // Request uri / label string
-      // Query and create graph with that string
-      Close();
-    });
-
 
     cm.AddButton("Close Graph", new Color(1, 0.5f, 0.5f) / 2, () =>
     {
@@ -405,31 +393,6 @@ public class NodeMenu : MonoBehaviour
         PopulateEdge(input);
       });
     }
-    if (edge.IsVariable)
-    {
-      cm.AddButton("Undo conversion", Color.blue / 2, () =>
-      {
-        graph.orderBy.Remove(edge.variableName);
-        edge.UndoConversion();
-        PopulateEdge(input);
-      });
-      cm.AddButton("Rename", Color.red / 2, () =>
-      {
-        KeyboardHandler.instance.Open(edge);
-      });
-    }
-    else
-    {
-      if (!edge.IsVariable)
-      {
-        cm.AddButton("Convert to Variable", Color.blue / 2, () =>
-        {
-          edge.MakeVariable();
-          edge.Select();
-          PopulateEdge(input);
-        });
-      }
-    }
 
     if (edge.IsSelected)
     {
@@ -458,7 +421,6 @@ public class NodeMenu : MonoBehaviour
       });
     }
 
-
     cm.AddButton("Settings", Color.yellow / 2, () =>
     {
       subMenu = "Settings";
@@ -471,6 +433,33 @@ public class NodeMenu : MonoBehaviour
       cm.Close();
       PopulateEdge(input);
     });
+
+    if (edge.IsVariable)
+    {
+      cm.AddButton("Undo variable conversion", Color.blue / 2, () =>
+      {
+        graph.orderBy.Remove(edge.variableName);
+        edge.UndoConversion();
+        PopulateEdge(input);
+      });
+      cm.AddButton("Rename", Color.red / 2, () =>
+      {
+        KeyboardHandler.instance.Open(edge);
+      });
+    }
+    else
+    {
+      if (!edge.IsVariable)
+      {
+        cm.AddButton("Convert to Variable", Color.blue / 2, () =>
+        {
+          edge.MakeVariable();
+          edge.Select();
+          PopulateEdge(input);
+        });
+      }
+    }
+
   }
 
   private void PopulateEdgeDisplaySubMenus(UnityEngine.Object input)

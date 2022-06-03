@@ -40,8 +40,6 @@ public class GraphInteract : MonoBehaviour
   // Update is called once per frame
   void Update()
   {
-    if (Main.instance.mainGraph == null) return;
-
     if (IsDraggingLine)
     {
       lineRenderer.SetPosition(1, transform.position);
@@ -84,8 +82,17 @@ public class GraphInteract : MonoBehaviour
 
   void CreateNewNode()
   {
+    Graph graphToAddNode = null;
+
+    graphToAddNode = Utils.FindClosestGraph(transform.position)?.GetComponent<Graph>();
+
+    if (graphToAddNode == null)
+    {
+      graphToAddNode = Main.instance.CreateGraph();
+    }
+
     IsHoldingPinchButton = false;
-    Node node = Main.instance.mainGraph.CreateNode(Settings.Instance.DefaultNodeCreationURI + nodeCreationCounter, transform.position);
+    Node node = graphToAddNode.CreateNode(Settings.Instance.DefaultNodeCreationURI + nodeCreationCounter, transform.position);
     nodeCreationCounter++;
     node.MakeVariable();
     Main.instance.mainGraph.nodeList.Add(node);

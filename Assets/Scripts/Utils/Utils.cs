@@ -7,6 +7,24 @@ using UnityEngine;
 
 public class Utils
 {
+
+  static public GameObject FindClosestGraph(Vector3 position)
+  {
+    GameObject closest = null;
+    GameObject[] graphs = GameObject.FindGameObjectsWithTag("Graph");
+    float closestDistance = float.MaxValue;
+    foreach (GameObject graph in graphs)
+    {
+      float distance = Vector3.Distance(position, graph.GetComponent<Graph>().boundingSphere.transform.position);
+      if (distance < closestDistance)
+      {
+        closestDistance = distance;
+        closest = graph;
+      }
+    }
+    return closest;
+  }
+
   static public Vector3 CalculateCubicBezierPoint(float t, Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3)
   {
     float u = 1 - t;
@@ -25,7 +43,8 @@ public class Utils
   static public string GetShortLabelFromUri(string uri)
   {
     var list = uri.Split('/', '#');
-    if (list.Length > 0) {
+    if (list.Length > 0)
+    {
       return list[list.Length - 1];
     }
     else

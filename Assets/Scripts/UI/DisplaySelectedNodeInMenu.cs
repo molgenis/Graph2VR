@@ -39,6 +39,7 @@ public class DisplaySelectedNodeInMenu : MonoBehaviour
 
   void DisableCheck()
   {
+
     if (node != null)
     {
       if (!node.IsActiveInMenu)
@@ -58,6 +59,13 @@ public class DisplaySelectedNodeInMenu : MonoBehaviour
         if (node == null) glow.SetActive(true);
         displayEdge.SetActive(false);
       }
+    }
+
+    if (edge == null && node == null)
+    {
+      displayNode.SetActive(false);
+      displayEdge.SetActive(false);
+      glow.SetActive(true);
     }
   }
 }

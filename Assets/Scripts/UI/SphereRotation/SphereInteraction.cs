@@ -76,7 +76,7 @@ public class SphereInteraction : MonoBehaviour
 
     if (!isActive && zoomAction)
     {
-      closest = FindClosestGraph();
+      closest = Utils.FindClosestGraph(leftController.position);
     }
 
     if (!isActive && zoomAction)
@@ -100,22 +100,6 @@ public class SphereInteraction : MonoBehaviour
     }
   }
 
-  private GameObject FindClosestGraph()
-  {
-    GameObject closest = null;
-    GameObject[] graphs = GameObject.FindGameObjectsWithTag("Graph");
-    float closestDistance = float.MaxValue;
-    foreach (GameObject graph in graphs)
-    {
-      float distance = Vector3.Distance(leftController.position, graph.GetComponent<Graph>().boundingSphere.transform.position);
-      if (distance < closestDistance)
-      {
-        closestDistance = distance;
-        closest = graph;
-      }
-    }
-    return closest;
-  }
 
 
 }
