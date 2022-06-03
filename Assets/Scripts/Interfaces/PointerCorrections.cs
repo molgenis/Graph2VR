@@ -19,7 +19,7 @@ public class PointerCorrections : MonoBehaviour
         transform.localPosition = questOffset;
         transform.rotation = Quaternion.Euler(questRotation);
       }
-      else
+      else if (name == "vive")
       {
         transform.localPosition = viveOffset;
         transform.rotation = Quaternion.Euler(viveRotation);
