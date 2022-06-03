@@ -226,7 +226,6 @@ public class Graph : MonoBehaviour
       if (state != null)
       {
         //Todo: Fix this error - it still occurs sometimes (graph = null)
-        Debug.Log("There may be an error");
         Debug.Log(graph);
         Debug.Log(state);
         Debug.Log(((AsyncError)state).Error);

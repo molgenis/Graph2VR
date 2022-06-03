@@ -43,7 +43,7 @@ public class NodeMenu : MonoBehaviour
 
     if (populateMenuState == PopulateMenuState.loaded)
     {
-      DrawDelayedMenuButtons();
+      DrawDelayedMenuButtons(true);
     }
     else
     {
@@ -61,7 +61,7 @@ public class NodeMenu : MonoBehaviour
 
     if (populateMenuState == PopulateMenuState.loaded)
     {
-      DrawDelayedMenuButtons();
+      DrawDelayedMenuButtons(false);
     }
     else
     {
@@ -70,7 +70,7 @@ public class NodeMenu : MonoBehaviour
 
   }
 
-  private void DrawDelayedMenuButtons()
+  private void DrawDelayedMenuButtons(bool isOutgoingLink)
   {
     //draw buttons
     if (labelAndCountByUri != null)
@@ -87,7 +87,7 @@ public class NodeMenu : MonoBehaviour
         }
         cm.AddButton(label, item.Key, color, () =>
         {
-          graph.ExpandGraph(node, item.Key, false);
+          graph.ExpandGraph(node, item.Key, isOutgoingLink);
         }, number: item.Value.Item2);
       }
     }
