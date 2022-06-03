@@ -371,11 +371,6 @@ Camera:
   m_CorrespondingSourceObject: {fileID: 5987724217963503345, guid: 97869828da070e047b842768e2686dc1, type: 3}
   m_PrefabInstance: {fileID: 2114014559}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &472250670 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6007703616736658491, guid: 97869828da070e047b842768e2686dc1, type: 3}
-  m_PrefabInstance: {fileID: 2114014559}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &492886757
 GameObject:
   m_ObjectHideFlags: 0
@@ -1076,11 +1071,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6eabe2a73c516614f8f9a91dadc5937e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &1806662920 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6007703615058462837, guid: 97869828da070e047b842768e2686dc1, type: 3}
-  m_PrefabInstance: {fileID: 2114014559}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1812040979
 GameObject:
   m_ObjectHideFlags: 0
@@ -1142,6 +1132,11 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2074535701 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6007703616592704115, guid: 97869828da070e047b842768e2686dc1, type: 3}
+  m_PrefabInstance: {fileID: 2114014559}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2114014559
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1149,9 +1144,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 359138915536769324, guid: 97869828da070e047b842768e2686dc1, type: 3}
-      propertyPath: m_Enabled
-      value: 0
+    - target: {fileID: 3829302233393346569, guid: 97869828da070e047b842768e2686dc1, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3829302233393346569, guid: 97869828da070e047b842768e2686dc1, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3829302233393346569, guid: 97869828da070e047b842768e2686dc1, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 6007703615058463561, guid: 97869828da070e047b842768e2686dc1, type: 3}
       propertyPath: m_Name
@@ -1201,51 +1204,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6007703615667292594, guid: 97869828da070e047b842768e2686dc1, type: 3}
-      propertyPath: m_Camera
+    - target: {fileID: 7333685109807231532, guid: 97869828da070e047b842768e2686dc1, type: 3}
+      propertyPath: glow
       value: 
-      objectReference: {fileID: 2114014560}
-    m_RemovedComponents:
-    - {fileID: 1114307708, guid: 97869828da070e047b842768e2686dc1, type: 3}
+      objectReference: {fileID: 2074535701}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 97869828da070e047b842768e2686dc1, type: 3}
 --- !u!20 &2114014560 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 359138915536769324, guid: 97869828da070e047b842768e2686dc1, type: 3}
   m_PrefabInstance: {fileID: 2114014559}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2114014561
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 472250670}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4fbecab7dc6333a4f83fb80d9094d63a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxDistance: 10
-  layer:
-    serializedVersion: 2
-    m_Bits: 823
-  leftControlerModel: {fileID: 1806662920}
---- !u!114 &2114014564
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 472250670}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f0de607a288847244a9ebfbebff915d0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  questOffset: {x: -0.02, y: -0.01, z: -0.01}
-  questRotation: {x: 72.5, y: 0, z: 0}
-  viveOffset: {x: 0, y: 0, z: 0}
-  viveRotation: {x: 0, y: 0, z: 0}
 --- !u!1 &1141087710156371
 GameObject:
   m_ObjectHideFlags: 0
