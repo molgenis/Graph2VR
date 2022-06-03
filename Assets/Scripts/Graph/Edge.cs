@@ -225,11 +225,7 @@ public class Edge : MonoBehaviour
     IsSelected = true;
     displaySubject.Select();
     displayObject.Select();
-
-    if (graphSubject != null && graphObject != null)
-    {
-      graph.AddToSelection(this);
-    }
+    graph.AddToSelection(this);
   }
 
   public void Deselect()
@@ -237,11 +233,7 @@ public class Edge : MonoBehaviour
     IsSelected = false;
     displaySubject.Deselect();
     displayObject.Deselect();
-
-    if (graphSubject != null && graphObject != null)
-    {
-      graph.RemoveFromSelection(this);
-    }
+    graph.RemoveFromSelection(this);
   }
 
   public void MakeVariable()

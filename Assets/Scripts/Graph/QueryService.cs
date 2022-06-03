@@ -183,14 +183,13 @@ public class QueryService : MonoBehaviour
         {triples}
       }} {order} LIMIT {queryLimit}";
 
+    Debug.Log("query: " + query);
     endPoint.QueryWithResultSet(query, (SparqlResultSet results, object state) =>
     {
+      Debug.Log("results: " + results);
       callback(results, query);
     }, null);
   }
-
-
-
 
   private static string GetOrderByString(OrderedDictionary orderByList)
   {
