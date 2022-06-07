@@ -191,6 +191,25 @@ public class QueryService : MonoBehaviour
     }, null);
   }
 
+
+  public void AutocompleteSearch(string searchterm, SparqlResultsCallback callback)
+  {
+    if (searchterm.Length > 3)
+    {
+      string query = $@"
+      {PREFIXES}
+      select ?entity ?name (COUNT(?x) AS ?score) 
+      where {{
+      ?x(^(<>| !<>) | rdfs:label | skos:altLabel) ? entity.
+      BIND(STR(?entity) AS ? name).
+      FILTER REGEX(?name, '^{searchterm}')
+      }}
+      GROUP BY ?entity? name ORDER BY DESC(?score) LIMIT 10";
+      endPoint.QueryWithResultSet(query, callback, state: null);
+    }
+    return;
+  }
+
   private static string GetOrderByString(OrderedDictionary orderByList)
   {
     if (orderByList.Count > 0)
