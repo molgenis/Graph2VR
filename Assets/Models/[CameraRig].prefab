@@ -211,7 +211,7 @@ RectTransform:
   m_GameObject: {fileID: 4415154332105544569}
   m_LocalRotation: {x: 0.5, y: -0.5, z: -0.5, w: 0.5}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.5, y: 1, z: 0.5}
+  m_LocalScale: {x: 0.8, y: 1.6, z: 0.8}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7754489876075730818}
@@ -1222,7 +1222,7 @@ GameObject:
   - component: {fileID: 1536544822}
   m_Layer: 0
   m_Name: Controller (right)
-  m_TagString: RightControler
+  m_TagString: RightController
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1646,7 +1646,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   leftController: {fileID: 6007703615058671171}
-  rightControler: {fileID: 6007703615058727583}
+  rightController: {fileID: 6007703615058727583}
   baseMaterial: {fileID: 2100000, guid: f9f74ce54d36249479f4f111fd209e9b, type: 2}
   size: 0.015
   scaleFactor: 1

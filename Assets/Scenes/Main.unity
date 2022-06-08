@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.005506694, g: 0.022075854, b: 0.04601198, a: 1}
+  m_IndirectSpecularColor: {r: 0.005498711, g: 0.022029527, b: 0.045998484, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1132,11 +1132,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &2074535701 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6007703616592704115, guid: 97869828da070e047b842768e2686dc1, type: 3}
-  m_PrefabInstance: {fileID: 2114014559}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2114014559
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1144,18 +1139,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3829302233393346569, guid: 97869828da070e047b842768e2686dc1, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.8
-      objectReference: {fileID: 0}
-    - target: {fileID: 3829302233393346569, guid: 97869828da070e047b842768e2686dc1, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1.6
-      objectReference: {fileID: 0}
-    - target: {fileID: 3829302233393346569, guid: 97869828da070e047b842768e2686dc1, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.8
-      objectReference: {fileID: 0}
     - target: {fileID: 6007703615058463561, guid: 97869828da070e047b842768e2686dc1, type: 3}
       propertyPath: m_Name
       value: '[CameraRig]'
@@ -1204,10 +1187,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7333685109807231532, guid: 97869828da070e047b842768e2686dc1, type: 3}
-      propertyPath: glow
-      value: 
-      objectReference: {fileID: 2074535701}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 97869828da070e047b842768e2686dc1, type: 3}
 --- !u!20 &2114014560 stripped
@@ -1266,6 +1245,7 @@ MonoBehaviour:
   initialSparqlQueryString: construct {?s ?p ?o}  where  {?s ?p ?o} Limit 100
   initialSparqlURI: https://dbpedia.org/resource/Mount_Everest
   StartWithSingleNode: 0
+  SearchOnKeypress: 1
   ImagePredicates:
   - http://xmlns.com/foaf/0.1/depiction
   - http://xmlns.com/foaf/0.1/Image

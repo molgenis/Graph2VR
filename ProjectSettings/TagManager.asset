@@ -5,8 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - LeftController
-  - RightControler
   - Graph
+  - RightController
   layers:
   - Default
   - TransparentFX

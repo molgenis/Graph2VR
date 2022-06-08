@@ -194,20 +194,34 @@ public class QueryService : MonoBehaviour
 
   public void AutocompleteSearch(string searchterm, SparqlResultsCallback callback)
   {
+    Debug.Log(searchterm);
     if (searchterm.Length > 3)
     {
-      string query = $@"
+      Debug.Log("ok Lets search");
+      /*string query = $@"
       {PREFIXES}
       select ?entity ?name (COUNT(?x) AS ?score) 
       where {{
-      ?x(^(<>| !<>) | rdfs:label | skos:altLabel) ? entity.
-      BIND(STR(?entity) AS ? name).
-      FILTER REGEX(?name, '^{searchterm}')
+      ?x(^(<>| !<>) | rdfs:label | skos:altLabel) ?entity.
+      BIND(STR(?entity) AS ?name).
+      FILTER REGEX(?name, '{searchterm}')
       }}
-      GROUP BY ?entity? name ORDER BY DESC(?score) LIMIT 10";
+      GROUP BY ?entity ?name ORDER BY DESC(?score) LIMIT 4";*/
+      string query = $@"
+      {PREFIXES}
+      select distinct ?uri ?name 
+      where {{
+      ?uri(^(<>| !<>) | rdfs:label | skos:altLabel) ?entity.
+      BIND(STR(?entity) AS ?name).
+      FILTER REGEX(?name, '{searchterm}')
+      }}
+      LIMIT 5";
       endPoint.QueryWithResultSet(query, callback, state: null);
     }
-    return;
+    else
+    {
+      callback(null, null);
+    }
   }
 
   private static string GetOrderByString(OrderedDictionary orderByList)

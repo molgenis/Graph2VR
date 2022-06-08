@@ -8,7 +8,7 @@ public class SphereInteraction : MonoBehaviour
   public bool isActive = false;
 
   Transform leftController;
-  Transform rightControler;
+  Transform rightController;
 
   Vector3 lefToRight; // In worldspace
   Vector3 leftToCenter;
@@ -21,7 +21,7 @@ public class SphereInteraction : MonoBehaviour
   {
     Vector3 center = graph.boundingSphere.transform.position;
     Vector3 left = leftController.transform.position;
-    Vector3 right = rightControler.transform.position;
+    Vector3 right = rightController.transform.position;
     lefToRight = right - left;
     leftToCenter = center - left;
     handleDistance = Vector3.Distance(left, right);
@@ -37,7 +37,7 @@ public class SphereInteraction : MonoBehaviour
   void UpdateInteraction()
   {
     Vector3 left = leftController.transform.position;
-    Vector3 right = rightControler.transform.position;
+    Vector3 right = rightController.transform.position;
 
     Vector3 newLefToRight = right - left;
     float sizeFactor = Vector3.Distance(left, right) / handleDistance;
@@ -66,7 +66,7 @@ public class SphereInteraction : MonoBehaviour
   private void Start()
   {
     leftController = GameObject.FindGameObjectWithTag("LeftController").transform;
-    rightControler = GameObject.FindGameObjectWithTag("RightControler").transform;
+    rightController = GameObject.FindGameObjectWithTag("RightController").transform;
   }
 
   void Update()

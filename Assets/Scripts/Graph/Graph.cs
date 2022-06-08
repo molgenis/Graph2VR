@@ -503,6 +503,16 @@ public class Graph : MonoBehaviour
     return node;
   }
 
+  public void AddNodeFromDatabase()
+  {
+    Debug.Log("AddNodeFromDatabase");
+    AutocompleteHandeler.Instance.SearchForNode((string label, string uri) =>
+    {
+      Debug.Log("Add node: " + label + " " + uri);
+      // NODE: dont add if it already exists in the graph
+    });
+  }
+
   public Node GetByINode(INode iNode)
   {
     return nodeList.Find((Node node) => node.graphNode.Equals(iNode));

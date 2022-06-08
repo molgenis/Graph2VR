@@ -10,7 +10,7 @@ public class CircleMenuSliderNob : MonoBehaviour
   public void Set(CircleMenu menu)
   {
     this.menu = menu;
-    controler = GameObject.FindGameObjectWithTag("RightControler");
+    controler = GameObject.FindGameObjectWithTag("RightController");
   }
 
   // Update is called once per frame

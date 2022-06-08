@@ -6,7 +6,7 @@ using UnityEngine;
 public class CircleMenu : MonoBehaviour
 {
   public Transform leftController = null;
-  public Transform rightControler = null;
+  public Transform rightController = null;
   public Material baseMaterial;
   public float size = 0.1f;
   public float scaleFactor = 0.5f;
@@ -47,7 +47,7 @@ public class CircleMenu : MonoBehaviour
   private void Start()
   {
     if (leftController == null) leftController = GameObject.FindGameObjectWithTag("LeftController").transform;
-    if (rightControler == null) rightControler = GameObject.FindGameObjectWithTag("RightControler").transform;
+    if (rightController == null) rightController = GameObject.FindGameObjectWithTag("RightController").transform;
   }
 
   private void Update()

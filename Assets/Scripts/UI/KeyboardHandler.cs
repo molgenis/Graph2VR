@@ -83,7 +83,7 @@ public class KeyboardHandler : MonoBehaviour
     keyboard = GetComponent<Keyboard>();
   }
 
-  private void UpdateLocation()
+  public void UpdateLocation()
   {
     Quaternion rotation = Quaternion.Euler(0, cameraToFollow.transform.rotation.eulerAngles.y, 0);
     transform.rotation = rotation;
