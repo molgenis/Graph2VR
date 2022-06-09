@@ -183,10 +183,8 @@ public class QueryService : MonoBehaviour
         {triples}
       }} {order} LIMIT {queryLimit}";
 
-    Debug.Log("query: " + query);
     endPoint.QueryWithResultSet(query, (SparqlResultSet results, object state) =>
     {
-      Debug.Log("results: " + results);
       callback(results, query);
     }, null);
   }
@@ -194,10 +192,8 @@ public class QueryService : MonoBehaviour
 
   public void AutocompleteSearch(string searchterm, SparqlResultsCallback callback)
   {
-    Debug.Log(searchterm);
     if (searchterm.Length > 3)
     {
-      Debug.Log("ok Lets search");
       /*string query = $@"
       {PREFIXES}
       select ?entity ?name (COUNT(?x) AS ?score) 

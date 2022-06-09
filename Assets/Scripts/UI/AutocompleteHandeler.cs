@@ -38,7 +38,6 @@ public class AutocompleteHandeler : MonoBehaviour
 
   public void SearchForNode(Action<string, string> callback)
   {
-    Debug.Log("SearchForNode");
     foundResultsCallback = callback;
     keyboard.SetText("");
     ClearUIItems();
@@ -95,7 +94,6 @@ public class AutocompleteHandeler : MonoBehaviour
     if (state is AsyncError)
     {
       ClearUIItems();
-      Debug.Log("Timeout");
       AddItem("Error", "Timeout", false);
       return;
     }
@@ -114,10 +112,12 @@ public class AutocompleteHandeler : MonoBehaviour
     {
       Destroy(child.gameObject);
     }
+    searchResults.SetActive(false);
   }
 
   private void AddItem(string name, string uri, bool clickable = true)
   {
+    searchResults.SetActive(true);
     GameObject clone = Instantiate<GameObject>(searchResultPrefab);
     clone.transform.SetParent(searchResultsLayout.transform);
     clone.transform.localPosition = Vector3.zero;
