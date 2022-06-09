@@ -503,6 +503,18 @@ public class Graph : MonoBehaviour
     return node;
   }
 
+  public void AddNodeFromDatabase()
+  {
+    AutocompleteHandeler.Instance.SearchForNode((string label, string uri) =>
+    {
+      Debug.Log("Add node: " + label + " " + uri);
+      Vector3 nodeSpawnPosition = GameObject.FindGameObjectWithTag("LeftController").transform.position;
+      Node newNode = CreateNode(uri, nodeSpawnPosition);
+      newNode.SetLabel(label);
+      // NODE: dont add if it already exists in the graph
+    });
+  }
+
   public Node GetByINode(INode iNode)
   {
     return nodeList.Find((Node node) => node.graphNode.Equals(iNode));

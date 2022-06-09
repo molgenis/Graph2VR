@@ -8,7 +8,7 @@ public class CircleMenuButton : MonoBehaviour, IPointerEnterHandler, IPointerExi
   CircleMenu menu;
   float initialAngle;
   readonly float falloff = 30f;
-  GameObject controler;
+  GameObject controller;
   CircleMenu.CircleButton button;
 
   public void Set(CircleMenu menu, float initialAngle, CircleMenu.CircleButton button, bool useAlternativeClick = false)
@@ -18,7 +18,7 @@ public class CircleMenuButton : MonoBehaviour, IPointerEnterHandler, IPointerExi
     this.button = button;
     this.useAlternativeClick = useAlternativeClick;
 
-    controler = GameObject.FindGameObjectWithTag("RightControler");
+    controller = GameObject.FindGameObjectWithTag("RightController");
   }
 
   void Update()

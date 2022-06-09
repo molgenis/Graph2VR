@@ -29,6 +29,7 @@ namespace Dweiss
     public string initialSparqlURI = "";
 
     public bool StartWithSingleNode = false;
+    public bool SearchOnKeypress = false;
 
     public string[] ImagePredicates = { "http://xmlns.com/foaf/0.1/depiction", "http://xmlns.com/foaf/0.1/Image", "http://xmlns.com/foaf/0.1/thumbnail", "http://dbpedia.org/property/photo" };
 

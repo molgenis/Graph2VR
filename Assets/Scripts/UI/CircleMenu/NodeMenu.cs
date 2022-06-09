@@ -196,6 +196,7 @@ public class NodeMenu : MonoBehaviour
         Close();
       });
     }
+
     if (graph.parentGraph != null && graph.creationQuery != "")
     {
       cm.AddButton("Close sibling graphs", new Color(1, 0.5f, 0.5f) / 2, () =>
@@ -204,6 +205,13 @@ public class NodeMenu : MonoBehaviour
         Close();
       });
     }
+
+    cm.AddButton("Search for existing node", Color.blue / 2, () =>
+    {
+      Debug.Log("BUTTON PRESS: Search for existing node");
+      graph.AddNodeFromDatabase();
+      Close();
+    });
 
   }
 
@@ -505,7 +513,6 @@ public class NodeMenu : MonoBehaviour
     if (cm != null)
     {
       cm.Close();
-      KeyboardHandler.instance.Close();
       controlerModel.SetActive(true);
     }
   }

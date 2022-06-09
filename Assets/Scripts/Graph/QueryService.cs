@@ -183,10 +183,8 @@ public class QueryService : MonoBehaviour
         {triples}
       }} {order} LIMIT {queryLimit}";
 
-    Debug.Log("query: " + query);
     endPoint.QueryWithResultSet(query, (SparqlResultSet results, object state) =>
     {
-      Debug.Log("results: " + results);
       callback(results, query);
     }, null);
   }
@@ -196,18 +194,30 @@ public class QueryService : MonoBehaviour
   {
     if (searchterm.Length > 3)
     {
-      string query = $@"
+      /*string query = $@"
       {PREFIXES}
       select ?entity ?name (COUNT(?x) AS ?score) 
       where {{
-      ?x(^(<>| !<>) | rdfs:label | skos:altLabel) ? entity.
-      BIND(STR(?entity) AS ? name).
-      FILTER REGEX(?name, '^{searchterm}')
+      ?x(^(<>| !<>) | rdfs:label | skos:altLabel) ?entity.
+      BIND(STR(?entity) AS ?name).
+      FILTER REGEX(?name, '{searchterm}')
       }}
-      GROUP BY ?entity? name ORDER BY DESC(?score) LIMIT 10";
+      GROUP BY ?entity ?name ORDER BY DESC(?score) LIMIT 4";*/
+      string query = $@"
+      {PREFIXES}
+      select distinct ?uri ?name 
+      where {{
+      ?uri(^(<>| !<>) | rdfs:label | skos:altLabel) ?entity.
+      BIND(STR(?entity) AS ?name).
+      FILTER REGEX(?name, '{searchterm}')
+      }}
+      LIMIT 5";
       endPoint.QueryWithResultSet(query, callback, state: null);
     }
-    return;
+    else
+    {
+      callback(null, null);
+    }
   }
 
   private static string GetOrderByString(OrderedDictionary orderByList)

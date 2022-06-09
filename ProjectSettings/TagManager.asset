@@ -5,8 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - LeftController
-  - RightControler
   - Graph
+  - RightController
   layers:
   - Default
   - TransparentFX
@@ -14,7 +14,7 @@ TagManager:
   - world
   - Water
   - UI
-  - 
+  - No Select
   - 
   - Nodes
   - Lines
