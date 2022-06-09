@@ -44,21 +44,22 @@ public class AutocompleteHandeler : MonoBehaviour
     ClearUIItems();
     keyboard.Enable();
     keyboard.SetPlaceholderMessage("Please enter search term");
-    // KeyboardHandler.instance.UpdateLocation();
+    KeyboardHandler.instance.UpdateLocation();
     DisplayOnlyControllerModel(true);
 
-
-
-    if (Settings.Instance.SearchOnKeypress) { 
+    if (Settings.Instance.SearchOnKeypress)
+    {
       keyboard.OnUpdate.AddListener(HandleSearch);
-    }else{
+    }
+    else
+    {
       keyboard.OnSubmit.AddListener(HandleSearch);
-
     }
     keyboard.OnCancel.AddListener(HandleCancel);
   }
 
-  private void HandleCancel() {
+  private void HandleCancel()
+  {
     DisplayOnlyControllerModel(false);
     keyboard.Disable();
     RemoveListeners();
@@ -86,12 +87,12 @@ public class AutocompleteHandeler : MonoBehaviour
 
   private void SearchCallback(SparqlResultSet results, object state)
   {
-    if(results == null)
+    if (results == null)
     {
       ClearUIItems();
       return;
     }
-    if(state is AsyncError)
+    if (state is AsyncError)
     {
       ClearUIItems();
       Debug.Log("Timeout");

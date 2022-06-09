@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.005498711, g: 0.022029527, b: 0.045998484, a: 1}
+  m_IndirectSpecularColor: {r: 0.005506694, g: 0.022075854, b: 0.04601198, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1187,6 +1187,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7598896656370363383, guid: 97869828da070e047b842768e2686dc1, type: 3}
+      propertyPath: layer.m_Bits
+      value: 831
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 97869828da070e047b842768e2686dc1, type: 3}
 --- !u!20 &2114014560 stripped
@@ -1245,7 +1249,7 @@ MonoBehaviour:
   initialSparqlQueryString: construct {?s ?p ?o}  where  {?s ?p ?o} Limit 100
   initialSparqlURI: https://dbpedia.org/resource/Mount_Everest
   StartWithSingleNode: 0
-  SearchOnKeypress: 1
+  SearchOnKeypress: 0
   ImagePredicates:
   - http://xmlns.com/foaf/0.1/depiction
   - http://xmlns.com/foaf/0.1/Image
