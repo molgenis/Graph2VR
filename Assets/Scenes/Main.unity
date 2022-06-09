@@ -544,6 +544,10 @@ PrefabInstance:
       propertyPath: offset
       value: 
       objectReference: {fileID: 687589761}
+    - target: {fileID: 223000011891530624, guid: f28287b1c722ebd4aa4f4d8547ed7fa8, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 2114014560}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f28287b1c722ebd4aa4f4d8547ed7fa8, type: 3}
 --- !u!4 &687589761 stripped
