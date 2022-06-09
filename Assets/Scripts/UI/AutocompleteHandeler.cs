@@ -128,17 +128,15 @@ public class AutocompleteHandeler : MonoBehaviour
     text.text = name + " - " + uri;
     if (clickable)
     {
-      clone.transform.GetComponent<Button>().onClick.AddListener(SearchItemButtonClick);
+      Button button = clone.transform.GetComponent<Button>();
+      button.onClick.AddListener(() =>
+      {
+        keyboard.Disable();
+        RemoveListeners();
+        DisplayOnlyControllerModel(false);
+        string label = button.transform.Find("Text").GetComponent<TextMeshProUGUI>().text;
+        foundResultsCallback(name, uri);
+      });
     }
-  }
-
-  private void SearchItemButtonClick()
-  {
-    keyboard.Disable();
-    RemoveListeners();
-    DisplayOnlyControllerModel(false);
-    string label = GetComponent<Text>().text;
-    foundResultsCallback(label, label);
-
   }
 }

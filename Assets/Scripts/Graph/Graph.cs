@@ -505,10 +505,12 @@ public class Graph : MonoBehaviour
 
   public void AddNodeFromDatabase()
   {
-    Debug.Log("AddNodeFromDatabase");
     AutocompleteHandeler.Instance.SearchForNode((string label, string uri) =>
     {
       Debug.Log("Add node: " + label + " " + uri);
+      Vector3 nodeSpawnPosition = GameObject.FindGameObjectWithTag("LeftController").transform.position;
+      Node newNode = CreateNode(uri, nodeSpawnPosition);
+      newNode.SetLabel(label);
       // NODE: dont add if it already exists in the graph
     });
   }
