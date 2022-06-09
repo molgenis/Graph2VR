@@ -24,6 +24,11 @@ public class QueryService : MonoBehaviour
   {
     SetupSingelton();
     AddDefaultNamespaces();
+    SwitchEndpoint();
+  }
+
+  public void SwitchEndpoint()
+  {
     this.endPoint = GetEndPoint();
   }
 

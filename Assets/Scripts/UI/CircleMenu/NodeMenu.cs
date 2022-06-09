@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dweiss;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -208,7 +209,6 @@ public class NodeMenu : MonoBehaviour
 
     cm.AddButton("Search for existing node", Color.blue / 2, () =>
     {
-      Debug.Log("BUTTON PRESS: Search for existing node");
       graph.AddNodeFromDatabase();
       Close();
     });
@@ -217,6 +217,36 @@ public class NodeMenu : MonoBehaviour
 
   public void PopulateSettingsMenu()
   {
+    cm.AddButton("Switch to DBPedia", Color.green / 2, () =>
+    {
+      Settings.Instance.BaseURI = "http://dbpedia.org";
+      Settings.Instance.SparqlEndpoint = "https://dbpedia.org/sparql";
+      QueryService.Instance.SwitchEndpoint();
+      Close();
+    });
+
+    cm.AddButton("Switch to localhost", Color.green / 2, () =>
+    {
+      Settings.Instance.BaseURI = "https://github.com/PjotrSvetachov/GraphVR/example-graph";
+      Settings.Instance.SparqlEndpoint = "http://localhost:8890/sparql";
+      QueryService.Instance.SwitchEndpoint();
+      Close();
+    });
+
+
+    cm.AddButton(Settings.Instance.SearchOnKeypress ? "Use: Search on submit" : "Use: Search on key-press", Color.yellow / 2, () =>
+     {
+       Settings.Instance.SearchOnKeypress = !Settings.Instance.SearchOnKeypress;
+       cm.Close();
+       if (node == null)
+       {
+         PopulateEdge(edge);
+       }
+       else
+       {
+         PopulateNode(node);
+       }
+     });
 
   }
 

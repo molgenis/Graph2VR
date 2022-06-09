@@ -86,20 +86,22 @@ public class AutocompleteHandeler : MonoBehaviour
 
   private void SearchCallback(SparqlResultSet results, object state)
   {
-    if (results == null)
-    {
-      ClearUIItems();
-      return;
-    }
-    if (state is AsyncError)
-    {
-      ClearUIItems();
-      AddItem("Error", "Timeout", false);
-      return;
-    }
+    Debug.Log("SearchCallback");
     UnityMainThreadDispatcher.Instance().Enqueue(() =>
     {
       ClearUIItems();
+      if (results == null)
+      {
+        Debug.Log("No results found");
+        AddItem("Notice", "No results found", false);
+        return;
+      }
+      if (state is AsyncError)
+      {
+        Debug.Log("Timeout");
+        AddItem("Error", "Timeout", false);
+        return;
+      }
       foreach (SparqlResult result in results)
       {
         AddItem(result.Value("name").ToString(), result.Value("uri").ToString());
