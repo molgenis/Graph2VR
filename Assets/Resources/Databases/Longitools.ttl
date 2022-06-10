@@ -1,0 +1,1228 @@
+# baseURI: http://example.uri
+
+@prefix : <http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://example.uri>
+  rdf:type owl:Ontology ;
+.
+<http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Activities_of_daily_living_(ADL)>
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Disabilities ;
+.
+:Acute_injuries
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Self-reported_health_measure ;
+.
+:Adipokines
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Cardiovascular ;
+.
+:Adiponectin
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Adipokines ;
+.
+:Age_at_adiposity_peak
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Other ;
+.
+:Age_at_adiposity_rebound
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Other ;
+.
+:Age_at_latest_follow-up
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Baseline_characteristics ;
+.
+:Age_at_menarche
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Puberty ;
+.
+:Age_at_peak_height_velocity
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Puberty ;
+.
+:Age_at_recruitment
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Baseline_characteristics ;
+.
+:Age_of_child_at_death_of_the_father
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Parental_sociodemographic_characteristics ;
+.
+:Age_of_child_at_death_of_the_mother
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Parental_sociodemographic_characteristics ;
+.
+:Air
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Air ;
+.
+:Alcohol_use
+  rdf:type owl:Class ;
+  rdfs:subClassOf <http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Lifestyle/Behaviour> ;
+.
+:Anthropometric_measures
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Anthropometry ;
+.
+:Anthropometry
+  rdf:type owl:Class ;
+  owl:sameAs <http://dbpedia.org/resource/Anthropometry> ;
+.
+:Anxiety
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Mental_Health ;
+.
+:Area_social_context
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Socioeconomic ;
+.
+:Arm_circumference
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Anthropometric_measures ;
+.
+:Arterial_distensibility
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Peripheral_blood_pressure ;
+.
+:Asthma
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Self-reported_health_measure ;
+.
+<http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Attention_deficit_hyperactivity_disorder_(ADHD)>
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Mental_Health ;
+.
+<http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Autism_spectrum_disorder_(ASD)>
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Mental_Health ;
+.
+:Baseline_characteristics
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Core_Variables ;
+.
+:Behavioural_risk
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Psychosocial ;
+.
+:Biceps_skinfold
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Skinfold_body_fat_measures ;
+.
+:Bioimpedance
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Other ;
+.
+:Biomarkers
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Air ;
+  rdfs:subClassOf :Lifestyle ;
+.
+:Birth_intervention
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Health_status_during_pregnancy ;
+.
+:Birth_length
+  rdf:type owl:Class ;
+  rdfs:subClassOf <http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Foetal_growth/_birth_measures> ;
+.
+:Birth_weight
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Baseline_characteristics ;
+  rdfs:subClassOf <http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Foetal_growth/_birth_measures> ;
+.
+:Blood_carboxyhaemoglobin
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Biomarkers ;
+.
+:Blood_methaemoglobin
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Biomarkers ;
+.
+<http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Body_mass_index_(BMI)>
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Anthropometric_measures ;
+.
+:Breastfeeding
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Baseline_characteristics ;
+.
+<http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#C-reactive_protein_(CRP)>
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Inflammatory_markers ;
+.
+:COPD
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Self-reported_health_measure ;
+.
+:Cancer
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Self-reported_health_measure ;
+.
+:Capital_income
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Income ;
+.
+:Cardiac_ultrasound_measures
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Peripheral_blood_pressure ;
+.
+:Cardiovascular
+  rdf:type owl:Class ;
+.
+:Cardiovascular_events
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Peripheral_blood_pressure ;
+.
+:Care_services
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Health_consumption ;
+.
+<http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Carotid_intima-media_thickness_(CIMT)>
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Peripheral_blood_pressure ;
+.
+:Central_blood_pressure
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Peripheral_blood_pressure ;
+.
+:Cognitive_measures
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Mental_Health ;
+.
+:Concentration_of_indoor_BTEX
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Indoor_air_pollution ;
+.
+:Concentration_of_indoor_Benzene
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Indoor_air_pollution ;
+.
+:Concentration_of_indoor_Ethylbenzene
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Indoor_air_pollution ;
+.
+<http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Concentration_of_indoor_NO₂>
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Indoor_air_pollution ;
+.
+:Concentration_of_indoor_Oxylene
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Indoor_air_pollution ;
+.
+:Concentration_of_indoor_PM10
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Indoor_air_pollution ;
+.
+<http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Concentration_of_indoor_PM2.5>
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Indoor_air_pollution ;
+.
+:Concentration_of_indoor_Pmxylene
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Indoor_air_pollution ;
+.
+:Concentration_of_indoor_Toluene
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Indoor_air_pollution ;
+.
+:Concentration_of_indoor_absorbance
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Indoor_air_pollution ;
+.
+:Core_Variables
+  rdf:type owl:Class ;
+.
+:Cortisol
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Biomarkers ;
+.
+:Cotinine
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Biomarkers ;
+.
+:Covered_by_Government_health_insurance_program
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Health_insurance ;
+.
+:Covered_by_dental_Insurance
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Health_insurance ;
+.
+:Covered_by_life_insurance
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Health_insurance ;
+.
+:Covered_by_long-term_care_insurance
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Health_insurance ;
+.
+:Covered_by_private_health_insurance_program
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Health_insurance ;
+.
+:Covered_by_voluntary_health_insurance
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Health_insurance ;
+.
+:DNA_methylation
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Epigenomics ;
+.
+:DXA_fat_and_lean_mass
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Anthropometry ;
+.
+:DXA_fat_mass_by_area
+  rdf:type owl:Class ;
+  rdfs:subClassOf :DXA_fat_and_lean_mass ;
+.
+:DXA_total_fat_mass
+  rdf:type owl:Class ;
+  rdfs:subClassOf :DXA_fat_and_lean_mass ;
+.
+:DXA_total_lean_mass
+  rdf:type owl:Class ;
+  rdfs:subClassOf :DXA_fat_and_lean_mass ;
+.
+:Dentist_or_orthodontist
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Health_professional_visits ;
+.
+:Depression
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Mental_Health ;
+.
+<http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Depression_during_pregnancy/_postnatal_depression>
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Health_status_during_pregnancy ;
+.
+:Diabetes
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Peripheral_blood_pressure ;
+.
+:Dietary_information
+  rdf:type owl:Class ;
+  rdfs:subClassOf <http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Lifestyle/Behaviour> ;
+.
+:Dietician
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Health_professional_visits ;
+.
+:Disabilities
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Healthstatus ;
+.
+<http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Drugs/_vaccinations>
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Health_consumption ;
+.
+:Eating_disorders
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Mental_Health ;
+.
+:Educational_attainment
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Socioeconomic_characteristics ;
+.
+:Epigenomics
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Omics ;
+.
+:Epigenomics_in_pregnancy
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Health_status_during_pregnancy ;
+.
+:Ethnicity
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Baseline_characteristics ;
+.
+:Exposure_to_passive_smoing
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Passive_smoking ;
+.
+:Externalising_behaviour
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Mental_Health ;
+.
+:Extra
+  rdf:type owl:Class ;
+.
+:Fat_mass
+  rdf:type owl:Class ;
+  rdfs:subClassOf :MRI_scans ;
+.
+:Fatty_acid_profiles
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Lipids ;
+.
+:Fibrinogen
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Inflammatory_markers ;
+.
+:Flu_vaccination
+  rdf:type owl:Class ;
+  rdfs:subClassOf <http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Drugs/_vaccinations> ;
+.
+<http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Foetal_growth/_birth_measures>
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Anthropometry ;
+.
+:Foetal_weight
+  rdf:type owl:Class ;
+  rdfs:subClassOf <http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Foetal_growth/_birth_measures> ;
+.
+<http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#For_the_dental_care_about_how_much_did_you_pay_out-of-pocket?>
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Health_professional_visits ;
+.
+<http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#For_the_medicines_not_prescribed_to_you_by_a_doctor_about_how_much_did_you_pay?>
+  rdf:type owl:Class ;
+  rdfs:subClassOf <http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Drugs/_vaccinations> ;
+.
+<http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#For_the_medicines_prescribed_to_you_by_a_doctor_about_how_much_did_you_pay_out-of-pocket?>
+  rdf:type owl:Class ;
+  rdfs:subClassOf <http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Drugs/_vaccinations> ;
+.
+<http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#For_the_visits_to_GPs,_family_doctors_or_medical_or_surgical_specialists_about_how_much_did_you_pay_out-of-pocket?>
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Health_professional_visits ;
+.
+:Foregone_hospitalizations_following_medical_advice
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Hospital ;
+.
+<http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#GP_(general_practitioner)_or_family_doctor>
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Health_professional_visits ;
+.
+:Genome-wide_genotyping_data
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Genomics ;
+.
+:Genomics
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Omics ;
+.
+:Genomics_in_pregnancy
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Health_status_during_pregnancy ;
+.
+<http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Gestational_age_(or_info_on_whether_preterm,_term_or_post-term)>
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Baseline_characteristics ;
+.
+<http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Gestational_diabetes_(or_glucose_levels_during_pregnancy>
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Health_status_during_pregnancy ;
+.
+:Gestational_hypertension
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Health_status_during_pregnancy ;
+.
+:Glucose
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Glucose-related ;
+.
+:Glucose-related
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Cardiovascular ;
+.
+<http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Glycated_haemoglobin_(HbA1c)>
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Glucose-related ;
+.
+:HDL-C
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Lipids ;
+.
+:Head_circumference
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Anthropometric_measures ;
+.
+:Headache_or_migraine
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Self-reported_health_measure ;
+.
+:Health_consumption
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Health_consumption ;
+.
+:Health_insurance
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Socioeconomic ;
+.
+:Health_professional_visits
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Health_consumption ;
+.
+:Health_status_during_pregnancy
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Core_Variables ;
+.
+:Healthstatus
+  rdf:type owl:Class ;
+.
+<http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Height_(kg)>
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Anthropometric_measures ;
+.
+:Hip_circumference
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Anthropometric_measures ;
+.
+:Histone_modification
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Epigenomics ;
+.
+:Home_care_service_provided_by_a_nurse_or_midwife
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Care_services ;
+.
+:Home_environment
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Parental_investments_on_child ;
+.
+:Home_help_for_the_housework_or_for_elderly_people
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Care_services ;
+.
+:Home_ownership
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Wealth ;
+.
+:Hospital
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Health_consumption ;
+.
+:Hospitalized_as_a_day_patient
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Hospital ;
+.
+:Hospitalized_as_an_inpatient
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Hospital ;
+.
+:Household_income_at_baseline
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Socioeconomic_characteristics ;
+.
+<http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#If_yes,_please_specify_category>
+  rdf:type owl:Class ;
+  rdfs:subClassOf <http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Drugs/_vaccinations> ;
+.
+:Impairment_or_health_problem_limiting_typical_activities
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Disabilities ;
+.
+:Income
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Socioeconomic ;
+.
+:Income_from_other_household_members
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Income ;
+.
+<http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Index_of_Multiple_Deprivation_(IMD)>
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Area_social_context ;
+.
+:Individual_income_from_employer_pension_or_annuity
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Income ;
+.
+:Individual_income_from_other_government_transfers
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Income ;
+.
+:Individual_income_from_public_pensions
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Income ;
+.
+:Indoor_air_pollution
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Air ;
+.
+:Inflammatory_markers
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Cardiovascular ;
+.
+<http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Instrumental_activities_of_daily_living_(iADL)>
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Disabilities ;
+.
+<http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Interleukin-6_(IL-6)>
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Inflammatory_markers ;
+.
+:Internalising_behaviour
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Mental_Health ;
+.
+:LDL-C
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Lipids ;
+.
+:Labour_income
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Income ;
+.
+:Leptin
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Adipokines ;
+.
+:Life_events
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Mental_Health ;
+.
+:Lifestyle
+  rdf:type owl:Class ;
+.
+<http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Lifestyle/Behaviour>
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Lifestyle ;
+.
+:Lipids
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Cardiovascular ;
+.
+:Lung_function
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Self-reported_health_measure ;
+.
+:MRI_scans
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Anthropometry ;
+.
+:Main_reason_for_not_being_hospitalised
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Hospital ;
+.
+:Main_reason_for_not_consulting_a_specialist
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Health_professional_visits ;
+.
+<http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Mass_Spectrometry_(MS)>
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Metabolomics ;
+.
+<http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Maternal_age_at_birth_(years)>
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Parental_sociodemographic_characteristics ;
+.
+:Maternal_alcohol_intake_during_pregnancy
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Health_status_during_pregnancy ;
+.
+:Maternal_cohabitation_status
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Parental_sociodemographic_characteristics ;
+.
+:Maternal_country_of_birth
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Parental_sociodemographic_characteristics ;
+.
+:Maternal_death
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Parental_sociodemographic_characteristics ;
+.
+:Maternal_education_at_birth
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Parental_socioeconomic_characteristics ;
+.
+:Maternal_ethnicity
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Parental_sociodemographic_characteristics ;
+.
+:Maternal_exercise_during_pregnancy
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Health_status_during_pregnancy ;
+.
+<http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Maternal_height_(m)>
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Health_status_during_pregnancy ;
+.
+:Maternal_history_of_asthma
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Parental_health-related_characteristics ;
+.
+:Maternal_history_of_diabetes
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Parental_health-related_characteristics ;
+.
+:Maternal_history_of_hypertension
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Parental_health-related_characteristics ;
+.
+:Maternal_history_of_obesity
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Parental_health-related_characteristics ;
+.
+:Maternal_late_pregnancy_weight_or_gestational_weight_gain
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Health_status_during_pregnancy ;
+.
+:Maternal_life_events
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Parental_mental_health ;
+.
+:Maternal_mental_health
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Parental_mental_health ;
+.
+:Maternal_migration
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Parental_mental_health ;
+.
+:Maternal_occupation_at_birth
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Parental_socioeconomic_characteristics ;
+.
+:Maternal_occupation_status_at_birth
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Parental_socioeconomic_characteristics ;
+.
+<http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Maternal_pre-pregnancy_weight_(kg)>
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Health_status_during_pregnancy ;
+.
+:Maternal_smoking_during_pregnancy
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Health_status_during_pregnancy ;
+.
+:Maternal_stress
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Parental_mental_health ;
+.
+:Meals_on_wheels
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Care_services ;
+.
+<http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Measure_of_risk_attitude/risk_taking_behaviour>
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Behavioural_risk ;
+.
+<http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Medical_laboratory,_radiology_centre>
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Health_professional_visits ;
+.
+:Medical_or_surgical_specialist
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Health_professional_visits ;
+.
+:Melatonin
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Biomarkers ;
+.
+:Mental_Health
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Psychosocial ;
+.
+:Metabolomics
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Omics ;
+.
+:Metabolomics_in_pregnancy
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Health_status_during_pregnancy ;
+.
+:Microarrays
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Transcriptomics ;
+.
+:Migration
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Mental_Health ;
+.
+<http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Miscarriage/_terminations>
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Health_status_during_pregnancy ;
+.
+:Mode_of_delivery
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Health_status_during_pregnancy ;
+.
+:Month_of_birth
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Baseline_characteristics ;
+.
+<http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Net_value_of_bonds,_stocks,_and_mutual_funds>
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Wealth ;
+.
+:Net_value_of_businesses
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Wealth ;
+.
+:Net_value_of_cars
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Wealth ;
+.
+:Net_value_of_primary_residence
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Wealth ;
+.
+<http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Net_value_of_real_estate_(not_primary_residence)>
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Wealth ;
+.
+<http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Nuclear_Magnetic_Resonance_(NMR)>
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Metabolomics ;
+.
+:Number_of_active_workers_in_the_household
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Socioeconomic_characteristics ;
+.
+:Number_of_hospitalizations
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Hospital ;
+.
+:Number_of_individuals_in_the_household
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Socioeconomic_characteristics ;
+.
+<http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Nurse,_midwife>
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Health_professional_visits ;
+.
+:Nursing_home
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Health_consumption ;
+.
+:Nursing_home_stays
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Nursing_home ;
+.
+:Occupational_status
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Socioeconomic_characteristics ;
+.
+:Omics
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Omics ;
+.
+<http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Oral_glucose_tolerance_test_(OGTT)>
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Glucose-related ;
+.
+:Other
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Anthropometry ;
+.
+:Other_home_care_services
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Care_services ;
+.
+:Other_individual_income
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Income ;
+.
+<http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Pain_in_the_joints_(e.g._arthrosis,_arthritis)>
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Self-reported_health_measure ;
+.
+:Pain_in_the_neck_or_back
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Self-reported_health_measure ;
+.
+:Parental_health-related_characteristics
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Core_Variables ;
+.
+:Parental_investments_on_child
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Psychosocial ;
+.
+:Parental_mental_health
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Psychosocial ;
+.
+:Parental_sociodemographic_characteristics
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Core_Variables ;
+.
+:Parental_socioeconomic_characteristics
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Socioeconomic ;
+.
+:Parenting
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Parental_investments_on_child ;
+.
+:Parity
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Parental_health-related_characteristics ;
+.
+:Passive_smoking
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Air ;
+.
+<http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Paternal_age_at_birth_(years)>
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Parental_sociodemographic_characteristics ;
+.
+:Paternal_alcohol_intake_around_pregnancy
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Health_status_during_pregnancy ;
+.
+:Paternal_country_of_birth
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Parental_sociodemographic_characteristics ;
+.
+:Paternal_death
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Parental_sociodemographic_characteristics ;
+.
+:Paternal_education_at_birth
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Parental_socioeconomic_characteristics ;
+.
+:Paternal_ethnicity
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Parental_sociodemographic_characteristics ;
+.
+<http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Paternal_height_(m)>
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Health_status_during_pregnancy ;
+.
+:Paternal_history_of_asthma
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Parental_health-related_characteristics ;
+.
+:Paternal_history_of_diabetes
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Parental_health-related_characteristics ;
+.
+:Paternal_history_of_hypertension
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Parental_health-related_characteristics ;
+.
+:Paternal_history_of_obesity
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Parental_health-related_characteristics ;
+.
+:Paternal_life_events
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Parental_mental_health ;
+.
+:Paternal_mental_health
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Parental_mental_health ;
+.
+:Paternal_migration
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Parental_mental_health ;
+.
+:Paternal_occupation_at_birth
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Parental_socioeconomic_characteristics ;
+.
+:Paternal_occupation_status_at_birth
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Parental_socioeconomic_characteristics ;
+.
+:Paternal_smoking_around_pregnancy
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Health_status_during_pregnancy ;
+.
+:Paternal_stress
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Parental_mental_health ;
+.
+<http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Paternal_weight_around_pregnancy_(kg)>
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Health_status_during_pregnancy ;
+.
+:Perceived_risk_for_health_or_safety_in_current_job
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Behavioural_risk ;
+.
+<http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Perceived_risk_for_health_or_safety_in_the_city/neighbourhood>
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Behavioural_risk ;
+.
+:Peripheral_blood_pressure
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Cardiovascular ;
+.
+:Pets
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Air ;
+.
+:Pets_at_home
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Pets ;
+.
+:Physical_activity
+  rdf:type owl:Class ;
+  rdfs:subClassOf <http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Lifestyle/Behaviour> ;
+.
+<http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Physiotherapist_/_kinesitherapist>
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Health_professional_visits ;
+.
+<http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Post-traumatic_stress_disorder_(PTSD)>
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Mental_Health ;
+.
+:Pre-eclampsia
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Health_status_during_pregnancy ;
+.
+<http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Pre-flow_mediated_dilation_pulse_(FMD)>
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Peripheral_blood_pressure ;
+.
+:Psychologist_or_psychotherapist
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Health_professional_visits ;
+.
+:Psychosocial
+  rdf:type owl:Class ;
+.
+:Puberty
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Healthstatus ;
+.
+:Pulmonary_infections
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Self-reported_health_measure ;
+.
+:Pulse_rate
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Peripheral_blood_pressure ;
+.
+<http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Pulse_wave_velocity_(PWV)>
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Peripheral_blood_pressure ;
+.
+:RNA_Sequencing
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Transcriptomics ;
+.
+:Self-reported_health_measure
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Healthstatus ;
+.
+:Sex
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Baseline_characteristics ;
+.
+:Sibling_position
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Baseline_characteristics ;
+.
+:Sitting_height
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Anthropometric_measures ;
+.
+:Size_for_gestational_age
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Baseline_characteristics ;
+.
+:Skinfold_body_fat_measures
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Anthropometry ;
+.
+:Sleep_information
+  rdf:type owl:Class ;
+  rdfs:subClassOf <http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Lifestyle/Behaviour> ;
+.
+:Smoking
+  rdf:type owl:Class ;
+  rdfs:subClassOf <http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Lifestyle/Behaviour> ;
+.
+:Socioeconomic
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Socioeconomic ;
+.
+:Socioeconomic_characteristics
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Socioeconomic ;
+.
+:Specialist
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Health_professional_visits ;
+.
+<http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Still_in_education?>
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Socioeconomic_characteristics ;
+.
+:Stimulation_activities
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Parental_investments_on_child ;
+.
+:Stress
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Mental_Health ;
+.
+:Subjective_well-being
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Self-reported_health_measure ;
+.
+:Subscapular_skinfold
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Skinfold_body_fat_measures ;
+.
+:Suprailiac_skinfold
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Skinfold_body_fat_measures ;
+.
+<http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Tanner_stages_(I-V)_of_breast_development>
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Puberty ;
+.
+<http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Tanner_stages_(I-V)_of_pubic_hair_development>
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Puberty ;
+.
+:Time_use_measures
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Parental_investments_on_child ;
+.
+:Total_cholesterol
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Lipids ;
+.
+:Total_household_income
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Income ;
+.
+:Total_non-housing_wealth
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Wealth ;
+.
+:Total_number_of_days_of_hospitalization
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Hospital ;
+.
+:Total_number_of_nights_of_hospitalization
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Hospital ;
+.
+:Total_wealth
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Wealth ;
+.
+:Townsend_index_score
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Area_social_context ;
+.
+:Transcriptomics
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Omics ;
+.
+:Transcriptomics_in_pregnancy
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Health_status_during_pregnancy ;
+.
+:Transport_service_to_and_from_health-related_places
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Care_services ;
+.
+:Triceps_skinfold
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Skinfold_body_fat_measures ;
+.
+:Triglycerides
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Lipids ;
+.
+<http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Tumour_Necrosis_Factor-α_(TNF-α)>
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Inflammatory_markers ;
+.
+:Type_of_work
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Socioeconomic_characteristics ;
+.
+:Use_of_illicit_drugs
+  rdf:type owl:Class ;
+  rdfs:subClassOf <http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Lifestyle/Behaviour> ;
+.
+:Use_of_medicines
+  rdf:type owl:Class ;
+  rdfs:subClassOf <http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Drugs/_vaccinations> ;
+.
+:VLDL-C
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Lipids ;
+.
+<http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Value_of_all_mortgages_(primary_residence)>
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Wealth ;
+.
+<http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Value_of_bank,_transaction,_saving,_or_postal_accounts>
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Wealth ;
+.
+<http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Value_of_individual_retirement_account_(IRA)_and_other_long-term_savings>
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Wealth ;
+.
+:Value_of_other_debt
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Wealth ;
+.
+:Value_of_primary_residence
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Wealth ;
+.
+:Voice_break
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Puberty ;
+.
+<http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Von_Willebrand_Factor_(vWF)>
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Inflammatory_markers ;
+.
+:Waist_circumference
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Anthropometric_measures ;
+.
+:Wealth
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Socioeconomic ;
+.
+<http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Weight_(kg)>
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Anthropometric_measures ;
+.
+<http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Were_these_prescribed_by_a_doctor?>
+  rdf:type owl:Class ;
+  rdfs:subClassOf <http://www.semanticweb.org/alexander/ontologies/2020/7/untitled-ontology-276#Drugs/_vaccinations> ;
+.
+:Wheezing
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Self-reported_health_measure ;
+.
+:Year_of_birth
+  rdf:type owl:Class ;
+  rdfs:subClassOf :Baseline_characteristics ;
+.
+[
+  rdf:type owl:AllDisjointClasses ;
+  owl:members (
+      :Alcohol_use
+      :Biomarkers
+      :Dietary_information
+      :Physical_activity
+      :Sleep_information
+      :Smoking
+      :Use_of_illicit_drugs
+    ) ;
+].
+[
+  rdf:type owl:AllDisjointClasses ;
+  owl:members (
+      :Cortisol
+      :Cotinine
+      :Melatonin
+    ) ;
+].
