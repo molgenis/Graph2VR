@@ -1156,6 +1156,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 656317417, guid: 97869828da070e047b842768e2686dc1, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 656317417, guid: 97869828da070e047b842768e2686dc1, type: 3}
       propertyPath: m_PositionInput.m_UseReference
       value: 0
       objectReference: {fileID: 0}
@@ -1218,6 +1222,29 @@ Camera:
   m_CorrespondingSourceObject: {fileID: 359138915536769324, guid: 97869828da070e047b842768e2686dc1, type: 3}
   m_PrefabInstance: {fileID: 2114014559}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2114014561 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6006723395369206453, guid: 97869828da070e047b842768e2686dc1, type: 3}
+  m_PrefabInstance: {fileID: 2114014559}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2114014562
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2114014561}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a2a9c34df4095f47b9ca8f975175f5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Device: 0
+  m_PoseSource: 2
+  m_PoseProviderComponent: {fileID: 0}
+  m_TrackingType: 0
+  m_UpdateType: 0
+  m_UseRelativeTransform: 0
 --- !u!1 &1141087710156371
 GameObject:
   m_ObjectHideFlags: 0
