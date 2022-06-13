@@ -1,10 +1,12 @@
-﻿using UnityEngine;
+﻿using Dweiss;
+using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
   public float snapTurnAngle = 20;
   public float movementSpeed = 10;
   public Transform teleportPoint;
+  public GameObject teleportTarget;
 
   bool teleportLock = false;
   bool leftSnapLock = false;
@@ -40,23 +42,32 @@ public class Movement : MonoBehaviour
 
   private void HandleTeleportAction()
   {
-    if (isVive && ControlerInput.instance.viveRightTrackpadClicked || !isVive)
+    if ((isVive && ControlerInput.instance.viveRightTrackpadClicked) || !isVive)
     {
       if ((ControlerInput.instance.axisRight.y < -0.5f || (isVive && ControlerInput.instance.axisRight.y > 0.5f)) && !teleportLock)
       {
-        transform.position = teleportPoint.position;
+        teleportTarget.SetActive(true);
         teleportLock = true;
       }
     }
     if ((ControlerInput.instance.axisRight.y > -0.3f && ControlerInput.instance.axisRight.y < 0.3f) || (isVive && !ControlerInput.instance.viveRightTrackpadClicked))
     {
+      if (teleportLock)
+      {
+        teleportTarget.SetActive(false);
+        transform.position = teleportPoint.position + new Vector3(0, Settings.Instance.playerHeight, 0);
+      }
       teleportLock = false;
+    }
+    if (teleportLock)
+    {
+      teleportTarget.transform.position = teleportPoint.position;
     }
   }
 
   private void HandleSnapRotateRight()
   {
-    if (isVive && ControlerInput.instance.viveRightTrackpadClicked || !isVive)
+    if ((isVive && ControlerInput.instance.viveRightTrackpadClicked) || !isVive)
     {
       if (ControlerInput.instance.axisRight.x < -0.5f && !rightSnapLock)
       {
@@ -72,7 +83,7 @@ public class Movement : MonoBehaviour
 
   private void HandleSnapRotateLeft()
   {
-    if (isVive && ControlerInput.instance.viveRightTrackpadClicked || !isVive)
+    if ((isVive && ControlerInput.instance.viveRightTrackpadClicked) || !isVive)
     {
       if (ControlerInput.instance.axisRight.x > 0.5f && !leftSnapLock)
       {
