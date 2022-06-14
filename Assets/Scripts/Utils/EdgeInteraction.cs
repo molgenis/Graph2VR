@@ -15,6 +15,7 @@ public class EdgeInteraction : MonoBehaviour, IPointerEnterHandler, IPointerExit
   public void OnPointerClick(PointerEventData eventData)
   {
     Edge lastSelection = null;
+    if (graph == null) return;
 
     foreach (Edge graphEdge in graph.edgeList)
     {

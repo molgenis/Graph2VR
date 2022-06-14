@@ -551,6 +551,7 @@ public class Graph : MonoBehaviour
     edge.displayObject.connections.Remove(edge);
     edge.displaySubject.connections.Remove(edge);
     edgeList.Remove(edge);
+    //TODO: update edges that connect the same two nodes (adjusting Bezier curves)
     Destroy(edge.gameObject);
   }
 
