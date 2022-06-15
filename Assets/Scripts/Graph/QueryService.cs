@@ -57,7 +57,6 @@ public class QueryService : MonoBehaviour
   public void ExpandGraph(Node node, string uri, bool isOutgoingLink, GraphCallback queryCallback)
   {
     string query = GetExpandGraphQuery(node, uri, isOutgoingLink);
-    Debug.Log("ExpandGraph: "+ query);
     endPoint.QueryWithResultGraph(query, queryCallback, state: null);
   }
 

@@ -231,6 +231,20 @@ public class Node : MonoBehaviour
 
   private void ConnectLabelToNode(Edge edge)
   {
+    /*
+    Debug.Log("ConnectLabelToNode");
+    Debug.Log("=-=-=-=-=--=-=-==-=-=-=-=-");
+    foreach (Edge e in graph.edgeList)
+    {
+      if((e.displaySubject == this))
+      {
+        Debug.Log(e.displayObject.uri + " - " + e.displayObject.label);
+        Debug.Log("IsLabelPredicate(edge.uri): " + IsLabelPredicate(e.uri));
+      }
+    }
+    */
+    //List<Edge> labelEdges = graph.edgeList.FindAll(edge => edge.displaySubject == this && IsLabelPredicate(edge.uri));
+
     if(IsLabelPredicate(edge.uri))
     {
       SetLabel(edge.displayObject.label);
@@ -245,33 +259,10 @@ public class Node : MonoBehaviour
 
   private void ConnectImageToNode(Edge edge)
   {
-      if (IsImagePredicate(edge.uri))
+    if (IsImagePredicate(edge.uri))
       {
-        // Todo: we might want to modify the mesh when we are certain that the texture exists and is not a 404 url
-        Mesh m = new Mesh();
-        m.vertices = new Vector3[]{
-          new Vector3(-1, -1.5f, 0),
-          new Vector3(1, -1.5f, 0),
-          new Vector3(1, 0.5f, 0),
-          new Vector3(-1, 0.5f, 0)
-        };
-
-        m.uv = new Vector2[]{
-          new Vector2(0, 0),
-          new Vector2(0, 1),
-          new Vector2(1, 1),
-          new Vector2(1, 0),
-        };
-        m.triangles = new int[] { 0, 1, 2, 0, 2, 3 };
-        m.RecalculateBounds();
-        m.RecalculateNormals();
-        MeshFilter filter = GetComponent<MeshFilter>();
-        filter.mesh = m;
-
         StartCoroutine(FetchTexture(edge.displayObject.uri));
         graph.RemoveNode(edge.displayObject);
-        // Do not break, node can have multiple images, some of them can be 404 url's so lets go through all of them
-        //break;
       }
   }
 
@@ -306,36 +297,38 @@ public class Node : MonoBehaviour
   public void SetColor(Color color)
   {
     GetComponent<Renderer>().material.color = color;
+    Transform image = transform.Find("Border");
+    if (image)
+    {
+      image.GetComponent<Renderer>().material.color = color;
+    }
   }
 
   public IEnumerator FetchTexture(string url)
   {
-    Debug.Log(url);
-    UnityWebRequest www = UnityWebRequestTexture.GetTexture(url);
-    Debug.Log("0");
-    Debug.Log(www);
-    Debug.Log("1");
-    yield return new WaitForSeconds(1);
-    Debug.Log("2");
-    yield return new WaitForEndOfFrame();
-    Debug.Log("3");
-    yield return www.SendWebRequest();
-    Debug.Log("Hello world");
+    UnityWebRequest imageRequest = UnityWebRequestTexture.GetTexture(url);
+    yield return imageRequest.SendWebRequest();
 
-    if (www.result != UnityWebRequest.Result.Success)
+    if (imageRequest.result != UnityWebRequest.Result.Success)
     {
-      Debug.Log(www.error);
+      Debug.Log(imageRequest.error);
     }
     else
     {
-      GetComponent<Renderer>().material.mainTexture = ((DownloadHandlerTexture)www.downloadHandler).texture;
+      Color color = GetComponent<Renderer>().material.color;
+      GameObject borderObject = transform.Find("Border").gameObject;
+      GameObject imageObject = borderObject.transform.Find("Image").gameObject;
+      borderObject.SetActive(true);
+      borderObject.GetComponent<Renderer>().material.color = color;
+      gameObject.GetComponent<Renderer>().enabled = false;
+      imageObject.GetComponent<Renderer>().material.mainTexture = ((DownloadHandlerTexture)imageRequest.downloadHandler).texture;
 
       // handle aspect ratio
-      float scale = 0.1f;
+      float scale = 3.0f;
       float width = 2.0f * scale;
-      float aspect = (float)((DownloadHandlerTexture)www.downloadHandler).texture.width / ((DownloadHandlerTexture)www.downloadHandler).texture.height;
+      float aspect = (float)((DownloadHandlerTexture)imageRequest.downloadHandler).texture.width / ((DownloadHandlerTexture)imageRequest.downloadHandler).texture.height;
       float height = width / aspect;
-      GetComponent<Renderer>().gameObject.transform.localScale = new Vector3(width, height, scale);
+      borderObject.transform.localScale = new Vector3(width, height, scale);
     }
   }
 

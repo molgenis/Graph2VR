@@ -423,7 +423,6 @@ public class Graph : MonoBehaviour
     if (from.uri != null && from.uri != "" && from.uri == to.uri)
     {
       edge.lineType = Edge.LineType.Circle;
-      Debug.Log("Found self referencing edge");
     }
 
     // Check if edge overlaps with an other
@@ -508,7 +507,6 @@ public class Graph : MonoBehaviour
   {
     AutocompleteHandeler.Instance.SearchForNode((string label, string uri) =>
     {
-      Debug.Log("Add node: " + label + " " + uri);
       Vector3 nodeSpawnPosition = GameObject.FindGameObjectWithTag("LeftController").transform.position;
       Node newNode = CreateNode(uri, nodeSpawnPosition);
       newNode.SetLabel(label);
