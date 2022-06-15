@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Dweiss;
 using System.Diagnostics;
 using UnityEngine;
 using VDS.RDF;
@@ -179,7 +180,7 @@ public class Edge : MonoBehaviour
     }
     else if (IsSubclassOfRelation)
     {
-      SetColor(ColorSettings.instance.defaultEdgeColor, ColorSettings.instance.arrowheadSubclassOfColor);
+      SetColor(ColorSettings.instance.defaultEdgeColor, Settings.Instance.arrowheadSubclassOfColor);
     }
     else
     {

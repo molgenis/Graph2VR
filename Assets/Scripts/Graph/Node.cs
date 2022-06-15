@@ -150,16 +150,16 @@ public class Node : MonoBehaviour
       switch (edge.displayObject.uri)
       {
         case "http://www.w3.org/2002/07/owl#Thing":
-          SetColor(ColorSettings.instance.nodeOwlClassColor);
+          SetColor(Settings.Instance.nodeOwlClassColor);
           return true;
         case "http://www.w3.org/2002/07/owl#Class":
-          SetColor(ColorSettings.instance.nodeOwlClassColor);
+          SetColor(Settings.Instance.nodeOwlClassColor);
           return true;
         case "https://www.w3.org/1999/02/22-rdf-syntax-ns#subClassOf":
-          SetColor(ColorSettings.instance.arrowheadSubclassOfColor);
+          SetColor(Settings.Instance.arrowheadSubclassOfColor);
           return true;
         case "https://www.w3.org/1999/02/22-rdf-syntax-ns#Property":
-          SetColor(ColorSettings.instance.nodeRdfsClassColor);
+          SetColor(Settings.Instance.nodeRdfsClassColor);
           return true;
       }
     }
@@ -184,7 +184,7 @@ public class Node : MonoBehaviour
         case NodeType.Literal:
           SetLabel(((ILiteralNode)graphNode).Value);
           uri = "";
-          SetColor(ColorSettings.instance.literalColor);
+          SetColor(Settings.Instance.literalColor);
           break;
         case NodeType.Uri:
           uri = ((IUriNode)graphNode).Uri.ToString();

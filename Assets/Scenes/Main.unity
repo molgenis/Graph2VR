@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.005498711, g: 0.022029527, b: 0.045998484, a: 1}
+  m_IndirectSpecularColor: {r: 0.0055015082, g: 0.022027984, b: 0.045998562, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -828,17 +828,11 @@ MonoBehaviour:
   edgeGrabbedColor: {r: 1, g: 0, b: 0, a: 0.33333334}
   defaultNodeColor: {r: 0, g: 0.25882354, b: 0.6, a: 1}
   uriColor: {r: 0, g: 0.25882354, b: 0.6, a: 1}
-  literalColor: {r: 1, g: 0.8, b: 0.2, a: 1}
   variableColor: {r: 0.27332425, g: 1, b: 0, a: 1}
   blankNodeColor: {r: 0.21960786, g: 0.21960786, b: 0.21960786, a: 1}
   nodeSelectedColor: {r: 1.9843137, g: 1.1137255, b: 0, a: 0}
   nodeHoverColor: {r: 2.1185474, g: 2.1185474, b: 2.1185474, a: 0}
   nodeGrabbedColor: {r: 1, g: 0, b: 0, a: 0}
-  nodeOwlClassColor: {r: 0.6666667, g: 0.8, b: 1, a: 0}
-  nodeRdfsClassColor: {r: 0.8, g: 0.6, b: 0.8, a: 0}
-  nodeOwlDatatypeColor: {r: 0.6, g: 0.8, b: 0.4, a: 0}
-  DeprecatedColor: {r: 0.8, g: 0.8, b: 0.8, a: 0}
-  arrowheadSubclassOfColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &1503421658
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1293,9 +1287,15 @@ MonoBehaviour:
   BaseURI: http://dbpedia.org
   DefaultNodeCreationURI: http://graph2vr.org/newNode#
   DefaultEdgeCreationURI: http://graph2vr.org/newEdge#
-  initialSparqlQueryString: construct {?s ?p ?o}  where  {?s ?p ?o } Limit 10
-  initialSparqlURI: http://dbpedia.org/resource/Mount_Everest
-  StartWithSingleNode: 1
+  initialSparqlQueryString: 'prefix dbo: <http://dbpedia.org/ontology/> prefix rdfs:
+    <http://www.w3.org/2000/01/rdf-schema#> prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+    prefix dbp: <http://dbpedia.org/property/> prefix dbr: <http://dbpedia.org/resource/>
+    construct {     ?mountain rdf:type dbo:Mountain.     ?mountain dbo:elevation
+    ?height.     ?mountain dbp:location ?location }  where {     ?mountain rdf:type
+    dbo:Mountain.     ?mountain dbo:elevation ?height.     ?mountain dbp:location
+    ?location }  ORDER BY DESC (?height)  LIMIT 10'
+  initialSparqlURI: http://dbpedia.org/ontology/Mountain
+  StartWithSingleNode: 0
   SearchOnKeypress: 0
   playerHeight: 1.8
   ImagePredicates:
@@ -1303,7 +1303,12 @@ MonoBehaviour:
   - http://xmlns.com/foaf/0.1/Image
   - http://xmlns.com/foaf/0.1/thumbnail
   - http://dbpedia.org/property/photo
-  - http://dbpedia.org/ontology/thumbnail
+  literalColor: {r: 1, g: 0.8, b: 0.2, a: 1}
+  nodeOwlClassColor: {r: 0.6666667, g: 0.8, b: 1, a: 0}
+  nodeRdfsClassColor: {r: 0.8, g: 0.6, b: 0.8, a: 0}
+  nodeOwlDatatypeColor: {r: 0.6, g: 0.8, b: 0.4, a: 0}
+  DeprecatedColor: {r: 0.8, g: 0.8, b: 0.8, a: 0}
+  arrowheadSubclassOfColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!4 &543450651980506302
 Transform:
   m_ObjectHideFlags: 0
