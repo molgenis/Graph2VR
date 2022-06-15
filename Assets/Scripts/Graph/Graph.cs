@@ -496,6 +496,7 @@ public class Graph : MonoBehaviour
   private Node CreateNodeFromClone(string value, GameObject clone)
   {
     Node node = clone.AddComponent<Node>();
+
     node.graph = this;
     node.SetURI(value);
     node.SetLabel(value);

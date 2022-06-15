@@ -45,6 +45,7 @@ public class QueryService : MonoBehaviour
   {
     try
     {
+      Debug.Log("ExecuteQuery: " + query);
       endPoint.QueryWithResultGraph(query, queryCallback, state: null);
     }
     catch (RdfQueryException error)
@@ -53,10 +54,10 @@ public class QueryService : MonoBehaviour
       Debug.Log(error);
     }
   }
-
   public void ExpandGraph(Node node, string uri, bool isOutgoingLink, GraphCallback queryCallback)
   {
     string query = GetExpandGraphQuery(node, uri, isOutgoingLink);
+    Debug.Log("ExpandGraph: "+ query);
     endPoint.QueryWithResultGraph(query, queryCallback, state: null);
   }
 
@@ -89,9 +90,19 @@ public class QueryService : MonoBehaviour
       return $@"
             {PREFIXES}
             construct {{
-                ?subject <{uri}> <{nodeUriString}>
+                ?subject <{uri}> <{nodeUriString}> .
+                ?subject rdfs:label ?subjectlabel .
+                ?subject a ?type .
             }} where {{
                 ?subject <{uri}> <{nodeUriString}>
+                OPTIONAL {{
+                    ?subject rdfs:label ?subjectlabel .
+                    FILTER(LANG(?subjectlabel) = '' || LANGMATCHES(LANG(?subjectlabel), '{Main.instance.languageCode}'))
+                }}
+                OPTIONAL {{
+                  ?subject a ?type .
+                  FILTER(?type = owl:Thing || ?type = owl:Class || ?type = rdfs:subClassOf || ?type = rdf:Property)
+                }}
             }}  LIMIT " + queryLimit;
     }
   }

@@ -10,18 +10,24 @@ public class Node : MonoBehaviour
 {
   public Graph graph;
   private Canvas infoPanel;
+
+  public string uri = ""; // Full URI, empty if literal
+  public string label = "";
+  private string cachedNodeLabel = ""; // label of the node, (before it gets converted to variable)
+
+  public INode graphNode;
+  public List<Edge> connections = new List<Edge>();
+
+  private TMPro.TextMeshPro textMesh;
+  // Variables for the Force-directed algorithm
+  public Vector3 displacement;
+
   private bool isVariable = false;
   private bool isSelected = false;
   private bool isActiveInMenu = false;
   private bool isPointerHovered = false;
   private bool isControllerHovered = false;
   private bool isControllerGrabbed = false;
-
-  public List<Edge> connections = new List<Edge>();
-  public void AddConnection(Edge edge)
-  {
-    if (!connections.Contains(edge)) connections.Add(edge);
-  }
 
   public bool IsActiveInMenu
   {
@@ -83,16 +89,6 @@ public class Node : MonoBehaviour
     }
   }
 
-  public string uri = ""; // Full URI, empty if literal
-  public string label = "";
-  private string cachedNodeLabel = ""; // label of the node, (before it gets converted to variable)
-
-  public INode graphNode;
-
-  private TMPro.TextMeshPro textMesh;
-  // Variables for the Force-directed algorithm
-  public Vector3 displacement;
-
   public void Awake()
   {
     textMesh = GetComponentInChildren<TMPro.TextMeshPro>(true);
@@ -101,8 +97,17 @@ public class Node : MonoBehaviour
   public void Start()
   {
     InvokeRepeating("UpdateDisplay", 1, 1);
-    RefineGraph();
     UpdateColor();
+  }
+
+  public void AddConnection(Edge edge)
+  {
+    if (!connections.Contains(edge))
+    {
+      connections.Add(edge);
+      ConnectLabelToNode(edge);
+      ConnectImageToNode(edge);
+    }
   }
 
   private void UpdateColor()
@@ -224,26 +229,12 @@ public class Node : MonoBehaviour
     UpdateColor();
   }
 
-  public void RefineGraph()
+  private void ConnectLabelToNode(Edge edge)
   {
-    if (graphNode == null)
+    if(IsLabelPredicate(edge.uri))
     {
-      return;
-    }
-    else
-    {
-      ConnectLabelToNode();
-      ConnectImageToNode();
-    }
-  }
-
-  private void ConnectLabelToNode()
-  {
-    Edge labelEdge = graph.edgeList.Find(edge => edge.displaySubject == this && IsLabelPredicate(edge.uri));
-    if (labelEdge != null)
-    {
-      SetLabel(labelEdge.displayObject.uri);
-      graph.RemoveNode(labelEdge.displayObject);
+      SetLabel(edge.displayObject.label);
+      graph.RemoveNode(edge.displayObject);
     }
   }
 
@@ -252,11 +243,8 @@ public class Node : MonoBehaviour
     return predicate == "http://www.w3.org/2000/01/rdf-schema#label";
   }
 
-  private void ConnectImageToNode()
+  private void ConnectImageToNode(Edge edge)
   {
-    List<Edge> imageEdge = graph.edgeList.FindAll(edge => edge.displaySubject);
-    foreach (Edge edge in imageEdge)
-    {
       if (IsImagePredicate(edge.uri))
       {
         // Todo: we might want to modify the mesh when we are certain that the texture exists and is not a 404 url
@@ -285,7 +273,6 @@ public class Node : MonoBehaviour
         // Do not break, node can have multiple images, some of them can be 404 url's so lets go through all of them
         //break;
       }
-    }
   }
 
   private bool IsImagePredicate(string predicate)
@@ -323,8 +310,17 @@ public class Node : MonoBehaviour
 
   public IEnumerator FetchTexture(string url)
   {
+    Debug.Log(url);
     UnityWebRequest www = UnityWebRequestTexture.GetTexture(url);
+    Debug.Log("0");
+    Debug.Log(www);
+    Debug.Log("1");
+    yield return new WaitForSeconds(1);
+    Debug.Log("2");
+    yield return new WaitForEndOfFrame();
+    Debug.Log("3");
     yield return www.SendWebRequest();
+    Debug.Log("Hello world");
 
     if (www.result != UnityWebRequest.Result.Success)
     {
