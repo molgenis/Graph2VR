@@ -146,13 +146,13 @@ public class Edge : MonoBehaviour
     string shortName = graph.GetShortName(uri);
     if (shortName != "")
     {
-      textShort = textLong = shortName;
+      textShort = shortName;
     }
     else
     {
       textShort = Utils.GetShortLabelFromUri(uri);
-      textLong = uri;
     }
+    textLong = uri;
     UpdateEdgeText();
   }
 
