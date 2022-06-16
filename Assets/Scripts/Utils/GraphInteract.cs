@@ -92,7 +92,7 @@ public class GraphInteract : MonoBehaviour
     }
 
     IsHoldingPinchButton = false;
-    Node node = graphToAddNode.CreateNode(Settings.Instance.DefaultNodeCreationURI + nodeCreationCounter, transform.position);
+    Node node = graphToAddNode.CreateNode(Settings.Instance.defaultNodeCreationURI + nodeCreationCounter, transform.position);
     nodeCreationCounter++;
     node.MakeVariable();
   }
@@ -186,7 +186,7 @@ public class GraphInteract : MonoBehaviour
           Node EdgeEnd = CurrentHoveredObject.GetComponent<Node>();
           if (EdgeBegin != null && EdgeEnd != null && EdgeBegin != EdgeEnd)
           {
-            Edge edge = EdgeBegin.graph.CreateEdge(EdgeBegin, Settings.Instance.DefaultEdgeCreationURI + edgeCreationCounter, EdgeEnd);
+            Edge edge = EdgeBegin.graph.CreateEdge(EdgeBegin, Settings.Instance.defaultEdgeCreationURI + edgeCreationCounter, EdgeEnd);
             edgeCreationCounter++;
           }
         }

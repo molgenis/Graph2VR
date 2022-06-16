@@ -217,26 +217,22 @@ public class NodeMenu : MonoBehaviour
 
   public void PopulateSettingsMenu()
   {
-    cm.AddButton("Switch to DBPedia", Color.green / 2, () =>
+    foreach (DatabaseSetttings dataBaseSettings in Settings.Instance.databaseSetttings)
     {
-      Settings.Instance.BaseURI = "http://dbpedia.org";
-      Settings.Instance.SparqlEndpoint = "https://dbpedia.org/sparql";
-      QueryService.Instance.SwitchEndpoint();
-      Close();
-    });
+      cm.AddButton("Switch to " + dataBaseSettings.label, Color.green / 2, () =>
+      {
+        Settings.Instance.baseURI = dataBaseSettings.baseURI;
+        Settings.Instance.sparqlEndpoint = dataBaseSettings.sparqlEndpoint;
+        Settings.Instance.databaseSuportsBifContains = dataBaseSettings.databaseSuportsBifContains;
+        Settings.Instance.searchOnKeypress = dataBaseSettings.searchOnKeypress;
+        QueryService.Instance.SwitchEndpoint();
+        Close();
+      });
+    }
 
-    cm.AddButton("Switch to localhost", Color.green / 2, () =>
-    {
-      Settings.Instance.BaseURI = "https://github.com/PjotrSvetachov/GraphVR/example-graph";
-      Settings.Instance.SparqlEndpoint = "http://localhost:8890/sparql";
-      QueryService.Instance.SwitchEndpoint();
-      Close();
-    });
-
-
-    cm.AddButton(Settings.Instance.SearchOnKeypress ? "Use: Search on submit" : "Use: Search on key-press", Color.yellow / 2, () =>
+    cm.AddButton(Settings.Instance.searchOnKeypress ? "Use: Search on submit" : "Use: Search on key-press", Color.yellow / 2, () =>
      {
-       Settings.Instance.SearchOnKeypress = !Settings.Instance.SearchOnKeypress;
+       Settings.Instance.searchOnKeypress = !Settings.Instance.searchOnKeypress;
        cm.Close();
        if (node == null)
        {

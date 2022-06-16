@@ -218,6 +218,7 @@ public class QueryService : MonoBehaviour
       FILTER REGEX(?name, '{searchterm}')
       }}
       GROUP BY ?entity ?name ORDER BY DESC(?score) LIMIT 4";*/
+
       string query = $@"
       {PREFIXES}
       select distinct ?uri ?name 
@@ -227,7 +228,19 @@ public class QueryService : MonoBehaviour
       FILTER REGEX(?name, '{searchterm}')
       }}
       LIMIT 5";
-      endPoint.QueryWithResultSet(query, callback, state: null);
+
+      string bifQuery = $@"
+      {PREFIXES}
+      select distinct ?uri ?name 
+      where {{
+        ?uri rdfs:label ?name.
+        ?name bif:contains '{searchterm}'.
+      }}
+      LIMIT 5";
+
+      endPoint.QueryWithResultSet(
+        Settings.Instance.databaseSuportsBifContains ? bifQuery : query
+        , callback, state: null);
     }
     else
     {
@@ -254,7 +267,7 @@ public class QueryService : MonoBehaviour
 
   private SparqlRemoteEndpoint GetEndPoint()
   {
-    return new SparqlRemoteEndpoint(new Uri(Settings.Instance.SparqlEndpoint), Settings.Instance.BaseURI);
+    return new SparqlRemoteEndpoint(new Uri(Settings.Instance.sparqlEndpoint), Settings.Instance.baseURI);
   }
 
   #region  Singleton

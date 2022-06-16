@@ -46,7 +46,7 @@ public class AutocompleteHandeler : MonoBehaviour
     KeyboardHandler.instance.UpdateLocation();
     DisplayOnlyControllerModel(true);
 
-    if (Settings.Instance.SearchOnKeypress)
+    if (Settings.Instance.searchOnKeypress)
     {
       keyboard.OnUpdate.AddListener(HandleSearch);
     }
@@ -66,7 +66,7 @@ public class AutocompleteHandeler : MonoBehaviour
 
   private void RemoveListeners()
   {
-    if (Settings.Instance.SearchOnKeypress)
+    if (Settings.Instance.searchOnKeypress)
     {
       keyboard.OnUpdate.RemoveListener(HandleSearch);
     }

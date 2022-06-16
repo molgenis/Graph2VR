@@ -12,7 +12,8 @@ public class Main : MonoBehaviour
   void Start()
   {
     mainGraph = CreateGraph();
-    if (Settings.Instance.StartWithSingleNode)
+
+    if (Settings.Instance.startWithSingleNode)
     {
       mainGraph.CreateNode(Settings.Instance.initialSparqlURI, Vector3.zero);
     }

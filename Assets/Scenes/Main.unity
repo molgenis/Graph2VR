@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.0055015082, g: 0.022027984, b: 0.045998562, a: 1}
+  m_IndirectSpecularColor: {r: 0.005506694, g: 0.022075854, b: 0.04601198, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1283,10 +1283,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfad8e0279381294fad0e271990e9952, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SparqlEndpoint: https://dbpedia.org/sparql
-  BaseURI: http://dbpedia.org
-  DefaultNodeCreationURI: http://graph2vr.org/newNode#
-  DefaultEdgeCreationURI: http://graph2vr.org/newEdge#
+  sparqlEndpoint: https://dbpedia.org/sparql
+  baseURI: http://dbpedia.org
+  databaseSuportsBifContains: 1
+  defaultNodeCreationURI: http://graph2vr.org/newNode#
+  defaultEdgeCreationURI: http://graph2vr.org/newEdge#
   initialSparqlQueryString: 'prefix dbo: <http://dbpedia.org/ontology/> prefix rdfs:
     <http://www.w3.org/2000/01/rdf-schema#> prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
     prefix dbp: <http://dbpedia.org/property/> prefix dbr: <http://dbpedia.org/resource/>
@@ -1295,10 +1296,10 @@ MonoBehaviour:
     dbo:Mountain.     ?mountain dbo:elevation ?height.     ?mountain dbp:location
     ?location }  ORDER BY DESC (?height)  LIMIT 10'
   initialSparqlURI: http://dbpedia.org/ontology/Mountain
-  StartWithSingleNode: 0
-  SearchOnKeypress: 0
+  startWithSingleNode: 0
+  searchOnKeypress: 0
   playerHeight: 1.8
-  ImagePredicates:
+  imagePredicates:
   - http://xmlns.com/foaf/0.1/depiction
   - http://xmlns.com/foaf/0.1/Image
   - http://xmlns.com/foaf/0.1/thumbnail
@@ -1307,8 +1308,17 @@ MonoBehaviour:
   nodeOwlClassColor: {r: 0.6666667, g: 0.8, b: 1, a: 0}
   nodeRdfsClassColor: {r: 0.8, g: 0.6, b: 0.8, a: 0}
   nodeOwlDatatypeColor: {r: 0.6, g: 0.8, b: 0.4, a: 0}
-  DeprecatedColor: {r: 0.8, g: 0.8, b: 0.8, a: 0}
+  deprecatedColor: {r: 204, g: 204, b: 204, a: 1}
   arrowheadSubclassOfColor: {r: 1, g: 1, b: 1, a: 1}
+  databaseSetttings:
+  - label: Dbpedia
+    sparqlEndpoint: https://dbpedia.org/sparql
+    baseURI: http://dbpedia.org
+    databaseSuportsBifContains: 1
+  - label: Localhost
+    sparqlEndpoint: https://github.com/PjotrSvetachov/GraphVR/example-graph
+    baseURI: http://localhost:8890/sparql
+    databaseSuportsBifContains: 0
 --- !u!4 &543450651980506302
 Transform:
   m_ObjectHideFlags: 0

@@ -257,7 +257,7 @@ public class Node : MonoBehaviour
 
   private bool IsImagePredicate(string predicate)
   {
-    foreach (string pred in Settings.Instance.ImagePredicates)
+    foreach (string pred in Settings.Instance.imagePredicates)
     {
       if (predicate.Equals(pred))
       {
