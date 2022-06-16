@@ -62,6 +62,8 @@ public class Edge : MonoBehaviour
     {
       isSelected = value;
       UpdateColor();
+      displayObject.UpdateSelectionStatus();
+      displaySubject.UpdateSelectionStatus();
     }
   }
 
@@ -224,16 +226,12 @@ public class Edge : MonoBehaviour
   public void Select()
   {
     IsSelected = true;
-    displaySubject.Select();
-    displayObject.Select();
     graph.AddToSelection(this);
   }
 
   public void Deselect()
   {
     IsSelected = false;
-    displaySubject.Deselect();
-    displayObject.Deselect();
     graph.RemoveFromSelection(this);
   }
 
@@ -321,6 +319,15 @@ public class Edge : MonoBehaviour
         textFront.transform.localRotation *= Quaternion.AngleAxis(180, Vector3.up);
       }
     }
+  }
+
+  public void Remove()
+  {
+    displayObject.connections.Remove(this);
+    displaySubject.connections.Remove(this);
+    UpdateEdgeLines(true);
+    displayObject.UpdateSelectionStatus();
+    displaySubject.UpdateSelectionStatus();
   }
 
   public void UpdateEdgeLines(bool removeSelf = false)

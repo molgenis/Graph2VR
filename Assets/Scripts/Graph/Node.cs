@@ -23,7 +23,6 @@ public class Node : MonoBehaviour
   public Vector3 displacement;
 
   private bool isVariable = false;
-  private bool isSelected = false;
   private bool isActiveInMenu = false;
   private bool isPointerHovered = false;
   private bool isControllerHovered = false;
@@ -45,16 +44,6 @@ public class Node : MonoBehaviour
     set
     {
       isVariable = value;
-      UpdateColor();
-    }
-  }
-
-  public bool IsSelected
-  {
-    get => isSelected;
-    set
-    {
-      isSelected = value;
       UpdateColor();
     }
   }
@@ -214,19 +203,19 @@ public class Node : MonoBehaviour
     }
 
   }
-  public void Select()
-  {
-    isSelected = true;
-    transform.Find("Selected").gameObject.SetActive(true);
-    transform.Find("Selected").gameObject.GetComponentInChildren<Renderer>().material.SetColor("_EmissionColor", ColorSettings.instance.nodeSelectedColor);
-    UpdateColor();
-  }
 
-  public void Deselect()
+  public void UpdateSelectionStatus()
   {
-    isSelected = false;
-    transform.Find("Selected").gameObject.SetActive(false);
-    UpdateColor();
+    if (IsEdgePartOfSelectedTriple())
+    {
+      transform.Find("Selected").gameObject.SetActive(true);
+      transform.Find("Selected").gameObject.GetComponentInChildren<Renderer>().material.SetColor("_EmissionColor", ColorSettings.instance.nodeSelectedColor);
+    }
+    else
+    {
+      transform.Find("Selected").gameObject.SetActive(false);
+      UpdateColor();
+    }
   }
 
   private void ConnectLabelToNode(Edge edge)
@@ -245,7 +234,7 @@ public class Node : MonoBehaviour
     */
     //List<Edge> labelEdges = graph.edgeList.FindAll(edge => edge.displaySubject == this && IsLabelPredicate(edge.uri));
 
-    if(IsLabelPredicate(edge.uri))
+    if (IsLabelPredicate(edge.uri))
     {
       SetLabel(edge.displayObject.label);
       graph.RemoveNode(edge.displayObject);
@@ -260,10 +249,10 @@ public class Node : MonoBehaviour
   private void ConnectImageToNode(Edge edge)
   {
     if (IsImagePredicate(edge.uri))
-      {
-        StartCoroutine(FetchTexture(edge.displayObject.uri));
-        graph.RemoveNode(edge.displayObject);
-      }
+    {
+      StartCoroutine(FetchTexture(edge.displayObject.uri));
+      graph.RemoveNode(edge.displayObject);
+    }
   }
 
   private bool IsImagePredicate(string predicate)
@@ -420,5 +409,10 @@ public class Node : MonoBehaviour
     infoPanel.transform.position = transform.position;
     infoPanel.transform.rotation = Quaternion.LookRotation(transform.position - Camera.main.transform.position, Vector3.up);
     infoPanel.transform.position += infoPanel.transform.rotation * new Vector3(1.0f, 0, 0) * Mathf.Max(transform.lossyScale.x, gameObject.transform.lossyScale.y);
+  }
+
+  private bool IsEdgePartOfSelectedTriple()
+  {
+    return connections.Find(edge => edge.IsSelected);
   }
 }

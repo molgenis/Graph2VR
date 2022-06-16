@@ -523,11 +523,8 @@ public class Graph : MonoBehaviour
 
   public void RemoveEdge(Edge edge)
   {
-    edge.displayObject.connections.Remove(edge);
-    edge.displaySubject.connections.Remove(edge);
     edgeList.Remove(edge);
-
-    edge.UpdateEdgeLines(true);
+    edge.Remove();
 
     Destroy(edge.gameObject);
   }
