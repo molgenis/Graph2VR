@@ -323,6 +323,47 @@ public class Edge : MonoBehaviour
     }
   }
 
+  public void UpdateEdgeLines(bool removeSelf = false)
+  {
+    // Check if edge overlaps with an other
+    List<Edge> foundCollisions = new List<Edge>();
+    foreach (Edge edgeToCheck in graph.edgeList)
+    {
+      if ((displaySubject.uri == edgeToCheck.displaySubject.uri && displayObject.uri == edgeToCheck.displayObject.uri))
+      {
+        foundCollisions.Add(edgeToCheck);
+        edgeToCheck.flippedDirection = false;
+      }
+      else if (displayObject.uri == edgeToCheck.displaySubject.uri && displaySubject.uri == edgeToCheck.displayObject.uri)
+      {
+        foundCollisions.Add(edgeToCheck);
+        edgeToCheck.flippedDirection = true;
+      }
+    }
+
+    int collisionCount = (foundCollisions.Count - (removeSelf ? 1 : 0));
+    if (collisionCount > 0)
+    {
+      int index = 0;
+      if (!removeSelf) foundCollisions.Add(this);
+      foreach (Edge foundEdge in foundCollisions)
+      {
+        foundEdge.lineType = Edge.LineType.Bend;
+        foundEdge.bendDirectionOffset = (360f / (foundCollisions.Count)) * index;
+        foundEdge.UpdateEdgeDisplay();
+        index++;
+      }
+    }
+    else if (removeSelf)
+    {
+      foreach (Edge foundEdge in foundCollisions)
+      {
+        foundEdge.lineType = Edge.LineType.Direct;
+        foundEdge.UpdateEdgeDisplay();
+      }
+    }
+  }
+
   public void UpdateEdgeDisplay()
   {
     transform.position = (displaySubject.transform.position + displayObject.transform.position) * 0.5f;

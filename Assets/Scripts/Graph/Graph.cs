@@ -424,35 +424,11 @@ public class Graph : MonoBehaviour
     {
       edge.lineType = Edge.LineType.Circle;
     }
-
-    // Check if edge overlaps with an other
-    List<Edge> foundCollisions = new List<Edge>();
-    foreach (Edge edgeToCheck in edgeList)
+    else
     {
-      if ((from.uri == edgeToCheck.displaySubject.uri && to.uri == edgeToCheck.displayObject.uri))
-      {
-        foundCollisions.Add(edgeToCheck);
-        edgeToCheck.flippedDirection = false;
-      }
-      else if (to.uri == edgeToCheck.displaySubject.uri && from.uri == edgeToCheck.displayObject.uri)
-      {
-        foundCollisions.Add(edgeToCheck);
-        edgeToCheck.flippedDirection = true;
-      }
+      edge.UpdateEdgeLines();
     }
 
-    if (foundCollisions.Count > 0)
-    {
-      int index = 0;
-      foundCollisions.Add(edge);
-      foreach (Edge foundEdge in foundCollisions)
-      {
-        foundEdge.lineType = Edge.LineType.Bend;
-        foundEdge.bendDirectionOffset = (360f / (foundCollisions.Count)) * index;
-        foundEdge.UpdateEdgeDisplay();
-        index++;
-      }
-    }
     return edge;
   }
 
@@ -550,7 +526,9 @@ public class Graph : MonoBehaviour
     edge.displayObject.connections.Remove(edge);
     edge.displaySubject.connections.Remove(edge);
     edgeList.Remove(edge);
-    //TODO: update edges that connect the same two nodes (adjusting Bezier curves)
+
+    edge.UpdateEdgeLines(true);
+
     Destroy(edge.gameObject);
   }
 
