@@ -46,8 +46,10 @@ public class ControlerInput : MonoBehaviour
 
     if (leftAxis.action != null) leftAxis.action.Enable();
     if (leftAxis.action != null) leftAxis.action.performed += LeftAxis;
+    if (leftAxis.action != null) leftAxis.action.canceled += LeftAxisCancel;
     if (rightAxis.action != null) rightAxis.action.Enable();
     if (rightAxis.action != null) rightAxis.action.performed += RightAxis;
+    if (rightAxis.action != null) rightAxis.action.canceled += RightAxisCancel;
 
     if (viveTrackpadLeftClick.action != null) viveTrackpadLeftClick.action.Enable();
     if (viveTrackpadLeftClick.action != null) viveTrackpadLeftClick.action.performed += ViveTrackpadLeftClick;
@@ -74,9 +76,19 @@ public class ControlerInput : MonoBehaviour
   {
     axisLeft = (Vector2)a.ReadValueAsObject();
   }
+  void LeftAxisCancel(InputAction.CallbackContext a)
+  {
+    axisLeft = Vector2.zero;
+  }
+
   void RightAxis(InputAction.CallbackContext a)
   {
     axisRight = (Vector2)a.ReadValueAsObject();
+  }
+
+  void RightAxisCancel(InputAction.CallbackContext a)
+  {
+    axisRight = Vector2.zero;
   }
 
   void GripActionLeft(InputAction.CallbackContext a)
