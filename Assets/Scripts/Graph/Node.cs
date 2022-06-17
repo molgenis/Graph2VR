@@ -243,7 +243,7 @@ public class Node : MonoBehaviour
 
   private bool IsLabelPredicate(string predicate)
   {
-    return predicate == "http://www.w3.org/2000/01/rdf-schema#label";
+    return predicate == "http://graph2vr.org/label";
   }
 
   private void ConnectImageToNode(Edge edge)

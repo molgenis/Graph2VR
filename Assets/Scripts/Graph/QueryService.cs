@@ -70,14 +70,19 @@ public class QueryService : MonoBehaviour
             {PREFIXES}
             construct {{
                 <{nodeUriString}> <{uri}> ?object .
-                ?object rdfs:label ?objectlabel .
+                ?object ?graph2vrlabel ?label .
                 ?object a ?type .
             }} where {{
                 <{nodeUriString}> <{uri}> ?object .
-                OPTIONAL {{
-                    ?object rdfs:label ?objectlabel .
-                    FILTER(LANG(?objectlabel) = '' || LANGMATCHES(LANG(?objectlabel), '{Main.instance.languageCode}'))
+
+                Optional{{
+                  Select ?object <http://graph2vr.org/label> AS ?graph2vrlabel STR(?label) as ?label
+                  where {{
+                    ?object rdfs:label ?label .
+                    FILTER(LANG(?label) = '' || LANGMATCHES(LANG(?label), '{Main.instance.languageCode}'))
+                  }}
                 }}
+
                 OPTIONAL {{
                   ?object a ?type .
                   FILTER(?type = owl:Thing || ?type = owl:Class || ?type = rdfs:subClassOf || ?type = rdf:Property)
@@ -90,14 +95,19 @@ public class QueryService : MonoBehaviour
             {PREFIXES}
             construct {{
                 ?subject <{uri}> <{nodeUriString}> .
-                ?subject rdfs:label ?subjectlabel .
+                ?subject ?graph2vrlabel ?label .
                 ?subject a ?type .
             }} where {{
                 ?subject <{uri}> <{nodeUriString}>
-                OPTIONAL {{
-                    ?subject rdfs:label ?subjectlabel .
-                    FILTER(LANG(?subjectlabel) = '' || LANGMATCHES(LANG(?subjectlabel), '{Main.instance.languageCode}'))
+
+                Optional{{
+                  Select ?subject <http://graph2vr.org/label> AS ?graph2vrlabel STR(?label) as ?label
+                  where {{
+                    ?subject rdfs:label ?label .
+                    FILTER(LANG(?label) = '' || LANGMATCHES(LANG(?label), '{Main.instance.languageCode}'))
+                  }}
                 }}
+
                 OPTIONAL {{
                   ?subject a ?type .
                   FILTER(?type = owl:Thing || ?type = owl:Class || ?type = rdfs:subClassOf || ?type = rdf:Property)

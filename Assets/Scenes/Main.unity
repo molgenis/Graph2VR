@@ -1297,7 +1297,7 @@ MonoBehaviour:
     ?location }  ORDER BY DESC (?height)  LIMIT 10'
   initialSparqlURI: http://dbpedia.org/ontology/Mountain
   startWithSingleNode: 0
-  searchOnKeypress: 0
+  searchOnKeypress: 1
   playerHeight: 1.8
   imagePredicates:
   - http://xmlns.com/foaf/0.1/depiction
@@ -1315,10 +1315,12 @@ MonoBehaviour:
     sparqlEndpoint: https://dbpedia.org/sparql
     baseURI: http://dbpedia.org
     databaseSuportsBifContains: 1
+    searchOnKeypress: 1
   - label: Localhost
     sparqlEndpoint: https://github.com/PjotrSvetachov/GraphVR/example-graph
     baseURI: http://localhost:8890/sparql
     databaseSuportsBifContains: 0
+    searchOnKeypress: 0
 --- !u!4 &543450651980506302
 Transform:
   m_ObjectHideFlags: 0
