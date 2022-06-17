@@ -57,20 +57,33 @@ public class QueryService : MonoBehaviour
   public void ExpandGraph(Node node, string uri, bool isOutgoingLink, GraphCallback queryCallback)
   {
     string query = GetExpandGraphQuery(node, uri, isOutgoingLink);
+    Debug.Log(query);
     endPoint.QueryWithResultGraph(query, queryCallback, state: null);
   }
 
   private string GetExpandGraphQuery(Node node, string uri, bool isOutgoingLink)
   {
     string nodeUriString = node.GetURIAsString();
+
+    string imagePredicates = "";
+
+    bool isFirstPredicate = true;
+    foreach (string predicate in Settings.Instance.imagePredicates)
+    {
+      imagePredicates += (isFirstPredicate ? "" : "|") + " <" + predicate + "> ";
+      isFirstPredicate = false;
+    }
+
     if (isOutgoingLink)
     {
+
       // Select with label
       return $@"
             {PREFIXES}
             construct {{
                 <{nodeUriString}> <{uri}> ?object .
                 ?object ?graph2vrlabel ?label .
+                ?object ?graph2vrimage ?image .
                 ?object a ?type .
             }} where {{
                 <{nodeUriString}> <{uri}> ?object .
@@ -83,11 +96,20 @@ public class QueryService : MonoBehaviour
                   }}
                 }}
 
+                Optional{{
+                  Select ?object <http://graph2vr.org/image> AS ?graph2vrimage ?image
+                  where {{
+                    ?object ({imagePredicates}) ?image .
+                    FILTER( strStarts( STR(?image), 'http://' ) || strStarts( STR(?image), 'https://' ) ) .
+                  }}
+                }}
+
                 OPTIONAL {{
                   ?object a ?type .
                   FILTER(?type = owl:Thing || ?type = owl:Class || ?type = rdfs:subClassOf || ?type = rdf:Property)
                 }}
-            }} LIMIT " + queryLimit;
+            }} 
+            LIMIT {queryLimit}";
     }
     else
     {
@@ -96,6 +118,7 @@ public class QueryService : MonoBehaviour
             construct {{
                 ?subject <{uri}> <{nodeUriString}> .
                 ?subject ?graph2vrlabel ?label .
+                ?subject ?graph2vrimage ?image .
                 ?subject a ?type .
             }} where {{
                 ?subject <{uri}> <{nodeUriString}>
@@ -108,11 +131,20 @@ public class QueryService : MonoBehaviour
                   }}
                 }}
 
+                Optional{{
+                  Select ?subject <http://graph2vr.org/image> AS ?graph2vrimage ?image
+                  where {{
+                    ?subject ({imagePredicates}) ?image .
+                    FILTER( strStarts( STR(?image), 'http://' ) || strStarts( STR(?image), 'https://' ) ) .
+                  }}
+                }}
+
                 OPTIONAL {{
                   ?subject a ?type .
                   FILTER(?type = owl:Thing || ?type = owl:Class || ?type = rdfs:subClassOf || ?type = rdf:Property)
                 }}
-            }}  LIMIT " + queryLimit;
+            }}  
+            LIMIT {queryLimit}";
     }
   }
 

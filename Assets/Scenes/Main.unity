@@ -1304,6 +1304,7 @@ MonoBehaviour:
   - http://xmlns.com/foaf/0.1/Image
   - http://xmlns.com/foaf/0.1/thumbnail
   - http://dbpedia.org/property/photo
+  - http://dbpedia.org/ontology/thumbnail
   literalColor: {r: 1, g: 0.8, b: 0.2, a: 1}
   nodeOwlClassColor: {r: 0.6666667, g: 0.8, b: 1, a: 0}
   nodeRdfsClassColor: {r: 0.8, g: 0.6, b: 0.8, a: 0}

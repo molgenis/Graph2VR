@@ -21,6 +21,7 @@ public class Node : MonoBehaviour
   private TMPro.TextMeshPro textMesh;
   // Variables for the Force-directed algorithm
   public Vector3 displacement;
+  private bool hasImage = false;
 
   private bool isVariable = false;
   private bool isActiveInMenu = false;
@@ -248,21 +249,36 @@ public class Node : MonoBehaviour
 
   private void ConnectImageToNode(Edge edge)
   {
-    if (IsImagePredicate(edge.uri))
+    if (edge.displaySubject == this && IsInternalImagePredicate(edge.uri))
     {
-      StartCoroutine(FetchTexture(edge.displayObject.uri));
+      if (!hasImage)
+      {
+        StartCoroutine(FetchTexture(edge.displayObject.uri));
+        hasImage = true;
+      }
       graph.RemoveNode(edge.displayObject);
     }
+    else if (edge.displayObject == this && IsImagePredicate(edge.uri))
+    {
+      if (!hasImage)
+      {
+        StartCoroutine(FetchTexture(edge.displayObject.uri));
+        hasImage = true;
+      }
+    }
+
+  }
+
+  private bool IsInternalImagePredicate(string predicate)
+  {
+    return predicate == "http://graph2vr.org/image";
   }
 
   private bool IsImagePredicate(string predicate)
   {
-    foreach (string pred in Settings.Instance.imagePredicates)
+    foreach (string predicateToCheck in Settings.Instance.imagePredicates)
     {
-      if (predicate.Equals(pred))
-      {
-        return true;
-      }
+      if (predicate == predicateToCheck) return true;
     }
     return false;
   }
@@ -297,7 +313,6 @@ public class Node : MonoBehaviour
   {
     UnityWebRequest imageRequest = UnityWebRequestTexture.GetTexture(url);
     yield return imageRequest.SendWebRequest();
-
     if (imageRequest.result != UnityWebRequest.Result.Success)
     {
       Debug.Log(imageRequest.error);
@@ -307,16 +322,23 @@ public class Node : MonoBehaviour
       Color color = GetComponent<Renderer>().material.color;
       GameObject borderObject = transform.Find("Border").gameObject;
       GameObject imageObject = borderObject.transform.Find("Image").gameObject;
+      DownloadHandlerTexture imageDownloadHandler = (DownloadHandlerTexture)imageRequest.downloadHandler;
+
+      Texture2D image = new Texture2D(imageDownloadHandler.texture.width, imageDownloadHandler.texture.height, imageDownloadHandler.texture.format, true);
+      image.LoadImage(imageDownloadHandler.data);
+
+      image.filterMode = FilterMode.Bilinear;
+      image.Apply(true);
       borderObject.SetActive(true);
       borderObject.GetComponent<Renderer>().material.color = color;
       gameObject.GetComponent<Renderer>().enabled = false;
-      imageObject.GetComponent<Renderer>().material.mainTexture = ((DownloadHandlerTexture)imageRequest.downloadHandler).texture;
+      imageObject.GetComponent<Renderer>().material.mainTexture = image;
 
       // handle aspect ratio
       float scale = 3.0f;
-      float width = 2.0f * scale;
-      float aspect = (float)((DownloadHandlerTexture)imageRequest.downloadHandler).texture.width / ((DownloadHandlerTexture)imageRequest.downloadHandler).texture.height;
-      float height = width / aspect;
+      float height = 1.0f * scale;
+      float aspect = (float)((DownloadHandlerTexture)imageRequest.downloadHandler).texture.height / ((DownloadHandlerTexture)imageRequest.downloadHandler).texture.width;
+      float width = height / aspect;
       borderObject.transform.localScale = new Vector3(width, height, scale);
     }
   }

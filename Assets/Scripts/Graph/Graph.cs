@@ -384,8 +384,8 @@ public class Graph : MonoBehaviour
   {
     Edge edge = InitializeEdge(uri, from, to);
     edgeList.Add(edge);
-    from.AddConnection(edge);
     to.AddConnection(edge);
+    from.AddConnection(edge);
     return edge;
   }
 
@@ -406,9 +406,10 @@ public class Graph : MonoBehaviour
     edge.graphObject = to;
 
     edgeList.Add(edge);
-    fromNode.AddConnection(edge);
     toNode.AddConnection(edge);
+    fromNode.AddConnection(edge);
   }
+
   private Edge InitializeEdge(string uri, Node from, Node to)
   {
     GameObject clone = GetEdgeClone();
