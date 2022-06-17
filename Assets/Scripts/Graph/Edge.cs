@@ -407,7 +407,7 @@ public class Edge : MonoBehaviour
 
   private void UpdateLineRenderer(Vector3 fromPosition, Vector3 toPosition, float distance, Vector3 normal)
   {
-    lineRenderer.startWidth = lineRenderer.endWidth = 0.005f * transform.lossyScale.magnitude;
+    lineRenderer.startWidth = lineRenderer.endWidth = 0.003f * transform.lossyScale.magnitude;
 
     Vector3 from = transform.worldToLocalMatrix * (fromPosition + normal * (displaySubject.transform.lossyScale.x * 0.5f));
     Vector3 to = transform.worldToLocalMatrix * (toPosition - (normal * ((displayObject.transform.lossyScale.x * 0.5f) + (arrow.lossyScale.x * 0.05f))));
