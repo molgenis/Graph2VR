@@ -221,7 +221,7 @@ public class Graph : MonoBehaviour
 
   public void ExpandGraph(Node node, string uri, bool isOutgoingLink)
   {
-    QueryService.Instance.ExpandGraph(node, uri, isOutgoingLink, ((graph, state) =>
+    QueryService.Instance.ExpandGraph(node, uri, isOutgoingLink, ((graph, refinmentGraph, state) =>
     {
       if (state != null)
       {
@@ -237,6 +237,24 @@ public class Graph : MonoBehaviour
         foreach (Triple triple in graph.Triples)
         {
           AddTriple(triple);
+        }
+
+        // Add refinement
+        // Add label
+        //List<INode> refinmentNodes = refinmentGraph.Nodes.ToList<INode>();
+        foreach (Node nodeToRefine in nodeList)
+        {
+          if (nodeToRefine.uri == "") continue;
+
+          Dictionary<string, List<string>> results = QueryService.Instance.RefineNode(refinmentGraph, nodeToRefine.uri);
+
+          List<string> images = results["images"];
+
+          if (results["labels"].Count > 0)
+          {
+            nodeToRefine.SetLabel(results["labels"].First());
+          }
+          nodeToRefine.SetImageFromList(images);
         }
       });
     }));

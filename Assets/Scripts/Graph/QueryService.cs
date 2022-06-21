@@ -54,12 +54,52 @@ public class QueryService : MonoBehaviour
       Debug.Log(error);
     }
   }
-  public void ExpandGraph(Node node, string uri, bool isOutgoingLink, GraphCallback queryCallback)
+  public void ExpandGraph(Node node, string uri, bool isOutgoingLink, Action<IGraph, IGraph, object> queryCallback)
   {
-    string query = GetExpandGraphQuery(node, uri, isOutgoingLink);
-    Debug.Log(query);
-    endPoint.QueryWithResultGraph(query, queryCallback, state: null);
+    string refinmentQuery = GetExpandGraphQuery(node, uri, isOutgoingLink);
+    string dataquery = GetSimpleExpandGraphQuery(node, uri, isOutgoingLink);
+    //Debug.Log(query);
+    endPoint.QueryWithResultGraph(refinmentQuery, (completeGraph, state) =>
+    {
+      // Do query
+      IGraph dataGraph = completeGraph.ExecuteQuery(dataquery) as IGraph;
+
+      //results go here -> queryCallback
+      queryCallback(dataGraph, completeGraph, state);
+
+    }, state: null);
   }
+
+
+  private string GetSimpleExpandGraphQuery(Node node, string uri, bool isOutgoingLink)
+  {
+    string nodeUriString = node.GetURIAsString();
+    if (isOutgoingLink)
+    {
+
+      // Select with label
+      return $@"
+            {PREFIXES}
+            construct {{
+                <{nodeUriString}> <{uri}> ?object .
+            }} where {{
+                <{nodeUriString}> <{uri}> ?object .
+            }} 
+            LIMIT {queryLimit}";
+    }
+    else
+    {
+      return $@"
+            {PREFIXES}
+            construct {{
+                ?subject <{uri}> <{nodeUriString}> .
+            }} where {{
+                ?subject <{uri}> <{nodeUriString}>
+            }}  
+            LIMIT {queryLimit}";
+    }
+  }
+
 
   private string GetExpandGraphQuery(Node node, string uri, bool isOutgoingLink)
   {
@@ -289,6 +329,57 @@ public class QueryService : MonoBehaviour
       callback(null, null);
     }
   }
+
+  public Dictionary<string, List<string>> RefineNode(IGraph refinmentGraph, string uri)
+  {
+    string query = $@"
+            select ?label ?image
+            where{{
+                optional{{
+                  <{uri}> <http://graph2vr.org/label> ?label .
+                }}
+                optional{{
+                  <{uri}> <http://graph2vr.org/image> ?image .
+                }}
+            }}";
+
+    SparqlResultSet data = refinmentGraph.ExecuteQuery(query) as SparqlResultSet;
+    List<string> labels = new List<string>();
+    List<string> images = new List<string>();
+
+    foreach (SparqlResult result in data)
+    {
+      string label = ExtractVariableFrom(result, "label");
+      string image = ExtractVariableFrom(result, "image");
+
+      if (label != null)
+      {
+        labels.Add(label);
+      }
+      if (image != null)
+      {
+        images.Add(image);
+      }
+    }
+
+    return new Dictionary<string, List<string>>
+    {
+      { "labels", labels },
+      { "images", images },
+    };
+  }
+
+  private string ExtractVariableFrom(SparqlResult result, string variable)
+  {
+    INode selected = null;
+    if (result.HasValue(variable))
+    {
+      selected = result.Value(variable);
+      return selected.ToString();
+    }
+    return null;
+  }
+
 
   private static string GetOrderByString(OrderedDictionary orderByList)
   {

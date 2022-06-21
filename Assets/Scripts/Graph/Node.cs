@@ -21,7 +21,6 @@ public class Node : MonoBehaviour
   private TMPro.TextMeshPro textMesh;
   // Variables for the Force-directed algorithm
   public Vector3 displacement;
-  private bool hasImage = false;
 
   private bool isVariable = false;
   private bool isActiveInMenu = false;
@@ -95,8 +94,6 @@ public class Node : MonoBehaviour
     if (!connections.Contains(edge))
     {
       connections.Add(edge);
-      ConnectLabelToNode(edge);
-      ConnectImageToNode(edge);
     }
   }
 
@@ -219,54 +216,52 @@ public class Node : MonoBehaviour
     }
   }
 
-  private void ConnectLabelToNode(Edge edge)
+  public void SetImageFromList(List<string> images)
   {
-    /*
-    Debug.Log("ConnectLabelToNode");
-    Debug.Log("=-=-=-=-=--=-=-==-=-=-=-=-");
-    foreach (Edge e in graph.edgeList)
-    {
-      if((e.displaySubject == this))
-      {
-        Debug.Log(e.displayObject.uri + " - " + e.displayObject.label);
-        Debug.Log("IsLabelPredicate(edge.uri): " + IsLabelPredicate(e.uri));
-      }
-    }
-    */
-    //List<Edge> labelEdges = graph.edgeList.FindAll(edge => edge.displaySubject == this && IsLabelPredicate(edge.uri));
+    StartCoroutine(FindAndSetWorkingTexture(images));
+  }
 
-    if (IsLabelPredicate(edge.uri))
+  private IEnumerator FindAndSetWorkingTexture(List<string> images)
+  {
+    foreach (string uri in images)
     {
-      SetLabel(edge.displayObject.label);
-      graph.RemoveNode(edge.displayObject);
+      UnityWebRequest imageRequest = UnityWebRequestTexture.GetTexture(uri);
+      yield return imageRequest.SendWebRequest();
+      if (imageRequest.result != UnityWebRequest.Result.Success)
+      {
+        continue;
+      }
+      else
+      {
+        DownloadHandlerTexture imageDownloadHandler = (DownloadHandlerTexture)imageRequest.downloadHandler;
+        int width = imageDownloadHandler.texture.width;
+        int height = imageDownloadHandler.texture.height;
+        Texture2D image = new Texture2D(width, height, imageDownloadHandler.texture.format, true);
+        image.LoadImage(imageDownloadHandler.data);
+        SetTexture(image, width, height);
+        break;
+      }
     }
   }
 
-  private bool IsLabelPredicate(string predicate)
+  private void SetTexture(Texture2D image, int width, int height)
   {
-    return predicate == "http://graph2vr.org/label";
-  }
+    Color color = GetComponent<Renderer>().material.color;
+    GameObject borderObject = transform.Find("Border").gameObject;
+    GameObject imageObject = borderObject.transform.Find("Image").gameObject;
 
-  private void ConnectImageToNode(Edge edge)
-  {
-    if (edge.displaySubject == this && IsInternalImagePredicate(edge.uri))
-    {
-      if (!hasImage)
-      {
-        StartCoroutine(FetchTexture(edge.displayObject.uri));
-        hasImage = true;
-      }
-      graph.RemoveNode(edge.displayObject);
-    }
-    else if (edge.displayObject == this && IsImagePredicate(edge.uri))
-    {
-      if (!hasImage)
-      {
-        StartCoroutine(FetchTexture(edge.displayObject.uri));
-        hasImage = true;
-      }
-    }
+    image.filterMode = FilterMode.Bilinear;
+    image.Apply(true);
+    borderObject.SetActive(true);
+    borderObject.GetComponent<Renderer>().material.color = color;
+    gameObject.GetComponent<Renderer>().enabled = false;
+    imageObject.GetComponent<Renderer>().material.mainTexture = image;
 
+    float scale = 3.0f;
+    float sizeX = 1.0f * scale;
+    float aspect = ((float)height / width);
+    float sizeY = sizeX / aspect;
+    borderObject.transform.localScale = new Vector3(sizeY, sizeX, scale);
   }
 
   private bool IsInternalImagePredicate(string predicate)
@@ -306,40 +301,6 @@ public class Node : MonoBehaviour
     if (image)
     {
       image.GetComponent<Renderer>().material.color = color;
-    }
-  }
-
-  public IEnumerator FetchTexture(string url)
-  {
-    UnityWebRequest imageRequest = UnityWebRequestTexture.GetTexture(url);
-    yield return imageRequest.SendWebRequest();
-    if (imageRequest.result != UnityWebRequest.Result.Success)
-    {
-      Debug.Log(imageRequest.error);
-    }
-    else
-    {
-      Color color = GetComponent<Renderer>().material.color;
-      GameObject borderObject = transform.Find("Border").gameObject;
-      GameObject imageObject = borderObject.transform.Find("Image").gameObject;
-      DownloadHandlerTexture imageDownloadHandler = (DownloadHandlerTexture)imageRequest.downloadHandler;
-
-      Texture2D image = new Texture2D(imageDownloadHandler.texture.width, imageDownloadHandler.texture.height, imageDownloadHandler.texture.format, true);
-      image.LoadImage(imageDownloadHandler.data);
-
-      image.filterMode = FilterMode.Bilinear;
-      image.Apply(true);
-      borderObject.SetActive(true);
-      borderObject.GetComponent<Renderer>().material.color = color;
-      gameObject.GetComponent<Renderer>().enabled = false;
-      imageObject.GetComponent<Renderer>().material.mainTexture = image;
-
-      // handle aspect ratio
-      float scale = 3.0f;
-      float height = 1.0f * scale;
-      float aspect = (float)((DownloadHandlerTexture)imageRequest.downloadHandler).texture.height / ((DownloadHandlerTexture)imageRequest.downloadHandler).texture.width;
-      float width = height / aspect;
-      borderObject.transform.localScale = new Vector3(width, height, scale);
     }
   }
 
