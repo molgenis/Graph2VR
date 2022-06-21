@@ -58,15 +58,10 @@ public class QueryService : MonoBehaviour
   {
     string refinmentQuery = GetExpandGraphQuery(node, uri, isOutgoingLink);
     string dataquery = GetSimpleExpandGraphQuery(node, uri, isOutgoingLink);
-    //Debug.Log(query);
     endPoint.QueryWithResultGraph(refinmentQuery, (completeGraph, state) =>
     {
-      // Do query
       IGraph dataGraph = completeGraph.ExecuteQuery(dataquery) as IGraph;
-
-      //results go here -> queryCallback
       queryCallback(dataGraph, completeGraph, state);
-
     }, state: null);
   }
 
@@ -105,6 +100,42 @@ public class QueryService : MonoBehaviour
   {
     string nodeUriString = node.GetURIAsString();
 
+    if (isOutgoingLink)
+    {
+
+      // Select with label
+      return $@"
+        {PREFIXES}
+        construct {{
+            <{nodeUriString}> <{uri}> ?object .
+            ?object ?graph2vrlabel ?label .
+            ?object ?graph2vrimage ?image .
+            ?object a ?type .
+        }} where {{
+            <{nodeUriString}> <{uri}> ?object .
+            {GetOptionalGraphQuery("?object")}
+        }} 
+        LIMIT {queryLimit}";
+    }
+    else
+    {
+      return $@"
+        {PREFIXES}
+        construct {{
+            ?subject <{uri}> <{nodeUriString}> .
+            ?subject ?graph2vrlabel ?label .
+            ?subject ?graph2vrimage ?image .
+            ?subject a ?type .
+        }} where {{
+            ?subject <{uri}> <{nodeUriString}>
+            {GetOptionalGraphQuery("?subject")}
+        }}  
+        LIMIT {queryLimit}";
+    }
+  }
+
+  private string GetOptionalGraphQuery(string variable)
+  {
     string imagePredicates = "";
 
     bool isFirstPredicate = true;
@@ -114,78 +145,28 @@ public class QueryService : MonoBehaviour
       isFirstPredicate = false;
     }
 
-    if (isOutgoingLink)
-    {
+    return $@"
+        Optional{{
+          Select {variable} <http://graph2vr.org/label> AS ?graph2vrlabel STR(?label) as ?label
+          where {{
+            {variable} rdfs:label ?label .
+            FILTER(LANG(?label) = '' || LANGMATCHES(LANG(?label), '{Main.instance.languageCode}'))
+          }}
+        }}
 
-      // Select with label
-      return $@"
-            {PREFIXES}
-            construct {{
-                <{nodeUriString}> <{uri}> ?object .
-                ?object ?graph2vrlabel ?label .
-                ?object ?graph2vrimage ?image .
-                ?object a ?type .
-            }} where {{
-                <{nodeUriString}> <{uri}> ?object .
+        Optional{{
+          Select {variable} <http://graph2vr.org/image> AS ?graph2vrimage ?image
+          where {{
+            {variable} ({imagePredicates}) ?image .
+            FILTER( strStarts( STR(?image), 'http://' ) || strStarts( STR(?image), 'https://' ) ) .
+          }}
+        }}
 
-                Optional{{
-                  Select ?object <http://graph2vr.org/label> AS ?graph2vrlabel STR(?label) as ?label
-                  where {{
-                    ?object rdfs:label ?label .
-                    FILTER(LANG(?label) = '' || LANGMATCHES(LANG(?label), '{Main.instance.languageCode}'))
-                  }}
-                }}
-
-                Optional{{
-                  Select ?object <http://graph2vr.org/image> AS ?graph2vrimage ?image
-                  where {{
-                    ?object ({imagePredicates}) ?image .
-                    FILTER( strStarts( STR(?image), 'http://' ) || strStarts( STR(?image), 'https://' ) ) .
-                  }}
-                }}
-
-                OPTIONAL {{
-                  ?object a ?type .
-                  FILTER(?type = owl:Thing || ?type = owl:Class || ?type = rdfs:subClassOf || ?type = rdf:Property)
-                }}
-            }} 
-            LIMIT {queryLimit}";
-    }
-    else
-    {
-      return $@"
-            {PREFIXES}
-            construct {{
-                ?subject <{uri}> <{nodeUriString}> .
-                ?subject ?graph2vrlabel ?label .
-                ?subject ?graph2vrimage ?image .
-                ?subject a ?type .
-            }} where {{
-                ?subject <{uri}> <{nodeUriString}>
-
-                Optional{{
-                  Select ?subject <http://graph2vr.org/label> AS ?graph2vrlabel STR(?label) as ?label
-                  where {{
-                    ?subject rdfs:label ?label .
-                    FILTER(LANG(?label) = '' || LANGMATCHES(LANG(?label), '{Main.instance.languageCode}'))
-                  }}
-                }}
-
-                Optional{{
-                  Select ?subject <http://graph2vr.org/image> AS ?graph2vrimage ?image
-                  where {{
-                    ?subject ({imagePredicates}) ?image .
-                    FILTER( strStarts( STR(?image), 'http://' ) || strStarts( STR(?image), 'https://' ) ) .
-                  }}
-                }}
-
-                OPTIONAL {{
-                  ?subject a ?type .
-                  FILTER(?type = owl:Thing || ?type = owl:Class || ?type = rdfs:subClassOf || ?type = rdf:Property)
-                }}
-            }}  
-            LIMIT {queryLimit}";
-    }
+        OPTIONAL {{
+          {variable} a ?type .
+          FILTER(?type = owl:Thing || ?type = owl:Class || ?type = rdfs:subClassOf || ?type = rdf:Property)
+        }}
+    ";
   }
 
   public void QueryByTriples(string triples, GraphCallback queryCallback)
@@ -291,16 +272,6 @@ public class QueryService : MonoBehaviour
   {
     if (searchterm.Length > 3)
     {
-      /*string query = $@"
-      {PREFIXES}
-      select ?entity ?name (COUNT(?x) AS ?score) 
-      where {{
-      ?x(^(<>| !<>) | rdfs:label | skos:altLabel) ?entity.
-      BIND(STR(?entity) AS ?name).
-      FILTER REGEX(?name, '{searchterm}')
-      }}
-      GROUP BY ?entity ?name ORDER BY DESC(?score) LIMIT 4";*/
-
       string query = $@"
       {PREFIXES}
       select distinct ?uri ?name 
