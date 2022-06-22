@@ -217,6 +217,18 @@ public class NodeMenu : MonoBehaviour
 
   public void PopulateSettingsMenu()
   {
+    cm.AddButton("Connect to custom server", Color.green / 2, () =>
+    {
+      Main.instance.GetComponent<ConnectToCustomDatabase>().GetEndpoint(endpoint => {
+        Settings.Instance.baseURI = "https://github.com/PjotrSvetachov/GraphVR/example-graph";
+        Settings.Instance.sparqlEndpoint = endpoint;
+        Settings.Instance.databaseSuportsBifContains = false;
+        Settings.Instance.searchOnKeypress = false;
+        QueryService.Instance.SwitchEndpoint();
+      }); 
+      Close();
+    });
+
     foreach (DatabaseSetttings dataBaseSettings in Settings.Instance.databaseSetttings)
     {
       cm.AddButton("Switch to " + dataBaseSettings.label, Color.green / 2, () =>
