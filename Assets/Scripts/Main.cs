@@ -11,6 +11,7 @@ public class Main : MonoBehaviour
 
   void Start()
   {
+    VDS.RDF.Options.UsePLinqEvaluation = false;
     mainGraph = CreateGraph();
 
     if (Settings.Instance.startWithSingleNode)
