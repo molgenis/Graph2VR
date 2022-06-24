@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.005498711, g: 0.022029527, b: 0.045998484, a: 1}
+  m_IndirectSpecularColor: {r: 0.005506694, g: 0.022075854, b: 0.04601198, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1371,8 +1371,8 @@ MonoBehaviour:
     databaseSuportsBifContains: 1
     searchOnKeypress: 1
   - label: Localhost
-    sparqlEndpoint: https://github.com/PjotrSvetachov/GraphVR/example-graph
-    baseURI: http://localhost:8890/sparql
+    sparqlEndpoint: http://localhost:8890/sparql
+    baseURI: https://github.com/PjotrSvetachov/GraphVR/example-graph
     databaseSuportsBifContains: 0
     searchOnKeypress: 0
 --- !u!4 &543450651980506302

@@ -15,7 +15,8 @@ public class QueryService : MonoBehaviour
   public int queryLimit = 25;
   const string PREFIXES = @"
     prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-    prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>";
+    prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+    prefix skos: <http://www.w3.org/2004/02/skos/core#>";
 
   public INamespaceMapper defaultNamespace = new NamespaceMapper(true);
 

@@ -66,15 +66,9 @@ public class AutocompleteHandeler : MonoBehaviour
 
   private void RemoveListeners()
   {
-    if (Settings.Instance.searchOnKeypress)
-    {
-      keyboard.OnUpdate.RemoveListener(HandleSearch);
-    }
-    else
-    {
-      keyboard.OnSubmit.RemoveListener(HandleSearch);
-    }
-    keyboard.OnCancel.RemoveListener(HandleCancel);
+    keyboard.OnUpdate.RemoveAllListeners();
+    keyboard.OnSubmit.RemoveAllListeners();
+    keyboard.OnCancel.RemoveAllListeners();
   }
 
   private void HandleSearch(string searchTerm)

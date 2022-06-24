@@ -219,13 +219,14 @@ public class NodeMenu : MonoBehaviour
   {
     cm.AddButton("Connect to custom server", Color.green / 2, () =>
     {
-      Main.instance.GetComponent<ConnectToCustomDatabase>().GetEndpoint(endpoint => {
-        Settings.Instance.baseURI = endpoint;
-        Settings.Instance.sparqlEndpoint = "https://github.com/PjotrSvetachov/GraphVR/example-graph";
+      Main.instance.GetComponent<ConnectToCustomDatabase>().GetEndpoint(endpoint =>
+      {
+        Settings.Instance.baseURI = "https://github.com/PjotrSvetachov/GraphVR/example-graph";
+        Settings.Instance.sparqlEndpoint = endpoint;
         Settings.Instance.databaseSuportsBifContains = false;
         Settings.Instance.searchOnKeypress = false;
         QueryService.Instance.SwitchEndpoint();
-      }); 
+      });
       Close();
     });
 

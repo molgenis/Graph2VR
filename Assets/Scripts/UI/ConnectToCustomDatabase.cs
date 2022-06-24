@@ -32,6 +32,7 @@ public class ConnectToCustomDatabase : MonoBehaviour
 
   private void HandleCancel()
   {
+    keyboard.SetText("");
     DisplayOnlyControllerModel(false);
     keyboard.Disable();
     RemoveListeners();
@@ -39,14 +40,16 @@ public class ConnectToCustomDatabase : MonoBehaviour
 
   private void RemoveListeners()
   {
-    keyboard.OnUpdate.RemoveListener(HandleSubmit);
-    keyboard.OnCancel.RemoveListener(HandleCancel);
+    keyboard.OnUpdate.RemoveAllListeners();
+    keyboard.OnSubmit.RemoveAllListeners();
+    keyboard.OnCancel.RemoveAllListeners();
   }
 
   private void HandleSubmit(string searchTerm)
   {
     DisplayOnlyControllerModel(false);
     keyboard.Disable();
+    keyboard.SetText("");
     RemoveListeners();
     callback(searchTerm);
   }
