@@ -13,6 +13,7 @@ public class Edge : MonoBehaviour
   public INode graphSubject;
   public INode graphPredicate;
   public INode graphObject;
+  private INode nonVariableGraphPredicate;
   private Transform arrow;
   private CapsuleCollider directLineCollider;
   private GameObject bendLineColliders;
@@ -238,6 +239,7 @@ public class Edge : MonoBehaviour
   public void MakeVariable()
   {
     IsVariable = true;
+    nonVariableGraphPredicate = graphPredicate;
     graphPredicate = GetVariableInode();
   }
 
@@ -249,6 +251,7 @@ public class Edge : MonoBehaviour
 
   public void UndoConversion()
   {
+    graphPredicate = nonVariableGraphPredicate;
     IsVariable = false;
     variableName = "";
   }

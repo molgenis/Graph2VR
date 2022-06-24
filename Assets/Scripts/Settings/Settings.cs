@@ -38,6 +38,7 @@ namespace Dweiss
 
     // We can start with an single node or a query.
     public string initialSparqlQueryString = "construct {?s ?p ?o}  where  {?s ?p ?o} Limit 100";
+    // prefix dbo: <http://dbpedia.org/ontology/> prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> prefix dbp: <http://dbpedia.org/property/> prefix dbr: <http://dbpedia.org/resource/> construct {     ?mountain rdf:type dbo:Mountain.     ?mountain dbo:elevation ?height.     ?mountain dbp:location ?location }  where {     ?mountain rdf:type dbo:Mountain.     ?mountain dbo:elevation ?height.     ?mountain dbp:location ?location }  ORDER BY DESC (?height)  LIMIT 10
 
     public string initialSparqlURI = "";
     public bool startWithSingleNode = false;
