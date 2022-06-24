@@ -1190,14 +1190,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 656317417, guid: 97869828da070e047b842768e2686dc1, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 656317417, guid: 97869828da070e047b842768e2686dc1, type: 3}
-      propertyPath: m_PositionInput.m_UseReference
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6007703615058463561, guid: 97869828da070e047b842768e2686dc1, type: 3}
       propertyPath: m_Name
       value: '[CameraRig]'
@@ -1246,22 +1238,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6007703615919559480, guid: 97869828da070e047b842768e2686dc1, type: 3}
-      propertyPath: m_CastShadows
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6007703616122355979, guid: 97869828da070e047b842768e2686dc1, type: 3}
-      propertyPath: m_CastShadows
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6007703616432736850, guid: 97869828da070e047b842768e2686dc1, type: 3}
-      propertyPath: m_CastShadows
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6007703616432736854, guid: 97869828da070e047b842768e2686dc1, type: 3}
       propertyPath: teleportTarget
       value: 
       objectReference: {fileID: 919132147526204932}
+    - target: {fileID: 6007703616736658491, guid: 97869828da070e047b842768e2686dc1, type: 3}
+      propertyPath: m_TagString
+      value: LaserPointer
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 97869828da070e047b842768e2686dc1, type: 3}
 --- !u!20 &2114014560 stripped
@@ -1269,29 +1253,6 @@ Camera:
   m_CorrespondingSourceObject: {fileID: 359138915536769324, guid: 97869828da070e047b842768e2686dc1, type: 3}
   m_PrefabInstance: {fileID: 2114014559}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &2114014561 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6006723395369206453, guid: 97869828da070e047b842768e2686dc1, type: 3}
-  m_PrefabInstance: {fileID: 2114014559}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &2114014562
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2114014561}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a2a9c34df4095f47b9ca8f975175f5b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Device: 0
-  m_PoseSource: 2
-  m_PoseProviderComponent: {fileID: 0}
-  m_TrackingType: 0
-  m_UpdateType: 0
-  m_UseRelativeTransform: 0
 --- !u!1 &1141087710156371
 GameObject:
   m_ObjectHideFlags: 0
@@ -1336,12 +1297,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfad8e0279381294fad0e271990e9952, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sparqlEndpoint: http://localhost:8890/sparql
-  baseURI: https://github.com/PjotrSvetachov/GraphVR/example-graph
+  sparqlEndpoint: https://dbpedia.org/sparql
+  baseURI: http://dbpedia.org
   databaseSuportsBifContains: 0
   defaultNodeCreationURI: http://graph2vr.org/newNode#
   defaultEdgeCreationURI: http://graph2vr.org/newEdge#
-  initialSparqlQueryString: construct {?s ?p ?o}  where  {?s ?p ?o} Limit 100
+  initialSparqlQueryString: 'prefix dbo: <http://dbpedia.org/ontology/> prefix rdfs:
+    <http://www.w3.org/2000/01/rdf-schema#> prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+    prefix dbp: <http://dbpedia.org/property/> prefix dbr: <http://dbpedia.org/resource/>
+    construct {     ?mountain rdf:type dbo:Mountain.     ?mountain dbo:elevation
+    ?height.     ?mountain dbp:location ?location }  where {     ?mountain rdf:type
+    dbo:Mountain.     ?mountain dbo:elevation ?height.     ?mountain dbp:location
+    ?location }  ORDER BY DESC (?height)  LIMIT 10'
   initialSparqlURI: http://dbpedia.org/ontology/Mountain
   startWithSingleNode: 0
   searchOnKeypress: 1

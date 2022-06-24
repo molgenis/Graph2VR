@@ -4,17 +4,29 @@ using UnityEngine;
 
 public class CircleMenuSliderNob : MonoBehaviour
 {
+  GameObject laserPointer;
   GameObject controler;
   CircleMenu menu;
+  public LayerMask layerMask;
 
   public void Set(CircleMenu menu)
   {
     this.menu = menu;
     controler = GameObject.FindGameObjectWithTag("RightController");
+    laserPointer = GameObject.FindGameObjectWithTag("LaserPointer");
   }
 
   // Update is called once per frame
   bool lastGrip = true;
+
+  private float positionToSliderValue(Vector3 position)
+  {
+    // Calculate slider value
+    Vector3 menuToControlerNormal = (position - menu.transform.position).normalized;
+    Vector3 projected = Vector3.ProjectOnPlane(menuToControlerNormal, menu.transform.forward);
+    return Mathf.Clamp01(Vector3.Angle(menu.transform.up, projected) / 180f);
+  }
+
   void Update()
   {
     // Collider ray check
@@ -26,20 +38,27 @@ public class CircleMenuSliderNob : MonoBehaviour
       actionPressed = true;
     }
 
+    if (ControlerInput.instance.triggerRight)
+    {
+      if (Physics.Raycast(new Ray(laserPointer.transform.position, laserPointer.transform.forward), out hit, 2f, layerMask.value))
+      {
+        Main.instance.canCreateNode = false;
+        menu.sliderValue = positionToSliderValue(hit.point);
+      }
+    }
+
     if (ControlerInput.instance.gripRight)
     {
-      // Calculate slider value
-      Vector3 menuToControlerNormal = (controler.transform.position - menu.transform.position).normalized;
-      Vector3 projected = Vector3.ProjectOnPlane(menuToControlerNormal, menu.transform.forward);
-      menu.sliderValue = Mathf.Clamp01(Vector3.Angle(menu.transform.up, projected) / 180f);
+      menu.sliderValue = positionToSliderValue(controler.transform.position);
     }
     else
     {
       if (collider != null)
       {
-        bool pointerSelection = collider.Raycast(new Ray(controler.transform.position, controler.transform.forward), out hit, 2f);
+        //bool pointerSelection = collider.Raycast(new Ray(controler.transform.position, controler.transform.forward), out hit, 2f,);
         bool grabSelection = collider.Raycast(new Ray(controler.transform.position, transform.position - controler.transform.position), out hit, 0.1f);
-        if (pointerSelection || grabSelection)
+
+        if (grabSelection)
         {
           // Someone is pointing at us
           gameObject.GetComponent<Renderer>().material.color = menu.defaultColor + new Color(0.2f, 0.2f, 0.2f); ;

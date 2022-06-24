@@ -106,6 +106,15 @@ public class CircleMenu : MonoBehaviour
     transform.localRotation = Quaternion.Euler(localRotationOffset);
     // Remove all child elements
     foreach (Transform child in transform) Destroy(child.gameObject);
+
+    GameObject sliderCollider = new GameObject("SliderCollider");
+    sliderCollider.transform.SetParent(transform);
+    sliderCollider.transform.localPosition = Vector3.zero;
+    sliderCollider.transform.localRotation = Quaternion.identity;
+    sliderCollider.transform.localScale = Vector3.one;
+    sliderCollider.layer = LayerMask.NameToLayer("MenuSliderCollider");
+
+
     transform.localScale = Vector3.one * size;
 
     int index = 0;
@@ -233,7 +242,11 @@ public class CircleMenu : MonoBehaviour
       for (int i = 0; i < sliderPathResolution; i++)
       {
         float sliderAngle = -(i / (float)sliderPathResolution) * totalAngle * Mathf.Deg2Rad;
-        sliderLine.SetPosition(i, new Vector2(Mathf.Sin(sliderAngle), Mathf.Cos(sliderAngle)) * 17);
+        Vector3 position = new Vector2(Mathf.Sin(sliderAngle), Mathf.Cos(sliderAngle)) * 17;
+        sliderLine.SetPosition(i, position);
+        SphereCollider collider = sliderCollider.AddComponent<SphereCollider>();
+        collider.radius = 0.75f;
+        collider.center = position;
       }
     }
     else

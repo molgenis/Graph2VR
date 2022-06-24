@@ -44,9 +44,10 @@ public class GraphInteract : MonoBehaviour
     {
       lineRenderer.SetPosition(1, transform.position);
     }
+    if (!ControlerInput.instance.triggerRight) Main.instance.canCreateNode = true;
     else if (IsHoldingPinchButton)
     {
-      if (HoldBeginTime + 2 < Time.time)
+      if (HoldBeginTime + 2 < Time.time && Main.instance.canCreateNode)
       {
         CreateNewNode();
       }

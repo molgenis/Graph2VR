@@ -6,6 +6,7 @@ public class Main : MonoBehaviour
   public string languageCode = "en";
 
   static public Main instance;
+  public bool canCreateNode = true;
   public Graph mainGraph = null;
   public GameObject graphPrefab;
 
