@@ -156,6 +156,7 @@ public class GraphInteract : MonoBehaviour
   bool oldTrigger = false;
   private void Trigger(InputAction.CallbackContext a)
   {
+    if (lineRenderer == null) return;
     bool newState = a.ReadValueAsButton();
     if (newState != oldTrigger)
     {

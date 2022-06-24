@@ -799,6 +799,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   languageCode: en
+  canCreateNode: 1
   mainGraph: {fileID: 0}
   graphPrefab: {fileID: 280358173420448884, guid: 4b47d999b2a37494baf875b5db9ccd16, type: 3}
 --- !u!114 &1503421654
@@ -1242,10 +1243,6 @@ PrefabInstance:
       propertyPath: teleportTarget
       value: 
       objectReference: {fileID: 919132147526204932}
-    - target: {fileID: 6007703616736658491, guid: 97869828da070e047b842768e2686dc1, type: 3}
-      propertyPath: m_TagString
-      value: LaserPointer
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 97869828da070e047b842768e2686dc1, type: 3}
 --- !u!20 &2114014560 stripped

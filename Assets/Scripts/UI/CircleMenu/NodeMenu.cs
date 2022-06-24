@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using VDS.RDF;
 using VDS.RDF.Query;
 
@@ -244,19 +245,28 @@ public class NodeMenu : MonoBehaviour
     }
 
     cm.AddButton(Settings.Instance.searchOnKeypress ? "Use: Search on submit" : "Use: Search on key-press", Color.yellow / 2, () =>
-     {
-       Settings.Instance.searchOnKeypress = !Settings.Instance.searchOnKeypress;
-       cm.Close();
-       if (node == null)
-       {
-         PopulateEdge(edge);
-       }
-       else
-       {
-         PopulateNode(node);
-       }
-     });
-
+      {
+        Settings.Instance.searchOnKeypress = !Settings.Instance.searchOnKeypress;
+        cm.Close();
+        if (node == null)
+        {
+          PopulateEdge(edge);
+        }
+        else
+        {
+          PopulateNode(node);
+        }
+      });
+    cm.AddButton("Reset Graph2VR DEMO", Color.red, () =>
+    {
+      foreach (GameObject gameObject in FindObjectsOfType<GameObject>())
+      {
+        gameObject.SetActive(false);
+        Destroy(gameObject);
+      }
+      SceneManager.LoadScene("Main");
+      return;
+    });
   }
 
   public void PopulateNode(UnityEngine.Object input)
