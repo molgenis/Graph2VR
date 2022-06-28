@@ -867,6 +867,7 @@ MonoBehaviour:
   gripRight: 0
   triggerLeft: 0
   triggerRight: 0
+  menu: 0
   viveLeftTrackpadClicked: 0
   viveRightTrackpadClicked: 0
   axisLeft: {x: 0, y: 0}
@@ -1087,6 +1088,26 @@ MonoBehaviour:
         m_Flags: 0
       m_Flags: 0
     m_Reference: {fileID: 0}
+  menuButton:
+    m_UseReference: 0
+    m_Action:
+      m_Name: Menu Button
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: b2ffd82a-2ebd-4503-b897-1e71a1143227
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings:
+      - m_Name: 
+        m_Id: f0a5563f-7087-4e47-9322-d9be2634d8e0
+        m_Path: <XRController>/menu
+        m_Interactions: 
+        m_Processors: 
+        m_Groups: 
+        m_Action: Menu Button
+        m_Flags: 0
+      m_Flags: 0
+    m_Reference: {fileID: 0}
 --- !u!114 &1503421659
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1300,7 +1321,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sparqlEndpoint: https://dbpedia.org/sparql
   baseURI: http://dbpedia.org
-  databaseSuportsBifContains: 0
+  databaseSuportsBifContains: 1
   defaultNodeCreationURI: http://graph2vr.org/newNode#
   defaultEdgeCreationURI: http://graph2vr.org/newEdge#
   initialSparqlQueryString: 'prefix dbo: <http://dbpedia.org/ontology/> prefix rdfs:
@@ -1312,7 +1333,7 @@ MonoBehaviour:
     ?location }  ORDER BY DESC (?height)  LIMIT 10'
   initialSparqlURI: http://dbpedia.org/ontology/Mountain
   startWithSingleNode: 0
-  searchOnKeypress: 0
+  searchOnKeypress: 1
   playerHeight: 1.8
   imagePredicates:
   - http://xmlns.com/foaf/0.1/depiction

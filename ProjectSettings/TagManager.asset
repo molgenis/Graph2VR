@@ -8,6 +8,7 @@ TagManager:
   - Graph
   - RightController
   - LaserPointer
+  - UseCustomDatabase
   layers:
   - Default
   - TransparentFX

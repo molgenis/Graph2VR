@@ -222,6 +222,7 @@ public class NodeMenu : MonoBehaviour
       {
          Main.instance.GetComponent<ConnectToCustomDatabase>().GetEndpoint(endpoint =>
        {
+          PlayerPrefs.SetString("CustomServer", endpoint);
           Settings.Instance.baseURI = "https://github.com/PjotrSvetachov/GraphVR/example-graph";
           Settings.Instance.sparqlEndpoint = endpoint;
           Settings.Instance.databaseSuportsBifContains = false;
@@ -257,13 +258,26 @@ public class NodeMenu : MonoBehaviour
               PopulateNode(node);
            }
         });
-      cm.AddButton("Reset Graph2VR DEMO", Color.red, () =>
+      cm.AddButton("Reset Graph2VR DEMO - Mountain", Color.red, () =>
       {
          foreach (GameObject gameObject in FindObjectsOfType<GameObject>())
          {
             gameObject.SetActive(false);
             Destroy(gameObject);
          }
+         SceneManager.LoadScene("Main");
+         return;
+      });
+      cm.AddButton("Reset Graph2VR DEMO - Local", Color.red, () =>
+      {
+         foreach (GameObject gameObject in FindObjectsOfType<GameObject>())
+         {
+            gameObject.SetActive(false);
+            Destroy(gameObject);
+         }
+         GameObject clone = new GameObject("SelectCustomDatabase");
+         clone.tag = "UseCustomDatabase";
+         DontDestroyOnLoad(clone);
          SceneManager.LoadScene("Main");
          return;
       });
