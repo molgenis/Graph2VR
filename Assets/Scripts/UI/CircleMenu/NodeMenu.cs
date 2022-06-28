@@ -222,12 +222,12 @@ public class NodeMenu : MonoBehaviour
       {
          Main.instance.GetComponent<ConnectToCustomDatabase>().GetEndpoint(endpoint =>
        {
-          Settings.Instance.baseURI = "https://github.com/PjotrSvetachov/GraphVR/example-graph";
-          Settings.Instance.sparqlEndpoint = endpoint;
-          Settings.Instance.databaseSuportsBifContains = false;
-          Settings.Instance.searchOnKeypress = false;
-          QueryService.Instance.SwitchEndpoint();
-       });
+           Settings.Instance.baseURI = "https://github.com/PjotrSvetachov/GraphVR/example-graph";
+           Settings.Instance.sparqlEndpoint = endpoint;
+           Settings.Instance.databaseSuportsBifContains = false;
+           Settings.Instance.searchOnKeypress = false;
+           QueryService.Instance.SwitchEndpoint();
+        });
          Close();
       });
 
