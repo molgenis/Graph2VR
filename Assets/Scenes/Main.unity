@@ -1308,7 +1308,7 @@ MonoBehaviour:
     ?location }  ORDER BY DESC (?height)  LIMIT 10'
   initialSparqlURI: http://dbpedia.org/ontology/Mountain
   startWithSingleNode: 0
-  searchOnKeypress: 1
+  searchOnKeypress: 0
   playerHeight: 1.8
   imagePredicates:
   - http://xmlns.com/foaf/0.1/depiction

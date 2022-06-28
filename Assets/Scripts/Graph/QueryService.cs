@@ -277,9 +277,9 @@ public class QueryService : MonoBehaviour
       {PREFIXES}
       select distinct ?uri ?name 
       where {{
-      ?uri(^(<>| !<>) | rdfs:label | skos:altLabel) ?entity.
-      BIND(STR(?entity) AS ?name).
-      FILTER REGEX(?name, '{searchterm}')
+         ?uri(^(<>| !<>) | rdfs:label | skos:altLabel) ?entity.
+         BIND(STR(?entity) AS ?name).
+         FILTER REGEX(?name, '{searchterm}', 'i')
       }}
       LIMIT 5";
 
