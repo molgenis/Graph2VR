@@ -73,15 +73,21 @@ public class Graph : MonoBehaviour
 
    private string GetLiteralValue(INode node)
    {
-      string dataType = (node as ILiteralNode).DataType?.ToString();
-      if (dataType == "" || dataType == null)
+      ILiteralNode literal = (node as ILiteralNode);
+      string dataType = literal.DataType?.ToString();
+      string language = literal.Language?.ToString();
+      string value = literal.Value?.ToString();
+
+      string result = $"'{value}'";
+      if (language != "" && language != null)
       {
-         return $"\"{(node as ILiteralNode).Value}\"";
+         result += $"@{language}";
       }
-      else
+      if (dataType != "" && dataType != null)
       {
-         return $"\"{(node as ILiteralNode).Value}\"^^<{dataType}>";
+         result += $"^^<{dataType}>";
       }
+      return result;
    }
 
    public void QuerySimilarPatternsMultipleLayers()
@@ -172,10 +178,10 @@ public class Graph : MonoBehaviour
       QueryService.Instance.GetOutgoingPredicats(URI, sparqlResultsCallback);
    }
 
-   public void GetIncomingPredicats(string URI, SparqlResultsCallback sparqlResultsCallback)
+   public void GetIncomingPredicats(string objectValue, SparqlResultsCallback sparqlResultsCallback)
    {
-      if (URI == "") return;
-      QueryService.Instance.GetIncomingPredicats(URI, sparqlResultsCallback);
+      if (objectValue == "") return;
+      QueryService.Instance.GetIncomingPredicats(objectValue, sparqlResultsCallback);
    }
 
    public void CollapseGraph(Node node)
@@ -247,12 +253,10 @@ public class Graph : MonoBehaviour
           //List<INode> refinmentNodes = refinmentGraph.Nodes.ToList<INode>();
           foreach (Node nodeToRefine in nodeList)
           {
-             if (nodeToRefine.uri == "") continue;
+             if (nodeToRefine.graphNode.NodeType != NodeType.Uri) continue;
 
              Dictionary<string, List<string>> results = QueryService.Instance.RefineNode(refinmentGraph, nodeToRefine.uri);
-
              List<string> images = results["images"];
-
              if (results["labels"].Count > 0)
              {
                 nodeToRefine.SetLabel(results["labels"].First());

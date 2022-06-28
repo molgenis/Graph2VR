@@ -57,6 +57,7 @@ public class QueryService : MonoBehaviour
    {
       string refinmentQuery = GetExpandGraphQuery(node, uri, isOutgoingLink);
       string dataquery = GetSimpleExpandGraphQuery(node, uri, isOutgoingLink);
+
       endPoint.QueryWithResultGraph(refinmentQuery, (completeGraph, state) =>
       {
          IGraph dataGraph = completeGraph.ExecuteQuery(dataquery) as IGraph;
@@ -67,7 +68,7 @@ public class QueryService : MonoBehaviour
 
    private string GetSimpleExpandGraphQuery(Node node, string uri, bool isOutgoingLink)
    {
-      string nodeUriString = node.GetURIAsString();
+      string value = node.graph.RealNodeValue(node.graphNode);
       if (isOutgoingLink)
       {
 
@@ -75,9 +76,9 @@ public class QueryService : MonoBehaviour
          return $@"
             {PREFIXES}
             construct {{
-                <{nodeUriString}> <{uri}> ?object .
+                {value} <{uri}> ?object .
             }} where {{
-                <{nodeUriString}> <{uri}> ?object .
+                {value} <{uri}> ?object .
             }} 
             LIMIT {queryLimit}";
       }
@@ -86,9 +87,9 @@ public class QueryService : MonoBehaviour
          return $@"
             {PREFIXES}
             construct {{
-                ?subject <{uri}> <{nodeUriString}> .
+                ?subject <{uri}> {value} .
             }} where {{
-                ?subject <{uri}> <{nodeUriString}>
+                ?subject <{uri}> {value}
             }}  
             LIMIT {queryLimit}";
       }
@@ -97,7 +98,7 @@ public class QueryService : MonoBehaviour
 
    private string GetExpandGraphQuery(Node node, string uri, bool isOutgoingLink)
    {
-      string nodeUriString = node.GetURIAsString();
+      string value = node.graph.RealNodeValue(node.graphNode);
 
       if (isOutgoingLink)
       {
@@ -106,12 +107,12 @@ public class QueryService : MonoBehaviour
          return $@"
         {PREFIXES}
         construct {{
-            <{nodeUriString}> <{uri}> ?object .
+            {value} <{uri}> ?object .
             ?object ?graph2vrlabel ?label .
             ?object ?graph2vrimage ?image .
             ?object a ?type .
         }} where {{
-            <{nodeUriString}> <{uri}> ?object .
+            {value} <{uri}> ?object .
             {GetOptionalGraphQuery("?object")}
         }} 
         LIMIT {queryLimit}";
@@ -121,12 +122,12 @@ public class QueryService : MonoBehaviour
          return $@"
         {PREFIXES}
         construct {{
-            ?subject <{uri}> <{nodeUriString}> .
+            ?subject <{uri}> {value} .
             ?subject ?graph2vrlabel ?label .
             ?subject ?graph2vrimage ?image .
             ?subject a ?type .
         }} where {{
-            ?subject <{uri}> <{nodeUriString}>
+            ?subject <{uri}> {value}
             {GetOptionalGraphQuery("?subject")}
         }}  
         LIMIT {queryLimit}";
@@ -203,13 +204,13 @@ public class QueryService : MonoBehaviour
       endPoint.QueryWithResultSet(query, sparqlResultsCallback, state: null);
    }
 
-   public void GetIncomingPredicats(string URI, SparqlResultsCallback sparqlResultsCallback)
+   public void GetIncomingPredicats(string objectValue, SparqlResultsCallback sparqlResultsCallback)
    {
       string query = $@"
       {PREFIXES}
       select distinct ?p (STR(COUNT(?s)) AS ?count) STR(?label) AS ?label 
       where {{ 
-        ?s ?p <{URI}> . 
+        ?s ?p {objectValue} . 
         OPTIONAL {{
           ?p rdfs:label ?label
         }}
