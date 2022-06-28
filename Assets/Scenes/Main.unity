@@ -844,7 +844,7 @@ MonoBehaviour:
   edgeSelectedColor: {r: 1.9843137, g: 1.1137255, b: 0, a: 0.72156864}
   edgeHoverColor: {r: 2.1185474, g: 2.1185474, b: 2.1185474, a: 0.19215687}
   edgeGrabbedColor: {r: 1, g: 0, b: 0, a: 0.33333334}
-  defaultNodeColor: {r: 0, g: 0.25882354, b: 0.6, a: 1}
+  defaultNodeColor: {r: 0.6666667, g: 0.8, b: 1, a: 1}
   uriColor: {r: 0, g: 0.25882354, b: 0.6, a: 1}
   variableColor: {r: 0.27332425, g: 1, b: 0, a: 1}
   blankNodeColor: {r: 0.21960786, g: 0.21960786, b: 0.21960786, a: 1}
@@ -1243,6 +1243,10 @@ PrefabInstance:
       propertyPath: teleportTarget
       value: 
       objectReference: {fileID: 919132147526204932}
+    - target: {fileID: 6007703616736658491, guid: 97869828da070e047b842768e2686dc1, type: 3}
+      propertyPath: m_TagString
+      value: LaserPointer
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 97869828da070e047b842768e2686dc1, type: 3}
 --- !u!20 &2114014560 stripped
