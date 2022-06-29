@@ -66,6 +66,8 @@ namespace Dweiss
 
     public string[] imagePredicates = { "http://xmlns.com/foaf/0.1/depiction", "http://xmlns.com/foaf/0.1/Image", "http://xmlns.com/foaf/0.1/thumbnail", "http://dbpedia.org/property/photo" };
 
+    public string[] infopanelPredicates = { "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "http://www.w3.org/2000/01/rdf-schema#label" };
+
     // VOWL color schema
     // Datatype 	#fc3 	yellow 	rdfs:Datatype, rdfs:Literal
     public Color literalColor = new Color(255, 204, 51);
@@ -91,6 +93,7 @@ namespace Dweiss
     new string name = "";
     #region  Singleton
     public static Settings _instance;
+
     public static Settings Instance { get { return _instance; } }
     private void SetupSingelton()
     {

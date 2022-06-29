@@ -202,6 +202,14 @@ public class Node : MonoBehaviour
 
   }
 
+  private void OnDestroy()
+  {
+    if(infoPanel != null)
+    {
+      Destroy(infoPanel.gameObject);
+    }
+  }
+
   public void UpdateSelectionStatus()
   {
     if (IsEdgePartOfSelectedTriple())
@@ -382,16 +390,19 @@ public class Node : MonoBehaviour
   {
     infoPanel = Instantiate<Canvas>(Resources.Load<Canvas>("UI/ContextMenu"));
     infoPanel.renderMode = RenderMode.WorldSpace;
-    infoPanel.worldCamera = GameObject.Find("Controller (right)").GetComponent<Camera>();
+    infoPanel.worldCamera = GameObject.Find("Controller (right)").GetComponentInChildren<Camera>();
     ContextMenuHandler selectorHandler = infoPanel.GetComponent<ContextMenuHandler>();
     selectorHandler.Initiate(this);
   }
 
   private void PositionInfoPanel()
   {
+    infoPanel.transform.SetParent(null);
+    infoPanel.transform.localScale = new Vector3(0.001f, 0.001f, 0.001f);
+    infoPanel.transform.SetParent(gameObject.transform, true);
     infoPanel.transform.position = transform.position;
     infoPanel.transform.rotation = Quaternion.LookRotation(transform.position - Camera.main.transform.position, Vector3.up);
-    infoPanel.transform.position += infoPanel.transform.rotation * new Vector3(1.0f, 0, 0) * Mathf.Max(transform.lossyScale.x, gameObject.transform.lossyScale.y);
+    infoPanel.transform.position += infoPanel.transform.rotation * new Vector3(0.5f, 0, 0);// * Mathf.Max(transform.lossyScale.x, gameObject.transform.lossyScale.y);
   }
 
   private bool IsEdgePartOfSelectedTriple()

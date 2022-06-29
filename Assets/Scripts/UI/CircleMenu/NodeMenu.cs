@@ -131,7 +131,11 @@ public class NodeMenu : MonoBehaviour
          {
             graph.CollapseGraph(node);
          });
-      }
+        cm.AddButton("Show/hide info", new Color(1, 0.5f, 0.5f) / 2, () =>
+        {
+          node.ToggleInfoPanel();
+        });
+    }
 
       cm.AddButton("Close node", new Color(1, 0.5f, 0.5f) / 2, () =>
       {
