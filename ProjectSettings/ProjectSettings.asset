@@ -134,7 +134,7 @@ PlayerSettings:
     16:10: 1
     16:9: 1
     Others: 1
-  bundleVersion: 1.0
+  bundleVersion: 1.0.0
   preloadedAssets:
   - {fileID: 11400000, guid: 49299175b7782b94b9548978ab9ebfcc, type: 2}
   - {fileID: -5495360693524629822, guid: e9fdf00479fecdb46b9f73cb2671ddc1, type: 2}
@@ -156,7 +156,7 @@ PlayerSettings:
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
-    Android: com.DefaultCompany.GraphVR
+    Android: com.DefaultCompany.Graph2VR
     Standalone: com.DefaultCompany.Graph2VR
   buildNumber:
     Standalone: 0
