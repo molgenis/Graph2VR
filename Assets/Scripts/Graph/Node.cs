@@ -399,7 +399,7 @@ public class Node : MonoBehaviour
   {
     infoPanel.transform.SetParent(null);
     infoPanel.transform.localScale = new Vector3(0.001f, 0.001f, 0.001f);
-    infoPanel.transform.SetParent(gameObject.transform, true);
+    infoPanel.transform.SetParent(graph.transform, true);
     infoPanel.transform.position = transform.position;
     infoPanel.transform.rotation = Quaternion.LookRotation(transform.position - Camera.main.transform.position, Vector3.up);
     infoPanel.transform.position += infoPanel.transform.rotation * new Vector3(0.5f, 0, 0);// * Mathf.Max(transform.lossyScale.x, gameObject.transform.lossyScale.y);
