@@ -39,7 +39,26 @@ namespace Dweiss
     // We can start with an single node or a query.
     public string initialSparqlQueryString = "construct {?s ?p ?o}  where  {?s ?p ?o} Limit 100";
     // prefix dbo: <http://dbpedia.org/ontology/> prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> prefix dbp: <http://dbpedia.org/property/> prefix dbr: <http://dbpedia.org/resource/> construct {     ?mountain rdf:type dbo:Mountain.     ?mountain dbo:elevation ?height.     ?mountain dbp:location ?location }  where {     ?mountain rdf:type dbo:Mountain.     ?mountain dbo:elevation ?height.     ?mountain dbp:location ?location }  ORDER BY DESC (?height)  LIMIT 10
-
+    /*
+     prefix dbo: <http://dbpedia.org/ontology/> 
+      prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
+      prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> 
+      prefix dbp: <http://dbpedia.org/property/> 
+      prefix dbr: <http://dbpedia.org/resource/> 
+      construct { ?mountain rdf:type dbo:Mountain.     
+                  ?mountain dbo:elevation ?height.     
+                  ?mountain dbp:location ?location.
+                  ?mountain <http://graph2vr.org/label> ?label.
+                  ?mountain <http://graph2vr.org/image> ?image.
+                 }  
+      where {     ?mountain rdf:type dbo:Mountain.     
+                  ?mountain dbo:elevation ?height.     
+                  ?mountain dbp:location ?location. 
+                  Optional{?mountain rdfs:label ?label.}
+                  Optional{?mountain dbp:depiction ?image.}
+      }  
+      ORDER BY DESC (?height)  LIMIT 10
+    */
     public string initialSparqlURI = "";
     public bool startWithSingleNode = false;
     public bool searchOnKeypress = false;
