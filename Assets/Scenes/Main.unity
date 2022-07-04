@@ -1264,10 +1264,6 @@ PrefabInstance:
       propertyPath: teleportTarget
       value: 
       objectReference: {fileID: 919132147526204932}
-    - target: {fileID: 6007703616736658491, guid: 97869828da070e047b842768e2686dc1, type: 3}
-      propertyPath: m_TagString
-      value: LaserPointer
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 97869828da070e047b842768e2686dc1, type: 3}
 --- !u!20 &2114014560 stripped

@@ -7,7 +7,6 @@ public class Main : MonoBehaviour
    public string languageCode = "en";
 
    static public Main instance;
-   public bool canCreateNode = true;
    public Graph mainGraph = null;
    public GameObject graphPrefab;
 
@@ -66,5 +65,15 @@ public class Main : MonoBehaviour
       GameObject clone = Instantiate(graphPrefab);
       clone.transform.position = new Vector3(0, 1, 0);
       return clone.GetComponent<Graph>();
+   }
+
+   public Graph FindClosestGraphOrCreateNewGraph(Vector3 position)
+   {
+      Graph graph = Utils.FindClosestGraph(position)?.GetComponent<Graph>();
+      if (graph == null)
+      {
+         graph = Main.instance.CreateGraph();
+      }
+      return graph;
    }
 }

@@ -701,7 +701,7 @@ GameObject:
   - component: {fileID: 5926846574481551007}
   - component: {fileID: 6007703616432736851}
   - component: {fileID: 656317417}
-  - component: {fileID: 2114014562}
+  - component: {fileID: 8413784938594836542}
   m_Layer: 0
   m_Name: Camera
   m_TagString: MainCamera
@@ -882,7 +882,7 @@ MonoBehaviour:
     m_SingletonActionBindings: []
     m_Flags: 0
   m_HasMigratedActions: 1
---- !u!114 &2114014562
+--- !u!114 &8413784938594836542
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1670,8 +1670,10 @@ GameObject:
   - component: {fileID: 6007703615061147709}
   - component: {fileID: 4584098405492057436}
   - component: {fileID: 605190105}
+  - component: {fileID: 2114014563}
+  - component: {fileID: 2114014562}
   m_Layer: 0
-  m_Name: NodeMenu
+  m_Name: Menu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1749,6 +1751,38 @@ MonoBehaviour:
   questRotation: {x: 0, y: 0, z: 0}
   viveOffset: {x: 0, y: 0, z: 0}
   viveRotation: {x: 0, y: 0, z: 0}
+--- !u!114 &2114014563
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6007703615061147651}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35a0d722dfcde554883823ab2fb7e77e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  graph: {fileID: 0}
+  controlerModel: {fileID: 6007703615058462837}
+  subMenu: 
+  limitSlider: {fileID: 6007703616689369755}
+--- !u!114 &2114014562
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6007703615061147651}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24735acb29d266a489bef35bc0c5a932, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  graph: {fileID: 0}
+  controlerModel: {fileID: 6007703615058462837}
+  subMenu: 
+  limitSlider: {fileID: 6007703616689369755}
 --- !u!1 &6007703615204004249
 GameObject:
   m_ObjectHideFlags: 0
@@ -2986,7 +3020,7 @@ GameObject:
   - component: {fileID: 2114014564}
   m_Layer: 0
   m_Name: Pointer
-  m_TagString: Untagged
+  m_TagString: LaserPointer
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

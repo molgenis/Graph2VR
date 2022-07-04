@@ -4,197 +4,188 @@ using UnityEngine.InputSystem;
 
 public class GraphInteract : MonoBehaviour
 {
-  private GameObject CurrentHoveredObject = null;
-  private GameObject GrabbedObject = null;
+   private GameObject CurrentHoveredObject = null;
+   private GameObject GrabbedObject = null;
 
-  private bool IsHoldingPinchButton = false;
-  private float HoldBeginTime;
-  private LineRenderer lineRenderer;
-  private bool IsDraggingLine = false;
-  private Node EdgeBegin = null;
-  public bool isLeftController = true;
-  private static int nodeCreationCounter = 1;
-  private static int edgeCreationCounter = 1;
+   private bool IsHoldingPinchButton = false;
+   private float HoldBeginTime;
+   private LineRenderer lineRenderer;
+   private bool IsDraggingLine = false;
+   private Node EdgeBegin = null;
+   public bool isLeftController = true;
+   private static int nodeCreationCounter = 1;
+   private static int edgeCreationCounter = 1;
 
-  void Start()
-  {
-    if (isLeftController)
-    {
-      ControlerInput.instance.triggerActionLeft.action.performed += Trigger;
-      ControlerInput.instance.gripActionLeft.action.performed += Grip;
-    }
-    else
-    {
-      ControlerInput.instance.triggerActionRight.action.performed += Trigger;
-      ControlerInput.instance.gripActionRight.action.performed += Grip;
-    }
-
-    lineRenderer = gameObject.AddComponent<LineRenderer>();
-    lineRenderer.material = Resources.Load<Material>("Materials/line");
-    lineRenderer.enabled = false;
-    lineRenderer.useWorldSpace = true;
-    lineRenderer.startWidth = 0.01f;
-    lineRenderer.endWidth = 0.01f;
-  }
-
-  // Update is called once per frame
-  void Update()
-  {
-    if (IsDraggingLine)
-    {
-      lineRenderer.SetPosition(1, transform.position);
-    }
-    if (!ControlerInput.instance.triggerRight) Main.instance.canCreateNode = true;
-    else if (IsHoldingPinchButton)
-    {
-      if (HoldBeginTime + 2 < Time.time && Main.instance.canCreateNode)
+   void Start()
+   {
+      if (isLeftController)
       {
-        CreateNewNode();
-      }
-    }
-
-    Collider[] overlapping = Physics.OverlapSphere(transform.position, 0.03f);
-    GameObject closestObject = null;
-    foreach (Collider col in overlapping)
-    {
-      GameObject colliderAsGrab = null;
-      if (col.gameObject.GetComponent<IGrabInterface>() != null)
-      {
-        colliderAsGrab = col.gameObject;
-      }
-      if (colliderAsGrab != null)
-      {
-        if (closestObject != null)
-        {
-          if (Vector3.SqrMagnitude(transform.position - col.gameObject.transform.position) < Vector3.SqrMagnitude(transform.position - closestObject.transform.position))
-          {
-            closestObject = colliderAsGrab;
-          }
-        }
-        else
-        {
-          closestObject = colliderAsGrab;
-        }
-      }
-    }
-
-    HandleHoveredObject(closestObject);
-  }
-
-  void CreateNewNode()
-  {
-    Graph graphToAddNode = null;
-
-    graphToAddNode = Utils.FindClosestGraph(transform.position)?.GetComponent<Graph>();
-
-    if (graphToAddNode == null)
-    {
-      graphToAddNode = Main.instance.CreateGraph();
-    }
-
-    IsHoldingPinchButton = false;
-    Node node = graphToAddNode.CreateNode(Settings.Instance.defaultNodeCreationURI + nodeCreationCounter, transform.position);
-    nodeCreationCounter++;
-    node.MakeVariable();
-  }
-
-  void HandleHoveredObject(GameObject newHoveredObject)
-  {
-    IGrabInterface newGrabAble = null;
-    if (newHoveredObject)
-    {
-      newGrabAble = newHoveredObject.GetComponent<IGrabInterface>();
-    }
-    if (newGrabAble == null)
-    {
-      if (CurrentHoveredObject != null)
-      {
-        CurrentHoveredObject.GetComponent<IGrabInterface>().ControllerExit();
-        CurrentHoveredObject = null;
-      }
-    }
-    else
-    {
-      if (newHoveredObject != CurrentHoveredObject)
-      {
-        if (CurrentHoveredObject)
-        {
-          CurrentHoveredObject.GetComponent<IGrabInterface>().ControllerExit();
-        }
-        newGrabAble.ControllerEnter();
-        CurrentHoveredObject = newHoveredObject;
-      }
-    }
-  }
-
-  bool oldGrip = false;
-  private void Grip(InputAction.CallbackContext a)
-  {
-    bool newState = a.ReadValueAsButton();
-    if (newState != oldGrip)
-    {
-      if (newState)
-      {
-        if (CurrentHoveredObject)
-        {
-          CurrentHoveredObject.GetComponent<IGrabInterface>().ControllerGrabBegin(this.gameObject);
-          GrabbedObject = CurrentHoveredObject;
-        }
+         ControlerInput.instance.triggerActionLeft.action.performed += Trigger;
+         ControlerInput.instance.gripActionLeft.action.performed += Grip;
       }
       else
       {
-        if (GrabbedObject)
-        {
-          GrabbedObject.GetComponent<IGrabInterface>().ControllerGrabEnd();
-          GrabbedObject = null;
-        }
+         ControlerInput.instance.triggerActionRight.action.performed += Trigger;
+         ControlerInput.instance.gripActionRight.action.performed += Grip;
       }
-    }
-    oldGrip = newState;
-  }
 
-  bool oldTrigger = false;
-  private void Trigger(InputAction.CallbackContext a)
-  {
-    if (lineRenderer == null) return;
-    bool newState = a.ReadValueAsButton();
-    if (newState != oldTrigger)
-    {
-      if (newState)
+      lineRenderer = gameObject.AddComponent<LineRenderer>();
+      lineRenderer.material = Resources.Load<Material>("Materials/line");
+      lineRenderer.enabled = false;
+      lineRenderer.useWorldSpace = true;
+      lineRenderer.startWidth = 0.01f;
+      lineRenderer.endWidth = 0.01f;
+   }
+
+   // Update is called once per frame
+   void Update()
+   {
+      if (IsDraggingLine)
       {
-        if (CurrentHoveredObject)
-        {
-          EdgeBegin = CurrentHoveredObject.GetComponent<Node>();
-          if (EdgeBegin)
-          {
-            IsDraggingLine = true;
-            lineRenderer.enabled = true;
-            lineRenderer.SetPosition(0, CurrentHoveredObject.transform.position);
-          }
-        }
-        else
-        {
-          IsHoldingPinchButton = true;
-          HoldBeginTime = Time.time;
-        }
+         lineRenderer.SetPosition(1, transform.position);
+      }
+      else if (IsHoldingPinchButton)
+      {
+         if (HoldBeginTime + 2 < Time.time)
+         {
+            CreateNewNode();
+         }
+      }
+
+      Collider[] overlapping = Physics.OverlapSphere(transform.position, 0.03f);
+      GameObject closestObject = null;
+      foreach (Collider col in overlapping)
+      {
+         GameObject colliderAsGrab = null;
+         if (col.gameObject.GetComponent<IGrabInterface>() != null)
+         {
+            colliderAsGrab = col.gameObject;
+         }
+         if (colliderAsGrab != null)
+         {
+            if (closestObject != null)
+            {
+               if (Vector3.SqrMagnitude(transform.position - col.gameObject.transform.position) < Vector3.SqrMagnitude(transform.position - closestObject.transform.position))
+               {
+                  closestObject = colliderAsGrab;
+               }
+            }
+            else
+            {
+               closestObject = colliderAsGrab;
+            }
+         }
+      }
+
+      HandleHoveredObject(closestObject);
+   }
+
+   void CreateNewNode()
+   {
+      Graph graphToAddNode = Main.instance.FindClosestGraphOrCreateNewGraph(transform.position);
+      IsHoldingPinchButton = false;
+      Node node = graphToAddNode.CreateNode(Settings.Instance.defaultNodeCreationURI + nodeCreationCounter, transform.position);
+      nodeCreationCounter++;
+      node.MakeVariable();
+   }
+
+   void HandleHoveredObject(GameObject newHoveredObject)
+   {
+      IGrabInterface newGrabAble = null;
+      if (newHoveredObject)
+      {
+         newGrabAble = newHoveredObject.GetComponent<IGrabInterface>();
+      }
+      if (newGrabAble == null)
+      {
+         if (CurrentHoveredObject != null)
+         {
+            CurrentHoveredObject.GetComponent<IGrabInterface>().ControllerExit();
+            CurrentHoveredObject = null;
+         }
       }
       else
       {
-        IsHoldingPinchButton = false;
-        IsDraggingLine = false;
-        lineRenderer.enabled = false;
-        if (CurrentHoveredObject)
-        {
-          Node EdgeEnd = CurrentHoveredObject.GetComponent<Node>();
-          if (EdgeBegin != null && EdgeEnd != null && EdgeBegin != EdgeEnd)
-          {
-            Edge edge = EdgeBegin.graph.CreateEdge(EdgeBegin, Settings.Instance.defaultEdgeCreationURI + edgeCreationCounter, EdgeEnd);
-            edgeCreationCounter++;
-          }
-        }
-        EdgeBegin = null;
+         if (newHoveredObject != CurrentHoveredObject)
+         {
+            if (CurrentHoveredObject)
+            {
+               CurrentHoveredObject.GetComponent<IGrabInterface>().ControllerExit();
+            }
+            newGrabAble.ControllerEnter();
+            CurrentHoveredObject = newHoveredObject;
+         }
       }
-    }
-    oldTrigger = newState;
-  }
+   }
+
+   bool oldGrip = false;
+   private void Grip(InputAction.CallbackContext a)
+   {
+      bool newState = a.ReadValueAsButton();
+      if (newState != oldGrip)
+      {
+         if (newState)
+         {
+            if (CurrentHoveredObject)
+            {
+               CurrentHoveredObject.GetComponent<IGrabInterface>().ControllerGrabBegin(this.gameObject);
+               GrabbedObject = CurrentHoveredObject;
+            }
+         }
+         else
+         {
+            if (GrabbedObject)
+            {
+               GrabbedObject.GetComponent<IGrabInterface>().ControllerGrabEnd();
+               GrabbedObject = null;
+            }
+         }
+      }
+      oldGrip = newState;
+   }
+
+   bool oldTrigger = false;
+   private void Trigger(InputAction.CallbackContext a)
+   {
+      if (lineRenderer == null) return;
+      bool newState = a.ReadValueAsButton();
+      if (newState != oldTrigger)
+      {
+         if (newState)
+         {
+            if (CurrentHoveredObject)
+            {
+               EdgeBegin = CurrentHoveredObject.GetComponent<Node>();
+               if (EdgeBegin)
+               {
+                  IsDraggingLine = true;
+                  lineRenderer.enabled = true;
+                  lineRenderer.SetPosition(0, CurrentHoveredObject.transform.position);
+               }
+            }
+            else
+            {
+               IsHoldingPinchButton = true;
+               HoldBeginTime = Time.time;
+            }
+         }
+         else
+         {
+            IsHoldingPinchButton = false;
+            IsDraggingLine = false;
+            lineRenderer.enabled = false;
+            if (CurrentHoveredObject)
+            {
+               Node EdgeEnd = CurrentHoveredObject.GetComponent<Node>();
+               if (EdgeBegin != null && EdgeEnd != null && EdgeBegin != EdgeEnd)
+               {
+                  Edge edge = EdgeBegin.graph.CreateEdge(EdgeBegin, Settings.Instance.defaultEdgeCreationURI + edgeCreationCounter, EdgeEnd);
+                  edgeCreationCounter++;
+               }
+            }
+            EdgeBegin = null;
+         }
+      }
+      oldTrigger = newState;
+   }
 }
