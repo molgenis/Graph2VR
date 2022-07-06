@@ -94,6 +94,18 @@ public class BaseMenu : MonoBehaviour
          Close();
       });
 
+      cm.AddButton("Save Graph (experimental)", new Color(1, 0.5f, 0.5f) / 2, () =>
+      {
+         SaveLoad.Save(graph, "graph");
+         Close();
+      });
+
+      cm.AddButton("Load last saved Graph (experimental)", new Color(1, 0.5f, 0.5f) / 2, () =>
+      {
+         SaveLoad.Load(Main.instance.CreateGraph(), "graph");
+         Close();
+      });
+
       if (graph.subGraphs.Count > 0)
       {
          cm.AddButton("Close all child graphs", new Color(1, 0.5f, 0.5f) / 2, () =>
