@@ -84,6 +84,21 @@ public class MainMenu : BaseMenu
          cm.Close();
          PopulateMainMenu();
       });
+
+      cm.AddButton("Save closest Graph (experimental)", new Color(1, 0.5f, 0.5f) / 2, () =>
+      {
+         SaveLoad.Save(Main.instance.FindClosestGraphOrCreateNewGraph(transform.position), "graph");
+         Close();
+      });
+
+      cm.AddButton("Load last saved Graph (experimental)", new Color(1, 0.5f, 0.5f) / 2, () =>
+      {
+         Graph graph = Main.instance.CreateGraph();
+         SaveLoad.Load(graph, "graph");
+         graph.layout.CalculateLayout();
+         Close();
+      });
+
       cm.AddButton("Search for existing node", Color.blue / 2, () =>
       {
          Main.instance.FindClosestGraphOrCreateNewGraph(transform.position).AddNodeFromDatabase();

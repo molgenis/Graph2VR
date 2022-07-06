@@ -304,8 +304,7 @@ public class Graph : MonoBehaviour
 
    public string CleanInfo(string str)
    {
-      // TODO: do we need: return str.TrimStart('<', '"').TrimEnd('>', '"');
-      return str.TrimStart('<').TrimEnd('>');
+      return str.TrimStart('<', '\'').TrimEnd('>', '\'');
    }
 
    public void CreateGraphByTriples(string triples)
