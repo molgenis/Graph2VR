@@ -168,6 +168,31 @@ public class NodeMenu : BaseMenu
          PopulateNode(input);
       });
 
+      if (node.lockPosition)
+      {
+         cm.AddButton("Unlock position", new Color(0.5f, 1f, 0.5f) / 2, () =>
+         {
+            LeanTween.cancel(node.gameObject);
+            LeanTween.value(node.gameObject, 0.2f, 0.4f, 0.3f).setOnUpdate(value => node.transform.Find("Nail").GetComponent<NailRotation>().offset = value).setOnComplete(() =>
+            {
+               node.LockPosition = false;
+               cm.Close();
+               PopulateNode(input);
+            });
+         });
+      }
+      else
+      {
+         cm.AddButton("Lock position", new Color(0.5f, 1f, 0.3f) / 2, () =>
+         {
+            LeanTween.cancel(node.gameObject);
+            LeanTween.value(node.gameObject, 0.4f, 0.2f, 0.5f).setOnUpdate(value => node.transform.Find("Nail").GetComponent<NailRotation>().offset = value);
+            node.LockPosition = true;
+            cm.Close();
+            PopulateNode(input);
+         });
+      }
+
       if (node.IsVariable)
       {
          cm.AddButton("Undo variable conversion", Color.blue / 2, () =>

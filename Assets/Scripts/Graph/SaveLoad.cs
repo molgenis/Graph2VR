@@ -6,7 +6,7 @@ using VDS.RDF;
 
 public class SaveLoad : MonoBehaviour
 {
-   private static string regexSelector = "^(<[^>]+>)\\s(<[^>]+>)\\s([<|'][^'>]+[>|'])";
+   private static string regexSelector = "^(<[^>]+>)\\s(<[^>]+>)\\s([<|'|\"][^'\">]+[>|'|\"])";
    private static string FileName(string name)
    {
       return Path.Combine(Application.persistentDataPath, name + ".nt");
