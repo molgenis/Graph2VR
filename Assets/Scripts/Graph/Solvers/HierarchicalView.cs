@@ -11,6 +11,8 @@ public class HierarchicalView : BaseLayoutAlgorithm
       initialNode.SetHierarchicalLevel(0);
       SetHierarchicalLayers(initialNode);
 
+      ResetNodes();
+
       foreach (Node node in graph.nodeList)
       {
          if (!node.hierarchicalLevelFound)
@@ -45,22 +47,51 @@ public class HierarchicalView : BaseLayoutAlgorithm
 
    }
 
+   private void ResetNodes()
+   {
+      foreach (Node node in graph.nodeList)
+      {
+         node.hierarchicalLevelFound = false;
+         node.hierarchicalPositionSet = false;
+      }
+   }
+
    public void PositionNodeLayer(Node node, int layer, Vector3 offset)
    {
-      node.transform.localPosition = offset + new Vector3(layer * (offsetSize * 2), 0, 0);
+      if (!node.LockPosition)
+      {
+         node.transform.localPosition = offset + new Vector3(layer * (offsetSize * 2), 0, 0);
+      }
+      else
+      {
+         offset = node.transform.localPosition - new Vector3(layer * (offsetSize * 2), 0, 0);
+      }
+
       node.hierarchicalPositionSet = true;
       int nextLayer = layer + 1;
+      int previousLayer = layer - 1;
 
-      int amountOfChildNodes = 0;
+      int amountOfChildNodesNextLayer = 0;
       foreach (Edge edge in node.connections)
       {
          if ((edge.displayObject.hierarchicalLevel == nextLayer && !edge.displayObject.hierarchicalPositionSet) || (edge.displaySubject.hierarchicalLevel == nextLayer && !edge.displaySubject.hierarchicalPositionSet))
          {
-            amountOfChildNodes++;
+            amountOfChildNodesNextLayer++;
          }
       }
 
-      int index = 0;
+      int amountOfChildNodesPreviousLayer = 0;
+      foreach (Edge edge in node.connections)
+      {
+         if ((edge.displayObject.hierarchicalLevel == previousLayer && !edge.displayObject.hierarchicalPositionSet) || (edge.displaySubject.hierarchicalLevel == previousLayer && !edge.displaySubject.hierarchicalPositionSet))
+         {
+            amountOfChildNodesPreviousLayer++;
+         }
+      }
+
+
+      int indexNext = 0;
+      int indexPrevious = 0;
       foreach (Edge edge in node.connections)
       {
          Node childNode;
@@ -76,12 +107,19 @@ public class HierarchicalView : BaseLayoutAlgorithm
          if (childNode.hierarchicalLevel == nextLayer && !childNode.hierarchicalPositionSet)
          {
             PositionNodeLayer(childNode, nextLayer,
-               AddToOffset(nextLayer, offset, amountOfChildNodes, index)
-               );
-            index++;
+               AddToOffset(nextLayer, offset, amountOfChildNodesNextLayer, indexNext)
+            );
+            indexNext++;
+         }
+
+         if (childNode.hierarchicalLevel == previousLayer && !childNode.hierarchicalPositionSet)
+         {
+            PositionNodeLayer(childNode, previousLayer,
+               AddToOffset(previousLayer, offset, amountOfChildNodesPreviousLayer, indexPrevious)
+            );
+            indexPrevious++;
          }
       }
-
    }
 
    public Vector3 AddToOffset(int layer, Vector3 offset, int amount, int index)

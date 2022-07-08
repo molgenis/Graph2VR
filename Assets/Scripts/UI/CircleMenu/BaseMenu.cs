@@ -76,12 +76,13 @@ public class BaseMenu : MonoBehaviour
          graph.layout.CalculateLayout();
       });
 
-      /*
-      cm.AddButton("Layout: Hierarchy (na)", Color.green / 2, () =>
+
+      cm.AddButton("Layout: Hierarchy", Color.green / 2, () =>
       {
-        Close();
+         graph.SwitchLayout<HierarchicalView>();
+         graph.layout.CalculateLayout();
       });
-      */
+
 
       cm.AddButton("Auto layout", Color.yellow / 2, () =>
       {
