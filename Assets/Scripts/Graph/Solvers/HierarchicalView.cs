@@ -10,31 +10,27 @@ public class HierarchicalView : BaseLayoutAlgorithm
       Node initialNode = graph.nodeList[0];
       initialNode.SetHierarchicalLevel(0);
       SetHierarchicalLayers(initialNode);
-      /*
+
       foreach (Node node in graph.nodeList)
       {
-         if (!node.hierarchicalLevelFound) // FIX node ipv initialNode
+         if (!node.hierarchicalLevelFound)
          {
             node.SetHierarchicalLevel(0);
             SetHierarchicalLayers(node);
          }
       }
-      */
 
       // Get lowest level
       int lowestLevel = int.MaxValue;
-      int highestLevel = int.MinValue;
       foreach (Node node in graph.nodeList)
       {
          if (node.hierarchicalLevel < lowestLevel) lowestLevel = node.hierarchicalLevel;
-         if (node.hierarchicalLevel > highestLevel) highestLevel = node.hierarchicalLevel;
       }
-      Debug.Log("lowestLevel: " + lowestLevel);
-      Debug.Log("highestLevel: " + highestLevel);
+
       // Correct lowels level to 0
       foreach (Node node in graph.nodeList)
       {
-         node.hierarchicalLevel = (highestLevel - lowestLevel) - (node.hierarchicalLevel - lowestLevel);
+         node.hierarchicalLevel = (node.hierarchicalLevel - lowestLevel);
       }
 
       float offset = 0;
@@ -42,7 +38,7 @@ public class HierarchicalView : BaseLayoutAlgorithm
       {
          if (node.hierarchicalLevel == 0)
          {
-            PositionNodeLayer(node, 0, new Vector3(0, offset, 0));
+            PositionNodeLayer(node, 0, new Vector3(0, 0, offset));
             offset += offsetSize;
          }
       }
@@ -51,9 +47,20 @@ public class HierarchicalView : BaseLayoutAlgorithm
 
    public void PositionNodeLayer(Node node, int layer, Vector3 offset)
    {
-      node.transform.localPosition = offset;
+      node.transform.localPosition = offset + new Vector3(layer * (offsetSize * 2), 0, 0);
       node.hierarchicalPositionSet = true;
+      int nextLayer = layer + 1;
 
+      int amountOfChildNodes = 0;
+      foreach (Edge edge in node.connections)
+      {
+         if ((edge.displayObject.hierarchicalLevel == nextLayer && !edge.displayObject.hierarchicalPositionSet) || (edge.displaySubject.hierarchicalLevel == nextLayer && !edge.displaySubject.hierarchicalPositionSet))
+         {
+            amountOfChildNodes++;
+         }
+      }
+
+      int index = 0;
       foreach (Edge edge in node.connections)
       {
          Node childNode;
@@ -66,49 +73,63 @@ public class HierarchicalView : BaseLayoutAlgorithm
             childNode = edge.displaySubject;
          }
 
-         if (childNode.hierarchicalLevel == layer + 1 && !childNode.hierarchicalPositionSet)
+         if (childNode.hierarchicalLevel == nextLayer && !childNode.hierarchicalPositionSet)
          {
-            offset = AddToOffset(layer + 1, offset);
-            PositionNodeLayer(childNode, layer + 1, offset);
+            PositionNodeLayer(childNode, nextLayer,
+               AddToOffset(nextLayer, offset, amountOfChildNodes, index)
+               );
+            index++;
          }
       }
 
    }
 
-   public Vector3 AddToOffset(int layer, Vector3 offset)
+   public Vector3 AddToOffset(int layer, Vector3 offset, int amount, int index)
    {
-      if (layer % 3 == 0) offset += new Vector3(0, offsetSize, 0);
-      if (layer % 3 == 1) offset += new Vector3(0, 0, offsetSize);
-      if (layer % 3 == 2) offset += new Vector3(offsetSize, 0, 0);
-      return offset;
+      if (amount % 2 == 0) amount--;
+
+      Vector3 direction = new Vector3(0, 1, 0);
+      if (layer % 2 == 1) direction = new Vector3(0, 0, 1);
+
+      Vector3 step = direction * offsetSize * index;
+      Vector3 center = direction * offsetSize * (amount - 1) * 0.5f;
+      return offset + (step - center);
    }
 
    List<string> structurePredicats = new List<string>
    {
-      "rdf:type", "rdfs:subClassOf"
+      "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "http://www.w3.org/2000/01/rdf-schema#subclassof"
    };
 
    private void SetHierarchicalLayers(Node node)
    {
+      List<Node> nodesToCall = new List<Node>();
       foreach (Edge edge in node.connections)
       {
-         int direction = structurePredicats.Contains(edge.textShort) ? 1 : -1;
+         int predicateDirection = structurePredicats.Contains(edge.uri.ToLower()) ? 1 : -1;
+         int objectSubjectOrderDirection;
+
          Node other;
          if (node.graph.RealNodeValue(node.graphNode) == node.graph.RealNodeValue(edge.graphSubject))
          {
             other = edge.displayObject; // We are a subject
+            objectSubjectOrderDirection = -1;
          }
          else
          {
             other = edge.displaySubject; // we are a object
+            objectSubjectOrderDirection = 1;
          }
 
          if (!other.hierarchicalLevelFound)
          {
-            other.SetHierarchicalLevel(node.hierarchicalLevel + direction);
-            SetHierarchicalLayers(other);
+            other.SetHierarchicalLevel(node.hierarchicalLevel + (predicateDirection * objectSubjectOrderDirection));
+            nodesToCall.Add(other);
          }
-
+      }
+      foreach (Node n in nodesToCall)
+      {
+         SetHierarchicalLayers(n);
       }
    }
 
