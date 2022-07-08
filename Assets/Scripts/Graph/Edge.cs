@@ -20,7 +20,7 @@ public class Edge : MonoBehaviour
    private LineRenderer lineRenderer;
    public TMPro.TextMeshPro textFront;
 
-   private string textShort = "";
+   public string textShort = "";
    private string textLong = "";
    public string variableName = "";
    public enum LineType { Direct, Bend, Circle }

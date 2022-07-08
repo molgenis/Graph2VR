@@ -7,6 +7,10 @@ using VDS.RDF;
 
 public class Node : MonoBehaviour
 {
+   public int hierarchicalLevel = 0;
+   public bool hierarchicalLevelFound = false;
+   public bool hierarchicalPositionSet = false;
+
    public Graph graph;
    private Canvas infoPanel;
 
@@ -105,6 +109,11 @@ public class Node : MonoBehaviour
       {
          connections.Add(edge);
       }
+   }
+   public void SetHierarchicalLevel(int level)
+   {
+      hierarchicalLevel = level;
+      hierarchicalLevelFound = true;
    }
 
    private void UpdateColor()
