@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HierarchicalView : BaseLayoutAlgorithm
+public class ClassHierarchy : BaseLayoutAlgorithm
 {
    private float offsetSize = 0.3f;
 
