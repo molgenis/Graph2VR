@@ -101,7 +101,39 @@ public class BaseMenu : MonoBehaviour
          Close();
       });
 
-      cm.AddButton("Save this Graph (experimental)", new Color(1, 0.5f, 0.5f) / 2, () =>
+      cm.AddButton("Pin all nodes", new Color(0.5f, 0.5f, 0.5f) / 2, () =>
+      {
+         graph.pinAllNodes(true);
+      });
+
+      cm.AddButton("Unpin all nodes", new Color(0.5f, 0.5f, 0.5f) / 2, () =>
+      {
+        graph.pinAllNodes(false);
+      });
+
+    if (graph.boundingSphere.GetComponent<Renderer>().forceRenderingOff == false)
+    {
+      cm.AddButton("Hide sphere", new Color(0, 0.9f, 1.0f) / 2, () =>
+      {
+        graph.boundingSphere.GetComponent<Renderer>().forceRenderingOff = true;
+        subMenu = "Graph";
+        cm.Close();
+        PopulateGraphMenu();
+        cm.ReBuild();
+      });
+    }
+    else {
+      cm.AddButton("Show sphere", new Color(0, 0.9f, 1.0f) / 2, () =>
+      {
+        graph.boundingSphere.GetComponent<Renderer>().forceRenderingOff = false;
+        populateMenuState = PopulateMenuState.unloaded;
+        cm.Close();
+        PopulateGraphMenu();
+        cm.ReBuild();
+      });
+    }
+
+    cm.AddButton("Save this Graph (experimental)", new Color(1, 0.5f, 0.5f) / 2, () =>
       {
          SaveLoad.Save(graph, "graph");
          Close();

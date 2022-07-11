@@ -577,4 +577,24 @@ public class Graph : MonoBehaviour
       layout = activeLayout;
       activeLayout.enabled = true;
    }
+
+  public void pinAllNodes(bool pin)
+  {
+    foreach (Node nodeToPin in nodeList)
+    {
+      LeanTween.cancel(nodeToPin.gameObject);
+      if (pin) {
+        LeanTween.value(nodeToPin.gameObject, 0.4f, 0.2f, 0.5f).setOnUpdate(value => nodeToPin.transform.Find("Nail").GetComponent<NailRotation>().offset = value);
+        {
+          nodeToPin.LockPosition = pin;
+        }
+      }
+      else { 
+        LeanTween.value(nodeToPin.gameObject, 0.2f, 0.4f, 0.3f).setOnUpdate(value => nodeToPin.transform.Find("Nail").GetComponent<NailRotation>().offset = value).setOnComplete(() =>
+        {
+          nodeToPin.LockPosition = pin;
+        });
+      }
+    }
+  }
 }
