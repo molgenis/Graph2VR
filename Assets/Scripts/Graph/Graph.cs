@@ -50,6 +50,8 @@ public class Graph : MonoBehaviour
 
    public string GetTriplesString()
    {
+      Debug.Log("Get Selection: ");
+      Debug.Log(selection.Aggregate(string.Empty, (accum, edge) => accum += edge.GetQueryString()));
       return selection.Aggregate(string.Empty, (accum, edge) => accum += edge.GetQueryString());
    }
 
@@ -137,11 +139,13 @@ public class Graph : MonoBehaviour
 
    public void AddToSelection(Edge toAdd)
    {
+      Debug.Log("Add to Selection: " + toAdd.uri);
       selection.Add(toAdd);
    }
 
    public void RemoveFromSelection(Edge toRemove)
    {
+      Debug.Log("Remove to Selection: " + toRemove.uri);
       // Todo: try catch?
       selection.Remove(toRemove);
    }
@@ -478,29 +482,36 @@ public class Graph : MonoBehaviour
       return node;
    }
 
-   public void AddNodeFromDatabase()
+   public void AddNodeFromDatabase(Node variableNode = null)
    {
       AutocompleteHandeler.Instance.SearchForNode((string label, string uri) =>
       {
          Vector3 nodeSpawnPosition = GameObject.FindGameObjectWithTag("LeftController").transform.position;
-         Node newNode = CreateNode(uri, nodeSpawnPosition);
-         newNode.SetLabel(label);
-         // NODE: dont add if it already exists in the graph
-      });
+         Node preExistingNode = null;
+         foreach (Node node in nodeList)
+         {
+            if (node.uri != "" && uri == node.uri)
+            {
+               preExistingNode = node;
+            }
+            else if (node.uri == "" && label == node.label)
+            {
+               preExistingNode = node;
+            }
+         }
+         if (preExistingNode != null)
+         {
+            preExistingNode.gameObject.transform.position = nodeSpawnPosition;
+         }
+         else
+         {
+            Node newNode = CreateNode(uri, nodeSpawnPosition);
+            newNode.SetLabel(label);
+         }
+      }, variableNode);
    }
 
-  public void AddNodeFromDatabase(Node node)
-  {
-    AutocompleteHandeler.Instance.SearchForNode(node, (string label, string uri) =>
-    {
-      Vector3 nodeSpawnPosition = GameObject.FindGameObjectWithTag("LeftController").transform.position;
-      Node newNode = CreateNode(uri, nodeSpawnPosition);
-      newNode.SetLabel(label);
-      // NODE: dont add if it already exists in the graph
-    });
-  }
-
-  public Node GetByINode(INode iNode)
+   public Node GetByINode(INode iNode)
    {
       return nodeList.Find((Node node) => node.graphNode.Equals(iNode));
    }
@@ -589,23 +600,25 @@ public class Graph : MonoBehaviour
       activeLayout.enabled = true;
    }
 
-  public void pinAllNodes(bool pin)
-  {
-    foreach (Node nodeToPin in nodeList)
-    {
-      LeanTween.cancel(nodeToPin.gameObject);
-      if (pin) {
-        LeanTween.value(nodeToPin.gameObject, 0.4f, 0.2f, 0.5f).setOnUpdate(value => nodeToPin.transform.Find("Nail").GetComponent<NailRotation>().offset = value);
-        {
-          nodeToPin.LockPosition = pin;
-        }
+   public void pinAllNodes(bool pin)
+   {
+      foreach (Node nodeToPin in nodeList)
+      {
+         LeanTween.cancel(nodeToPin.gameObject);
+         if (pin)
+         {
+            LeanTween.value(nodeToPin.gameObject, 0.4f, 0.2f, 0.5f).setOnUpdate(value => nodeToPin.transform.Find("Nail").GetComponent<NailRotation>().offset = value);
+            {
+               nodeToPin.LockPosition = pin;
+            }
+         }
+         else
+         {
+            LeanTween.value(nodeToPin.gameObject, 0.2f, 0.4f, 0.3f).setOnUpdate(value => nodeToPin.transform.Find("Nail").GetComponent<NailRotation>().offset = value).setOnComplete(() =>
+            {
+               nodeToPin.LockPosition = pin;
+            });
+         }
       }
-      else { 
-        LeanTween.value(nodeToPin.gameObject, 0.2f, 0.4f, 0.3f).setOnUpdate(value => nodeToPin.transform.Find("Nail").GetComponent<NailRotation>().offset = value).setOnComplete(() =>
-        {
-          nodeToPin.LockPosition = pin;
-        });
-      }
-    }
-  }
+   }
 }

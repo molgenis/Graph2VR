@@ -36,8 +36,10 @@ public class AutocompleteHandeler : MonoBehaviour
       GameObject.FindGameObjectWithTag("LeftController").transform.Find("Offset").Find("Sphere").gameObject.SetActive(!value);
    }
 
-   public void SearchForNode(Action<string, string> callback)
+   private Node variableNode = null;
+   public void SearchForNode(Action<string, string> callback, Node variableNode = null)
    {
+      this.variableNode = variableNode;
       foundResultsCallback = callback;
       keyboard.SetText("");
       ClearUIItems();
@@ -53,27 +55,6 @@ public class AutocompleteHandeler : MonoBehaviour
       else
       {
          keyboard.OnSubmit.AddListener(HandleSearch);
-      }
-      keyboard.OnCancel.AddListener(HandleCancel);
-   }
-
-  public void SearchForNode(Node node, Action<string, string> callback)
-   {
-      foundResultsCallback = callback;
-      keyboard.SetText("");
-      ClearUIItems();
-      keyboard.Enable();
-      keyboard.SetPlaceholderMessage("Please enter search term");
-      KeyboardHandler.instance.UpdateLocation();
-      DisplayOnlyControllerModel(true);
-
-      if (Settings.Instance.searchOnKeypress)
-      {
-        keyboard.OnUpdate.AddListener(delegate {HandleSearch(keyboard.text, node);});
-      }
-      else
-      {
-         keyboard.OnSubmit.AddListener(delegate { HandleSearch(keyboard.text, node);});
       }
       keyboard.OnCancel.AddListener(HandleCancel);
    }
@@ -96,17 +77,10 @@ public class AutocompleteHandeler : MonoBehaviour
    {
       ClearUIItems();
       AddItem("Loading", "please wait a moment", false);
-      QueryService.Instance.AutocompleteSearch(searchTerm, SearchCallback);
+      QueryService.Instance.AutocompleteSearch(searchTerm, SearchCallback, variableNode);
    }
 
-  private void HandleSearch(string searchTerm, Node node)
-  {
-    ClearUIItems();
-    AddItem("Loading", "please wait a moment", false);
-    QueryService.Instance.AutocompleteSearch(searchTerm, node, SearchCallback);
-  }
-
-  private void SearchCallback(SparqlResultSet results, object state)
+   private void SearchCallback(SparqlResultSet results, object state)
    {
       Debug.Log("SearchCallback");
       UnityMainThreadDispatcher.Instance().Enqueue(() =>

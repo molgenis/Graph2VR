@@ -226,14 +226,20 @@ public class Edge : MonoBehaviour
 
    public void Select()
    {
-      IsSelected = true;
-      graph.AddToSelection(this);
+      if (!IsSelected)
+      {
+         IsSelected = true;
+         graph.AddToSelection(this);
+      }
    }
 
    public void Deselect()
    {
-      IsSelected = false;
-      graph.RemoveFromSelection(this);
+      if (IsSelected)
+      {
+         IsSelected = false;
+         graph.RemoveFromSelection(this);
+      }
    }
 
    public void MakeVariable()
