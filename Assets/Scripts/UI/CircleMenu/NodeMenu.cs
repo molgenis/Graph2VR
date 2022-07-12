@@ -201,7 +201,12 @@ public class NodeMenu : BaseMenu
             PopulateNode(node);
          });
          cm.AddButton("Rename", Color.red / 2, () => { KeyboardHandler.instance.Open(node); });
-      }
+        cm.AddButton("Search for existing node", Color.blue / 2, () =>
+        {
+          Main.instance.FindClosestGraphOrCreateNewGraph(transform.position).AddNodeFromDatabase(node);
+          Close();
+        });
+    }
       else
       {
          cm.AddButton("Convert to Variable", ColorSettings.instance.variableColor / 2, () =>

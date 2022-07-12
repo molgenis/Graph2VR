@@ -303,7 +303,43 @@ public class QueryService : MonoBehaviour
       }
    }
 
-   public Dictionary<string, List<string>> RefineNode(IGraph refinmentGraph, string uri)
+  public void AutocompleteSearch(string searchterm, Node node, SparqlResultsCallback callback)
+  {
+    if (searchterm.Length > 3)
+    {
+      string query = $@"
+      {PREFIXES}
+      select distinct {node.GetQueryLabel()} AS ?uri ?name 
+      where {{
+        {node.graph.GetTriplesString()}
+        {node.GetQueryLabel()} rdfs:label ?name.
+         ?uri(^(<>| !<>) | rdfs:label | skos:altLabel) ?entity.
+         BIND(STR(?entity) AS ?name).
+         FILTER REGEX(?name, '{searchterm}', 'i')
+      }}
+      LIMIT 5";
+
+      string bifQuery = $@"
+      {PREFIXES}
+      select distinct {node.GetQueryLabel()} AS ?uri ?name 
+      where {{
+        {node.graph.GetTriplesString()}
+        {node.GetQueryLabel()} rdfs:label ?name.
+        ?name bif:contains '{searchterm}'.
+      }}
+      LIMIT 5";
+      Debug.Log(bifQuery);
+      endPoint.QueryWithResultSet(
+        Settings.Instance.databaseSuportsBifContains ? bifQuery : query
+        , callback, state: null);
+    }
+    else
+    {
+      callback(null, null);
+    }
+  }
+
+  public Dictionary<string, List<string>> RefineNode(IGraph refinmentGraph, string uri)
    {
       string query = $@"
             select ?label ?image

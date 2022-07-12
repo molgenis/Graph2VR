@@ -48,7 +48,7 @@ public class Graph : MonoBehaviour
       QuerySimilarWithTriples(triples, new Vector3(0, 0, 2), Quaternion.identity);
    }
 
-   private string GetTriplesString()
+   public string GetTriplesString()
    {
       return selection.Aggregate(string.Empty, (accum, edge) => accum += edge.GetQueryString());
    }
@@ -489,7 +489,18 @@ public class Graph : MonoBehaviour
       });
    }
 
-   public Node GetByINode(INode iNode)
+  public void AddNodeFromDatabase(Node node)
+  {
+    AutocompleteHandeler.Instance.SearchForNode(node, (string label, string uri) =>
+    {
+      Vector3 nodeSpawnPosition = GameObject.FindGameObjectWithTag("LeftController").transform.position;
+      Node newNode = CreateNode(uri, nodeSpawnPosition);
+      newNode.SetLabel(label);
+      // NODE: dont add if it already exists in the graph
+    });
+  }
+
+  public Node GetByINode(INode iNode)
    {
       return nodeList.Find((Node node) => node.graphNode.Equals(iNode));
    }

@@ -57,6 +57,27 @@ public class AutocompleteHandeler : MonoBehaviour
       keyboard.OnCancel.AddListener(HandleCancel);
    }
 
+  public void SearchForNode(Node node, Action<string, string> callback)
+   {
+      foundResultsCallback = callback;
+      keyboard.SetText("");
+      ClearUIItems();
+      keyboard.Enable();
+      keyboard.SetPlaceholderMessage("Please enter search term");
+      KeyboardHandler.instance.UpdateLocation();
+      DisplayOnlyControllerModel(true);
+
+      if (Settings.Instance.searchOnKeypress)
+      {
+        keyboard.OnUpdate.AddListener(delegate {HandleSearch(keyboard.text, node);});
+      }
+      else
+      {
+         keyboard.OnSubmit.AddListener(delegate { HandleSearch(keyboard.text, node);});
+      }
+      keyboard.OnCancel.AddListener(HandleCancel);
+   }
+
    private void HandleCancel()
    {
       DisplayOnlyControllerModel(false);
@@ -78,7 +99,14 @@ public class AutocompleteHandeler : MonoBehaviour
       QueryService.Instance.AutocompleteSearch(searchTerm, SearchCallback);
    }
 
-   private void SearchCallback(SparqlResultSet results, object state)
+  private void HandleSearch(string searchTerm, Node node)
+  {
+    ClearUIItems();
+    AddItem("Loading", "please wait a moment", false);
+    QueryService.Instance.AutocompleteSearch(searchTerm, node, SearchCallback);
+  }
+
+  private void SearchCallback(SparqlResultSet results, object state)
    {
       Debug.Log("SearchCallback");
       UnityMainThreadDispatcher.Instance().Enqueue(() =>
