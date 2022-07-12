@@ -4,33 +4,43 @@ using UnityEngine;
 public class ClassHierarchy : BaseLayoutAlgorithm
 {
    private float offsetSize = 0.3f;
+   private string subClassOfPredicate = "http://www.w3.org/2000/01/rdf-schema#subclassof";
 
    public override void CalculateLayout()
    {
       ResetNodes();
+      List<Edge> subClassOfEdgeList = graph.edgeList.FindAll(edge => edge.uri.ToLower() == subClassOfPredicate);
+      Node initialNode = null;
+      if (subClassOfEdgeList.Count == 0)
+      {
+         Debug.Log("Not a class hiearchy");
+         return;
+      }
+      else
+      {
+         initialNode = subClassOfEdgeList[0].displaySubject;
+      }
 
-      Node initialNode = graph.nodeList[0];
       initialNode.SetHierarchicalLevel(0);
       SetHierarchicalLayers(initialNode);
 
-
+      // Special case: Multiple root nodes
       foreach (Node node in graph.nodeList)
       {
          if (!node.hierarchicalLevelFound)
          {
-            Debug.Log("New subgraph found: " + node.label);
             node.SetHierarchicalLevel(0);
             SetHierarchicalLayers(node);
          }
       }
 
+      // Set positions
       float offset = 0;
       foreach (Node node in graph.nodeList)
       {
          if (node.hierarchicalLevel == 0)
          {
-            PositionNodeLayer(node, 0, new Vector3(0, 0, offset));
-            offset++;
+            offset += PositionNodeLayer(node, 0, offset);
          }
       }
    }
@@ -44,45 +54,28 @@ public class ClassHierarchy : BaseLayoutAlgorithm
       }
    }
 
-   public void PositionNodeLayer(Node node, int layer, Vector3 offset)
+   public float PositionNodeLayer(Node node, int layer, float offset)
    {
+      float newOffset = offset;
       if (!node.LockPosition)
       {
-         node.transform.localPosition = offset + new Vector3(layer * (offsetSize * 2), 0, 0);
+         node.transform.localPosition = new Vector3(0, 0, offset) + new Vector3(layer * (offsetSize * 2), 0, 0);
+         newOffset += 0.1f;
       }
       else
       {
-         offset = node.transform.localPosition - new Vector3(layer * (offsetSize * 2), 0, 0);
+         //offset = node.transform.localPosition - new Vector3(layer * (offsetSize * 2), 0, 0);
       }
 
       node.hierarchicalPositionSet = true;
       int nextLayer = layer + 1;
-      int previousLayer = layer - 1;
+      //int previousLayer = layer - 1;
 
-      int amountOfChildNodesNextLayer = 0;
-      foreach (Edge edge in node.connections)
-      {
-         if ((edge.displayObject.hierarchicalLevel == nextLayer && !edge.displayObject.hierarchicalPositionSet) || (edge.displaySubject.hierarchicalLevel == nextLayer && !edge.displaySubject.hierarchicalPositionSet))
-         {
-            amountOfChildNodesNextLayer++;
-         }
-      }
-
-      int amountOfChildNodesPreviousLayer = 0;
-      foreach (Edge edge in node.connections)
-      {
-         if ((edge.displayObject.hierarchicalLevel == previousLayer && !edge.displayObject.hierarchicalPositionSet) || (edge.displaySubject.hierarchicalLevel == previousLayer && !edge.displaySubject.hierarchicalPositionSet))
-         {
-            amountOfChildNodesPreviousLayer++;
-         }
-      }
-
-
-      int indexNext = 0;
-      int indexPrevious = 0;
       foreach (Edge edge in node.connections)
       {
          Node childNode;
+
+         // Are we a object or subject?
          if (node.graph.RealNodeValue(node.graphNode) == node.graph.RealNodeValue(edge.graphSubject))
          {
             childNode = edge.displayObject;
@@ -94,63 +87,45 @@ public class ClassHierarchy : BaseLayoutAlgorithm
 
          if (childNode.hierarchicalLevel == nextLayer && !childNode.hierarchicalPositionSet)
          {
-            PositionNodeLayer(childNode, nextLayer,
-               AddToOffset(nextLayer, offset, amountOfChildNodesNextLayer, indexNext)
-            );
-            indexNext++;
-         }
-
-         if (childNode.hierarchicalLevel == previousLayer && !childNode.hierarchicalPositionSet)
-         {
-            PositionNodeLayer(childNode, previousLayer,
-               AddToOffset(previousLayer, offset, amountOfChildNodesPreviousLayer, indexPrevious)
-            );
-            indexPrevious++;
+            newOffset = PositionNodeLayer(childNode, nextLayer, newOffset);
          }
       }
+      return newOffset;
    }
 
-   public Vector3 AddToOffset(int layer, Vector3 offset, int amount, int index)
-   {
-      if (amount % 2 == 0) amount--;
-
-      Vector3 direction = new Vector3(0, 1, 0);
-      if (layer % 2 == 1) direction = new Vector3(0, 0, 1);
-
-      Vector3 step = direction * offsetSize * index;
-      Vector3 center = direction * offsetSize * (amount - 1) * 0.5f;
-      return offset + (step - center);
-   }
-
+   /*
    List<string> structurePredicats = new List<string>
    {
       "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "http://www.w3.org/2000/01/rdf-schema#subclassof"
    };
+   */
 
    private void SetHierarchicalLayers(Node node)
    {
       List<Node> nodesToCall = new List<Node>();
       foreach (Edge edge in node.connections)
       {
-         int predicateDirection = structurePredicats.Contains(edge.uri.ToLower()) ? 1 : -1;
-         int objectSubjectOrderDirection;
+         if (edge.uri == subClassOfPredicate)
+         {
+            int objectSubjectOrderDirection;
 
-         Node other;
-         if (node.graph.RealNodeValue(node.graphNode) == node.graph.RealNodeValue(edge.graphSubject))
-         {
-            other = edge.displayObject; // We are a subject
-            objectSubjectOrderDirection = -1;
-         }
-         else
-         {
-            other = edge.displaySubject; // we are a object
-            objectSubjectOrderDirection = 1;
-         }
+            Node other;
+            if (node.graph.RealNodeValue(node.graphNode) == node.graph.RealNodeValue(edge.graphSubject))
+            {
+               other = edge.displayObject; // We are a subject
+               objectSubjectOrderDirection = -1;
+            }
+            else
+            {
+               other = edge.displaySubject; // we are a object
+               objectSubjectOrderDirection = 1;
+            }
 
-         if (!other.hierarchicalLevelFound)
-         {
-            other.SetHierarchicalLevel(node.hierarchicalLevel + (predicateDirection * objectSubjectOrderDirection));
-            nodesToCall.Add(other);
+            if (!other.hierarchicalLevelFound)
+            {
+               other.SetHierarchicalLevel(node.hierarchicalLevel + objectSubjectOrderDirection);
+               nodesToCall.Add(other);
+            }
          }
       }
       foreach (Node n in nodesToCall)

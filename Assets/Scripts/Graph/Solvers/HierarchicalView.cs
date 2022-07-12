@@ -18,7 +18,6 @@ public class HierarchicalView : BaseLayoutAlgorithm
       {
          if (!node.hierarchicalLevelFound)
          {
-            Debug.Log("New subgraph found: " + node.label);
             node.SetHierarchicalLevel(0);
             SetHierarchicalLayers(node);
          }
@@ -76,7 +75,6 @@ public class HierarchicalView : BaseLayoutAlgorithm
             amountOfChildNodesPreviousLayer++;
          }
       }
-
 
       int indexNext = 0;
       int indexPrevious = 0;
