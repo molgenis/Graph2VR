@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PointerCorrections : MonoBehaviour
@@ -18,6 +16,12 @@ public class PointerCorrections : MonoBehaviour
       {
         transform.localPosition = questOffset;
         transform.localRotation = Quaternion.Euler(questRotation);
+
+        if (PlayerPrefs.GetInt("isLeftHanded", 0) == 1)
+        {
+          transform.localPosition = new Vector3(-transform.localPosition.x, transform.localPosition.y, transform.localPosition.z);
+        }
+
       }
       else if (name == "vive")
       {
