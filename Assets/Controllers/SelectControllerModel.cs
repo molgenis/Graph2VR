@@ -1,25 +1,52 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.XR;
 
 public class SelectControllerModel : MonoBehaviour
 {
-  public GameObject quest;
+  public bool isLeftHandedModel = false;
+  public GameObject questLeft;
+  public GameObject questRight;
   public GameObject vive;
+  public bool switchHands = false;
+  private string modelName = "quest";
+  private GameObject leftModel = null;
+  private GameObject rightModel = null;
 
-  private void Start()
+  public void UpdateLeftRightHandedInterface()
   {
-    ControllerType.instance.GetControllerName((string name) =>
+    switchHands = PlayerPrefs.GetInt("isLeftHanded", 0) == 1;
+    SwitchModels();
+  }
+
+  private void SwitchModels()
+  {
+    if (leftModel != null) Destroy(leftModel);
+    if (rightModel != null) Destroy(rightModel);
+
+    if (modelName == "quest")
     {
-      if (name == "quest")
+      if (isLeftHandedModel ^ switchHands)
       {
-        Instantiate(quest, transform);
+        leftModel = Instantiate(questLeft, transform);
       }
       else
       {
-        Instantiate(vive, transform);
+        rightModel = Instantiate(questRight, transform);
       }
+    }
+    else
+    {
+      leftModel = Instantiate(vive, transform);
+    }
+  }
+
+  private void Start()
+  {
+    UpdateLeftRightHandedInterface();
+
+    ControllerType.instance.GetControllerName((string name) =>
+    {
+      modelName = name;
+      SwitchModels();
     });
   }
 }

@@ -9,6 +9,7 @@ TagManager:
   - RightController
   - LaserPointer
   - UseCustomDatabase
+  - CameraRig
   layers:
   - Default
   - TransparentFX

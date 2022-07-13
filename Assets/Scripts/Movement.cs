@@ -12,7 +12,6 @@ public class Movement : MonoBehaviour
   bool leftSnapLock = false;
   bool rightSnapLock = false;
   private bool isVive = false;
-
   private void Start()
   {
     ControllerType.instance.GetControllerName((string name) =>
@@ -20,7 +19,7 @@ public class Movement : MonoBehaviour
       if (name == "vive")
       {
         isVive = true;
-        Settings.Instance.playerHeight = Settings.Instance.playerHeight - 0.55f;  
+        Settings.Instance.playerHeight = Settings.Instance.playerHeight - 0.55f;
       }
     });
   }
