@@ -1219,6 +1219,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6007703614857959914, guid: 97869828da070e047b842768e2686dc1, type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6007703615058463561, guid: 97869828da070e047b842768e2686dc1, type: 3}
       propertyPath: m_Name
       value: '[CameraRig]'
@@ -1334,8 +1338,8 @@ MonoBehaviour:
     ?height.     ?mountain dbp:location ?location }  where {     ?mountain rdf:type
     dbo:Mountain.     ?mountain dbo:elevation ?height.     ?mountain dbp:location
     ?location }  ORDER BY DESC (?height)  LIMIT 10'
-  initialSparqlURI: http://dbpedia.org/ontology/Mountain
-  startWithSingleNode: 0
+  initialSparqlURI: http://www.w3.org/2002/07/owl#Thing
+  startWithSingleNode: 1
   searchOnKeypress: 1
   playerHeight: 1.8
   imagePredicates:
