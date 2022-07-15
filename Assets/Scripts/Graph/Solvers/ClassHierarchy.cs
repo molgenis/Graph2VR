@@ -6,6 +6,7 @@ public class ClassHierarchy : BaseLayoutAlgorithm
    private float offsetSize = 0.3f;
    private string subClassOfPredicate = "http://www.w3.org/2000/01/rdf-schema#subclassof";
    private string typePredicate = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
+   private string owlThing = "http://www.w3.org/2002/07/owl#Thing";
    private bool running = false;
    private void Update()
    {
@@ -81,7 +82,7 @@ public class ClassHierarchy : BaseLayoutAlgorithm
       {
          int typeDepth = 0;
          int otherDepth = 0;
-         if (node.hierarchical.hierarchicalType == Node.HierarchicalType.Type && node.hierarchical.parent != null)
+         if (node.hierarchical.hierarchicalType == Hierarchical.HierarchicalType.Type && node.hierarchical.parent != null)
          {
             node.hierarchical.parent.hierarchical.typeCount++;
             typeDepth = node.hierarchical.parent.hierarchical.typeCount;
@@ -91,7 +92,7 @@ public class ClassHierarchy : BaseLayoutAlgorithm
                node.hierarchical.parent.hierarchical.typeCount++;
             }
          }
-         if (node.hierarchical.hierarchicalType == Node.HierarchicalType.Other && node.hierarchical.parent != null)
+         if (node.hierarchical.hierarchicalType == Hierarchical.HierarchicalType.Other && node.hierarchical.parent != null)
          {
             node.hierarchical.parent.hierarchical.otherCount++;
             if (node.hierarchical.parent.hierarchical.parent != null)
@@ -101,10 +102,10 @@ public class ClassHierarchy : BaseLayoutAlgorithm
             otherDepth = node.hierarchical.parent.hierarchical.otherCount;
             offset = node.hierarchical.parent.hierarchical.offset;
          }
+
          node.hierarchical.targetLocation = new Vector3(0, typeDepth * offsetSize, offset) + new Vector3((layer * (offsetSize * 2)) + (otherDepth * offsetSize), 0, 0);
-         //node.transform.localPosition = new Vector3(0, typeDepth * offsetSize, offset) + new Vector3((layer * (offsetSize * 2)) + (otherDepth * offsetSize), 0, 0);
          node.hierarchical.offset = offset;
-         if (node.hierarchical.hierarchicalType == Node.HierarchicalType.SubClassOf)
+         if (node.hierarchical.hierarchicalType == Hierarchical.HierarchicalType.SubClassOf)
          {
             newOffset += offsetSize;
          }
@@ -153,7 +154,21 @@ public class ClassHierarchy : BaseLayoutAlgorithm
          if (node.graph.RealNodeValue(node.graphNode) == node.graph.RealNodeValue(edge.graphSubject))
          {
             other = edge.displayObject; // We are a subject
-            objectSubjectOrderDirection = -1;
+
+            if (edge.uri.ToLower() == subClassOfPredicate)
+            {
+               objectSubjectOrderDirection = -1;
+            }
+            else
+            {
+               objectSubjectOrderDirection = 1;
+            }
+            /*
+            if (other.uri == owlThing)
+            {
+               objectSubjectOrderDirection = 1;
+            }
+            */
          }
          else
          {
@@ -163,10 +178,11 @@ public class ClassHierarchy : BaseLayoutAlgorithm
 
          if (edge.uri.ToLower() == subClassOfPredicate)
          {
-            other.hierarchical.hierarchicalType = Node.HierarchicalType.SubClassOf;
+            other.hierarchical.hierarchicalType = Hierarchical.HierarchicalType.SubClassOf;
             if (!other.hierarchical.levelFound)
             {
-               other.hierarchical.parent = node;
+               if (objectSubjectOrderDirection == 1)
+                  other.hierarchical.parent = node;
                other.hierarchical.typeCount = 0;
                other.hierarchical.otherCount = 0;
                other.SetHierarchicalLevel(node.hierarchical.level + objectSubjectOrderDirection);
@@ -175,11 +191,19 @@ public class ClassHierarchy : BaseLayoutAlgorithm
          }
          else if (edge.uri.ToLower() == typePredicate)
          {
-            //if (objectSubjectOrderDirection == 1)
-            other.hierarchical.hierarchicalType = Node.HierarchicalType.Type;
+            if (objectSubjectOrderDirection == 1)
+            {
+               other.hierarchical.hierarchicalType = Hierarchical.HierarchicalType.Type;
+            }
+            else
+            {
+               other.hierarchical.hierarchicalType = Hierarchical.HierarchicalType.Other;
+            }
+
             if (!other.hierarchical.levelFound)
             {
-               other.hierarchical.parent = node;
+               if (objectSubjectOrderDirection == 1)
+                  other.hierarchical.parent = node;
                other.hierarchical.typeCount = 0;
                other.hierarchical.otherCount = 0;
                other.SetHierarchicalLevel(node.hierarchical.level + objectSubjectOrderDirection);
@@ -192,7 +216,7 @@ public class ClassHierarchy : BaseLayoutAlgorithm
             {
                other.hierarchical.parent = node;
                other.hierarchical.parent.hierarchical.typeWithChildNodes = true;
-               other.hierarchical.hierarchicalType = Node.HierarchicalType.Other;
+               other.hierarchical.hierarchicalType = Hierarchical.HierarchicalType.Other;
                other.hierarchical.otherCount = 0;
                other.SetHierarchicalLevel(node.hierarchical.level + objectSubjectOrderDirection);
                nodesToCall.Add(other);
