@@ -290,6 +290,7 @@ public class QueryService : MonoBehaviour
             where {{
               ?uri rdfs:label ?name.
               ?name bif:contains '{searchterm}'.
+              FILTER(LANG(?name) = '' || LANGMATCHES(LANG(?name), '{Main.instance.languageCode}')).
             }}
             LIMIT 5";
 
@@ -303,7 +304,8 @@ public class QueryService : MonoBehaviour
                  {variableNode.GetQueryLabel()} rdfs:label ?name.
                   ?uri(^(<>| !<>) | rdfs:label | skos:altLabel) ?entity.
                   BIND(STR(?entity) AS ?name).
-                  FILTER REGEX(?name, '{searchterm}', 'i')
+                  FILTER REGEX(?name, '{searchterm}', 'i').
+                  FILTER(LANG(?name) = '' || LANGMATCHES(LANG(?name), '{Main.instance.languageCode}')).
                }}
                LIMIT 5";
 
@@ -314,6 +316,7 @@ public class QueryService : MonoBehaviour
                  {variableNode.graph.GetTriplesString()}
                  {variableNode.GetQueryLabel()} rdfs:label ?name.
                  ?name bif:contains '{searchterm}'.
+                 FILTER(LANG(?name) = '' || LANGMATCHES(LANG(?name), '{Main.instance.languageCode}')).
                }}
                LIMIT 5";
          }
