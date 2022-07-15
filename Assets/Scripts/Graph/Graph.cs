@@ -600,6 +600,11 @@ public class Graph : MonoBehaviour
       activeLayout.enabled = true;
    }
 
+   public void SortNodes()
+   {
+      nodeList.Sort((Node a, Node b) => String.Compare(a.textMesh.text, b.textMesh.text));
+   }
+
    public void pinAllNodes(bool pin)
    {
       foreach (Node nodeToPin in nodeList)
