@@ -4,6 +4,17 @@ using UnityEngine;
 public class HierarchicalView : BaseLayoutAlgorithm
 {
    private float offsetSize = 0.3f;
+   private bool running = false;
+   private void Update()
+   {
+      if (running)
+      {
+         foreach (Node node in graph.nodeList)
+         {
+            node.transform.localPosition = Vector3.Lerp(node.transform.localPosition, node.hierarchical.targetLocation, Time.deltaTime * 2);
+         }
+      }
+   }
 
    public override void CalculateLayout()
    {
@@ -16,7 +27,7 @@ public class HierarchicalView : BaseLayoutAlgorithm
 
       foreach (Node node in graph.nodeList)
       {
-         if (!node.hierarchicalLevelFound)
+         if (!node.hierarchical.levelFound)
          {
             node.SetHierarchicalLevel(0);
             SetHierarchicalLayers(node);
@@ -26,20 +37,21 @@ public class HierarchicalView : BaseLayoutAlgorithm
       float offset = 0;
       foreach (Node node in graph.nodeList)
       {
-         if (node.hierarchicalLevel == 0)
+         if (node.hierarchical.level == 0)
          {
             PositionNodeLayer(node, 0, new Vector3(0, 0, offset));
             offset++;
          }
       }
+      running = true;
    }
 
    private void ResetNodes()
    {
       foreach (Node node in graph.nodeList)
       {
-         node.hierarchicalLevelFound = false;
-         node.hierarchicalPositionSet = false;
+         node.hierarchical.levelFound = false;
+         node.hierarchical.positionSet = false;
       }
    }
 
@@ -47,21 +59,21 @@ public class HierarchicalView : BaseLayoutAlgorithm
    {
       if (!node.LockPosition)
       {
-         node.transform.localPosition = offset + new Vector3(layer * (offsetSize * 2), 0, 0);
+         node.hierarchical.targetLocation = offset + new Vector3(layer * (offsetSize * 2), 0, 0);
       }
       else
       {
-         offset = node.transform.localPosition - new Vector3(layer * (offsetSize * 2), 0, 0);
+         offset = node.hierarchical.targetLocation - new Vector3(layer * (offsetSize * 2), 0, 0);
       }
 
-      node.hierarchicalPositionSet = true;
+      node.hierarchical.positionSet = true;
       int nextLayer = layer + 1;
       int previousLayer = layer - 1;
 
       int amountOfChildNodesNextLayer = 0;
       foreach (Edge edge in node.connections)
       {
-         if ((edge.displayObject.hierarchicalLevel == nextLayer && !edge.displayObject.hierarchicalPositionSet) || (edge.displaySubject.hierarchicalLevel == nextLayer && !edge.displaySubject.hierarchicalPositionSet))
+         if ((edge.displayObject.hierarchical.level == nextLayer && !edge.displayObject.hierarchical.positionSet) || (edge.displaySubject.hierarchical.level == nextLayer && !edge.displaySubject.hierarchical.positionSet))
          {
             amountOfChildNodesNextLayer++;
          }
@@ -70,7 +82,7 @@ public class HierarchicalView : BaseLayoutAlgorithm
       int amountOfChildNodesPreviousLayer = 0;
       foreach (Edge edge in node.connections)
       {
-         if ((edge.displayObject.hierarchicalLevel == previousLayer && !edge.displayObject.hierarchicalPositionSet) || (edge.displaySubject.hierarchicalLevel == previousLayer && !edge.displaySubject.hierarchicalPositionSet))
+         if ((edge.displayObject.hierarchical.level == previousLayer && !edge.displayObject.hierarchical.positionSet) || (edge.displaySubject.hierarchical.level == previousLayer && !edge.displaySubject.hierarchical.positionSet))
          {
             amountOfChildNodesPreviousLayer++;
          }
@@ -90,7 +102,7 @@ public class HierarchicalView : BaseLayoutAlgorithm
             childNode = edge.displaySubject;
          }
 
-         if (childNode.hierarchicalLevel == nextLayer && !childNode.hierarchicalPositionSet)
+         if (childNode.hierarchical.level == nextLayer && !childNode.hierarchical.positionSet)
          {
             PositionNodeLayer(childNode, nextLayer,
                AddToOffset(nextLayer, offset, amountOfChildNodesNextLayer, indexNext)
@@ -98,7 +110,7 @@ public class HierarchicalView : BaseLayoutAlgorithm
             indexNext++;
          }
 
-         if (childNode.hierarchicalLevel == previousLayer && !childNode.hierarchicalPositionSet)
+         if (childNode.hierarchical.level == previousLayer && !childNode.hierarchical.positionSet)
          {
             PositionNodeLayer(childNode, previousLayer,
                AddToOffset(previousLayer, offset, amountOfChildNodesPreviousLayer, indexPrevious)
@@ -145,9 +157,9 @@ public class HierarchicalView : BaseLayoutAlgorithm
             objectSubjectOrderDirection = 1;
          }
 
-         if (!other.hierarchicalLevelFound)
+         if (!other.hierarchical.levelFound)
          {
-            other.SetHierarchicalLevel(node.hierarchicalLevel + (predicateDirection * objectSubjectOrderDirection));
+            other.SetHierarchicalLevel(node.hierarchical.level + (predicateDirection * objectSubjectOrderDirection));
             nodesToCall.Add(other);
          }
       }
@@ -160,17 +172,18 @@ public class HierarchicalView : BaseLayoutAlgorithm
       int lowestLevel = int.MaxValue;
       foreach (Node currentNode in graph.nodeList)
       {
-         if (currentNode.hierarchicalLevel < lowestLevel) lowestLevel = currentNode.hierarchicalLevel;
+         if (currentNode.hierarchical.level < lowestLevel) lowestLevel = currentNode.hierarchical.level;
       }
 
       // Correct lowels level to 0
       foreach (Node currentNode in graph.nodeList)
       {
-         currentNode.hierarchicalLevel = (currentNode.hierarchicalLevel - lowestLevel);
+         currentNode.hierarchical.level = (currentNode.hierarchical.level - lowestLevel);
       }
    }
 
    public override void Stop()
    {
+      running = false;
    }
 }

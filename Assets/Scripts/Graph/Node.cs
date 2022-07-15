@@ -7,17 +7,35 @@ using VDS.RDF;
 
 public class Node : MonoBehaviour
 {
-   // hierarchical layout data
-   public int hierarchicalLevel = 0;
-   public bool hierarchicalLevelFound = false;
-   public bool hierarchicalPositionSet = false;
-   public Node hierarchicalParent = null;
-   public int hierarchicalTypeCount = 0;
-   public int hierarchicalOtherCount = 0;
-   public float hierarchicalOffset = 0;
-   public bool hierarchicalTypeWithChildNodes = false;
-   public enum HierarchicalType { SubClassOf, Type, Other }
-   public HierarchicalType hierarchicalType = HierarchicalType.SubClassOf;
+   public enum HierarchicalType { SubClassOf, Type, Other, None }
+   public class Hierarchical
+   {
+      public void Reset()
+      {
+         level = 0;
+         levelFound = false;
+         positionSet = false;
+         parent = null;
+         typeCount = 0;
+         otherCount = 0;
+         offset = 0;
+         typeWithChildNodes = false;
+         targetLocation = Vector3.zero;
+         hierarchicalType = HierarchicalType.None;
+      }
+      public int level = 0;
+      public bool levelFound = false;
+      public bool positionSet = false;
+      public Node parent = null;
+      public int typeCount = 0;
+      public int otherCount = 0;
+      public float offset = 0;
+      public bool typeWithChildNodes = false;
+      public Vector3 targetLocation = Vector3.zero;
+      public HierarchicalType hierarchicalType = HierarchicalType.None;
+   }
+   public Hierarchical hierarchical = new Hierarchical();
+
 
    public Graph graph;
    private Canvas infoPanel;
@@ -120,8 +138,8 @@ public class Node : MonoBehaviour
    }
    public void SetHierarchicalLevel(int level)
    {
-      hierarchicalLevel = level;
-      hierarchicalLevelFound = true;
+      hierarchical.level = level;
+      hierarchical.levelFound = true;
    }
 
    private void UpdateColor()
