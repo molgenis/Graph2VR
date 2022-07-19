@@ -7,7 +7,7 @@ using VDS.RDF;
 
 public class Node : MonoBehaviour
 {
-   public Hierarchical hierarchical = new Hierarchical();
+   public Hierarchical hierarchicalSettings = new Hierarchical();
    public Graph graph;
    private Canvas infoPanel;
 
@@ -109,8 +109,8 @@ public class Node : MonoBehaviour
    }
    public void SetHierarchicalLevel(int level)
    {
-      hierarchical.level = level;
-      hierarchical.levelFound = true;
+      hierarchicalSettings.level = level;
+      hierarchicalSettings.levelFound = true;
    }
 
    private void UpdateColor()
