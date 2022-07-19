@@ -7,7 +7,6 @@ using VDS.RDF.Query;
 
 public class Utils
 {
-
    static public GameObject FindClosestGraph(Vector3 position)
    {
       GameObject closest = null;
@@ -27,7 +26,7 @@ public class Utils
 
    static public Node GetPartnerNode(Node node, Edge edge)
    {
-      if (node.graph.RealNodeValue(node.graphNode) == node.graph.RealNodeValue(edge.graphSubject))
+      if (IsSubjectNode(node, edge))
       {
          return edge.displayObject;
       }
@@ -35,6 +34,11 @@ public class Utils
       {
          return edge.displaySubject;
       }
+   }
+
+   static public bool IsSubjectNode(Node node, Edge edge)
+   {
+      return node.graph.RealNodeValue(node.graphNode) == node.graph.RealNodeValue(edge.graphSubject);
    }
 
    static public Vector3 CalculateCubicBezierPoint(float t, Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3)

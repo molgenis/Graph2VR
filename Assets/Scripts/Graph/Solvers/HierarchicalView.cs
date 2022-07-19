@@ -66,44 +66,43 @@ public class HierarchicalView : BaseLayoutAlgorithm
       List<Node> nodesToCall = new List<Node>();
       foreach (Edge edge in node.connections)
       {
-         int objectSubjectOrderDirection;
-
-         Node other;
-         if (node.graph.RealNodeValue(node.graphNode) == node.graph.RealNodeValue(edge.graphSubject))
-         {
-            other = edge.displayObject; // We are a subject
-            objectSubjectOrderDirection = -1;
-         }
-         else
-         {
-            other = edge.displaySubject; // we are a object
-            objectSubjectOrderDirection = 1;
-         }
+         Node other = Utils.GetPartnerNode(node, edge);
+         int edgeDirection = FindEdgeDirection(node, edge);
 
          if (!other.hierarchicalSettings.levelFound)
          {
-            other.SetHierarchicalLevel(node.hierarchicalSettings.level + objectSubjectOrderDirection);
+            other.SetHierarchicalLevel(node.hierarchicalSettings.level + edgeDirection);
             nodesToCall.Add(other);
          }
       }
-
       foreach (Node n in nodesToCall)
       {
          SetHierarchicaLevels(n);
       }
+      ShiftHierarchyLevels(GetLowestLevel());
+   }
 
-      // Get lowest level
+   private static int FindEdgeDirection(Node node, Edge edge)
+   {
+      return Utils.IsSubjectNode(node, edge) ? -1 : 1;
+   }
+
+   private void ShiftHierarchyLevels(int lowestLevel)
+   {
+      foreach (Node currentNode in graph.nodeList)
+      {
+         currentNode.hierarchicalSettings.level = (currentNode.hierarchicalSettings.level - lowestLevel);
+      }
+   }
+
+   private int GetLowestLevel()
+   {
       int lowestLevel = int.MaxValue;
       foreach (Node currentNode in graph.nodeList)
       {
          if (currentNode.hierarchicalSettings.level < lowestLevel) lowestLevel = currentNode.hierarchicalSettings.level;
       }
-
-      // Correct lowels level to 0
-      foreach (Node currentNode in graph.nodeList)
-      {
-         currentNode.hierarchicalSettings.level = (currentNode.hierarchicalSettings.level - lowestLevel);
-      }
+      return lowestLevel;
    }
 
    public void PositionNodeLayer(Node node, int level, Vector3 offset)
@@ -138,7 +137,6 @@ public class HierarchicalView : BaseLayoutAlgorithm
          }
       }
    }
-
 
    private Vector3 SetNodePosition(Node node, int level, Vector3 offset)
    {
@@ -177,6 +175,7 @@ public class HierarchicalView : BaseLayoutAlgorithm
       if (totalChildren % 2 == 0) totalChildren--;
       Vector3 direction = new Vector3(0, 1, 0);
       if (level % 2 == 1) direction = new Vector3(0, 0, 1);
+
       Vector3 step = direction * offsetSize * childIndex;
       Vector3 center = direction * offsetSize * (totalChildren - 1) * 0.5f;
       return offset + (step - center);
