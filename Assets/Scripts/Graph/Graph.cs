@@ -25,8 +25,6 @@ public class Graph : MonoBehaviour
   public Graph parentGraph = null;
   public string creationQuery = "";
 
-  public void SetLastResults() { }
-
   public Graph QuerySimilarWithTriples(string triples, Vector3 position, Quaternion rotation)
   {
     Graph newGraph = Main.instance.CreateGraph();
@@ -58,7 +56,7 @@ public class Graph : MonoBehaviour
       NodeType.GraphLiteral or NodeType.Literal => GetLiteralValue(node),
       NodeType.Uri => $"<{(node as IUriNode).Uri}>",
       NodeType.Blank => "_:blankNode",
-      NodeType.Variable => (node as IVariableNode).VariableName,// TODO: do we need a '?' here?
+      NodeType.Variable => (node as IVariableNode).VariableName,
       _ => "",
     };
   }
@@ -135,7 +133,6 @@ public class Graph : MonoBehaviour
   public void RemoveFromSelection(Edge toRemove)
   {
     Debug.Log("Remove to Selection: " + toRemove.uri);
-    // Todo: try catch?
     selection.Remove(toRemove);
   }
 
@@ -209,28 +206,25 @@ public class Graph : MonoBehaviour
 
       // To draw new elements to unity we need to be on the main Thread
       UnityMainThreadDispatcher.Instance().Enqueue(() =>
-  {
-    foreach (Triple triple in graph.Triples)
-    {
-      AddTriple(triple);
-    }
-
-    // Add refinement
-    // Add label
-    //List<INode> refinmentNodes = refinmentGraph.Nodes.ToList<INode>();
-    foreach (Node nodeToRefine in nodeList)
-    {
-      if (nodeToRefine.graphNode.NodeType != NodeType.Uri) continue;
-
-      Dictionary<string, List<string>> results = QueryService.Instance.RefineNode(refinmentGraph, nodeToRefine.uri);
-      List<string> images = results["images"];
-      if (results["labels"].Count > 0)
       {
-        nodeToRefine.SetLabel(results["labels"].First());
-      }
-      nodeToRefine.SetImageFromList(images);
-    }
-  });
+        foreach (Triple triple in graph.Triples)
+        {
+          AddTriple(triple);
+        }
+
+        foreach (Node nodeToRefine in nodeList)
+        {
+          if (nodeToRefine.graphNode.NodeType != NodeType.Uri) continue;
+
+          Dictionary<string, List<string>> results = QueryService.Instance.RefineNode(refinmentGraph, nodeToRefine.uri);
+          List<string> images = results["images"];
+          if (results["labels"].Count > 0)
+          {
+            nodeToRefine.SetLabel(results["labels"].First());
+          }
+          nodeToRefine.SetImageFromList(images);
+        }
+      });
     }));
   }
 

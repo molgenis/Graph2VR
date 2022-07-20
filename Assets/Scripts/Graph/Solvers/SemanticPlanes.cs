@@ -75,12 +75,8 @@ public class SemanticPlanes : BaseLayoutAlgorithm
       // flatten graph
       node.transform.position = plane.ClosestPointOnPlane(node.transform.position);
     }
-
   }
 
-  public override void Stop()
-  {
-
-  }
+  public override void Stop() { }
 }
 
