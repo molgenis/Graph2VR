@@ -7,9 +7,6 @@ public class zoomSphere : MonoBehaviour
   Vector3 leftPos;
   Quaternion rightOrientation;
   Quaternion leftOriantation;
-  Vector3 leftdiffPos;
-  Vector3 rightdiffPos;
-  Vector3 eulerRotation;
 
   public GameObject zoomGraph;
   Vector3 startScale;
@@ -21,17 +18,11 @@ public class zoomSphere : MonoBehaviour
   bool isZooming = false;
   float zoomStart = 0.0f;
 
-  //  public SteamVR_Action_Boolean gripAction = SteamVR_Input.GetAction<SteamVR_Action_Boolean>("GrabGrip");
-  // Start is called before the first frame update
-  void Start()
-  {
-
-  }
+  void Start() { }
 
   // Update is called once per frame
   void Update()
   {
-    //  bool zoomAction = gripAction.GetState(SteamVR_Input_Sources.LeftHand) == true && gripAction.GetState(SteamVR_Input_Sources.RightHand) == true;
     // TODO: FIX ZOOM
     bool zoomAction = false;
 
@@ -77,22 +68,4 @@ public class zoomSphere : MonoBehaviour
       }
     }
   }
-  /*
-  public void ControllerMoved(SteamVR_Behaviour_Pose pose, SteamVR_Input_Sources source)
-  {
-    if (source == SteamVR_Input_Sources.LeftHand)
-    {
-      leftPos = pose.poseAction[source].localPosition;
-      leftOriantation = pose.poseAction[source].localRotation;
-      leftdiffPos = pose.poseAction[source].localPosition - pose.poseAction[source].lastLocalPosition;
-
-    }
-    else if (source == SteamVR_Input_Sources.RightHand)
-    {
-      rightPos = pose.poseAction[source].localPosition;
-      rightOrientation = pose.poseAction[source].localRotation;
-      rightdiffPos = pose.poseAction[source].localPosition - pose.poseAction[source].lastLocalPosition;
-    }
-  }
-  */
 }
