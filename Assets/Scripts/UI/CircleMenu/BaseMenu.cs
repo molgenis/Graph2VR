@@ -103,12 +103,12 @@ public class BaseMenu : MonoBehaviour
 
       cm.AddButton("Pin all nodes", new Color(0.5f, 0.5f, 0.5f) / 2, () =>
       {
-         graph.pinAllNodes(true);
+         graph.PinAllNodes(true);
       });
 
       cm.AddButton("Unpin all nodes", new Color(0.5f, 0.5f, 0.5f) / 2, () =>
       {
-        graph.pinAllNodes(false);
+        graph.PinAllNodes(false);
       });
 
     if (graph.boundingSphere.GetComponent<Renderer>().forceRenderingOff == false)

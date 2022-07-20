@@ -3,264 +3,278 @@ using UnityEngine;
 
 public class ClassHierarchy : BaseLayoutAlgorithm
 {
-   private float offsetSize = 0.3f;
-   private string subClassOfPredicate = "http://www.w3.org/2000/01/rdf-schema#subclassof";
-   private string typePredicate = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
-   private string owlThing = "http://www.w3.org/2002/07/owl#Thing";
-   private bool running = false;
+  private static readonly string SUBCLASS_OF_PREDICATE = "http://www.w3.org/2000/01/rdf-schema#subclassof";
+  private static readonly string TYPE_PREDICATE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
+  private readonly float offsetSize = 0.3f;
+  private bool running = false;
 
-   private void Update()
-   {
-      if (running)
-      {
-         foreach (Node node in graph.nodeList)
-         {
-            node.transform.localPosition = Vector3.Lerp(node.transform.localPosition, node.hierarchicalSettings.targetLocation, Time.deltaTime * 2);
-         }
-      }
-   }
-
-   public override void CalculateLayout()
-   {
-      ResetNodes();
-      graph.SortNodes();
-      CalculateHierarchicalLevels();
-      SortNodeList();
-      CalculatePositions();
-      running = true;
-   }
-
-   private void ResetNodes()
-   {
-      graph.nodeList.ForEach((Node node) => node.hierarchicalSettings.Reset());
-   }
-
-   private void CalculateHierarchicalLevels()
-   {
-      List<Edge> subClassOfEdgeList = graph.edgeList.FindAll(edge => edge.uri.ToLower() == subClassOfPredicate);
-      Node initialNode = null;
-      if (subClassOfEdgeList.Count == 0)
-      {
-         Debug.Log("Not a class hiearchy");
-         return;
-      }
-      else
-      {
-         initialNode = subClassOfEdgeList[0].displaySubject;
-      }
-
-      initialNode.SetHierarchicalLevel(0);
-      SetHierarchicalLevels(initialNode);
-
-      // Special case: Multiple root nodes
+  private void Update()
+  {
+    if (running)
+    {
       foreach (Node node in graph.nodeList)
       {
-         if (!node.hierarchicalSettings.levelFound)
-         {
-            node.SetHierarchicalLevel(0);
-            SetHierarchicalLevels(node);
-         }
+        node.transform.localPosition = Vector3.Lerp(node.transform.localPosition, node.hierarchicalSettings.targetLocation, Time.deltaTime * 2);
       }
-   }
+    }
+  }
 
-   private void CalculatePositions()
-   {
-      float offset = 0;
-      foreach (Node node in graph.nodeList)
+  public override void CalculateLayout()
+  {
+    ResetNodes();
+    graph.SortNodes();
+    CalculateHierarchicalLevels();
+    SortNodeList();
+    CalculatePositions();
+    running = true;
+  }
+
+  private void ResetNodes()
+  {
+    graph.nodeList.ForEach((Node node) => node.hierarchicalSettings.Reset());
+  }
+
+  private void CalculateHierarchicalLevels()
+  {
+    List<Edge> subClassOfEdgeList = graph.edgeList.FindAll(edge => edge.uri.ToLower() == SUBCLASS_OF_PREDICATE);
+    Node initialNode = null;
+    if (subClassOfEdgeList.Count == 0)
+    {
+      Debug.Log("Not a class hiearchy");
+      return;
+    }
+    else
+    {
+      initialNode = subClassOfEdgeList[0].displaySubject;
+    }
+
+    initialNode.SetHierarchicalLevel(0);
+    SetHierarchicalLevels(initialNode);
+
+    // Special case: Multiple root nodes
+    NewMethod();
+  }
+
+  private void NewMethod()
+  {
+    foreach (Node node in graph.nodeList)
+    {
+      if (!node.hierarchicalSettings.levelFound)
       {
-         if (node.hierarchicalSettings.level == 0)
-         {
-            offset = PositionNodeLevels(node, 0, offset);
-         }
+        node.SetHierarchicalLevel(0);
+        SetHierarchicalLevels(node);
       }
-   }
+    }
+  }
 
-   private void SortNodeList()
-   {
-      foreach (Node node in graph.nodeList)
+  private void CalculatePositions()
+  {
+    float offset = 0;
+    foreach (Node node in graph.nodeList)
+    {
+      if (node.hierarchicalSettings.level == 0)
       {
-         node.connections.Sort((Edge a, Edge b) => string.Compare(a.displaySubject.textMesh.text, b.displaySubject.textMesh.text));
+        offset = PositionNodeLevels(node, 0, offset);
       }
-   }
+    }
+  }
 
-   private void SetHierarchicalLevels(Node node)
-   {
-      List<Node> nodesToCall = new List<Node>();
-      foreach (Edge edge in node.connections)
+  private void SortNodeList()
+  {
+    foreach (Node node in graph.nodeList)
+    {
+      node.connections.Sort((Edge a, Edge b) => string.Compare(a.displaySubject.textMesh.text, b.displaySubject.textMesh.text));
+    }
+  }
+
+  private void SetHierarchicalLevels(Node node)
+  {
+    List<Node> nodesToCall = new();
+    foreach (Edge edge in node.connections)
+    {
+      Node partnerNode = SetEdgeHierachicalLevels(node, edge);
+      if (partnerNode != null)
       {
-         int edgeDirection = FindEdgeDirection(node, edge);
-         Node partnerNode = Utils.GetPartnerNode(node, edge);
-         if (partnerNode.hierarchicalSettings.levelFound) continue;
-
-         if (edge.uri.ToLower() == subClassOfPredicate)
-         {
-            SubClassOfSetting(node, edgeDirection, partnerNode);
-         }
-         else if (edge.uri.ToLower() == typePredicate)
-         {
-            TypeSettings(node, edgeDirection, partnerNode);
-         }
-         else
-         {
-            OtherSettings(node, partnerNode);
-         }
-
-         partnerNode.SetHierarchicalLevel(node.hierarchicalSettings.level + edgeDirection);
-         nodesToCall.Add(partnerNode);
+        nodesToCall.Add(partnerNode);
       }
+    }
 
-      foreach (Node n in nodesToCall)
-      {
-         SetHierarchicalLevels(n);
-      }
+    foreach (Node n in nodesToCall)
+    {
+      SetHierarchicalLevels(n);
+    }
 
-      ShiftHierarchyLevels(GetLowestLevel());
-   }
+    ShiftHierarchyLevels(GetLowestLevel());
+  }
 
-   private void ShiftHierarchyLevels(int lowestLevel)
-   {
-      foreach (Node currentNode in graph.nodeList)
-      {
-         currentNode.hierarchicalSettings.level = (currentNode.hierarchicalSettings.level - lowestLevel);
-      }
-   }
+  private Node SetEdgeHierachicalLevels(Node node, Edge edge)
+  {
+    Node partnerNode = Utils.GetPartnerNode(node, edge);
+    if (partnerNode.hierarchicalSettings.levelFound) return null;
+    int edgeDirection = FindEdgeDirection(node, edge);
 
-   private int GetLowestLevel()
-   {
-      int lowestLevel = int.MaxValue;
-      foreach (Node currentNode in graph.nodeList)
-      {
-         if (currentNode.hierarchicalSettings.level < lowestLevel) lowestLevel = currentNode.hierarchicalSettings.level;
-      }
-      return lowestLevel;
-   }
+    if (edge.uri.ToLower() == SUBCLASS_OF_PREDICATE)
+    {
+      SetSubClassOfSettings(node, edgeDirection, partnerNode);
+    }
+    else if (edge.uri.ToLower() == TYPE_PREDICATE)
+    {
+      SetTypeSettings(node, edgeDirection, partnerNode);
+    }
+    else
+    {
+      SetOtherSettings(node, partnerNode);
+    }
 
-   private static void OtherSettings(Node node, Node partnerNode)
-   {
-      partnerNode.hierarchicalSettings.hierarchicalType = Hierarchical.HierarchicalType.Other;
+    partnerNode.SetHierarchicalLevel(node.hierarchicalSettings.level + edgeDirection);
+    return partnerNode;
+  }
+
+  private void ShiftHierarchyLevels(int lowestLevel)
+  {
+    foreach (Node currentNode in graph.nodeList)
+    {
+      currentNode.hierarchicalSettings.level -= lowestLevel;
+    }
+  }
+
+  private int GetLowestLevel()
+  {
+    int lowestLevel = int.MaxValue;
+    foreach (Node currentNode in graph.nodeList)
+    {
+      if (currentNode.hierarchicalSettings.level < lowestLevel) lowestLevel = currentNode.hierarchicalSettings.level;
+    }
+    return lowestLevel;
+  }
+
+  private static void SetOtherSettings(Node node, Node partnerNode)
+  {
+    partnerNode.hierarchicalSettings.hierarchicalType = Hierarchical.HierarchicalType.Other;
+    partnerNode.hierarchicalSettings.parent = node;
+    node.hierarchicalSettings.typeWithChildNodes = true;
+    partnerNode.hierarchicalSettings.otherCount = 0;
+  }
+
+  private static void SetTypeSettings(Node node, int edgeDirection, Node partnerNode)
+  {
+    if (edgeDirection == 1)
+    {
+      partnerNode.hierarchicalSettings.hierarchicalType = Hierarchical.HierarchicalType.Type;
       partnerNode.hierarchicalSettings.parent = node;
-      node.hierarchicalSettings.typeWithChildNodes = true;
-      partnerNode.hierarchicalSettings.otherCount = 0;
-   }
+    }
+    else
+    {
+      partnerNode.hierarchicalSettings.hierarchicalType = Hierarchical.HierarchicalType.Other;
+    }
+    partnerNode.hierarchicalSettings.typeCount = 0;
+    partnerNode.hierarchicalSettings.otherCount = 0;
+  }
 
-   private static void TypeSettings(Node node, int edgeDirection, Node partnerNode)
-   {
-      if (edgeDirection == 1)
+  private static void SetSubClassOfSettings(Node node, int edgeDirection, Node partnerNode)
+  {
+    partnerNode.hierarchicalSettings.hierarchicalType = Hierarchical.HierarchicalType.SubClassOf;
+    if (edgeDirection == 1)
+    {
+      partnerNode.hierarchicalSettings.parent = node;
+    }
+    partnerNode.hierarchicalSettings.typeCount = 0;
+    partnerNode.hierarchicalSettings.otherCount = 0;
+  }
+
+  private int FindEdgeDirection(Node node, Edge edge)
+  {
+    return (Utils.IsSubjectNode(node, edge) && edge.uri.ToLower() == SUBCLASS_OF_PREDICATE) ? -1 : 1;
+  }
+
+  public float PositionNodeLevels(Node node, int level, float subClassOfOffset)
+  {
+    float newSubClassOfOffset = subClassOfOffset;
+    if (!node.LockPosition)
+    {
+      Node parentNode = node.hierarchicalSettings.parent;
+      if (node.hierarchicalSettings.hierarchicalType == Hierarchical.HierarchicalType.Type && parentNode != null)
       {
-         partnerNode.hierarchicalSettings.hierarchicalType = Hierarchical.HierarchicalType.Type;
-         partnerNode.hierarchicalSettings.parent = node;
+        SetTypePositionSettings(node, level, parentNode);
+
+      }
+      else if (node.hierarchicalSettings.hierarchicalType == Hierarchical.HierarchicalType.Other && parentNode != null)
+      {
+        SetOtherPositionSettings(node, level, parentNode);
       }
       else
       {
-         partnerNode.hierarchicalSettings.hierarchicalType = Hierarchical.HierarchicalType.Other;
+        newSubClassOfOffset = SetSubClassOffPositionSettings(node, level, subClassOfOffset, newSubClassOfOffset);
       }
-      partnerNode.hierarchicalSettings.typeCount = 0;
-      partnerNode.hierarchicalSettings.otherCount = 0;
-   }
+      node.hierarchicalSettings.subClassOfOffset = subClassOfOffset;
+      node.hierarchicalSettings.positionSet = true;
+    }
 
-   private static void SubClassOfSetting(Node node, int edgeDirection, Node partnerNode)
-   {
-      partnerNode.hierarchicalSettings.hierarchicalType = Hierarchical.HierarchicalType.SubClassOf;
-      if (edgeDirection == 1)
+    int nextLevel = level + 1;
+    foreach (Edge edge in node.connections)
+    {
+      Node childNode = Utils.GetPartnerNode(node, edge);
+      if (NodeOfLevelNeedsUpdate(childNode, nextLevel))
       {
-         partnerNode.hierarchicalSettings.parent = node;
+        newSubClassOfOffset = PositionNodeLevels(childNode, nextLevel, newSubClassOfOffset);
       }
-      partnerNode.hierarchicalSettings.typeCount = 0;
-      partnerNode.hierarchicalSettings.otherCount = 0;
-   }
+    }
+    return newSubClassOfOffset;
+  }
 
-   private int FindEdgeDirection(Node node, Edge edge)
-   {
-      return (Utils.IsSubjectNode(node, edge) && edge.uri.ToLower() == subClassOfPredicate) ? -1 : 1;
-   }
+  private float SetSubClassOffPositionSettings(Node node, int level, float subClassOfOffset, float newSubClassOfOffset)
+  {
+    SetNodePosition(node, level, subClassOfOffset, 0, 0);
+    if (node.hierarchicalSettings.hierarchicalType == Hierarchical.HierarchicalType.SubClassOf)
+    {
+      newSubClassOfOffset += offsetSize;
+    }
+    return newSubClassOfOffset;
+  }
 
-   public float PositionNodeLevels(Node node, int level, float subClassOfOffset)
-   {
-      float newSubClassOfOffset = subClassOfOffset;
-      if (!node.LockPosition)
-      {
-         Node parentNode = node.hierarchicalSettings.parent;
-         if (node.hierarchicalSettings.hierarchicalType == Hierarchical.HierarchicalType.Type && parentNode != null)
-         {
-            TypePositionSettings(node, level, parentNode);
+  private void SetOtherPositionSettings(Node node, int level, Node parentNode)
+  {
+    Node grandpaNode = parentNode.hierarchicalSettings.parent;
+    int typeDepth;
+    if (grandpaNode != null)
+    {
+      typeDepth = grandpaNode.hierarchicalSettings.typeCount;
+    }
+    else
+    {
+      typeDepth = parentNode.hierarchicalSettings.typeCount;
+    }
+    int otherDepth = ++parentNode.hierarchicalSettings.otherCount;
+    float subClassOfOffset = parentNode.hierarchicalSettings.subClassOfOffset;
+    SetNodePosition(node, level, subClassOfOffset, typeDepth, otherDepth);
+  }
 
-         }
-         else if (node.hierarchicalSettings.hierarchicalType == Hierarchical.HierarchicalType.Other && parentNode != null)
-         {
-            OtherPositionSettings(node, level, parentNode);
-         }
-         else
-         {
-            newSubClassOfOffset = SubClassOffPositionSettings(node, level, subClassOfOffset, newSubClassOfOffset);
-         }
-         node.hierarchicalSettings.subClassOfOffset = subClassOfOffset;
-         node.hierarchicalSettings.positionSet = true;
-      }
+  private void SetTypePositionSettings(Node node, int level, Node parentNode)
+  {
+    int typeDepth = ++parentNode.hierarchicalSettings.typeCount;
+    float subClassOfOffset = parentNode.hierarchicalSettings.subClassOfOffset;
 
-      int nextLevel = level + 1;
-      foreach (Edge edge in node.connections)
-      {
-         Node childNode = Utils.GetPartnerNode(node, edge);
-         if (NodeOfLevelNeedsUpdate(childNode, nextLevel))
-         {
-            newSubClassOfOffset = PositionNodeLevels(childNode, nextLevel, newSubClassOfOffset);
-         }
-      }
-      return newSubClassOfOffset;
-   }
+    // Reserve space for child nodes
+    if (node.hierarchicalSettings.typeWithChildNodes)
+    {
+      parentNode.hierarchicalSettings.typeCount++;
+    }
+    SetNodePosition(node, level, subClassOfOffset, typeDepth, 0);
+  }
 
-   private float SubClassOffPositionSettings(Node node, int level, float subClassOfOffset, float newSubClassOfOffset)
-   {
-      SetNodePosition(node, level, subClassOfOffset, 0, 0);
-      if (node.hierarchicalSettings.hierarchicalType == Hierarchical.HierarchicalType.SubClassOf)
-      {
-         newSubClassOfOffset += offsetSize;
-      }
-      return newSubClassOfOffset;
-   }
+  private void SetNodePosition(Node node, int level, float subClassOfOffset, int typeDepth, int otherDepth)
+  {
+    node.hierarchicalSettings.targetLocation =
+      new Vector3(0, typeDepth * offsetSize, subClassOfOffset) + new Vector3((level * (offsetSize * 2)) + (otherDepth * offsetSize), 0, 0);
+  }
 
-   private void OtherPositionSettings(Node node, int level, Node parentNode)
-   {
-      Node grandpaNode = parentNode.hierarchicalSettings.parent;
-      int typeDepth;
-      if (grandpaNode != null)
-      {
-         typeDepth = grandpaNode.hierarchicalSettings.typeCount;
-      }
-      else
-      {
-         typeDepth = parentNode.hierarchicalSettings.typeCount;
-      }
-      int otherDepth = ++parentNode.hierarchicalSettings.otherCount;
-      float subClassOfOffset = parentNode.hierarchicalSettings.subClassOfOffset;
-      SetNodePosition(node, level, subClassOfOffset, typeDepth, otherDepth);
-   }
+  private static bool NodeOfLevelNeedsUpdate(Node node, int level)
+  {
+    return node.hierarchicalSettings.level == level && !node.hierarchicalSettings.positionSet;
+  }
 
-   private void TypePositionSettings(Node node, int level, Node parentNode)
-   {
-      int typeDepth = ++parentNode.hierarchicalSettings.typeCount;
-      float subClassOfOffset = parentNode.hierarchicalSettings.subClassOfOffset;
-
-      // Reserve space for child nodes
-      if (node.hierarchicalSettings.typeWithChildNodes)
-      {
-         parentNode.hierarchicalSettings.typeCount++;
-      }
-      SetNodePosition(node, level, subClassOfOffset, typeDepth, 0);
-   }
-
-   private void SetNodePosition(Node node, int level, float subClassOfOffset, int typeDepth, int otherDepth)
-   {
-      node.hierarchicalSettings.targetLocation = new Vector3(0, typeDepth * offsetSize, subClassOfOffset) + new Vector3((level * (offsetSize * 2)) + (otherDepth * offsetSize), 0, 0);
-   }
-
-   private static bool NodeOfLevelNeedsUpdate(Node node, int level)
-   {
-      return node.hierarchicalSettings.level == level && !node.hierarchicalSettings.positionSet;
-   }
-
-   public override void Stop()
-   {
-      running = false;
-   }
+  public override void Stop()
+  {
+    running = false;
+  }
 }
