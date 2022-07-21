@@ -51,11 +51,10 @@ public class ClassHierarchy : BaseLayoutAlgorithm
     initialNode.SetHierarchicalLevel(0);
     SetHierarchicalLevels(initialNode);
 
-    // Special case: Multiple root nodes
-    NewMethod();
+    CalculateHierarchicalLevelsForMultipleRootNodes();
   }
 
-  private void NewMethod()
+  private void CalculateHierarchicalLevelsForMultipleRootNodes()
   {
     foreach (Node node in graph.nodeList)
     {
@@ -234,19 +233,34 @@ public class ClassHierarchy : BaseLayoutAlgorithm
 
   private void SetOtherPositionSettings(Node node, int level, Node parentNode)
   {
-    Node grandpaNode = parentNode.hierarchicalSettings.parent;
     int typeDepth;
-    if (grandpaNode != null)
+    Node typeParentNode = FindFirstNonOtherParent(node.hierarchicalSettings.parent);
+    if (typeParentNode.hierarchicalSettings.parent != null)
     {
-      typeDepth = grandpaNode.hierarchicalSettings.typeCount;
+      typeDepth = typeParentNode.hierarchicalSettings.parent.hierarchicalSettings.typeCount;
     }
     else
     {
-      typeDepth = parentNode.hierarchicalSettings.typeCount;
+      typeDepth = typeParentNode.hierarchicalSettings.typeCount;
     }
-    int otherDepth = ++parentNode.hierarchicalSettings.otherCount;
-    float subClassOfOffset = parentNode.hierarchicalSettings.subClassOfOffset;
-    SetNodePosition(node, level, subClassOfOffset, typeDepth, otherDepth);
+    node.hierarchicalSettings.Test = typeParentNode;
+    int otherDepth = ++typeParentNode.hierarchicalSettings.otherCount;
+    float subClassOfOffset = typeParentNode.hierarchicalSettings.subClassOfOffset - offsetSize;
+    SetNodePosition(node, typeParentNode.hierarchicalSettings.level + 1, subClassOfOffset, typeDepth, otherDepth);
+  }
+
+  private static Node FindFirstNonOtherParent(Node node)
+  {
+    Node previousNode = node;
+    for (int i = 0; i < 10; i++)
+    {
+      if (previousNode.hierarchicalSettings.hierarchicalType != Hierarchical.HierarchicalType.Other || previousNode == previousNode.hierarchicalSettings.parent)
+      {
+        break;
+      }
+      previousNode = previousNode.hierarchicalSettings.parent;
+    }
+    return previousNode;
   }
 
   private void SetTypePositionSettings(Node node, int level, Node parentNode)
