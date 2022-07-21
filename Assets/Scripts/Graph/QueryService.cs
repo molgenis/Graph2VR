@@ -270,28 +270,56 @@ public class QueryService : MonoBehaviour
    }
 
 
-   public void AutocompleteSearch(string searchterm, SparqlResultsCallback callback)
+   public void AutocompleteSearch(string searchterm, SparqlResultsCallback callback, Node variableNode = null)
    {
       if (searchterm.Length > 3)
       {
          string query = $@"
-      {PREFIXES}
-      select distinct ?uri ?name 
-      where {{
-         ?uri(^(<>| !<>) | rdfs:label | skos:altLabel) ?entity.
-         BIND(STR(?entity) AS ?name).
-         FILTER REGEX(?name, '{searchterm}', 'i')
-      }}
-      LIMIT 5";
+            {PREFIXES}
+            select distinct ?uri ?name 
+            where {{
+               ?uri(^(<>| !<>) | rdfs:label | skos:altLabel) ?entity.
+               BIND(STR(?entity) AS ?name).
+               FILTER REGEX(?name, '{searchterm}', 'i')
+            }}
+            LIMIT 5";
 
          string bifQuery = $@"
-      {PREFIXES}
-      select distinct ?uri ?name 
-      where {{
-        ?uri rdfs:label ?name.
-        ?name bif:contains '{searchterm}'.
-      }}
-      LIMIT 5";
+            {PREFIXES}
+            select distinct ?uri ?name 
+            where {{
+              ?uri rdfs:label ?name.
+              ?name bif:contains '{searchterm}'.
+              FILTER(LANG(?name) = '' || LANGMATCHES(LANG(?name), '{Main.instance.languageCode}')).
+            }}
+            LIMIT 5";
+
+         if (variableNode != null)
+         {
+            query = $@"
+               {PREFIXES}
+               select distinct {variableNode.GetQueryLabel()} AS ?uri ?name 
+               where {{
+                 {variableNode.graph.GetTriplesString()}
+                 {variableNode.GetQueryLabel()} rdfs:label ?name.
+                  ?uri(^(<>| !<>) | rdfs:label | skos:altLabel) ?entity.
+                  BIND(STR(?entity) AS ?name).
+                  FILTER REGEX(?name, '{searchterm}', 'i').
+                  FILTER(LANG(?name) = '' || LANGMATCHES(LANG(?name), '{Main.instance.languageCode}')).
+               }}
+               LIMIT 5";
+
+            bifQuery = $@"
+               {PREFIXES}
+               select distinct {variableNode.GetQueryLabel()} AS ?uri ?name 
+               where {{
+                 {variableNode.graph.GetTriplesString()}
+                 {variableNode.GetQueryLabel()} rdfs:label ?name.
+                 ?name bif:contains '{searchterm}'.
+                 FILTER(LANG(?name) = '' || LANGMATCHES(LANG(?name), '{Main.instance.languageCode}')).
+               }}
+               LIMIT 5";
+         }
 
          endPoint.QueryWithResultSet(
            Settings.Instance.databaseSuportsBifContains ? bifQuery : query

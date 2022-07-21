@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.005498711, g: 0.022029527, b: 0.045998484, a: 1}
+  m_IndirectSpecularColor: {r: 0.005506694, g: 0.022075854, b: 0.04601198, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -506,7 +506,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4000013025176432, guid: f28287b1c722ebd4aa4f4d8547ed7fa8, type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4000013025176432, guid: f28287b1c722ebd4aa4f4d8547ed7fa8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -784,7 +784,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1503421653
 MonoBehaviour:
@@ -1219,13 +1219,37 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6006723394868781058, guid: 97869828da070e047b842768e2686dc1, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007703614857959914, guid: 97869828da070e047b842768e2686dc1, type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007703614865032490, guid: 97869828da070e047b842768e2686dc1, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007703614865039550, guid: 97869828da070e047b842768e2686dc1, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007703614865050622, guid: 97869828da070e047b842768e2686dc1, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007703614865077380, guid: 97869828da070e047b842768e2686dc1, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6007703615058463561, guid: 97869828da070e047b842768e2686dc1, type: 3}
       propertyPath: m_Name
       value: '[CameraRig]'
       objectReference: {fileID: 0}
     - target: {fileID: 6007703615058713265, guid: 97869828da070e047b842768e2686dc1, type: 3}
       propertyPath: m_RootOrder
-      value: 8
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 6007703615058713265, guid: 97869828da070e047b842768e2686dc1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1266,6 +1290,10 @@ PrefabInstance:
     - target: {fileID: 6007703615058713265, guid: 97869828da070e047b842768e2686dc1, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007703615667292593, guid: 97869828da070e047b842768e2686dc1, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -650
       objectReference: {fileID: 0}
     - target: {fileID: 6007703616432736854, guid: 97869828da070e047b842768e2686dc1, type: 3}
       propertyPath: teleportTarget
@@ -1308,7 +1336,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &114197124645115825
 MonoBehaviour:
@@ -1334,7 +1362,7 @@ MonoBehaviour:
     ?height.     ?mountain dbp:location ?location }  where {     ?mountain rdf:type
     dbo:Mountain.     ?mountain dbo:elevation ?height.     ?mountain dbp:location
     ?location }  ORDER BY DESC (?height)  LIMIT 10'
-  initialSparqlURI: http://dbpedia.org/ontology/Mountain
+  initialSparqlURI: http://www.w3.org/2002/07/owl#Thing
   startWithSingleNode: 0
   searchOnKeypress: 1
   playerHeight: 1.8

@@ -36,8 +36,10 @@ public class AutocompleteHandeler : MonoBehaviour
       GameObject.FindGameObjectWithTag("LeftController").transform.Find("Offset").Find("Sphere").gameObject.SetActive(!value);
    }
 
-   public void SearchForNode(Action<string, string> callback)
+   private Node variableNode = null;
+   public void SearchForNode(Action<string, string> callback, Node variableNode = null)
    {
+      this.variableNode = variableNode;
       foundResultsCallback = callback;
       keyboard.SetText("");
       ClearUIItems();
@@ -75,7 +77,7 @@ public class AutocompleteHandeler : MonoBehaviour
    {
       ClearUIItems();
       AddItem("Loading", "please wait a moment", false);
-      QueryService.Instance.AutocompleteSearch(searchTerm, SearchCallback);
+      QueryService.Instance.AutocompleteSearch(searchTerm, SearchCallback, variableNode);
    }
 
    private void SearchCallback(SparqlResultSet results, object state)
