@@ -279,7 +279,7 @@ public class ClassHierarchy : BaseLayoutAlgorithm
   private void SetNodePosition(Node node, int level, float subClassOfOffset, int typeDepth, int otherDepth)
   {
     node.hierarchicalSettings.targetLocation =
-      new Vector3(0, typeDepth * offsetSize, subClassOfOffset) + new Vector3((level * (offsetSize * 2)) + (otherDepth * offsetSize), 0, 0);
+      new Vector3(0, typeDepth * offsetSize, subClassOfOffset) + new Vector3((level * (offsetSize)) + (otherDepth * offsetSize), 0, 0);
   }
 
   private static bool NodeOfLevelNeedsUpdate(Node node, int level)

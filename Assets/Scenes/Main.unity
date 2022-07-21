@@ -1363,7 +1363,7 @@ MonoBehaviour:
     dbo:Mountain.     ?mountain dbo:elevation ?height.     ?mountain dbp:location
     ?location }  ORDER BY DESC (?height)  LIMIT 10'
   initialSparqlURI: http://www.w3.org/2002/07/owl#Thing
-  startWithSingleNode: 1
+  startWithSingleNode: 0
   searchOnKeypress: 1
   playerHeight: 1.8
   imagePredicates:
