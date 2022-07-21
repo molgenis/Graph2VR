@@ -12,7 +12,10 @@ public class HierarchicalView : BaseLayoutAlgorithm
     {
       foreach (Node node in graph.nodeList)
       {
-        node.transform.localPosition = Vector3.Lerp(node.transform.localPosition, node.hierarchicalSettings.targetLocation, Time.deltaTime * 2);
+        if (!node.LockPosition)
+        {
+          node.transform.localPosition = Vector3.Lerp(node.transform.localPosition, node.hierarchicalSettings.targetLocation, Time.deltaTime * 2);
+        }
       }
     }
   }
