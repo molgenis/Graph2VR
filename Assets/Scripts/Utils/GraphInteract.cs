@@ -15,7 +15,7 @@ public class GraphInteract : MonoBehaviour
   public bool isLeftController = true;
   private static int nodeCreationCounter = 1;
   private static int edgeCreationCounter = 1;
-  private bool isLeftHanded = false;
+  public bool isLeftHanded = false;
   void Start()
   {
     lineRenderer = gameObject.AddComponent<LineRenderer>();
@@ -60,7 +60,7 @@ public class GraphInteract : MonoBehaviour
   }
   private void TriggerRight(InputAction.CallbackContext a)
   {
-    if (isLeftController ^ isLeftHanded)
+    if (!isLeftController ^ isLeftHanded)
     {
       Trigger(a);
     }
