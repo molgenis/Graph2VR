@@ -123,10 +123,6 @@ public class NodeMenu : BaseMenu
       {
         graph.CollapseGraph(node);
       });
-      cm.AddButton("Show/hide info", new Color(1, 0.5f, 0.5f) / 2, () =>
-      {
-        node.ToggleInfoPanel();
-      });
     }
 
     cm.AddButton("Close node", new Color(1, 0.5f, 0.5f) / 2, () =>
@@ -159,6 +155,10 @@ public class NodeMenu : BaseMenu
       subMenu = "Node";
       cm.Close();
       PopulateNode(input);
+    });
+    cm.AddButton("Show/hide info", new Color(1, 0.5f, 0.5f) / 2, () =>
+    {
+      node.ToggleInfoPanel();
     });
     cm.AddButton("Graph operations", Color.yellow / 2, () =>
     {
