@@ -50,7 +50,7 @@ public class CircleMenuButton : MonoBehaviour, IPointerEnterHandler, IPointerExi
 
   public void OnPointerEnter(PointerEventData eventData)
   {
-    gameObject.GetComponent<Renderer>().material.color = button.color + new Color(0.2f, 0.2f, 0.2f); ;
+    gameObject.GetComponent<Renderer>().material.color = button.color + new Color(0.2f, 0.2f, 0.2f);
     TextMeshPro text = gameObject.GetComponentInChildren<TextMeshPro>();
     if (text != null)
     {
@@ -86,13 +86,23 @@ public class CircleMenuButton : MonoBehaviour, IPointerEnterHandler, IPointerExi
 
   public void OnPointerClick(PointerEventData eventData)
   {
-    if (useAlternativeClick)
+    Material material = gameObject.GetComponent<Renderer>().material;
+    LeanTween.cancel(gameObject);
+    material.color = button.color + new Color(0.6f, 0.6f, 0.6f);
+    LeanTween.value(gameObject, (Color color) =>
     {
-      button.additionalCallback();
-    }
-    else
+      material.color = color;
+    }, material.color, material.color + new Color(0.2f, 0.2f, 0.2f), 0.15f).setOnComplete(() =>
     {
-      button.callback();
-    }
+      if (useAlternativeClick)
+      {
+        button.additionalCallback();
+      }
+      else
+      {
+        button.callback();
+      }
+    });
+
   }
 }
