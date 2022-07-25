@@ -383,7 +383,7 @@ public class Node : MonoBehaviour
     }
     else
     {
-      infoPanel.enabled = !infoPanel.enabled;
+      infoPanel.gameObject.SetActive(!infoPanel.gameObject.activeSelf);
     }
     PositionInfoPanel();
   }

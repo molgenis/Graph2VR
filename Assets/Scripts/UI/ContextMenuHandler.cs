@@ -6,11 +6,14 @@ using VDS.RDF;
 
 public class ContextMenuHandler : MonoBehaviour
 {
+  private static int headerSize = 30;
+  private static int titleSize = 25;
+  private static int textSize = 20;
+
   public GameObject ContentPanel;
   public GameObject labelPrefab;
   InputField inputPrefab;
 
-  // Start is called before the first frame update
   List<GameObject> labels = new List<GameObject>();
   public delegate void OnItemIsSelected(string button);
 
@@ -29,7 +32,7 @@ public class ContextMenuHandler : MonoBehaviour
 
   public void Initiate(Node node)
   {
-    GameObject loadingLabel = AddLabel("Loading please wait...", 20);
+    GameObject loadingLabel = AddLabel("Loading please wait...", headerSize);
     GetComponentInChildren<Button>().onClick.AddListener(() => node.ToggleInfoPanel());
     labelPrefab = Resources.Load<GameObject>("UI/Label");
     QueryService.Instance.GetDescriptionAsync(node.uri, (graph, state) =>
@@ -43,7 +46,7 @@ public class ContextMenuHandler : MonoBehaviour
           predicates.Add(triple.Predicate);
         }
         int numAdded = 0;
-        AddLabel(node.uri, 20);
+        AddLabel(node.uri, headerSize);
         foreach (string predicate in Settings.Instance.infopanelPredicates)
         {
           string prediacteName = node.graph.GetShortName(predicate);
@@ -92,13 +95,13 @@ public class ContextMenuHandler : MonoBehaviour
           }
           if (hasPropery)
           {
-            AddLabel("Has the following properties for " + prediacteName,15);
-            AddLabel(property);
+            AddLabel("Has the following properties for " + prediacteName, titleSize);
+            AddLabel(property, textSize);
           }
           if (isPropery)
           {
-            AddLabel("Is property " + prediacteName + " of following subjects:",15);
-            AddLabel(isOf);
+            AddLabel("Is property " + prediacteName + " of following subjects:", titleSize);
+            AddLabel(isOf, textSize);
           }
           if (numAdded > 10)
           {
@@ -107,12 +110,6 @@ public class ContextMenuHandler : MonoBehaviour
         }
       });
     });
-
-  }
-
-  // Update is called once per frame
-  void Update()
-  {
 
   }
 
