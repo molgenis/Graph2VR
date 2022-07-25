@@ -1,4 +1,5 @@
 using Dweiss;
+using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -60,6 +61,10 @@ public class MainMenu : BaseMenu
     {
       PopulateSettingsMenu();
     }
+    if (subMenu == "Load")
+    {
+      PopulateLoadMenu();
+    }
   }
 
   public void PopulateBaseMainMenu()
@@ -96,18 +101,22 @@ public class MainMenu : BaseMenu
       PopulateMainMenu();
     });
 
-    cm.AddButton("Save closest Graph (experimental)", new Color(1, 0.5f, 0.5f) / 2, () =>
+    cm.AddButton("Save closest Graph", new Color(1, 0.5f, 0.5f) / 2, () =>
     {
-      SaveLoad.Save(Main.instance.FindClosestGraphOrCreateNewGraph(transform.position), "graph");
+      Graph graphToSave = Main.instance.FindClosestGraphOrCreateNewGraph(transform.position);
+      Utils.GetStringFromVRKeyboard((string fileName) =>
+      {
+        SaveLoad.Save(graphToSave, fileName + ".nt");
+      }
+      , "graph", "Enter a filename...");
       Close();
     });
 
-    cm.AddButton("Load last saved Graph (experimental)", new Color(1, 0.5f, 0.5f) / 2, () =>
+    cm.AddButton("Load Graph", new Color(1, 0.5f, 0.5f) / 2, () =>
     {
-      Graph graph = Main.instance.CreateGraph();
-      SaveLoad.Load(graph, "graph");
-      graph.layout.CalculateLayout();
-      Close();
+      subMenu = "Load";
+      cm.Close();
+      PopulateMainMenu();
     });
 
     cm.AddButton("Search for existing node", Color.blue / 2, () =>
@@ -115,6 +124,22 @@ public class MainMenu : BaseMenu
       Main.instance.FindClosestGraphOrCreateNewGraph(transform.position).AddNodeFromDatabase();
       Close();
     });
+  }
+
+  public void PopulateLoadMenu()
+  {
+    string path = Application.persistentDataPath;
+    foreach (string filePath in System.IO.Directory.GetFiles(path))
+    {
+      string fileName = Path.GetFileName(filePath);
+      cm.AddButton(fileName, new Color(1, 0.5f, 0.5f) / 2, () =>
+      {
+        Graph graph = Main.instance.CreateGraph();
+        SaveLoad.Load(graph, fileName);
+        graph.layout.CalculateLayout();
+        Close();
+      });
+    }
   }
 
   public void PopulateSettingsMenu()

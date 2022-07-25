@@ -9,11 +9,13 @@ public class SaveLoad : MonoBehaviour
   private static readonly string regexSelector = "^(<[^>]+>)\\s(<[^>]+>)\\s([<|'|\"][^'\">]+[>|'|\"])";
   private static string FileName(string name)
   {
-    return Path.Combine(Application.persistentDataPath, name + ".nt");
+    return Path.Combine(Application.persistentDataPath, name);
   }
 
   public static void Save(Graph graph, string name)
   {
+    Debug.Log(graph);
+    Debug.Log(graph.edgeList.Count);
     using StreamWriter writer = new(FileName(name), false);
     foreach (Edge edge in graph.edgeList)
     {

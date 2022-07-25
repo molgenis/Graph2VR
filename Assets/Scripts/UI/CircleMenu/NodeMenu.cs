@@ -7,6 +7,12 @@ using VDS.RDF.Query;
 public class NodeMenu : BaseMenu
 {
   protected Dictionary<string, Tuple<string, int>> labelAndCountByUri = null;
+  private static Color closeRemoveColor = new Color(0.847f, 0.32f, 0.30f);
+  private static Color defaultMenuColor = Color.blue / 2;
+  private static Color grayColor = new Color(1, 1, 1) / 2;
+  private static Color dangerColor = new Color(1, 0.5f, 0.5f) / 2;
+  private static Color okColor = Color.green / 2;
+  private static Color warningColor = Color.yellow / 2;
 
   public void PopulateNode(UnityEngine.Object input)
   {
@@ -42,7 +48,7 @@ public class NodeMenu : BaseMenu
     }
     else
     {
-      cm.AddButton("Loading...", new Color(1, 1, 1) / 2, () => { });
+      cm.AddButton("Loading...", grayColor, () => { });
     }
   }
 
@@ -60,7 +66,7 @@ public class NodeMenu : BaseMenu
     }
     else
     {
-      cm.AddButton("Loading...", new Color(1, 1, 1) / 2, () => { });
+      cm.AddButton("Loading...", grayColor, () => { });
     }
 
   }
@@ -111,21 +117,21 @@ public class NodeMenu : BaseMenu
 
     if (node.uri != "")
     {
-      cm.AddButton("Collapse Incoming", new Color(1, 0.5f, 0.5f) / 2, () =>
+      cm.AddButton("Collapse Incoming", dangerColor, () =>
       {
         graph.CollapseIncomingGraph(node);
       });
-      cm.AddButton("Collapse Outgoing", new Color(1, 0.5f, 0.5f) / 2, () =>
+      cm.AddButton("Collapse Outgoing", dangerColor, () =>
       {
         graph.CollapseOutgoingGraph(node);
       });
-      cm.AddButton("Collapse All", new Color(1, 0.5f, 0.5f) / 2, () =>
+      cm.AddButton("Collapse All", dangerColor, () =>
       {
         graph.CollapseGraph(node);
       });
     }
 
-    cm.AddButton("Close node", new Color(1, 0.5f, 0.5f) / 2, () =>
+    cm.AddButton("Close node", dangerColor, () =>
     {
       graph.RemoveNode(node, true);
       Close();
@@ -135,7 +141,7 @@ public class NodeMenu : BaseMenu
 
   private void PopulateNodeDisplayMainMenu(UnityEngine.Object input)
   {
-    cm.AddButton("List incoming predicates", Color.green / 2, () =>
+    cm.AddButton("List incoming predicates", okColor, () =>
     {
       subMenu = "Incoming";
       cm.Close();
@@ -143,24 +149,24 @@ public class NodeMenu : BaseMenu
     });
     if (node.graphNode.NodeType == NodeType.Uri || node.graphNode.NodeType == NodeType.Variable)
     {
-      cm.AddButton("List outgoing predicates", Color.green / 2, () =>
+      cm.AddButton("List outgoing predicates", okColor, () =>
       {
         subMenu = "Outgoing";
         cm.Close();
         PopulateNode(input);
       });
     }
-    cm.AddButton("Close/Remove operations", Color.red / 2, () =>
+    cm.AddButton("Close/Remove operations", closeRemoveColor, () =>
     {
       subMenu = "Node";
       cm.Close();
       PopulateNode(input);
     });
-    cm.AddButton("Show/hide info", new Color(1, 0.5f, 0.5f) / 2, () =>
+    cm.AddButton("Show/hide info", defaultMenuColor, () =>
     {
       node.ToggleInfoPanel();
     });
-    cm.AddButton("Graph operations", Color.yellow / 2, () =>
+    cm.AddButton("Graph operations", warningColor, () =>
     {
       subMenu = "Graph";
       cm.Close();
@@ -169,7 +175,7 @@ public class NodeMenu : BaseMenu
 
     if (node.lockPosition)
     {
-      cm.AddButton("Unlock position", new Color(0.5f, 1f, 0.5f) / 2, () =>
+      cm.AddButton("Unlock position", okColor, () =>
       {
         LeanTween.cancel(node.gameObject);
         LeanTween.value(node.gameObject, 0.2f, 0.4f, 0.3f).setOnUpdate(value => node.transform.Find("Nail").GetComponent<NailRotation>().offset = value).setOnComplete(() =>
@@ -182,7 +188,7 @@ public class NodeMenu : BaseMenu
     }
     else
     {
-      cm.AddButton("Lock position", new Color(0.5f, 1f, 0.3f) / 2, () =>
+      cm.AddButton("Lock position", okColor, () =>
       {
         LeanTween.cancel(node.gameObject);
         LeanTween.value(node.gameObject, 0.4f, 0.2f, 0.5f).setOnUpdate(value => node.transform.Find("Nail").GetComponent<NailRotation>().offset = value);
@@ -194,12 +200,12 @@ public class NodeMenu : BaseMenu
 
     if (node.IsVariable)
     {
-      cm.AddButton("Undo variable conversion", Color.blue / 2, () =>
+      cm.AddButton("Undo variable conversion", defaultMenuColor, () =>
       {
         node.UndoConversion();
         PopulateNode(node);
       });
-      cm.AddButton("Rename variable", Color.red / 2, () =>
+      cm.AddButton("Rename variable", dangerColor, () =>
       {
         Utils.GetStringFromVRKeyboard((string label) =>
         {
@@ -207,7 +213,7 @@ public class NodeMenu : BaseMenu
         }
         , node.GetLabel(), "Enter a variable name...");
       });
-      cm.AddButton("Search for existing node", Color.blue / 2, () =>
+      cm.AddButton("Search for existing node", defaultMenuColor, () =>
       {
         Main.instance.FindClosestGraphOrCreateNewGraph(transform.position).AddNodeFromDatabase(node);
         Close();
@@ -226,7 +232,7 @@ public class NodeMenu : BaseMenu
   public void PopulateNodeDisplaySubMenus(UnityEngine.Object input)
   {
     // We are in a sub menu
-    cm.AddButton("Back", Color.blue / 2, () =>
+    cm.AddButton("Back", defaultMenuColor, () =>
     {
       subMenu = "";
       populateMenuState = PopulateMenuState.unloaded;

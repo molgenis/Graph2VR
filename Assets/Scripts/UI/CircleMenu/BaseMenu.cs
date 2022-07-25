@@ -3,113 +3,113 @@ using UnityEngine;
 
 public class BaseMenu : MonoBehaviour
 {
-   public Graph graph;
-   protected CircleMenu cm = null;
-   public GameObject controlerModel;
-   public string subMenu = "";
-   public GameObject limitSlider;
-   protected Node node = null;
-   protected Edge edge = null;
+  public Graph graph;
+  protected CircleMenu cm = null;
+  public GameObject controlerModel;
+  public string subMenu = "";
+  public GameObject limitSlider;
+  protected Node node = null;
+  protected Edge edge = null;
 
-   protected enum PopulateMenuState { unloaded, loading, loaded };
-   protected PopulateMenuState populateMenuState = PopulateMenuState.unloaded;
+  protected enum PopulateMenuState { unloaded, loading, loaded };
+  protected PopulateMenuState populateMenuState = PopulateMenuState.unloaded;
 
-   public void Start()
-   {
-      cm = GetComponent<CircleMenu>();
-   }
+  public void Start()
+  {
+    cm = GetComponent<CircleMenu>();
+  }
 
-   public virtual void Update()
-   {
-      if (ControlerInput.instance.triggerLeft)
-      {
-         Close();
-      }
-   }
+  public virtual void Update()
+  {
+    if (ControlerInput.instance.triggerLeft)
+    {
+      Close();
+    }
+  }
 
-   public void Close()
-   {
-      if (node != null) node.IsActiveInMenu = false;
-      if (edge != null) edge.IsActiveInMenu = false;
-      populateMenuState = PopulateMenuState.unloaded;
-      limitSlider.SetActive(false);
-      node = null;
-      subMenu = "";
-      edge = null;
-      graph = null;
-      if (cm != null)
-      {
-         cm.Close();
-         controlerModel.SetActive(true);
-      }
-   }
+  public void Close()
+  {
+    if (node != null) node.IsActiveInMenu = false;
+    if (edge != null) edge.IsActiveInMenu = false;
+    populateMenuState = PopulateMenuState.unloaded;
+    limitSlider.SetActive(false);
+    node = null;
+    subMenu = "";
+    edge = null;
+    graph = null;
+    if (cm != null)
+    {
+      cm.Close();
+      controlerModel.SetActive(true);
+    }
+  }
 
-   protected bool GraphHasSelectedVariable()
-   {
-      return graph.selection.Find((edge) => edge.IsVariable || edge.displayObject.IsVariable || edge.displaySubject.IsVariable) != null;
-   }
+  protected bool GraphHasSelectedVariable()
+  {
+    return graph.selection.Find((edge) => edge.IsVariable || edge.displayObject.IsVariable || edge.displaySubject.IsVariable) != null;
+  }
 
-   protected HashSet<string> SelectedVariableNames()
-   {
-      HashSet<string> variables = new HashSet<string>();
-      List<Edge> selected = graph.selection.FindAll((edge) => edge.IsVariable || edge.displayObject.IsVariable || edge.displaySubject.IsVariable);
-      foreach (Edge edge in selected)
-      {
-         if (edge.IsVariable) variables.Add(edge.variableName);
-         if (edge.displayObject.IsVariable) variables.Add(edge.displayObject.label);
-         if (edge.displaySubject.IsVariable) variables.Add(edge.displaySubject.label);
-      }
-      return variables;
-   }
+  protected HashSet<string> SelectedVariableNames()
+  {
+    HashSet<string> variables = new HashSet<string>();
+    List<Edge> selected = graph.selection.FindAll((edge) => edge.IsVariable || edge.displayObject.IsVariable || edge.displaySubject.IsVariable);
+    foreach (Edge edge in selected)
+    {
+      if (edge.IsVariable) variables.Add(edge.variableName);
+      if (edge.displayObject.IsVariable) variables.Add(edge.displayObject.label);
+      if (edge.displaySubject.IsVariable) variables.Add(edge.displaySubject.label);
+    }
+    return variables;
+  }
 
-   public void PopulateGraphMenu()
-   {
-      cm.AddButton("Layout: Force Directed 3D", Color.green / 2, () =>
-      {
-         graph.SwitchLayout<FruchtermanReingold>();
-         graph.layout.CalculateLayout();
-      });
+  public void PopulateGraphMenu()
+  {
+    cm.AddButton("Layout: Force Directed 3D", Color.green / 2, () =>
+    {
+      graph.SwitchLayout<FruchtermanReingold>();
+      graph.layout.CalculateLayout();
+    });
 
-      cm.AddButton("Layout: Force Directed 2D", Color.green / 2, () =>
-      {
-         graph.SwitchLayout<SpatialGrid2D>();
-         graph.layout.CalculateLayout();
-      });
-
-
-      cm.AddButton("Layout: Hierarchical View", Color.green / 2, () =>
-      {
-         graph.SwitchLayout<HierarchicalView>();
-         graph.layout.CalculateLayout();
-      });
-
-      cm.AddButton("Layout: Class Hierarchy", Color.green / 2, () =>
-      {
-         graph.SwitchLayout<ClassHierarchy>();
-         graph.layout.CalculateLayout();
-      });
+    cm.AddButton("Layout: Force Directed 2D", Color.green / 2, () =>
+    {
+      graph.SwitchLayout<SpatialGrid2D>();
+      graph.layout.CalculateLayout();
+    });
 
 
-      cm.AddButton("Auto layout", Color.yellow / 2, () =>
-      {
-         graph.layout.CalculateLayout();
-      });
+    cm.AddButton("Layout: Hierarchical View", Color.green / 2, () =>
+    {
+      graph.SwitchLayout<HierarchicalView>();
+      graph.layout.CalculateLayout();
+    });
 
-      cm.AddButton("Close Graph", new Color(1, 0.5f, 0.5f) / 2, () =>
-      {
-         graph.Remove();
-         Close();
-      });
+    cm.AddButton("Layout: Class Hierarchy", Color.green / 2, () =>
+    {
+      graph.SwitchLayout<ClassHierarchy>();
+      graph.layout.CalculateLayout();
+    });
 
-      cm.AddButton("Pin all nodes", new Color(0.5f, 0.5f, 0.5f) / 2, () =>
-      {
-         graph.PinAllNodes(true);
-      });
 
-      cm.AddButton("Unpin all nodes", new Color(0.5f, 0.5f, 0.5f) / 2, () =>
-      {
-        graph.PinAllNodes(false);
-      });
+    cm.AddButton("Auto layout", Color.yellow / 2, () =>
+    {
+      graph.layout.CalculateLayout();
+    });
+
+    cm.AddButton("Close Graph", new Color(1, 0.5f, 0.5f) / 2, () =>
+    {
+      graph.Remove();
+      Close();
+    });
+
+    cm.AddButton("Pin all nodes", new Color(0.5f, 0.5f, 0.5f) / 2, () =>
+    {
+      graph.PinAllNodes(true);
+    });
+
+    cm.AddButton("Unpin all nodes", new Color(0.5f, 0.5f, 0.5f) / 2, () =>
+    {
+      graph.PinAllNodes(false);
+    });
 
     if (graph.boundingSphere.GetComponent<Renderer>().forceRenderingOff == false)
     {
@@ -122,7 +122,8 @@ public class BaseMenu : MonoBehaviour
         cm.ReBuild();
       });
     }
-    else {
+    else
+    {
       cm.AddButton("Show sphere", new Color(0, 0.9f, 1.0f) / 2, () =>
       {
         graph.boundingSphere.GetComponent<Renderer>().forceRenderingOff = false;
@@ -133,28 +134,33 @@ public class BaseMenu : MonoBehaviour
       });
     }
 
-    cm.AddButton("Save this Graph (experimental)", new Color(1, 0.5f, 0.5f) / 2, () =>
+    cm.AddButton("Save this Graph", new Color(1, 0.5f, 0.5f) / 2, () =>
       {
-         SaveLoad.Save(graph, "graph");
-         Close();
+        Graph graphToSave = graph;
+        Utils.GetStringFromVRKeyboard((string fileName) =>
+        {
+          SaveLoad.Save(graphToSave, fileName);
+        }
+        , "graph", "Enter a filename...");
+        Close();
       });
 
-      if (graph.subGraphs.Count > 0)
+    if (graph.subGraphs.Count > 0)
+    {
+      cm.AddButton("Close all child graphs", new Color(1, 0.5f, 0.5f) / 2, () =>
       {
-         cm.AddButton("Close all child graphs", new Color(1, 0.5f, 0.5f) / 2, () =>
-         {
-            graph.RemoveSubGraphs();
-            Close();
-         });
-      }
+        graph.RemoveSubGraphs();
+        Close();
+      });
+    }
 
-      if (graph.parentGraph != null && graph.creationQuery != "")
+    if (graph.parentGraph != null && graph.creationQuery != "")
+    {
+      cm.AddButton("Close sibling graphs", new Color(1, 0.5f, 0.5f) / 2, () =>
       {
-         cm.AddButton("Close sibling graphs", new Color(1, 0.5f, 0.5f) / 2, () =>
-         {
-            graph.RemoveGraphsOfSameQuery();
-            Close();
-         });
-      }
-   }
+        graph.RemoveGraphsOfSameQuery();
+        Close();
+      });
+    }
+  }
 }
