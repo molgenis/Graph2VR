@@ -15,8 +15,6 @@ public class KeyboardHandler : MonoBehaviour
   public Vector3 offset;
   private Keyboard keyboard;
   private InputField inputField;
-  private Node node;
-  private Edge edge;
   private string originalStringValue; // Use to restore string on cancel
   static public KeyboardHandler instance;
 
@@ -29,39 +27,8 @@ public class KeyboardHandler : MonoBehaviour
     keyboard.OnUpdate.AddListener(HandleUpdate);
     keyboard.OnSubmit.AddListener(HandleSubmit);
     keyboard.OnCancel.AddListener(HandleCancel);
-    node = null;
     inputField = input;
     originalStringValue = input.text;
-    UpdateLocation();
-  }
-
-  // U?se this to edit a node's label
-  public void Open(Node node)
-  {
-    keyboard.Enable();
-    keyboard.SetPlaceholderMessage("Please enter label name");
-    keyboard.OnUpdate.AddListener(HandleUpdate);
-    keyboard.OnSubmit.AddListener(HandleSubmit);
-    keyboard.OnCancel.AddListener(HandleCancel);
-    keyboard.SetText(node.label);
-    inputField = null;
-    this.node = node;
-    originalStringValue = node.label;
-    UpdateLocation();
-  }
-
-  // Use this to edit a edge's label
-  public void Open(Edge edge)
-  {
-    inputField = null;
-    this.edge = edge;
-    originalStringValue = edge.variableName;
-    keyboard.Enable();
-    keyboard.SetPlaceholderMessage("Please enter label name");
-    keyboard.OnUpdate.AddListener(HandleUpdate);
-    keyboard.OnSubmit.AddListener(HandleSubmit);
-    keyboard.OnCancel.AddListener(HandleCancel);
-    keyboard.SetText(edge.variableName);
     UpdateLocation();
   }
 
@@ -97,14 +64,6 @@ public class KeyboardHandler : MonoBehaviour
     {
       inputField.text = text;
     }
-    else if (node != null)
-    {
-      node.SetLabel(text);
-    }
-    else if (edge != null)
-    {
-      edge.SetVariableName(text);
-    }
   }
 
   public void HandleSubmit(string text)
@@ -119,14 +78,6 @@ public class KeyboardHandler : MonoBehaviour
     if (inputField != null)
     {
       inputField.text = originalStringValue;
-    }
-    else if (node != null)
-    {
-      node.SetLabel(originalStringValue);
-    }
-    else if (edge != null)
-    {
-      edge.variableName = originalStringValue;
     }
     keyboard.SetText(originalStringValue);
     Close();

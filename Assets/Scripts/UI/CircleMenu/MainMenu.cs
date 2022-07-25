@@ -121,15 +121,15 @@ public class MainMenu : BaseMenu
   {
     cm.AddButton("Connect to custom server", Color.green / 2, () =>
     {
-      Main.instance.GetComponent<ConnectToCustomDatabase>().GetEndpoint(endpoint =>
-        {
-          PlayerPrefs.SetString("CustomServer", endpoint);
-          Settings.Instance.baseURI = "https://github.com/PjotrSvetachov/GraphVR/example-graph";
-          Settings.Instance.sparqlEndpoint = endpoint;
-          Settings.Instance.databaseSuportsBifContains = false;
-          Settings.Instance.searchOnKeypress = false;
-          QueryService.Instance.SwitchEndpoint();
-        });
+      Utils.GetStringFromVRKeyboard(endpoint =>
+      {
+        PlayerPrefs.SetString("CustomServer", endpoint);
+        Settings.Instance.baseURI = "https://github.com/PjotrSvetachov/GraphVR/example-graph";
+        Settings.Instance.sparqlEndpoint = endpoint;
+        Settings.Instance.databaseSuportsBifContains = false;
+        Settings.Instance.searchOnKeypress = false;
+        QueryService.Instance.SwitchEndpoint();
+      }, PlayerPrefs.GetString("CustomServer", ""), "Enter a custom server url...");
       Close();
     });
 

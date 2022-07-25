@@ -199,7 +199,14 @@ public class NodeMenu : BaseMenu
         node.UndoConversion();
         PopulateNode(node);
       });
-      cm.AddButton("Rename", Color.red / 2, () => { KeyboardHandler.instance.Open(node); });
+      cm.AddButton("Rename variable", Color.red / 2, () =>
+      {
+        Utils.GetStringFromVRKeyboard((string label) =>
+        {
+          node.SetLabel(label);
+        }
+        , node.GetLabel(), "Enter a variable name...");
+      });
       cm.AddButton("Search for existing node", Color.blue / 2, () =>
       {
         Main.instance.FindClosestGraphOrCreateNewGraph(transform.position).AddNodeFromDatabase(node);
