@@ -107,11 +107,6 @@ public class Node : MonoBehaviour
       connections.Add(edge);
     }
   }
-  public void SetHierarchicalLevel(int level)
-  {
-    hierarchicalSettings.level = level;
-    hierarchicalSettings.levelFound = true;
-  }
 
   private void UpdateColor()
   {

@@ -31,13 +31,13 @@ public class HierarchicalView : BaseLayoutAlgorithm
   private void CalculateHierarchicalLevels()
   {
     Node initialNode = graph.nodeList[0];
-    initialNode.SetHierarchicalLevel(0);
+    initialNode.hierarchicalSettings.SetLevel(0);
     SetHierarchicaLevels(initialNode);
     foreach (Node node in graph.nodeList)
     {
       if (!node.hierarchicalSettings.levelFound)
       {
-        node.SetHierarchicalLevel(0);
+        node.hierarchicalSettings.SetLevel(0);
         SetHierarchicaLevels(node);
       }
     }
@@ -74,7 +74,7 @@ public class HierarchicalView : BaseLayoutAlgorithm
 
       if (!other.hierarchicalSettings.levelFound)
       {
-        other.SetHierarchicalLevel(node.hierarchicalSettings.level + edgeDirection);
+        other.hierarchicalSettings.SetLevel(node.hierarchicalSettings.level + edgeDirection);
         nodesToCall.Add(other);
       }
     }

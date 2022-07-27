@@ -51,9 +51,8 @@ public class ClassHierarchy : BaseLayoutAlgorithm
       initialNode = subClassOfEdgeList[0].displaySubject;
     }
 
-    initialNode.SetHierarchicalLevel(0);
+    initialNode.hierarchicalSettings.SetLevel(0);
     SetHierarchicalLevels(initialNode);
-
     CalculateHierarchicalLevelsForMultipleRootNodes();
   }
 
@@ -63,7 +62,7 @@ public class ClassHierarchy : BaseLayoutAlgorithm
     {
       if (!node.hierarchicalSettings.levelFound)
       {
-        node.SetHierarchicalLevel(0);
+        node.hierarchicalSettings.SetLevel(0);
         SetHierarchicalLevels(node);
       }
     }
@@ -128,7 +127,7 @@ public class ClassHierarchy : BaseLayoutAlgorithm
       SetOtherSettings(node, partnerNode);
     }
 
-    partnerNode.SetHierarchicalLevel(node.hierarchicalSettings.level + edgeDirection);
+    partnerNode.hierarchicalSettings.SetLevel(node.hierarchicalSettings.level + edgeDirection);
     return partnerNode;
   }
 

@@ -19,6 +19,13 @@ public class Hierarchical
     targetLocation = Vector3.zero;
     hierarchicalType = HierarchicalType.None;
   }
+
+  public void SetLevel(int level)
+  {
+    this.level = level;
+    levelFound = true;
+  }
+
   public int level = 0;
   public bool levelFound = false;
   public bool positionSet = false;
