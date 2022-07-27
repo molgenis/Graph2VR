@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.InputSystem;
+﻿using UnityEngine;
 
 public class SphereInteraction : MonoBehaviour
 {
@@ -29,10 +26,7 @@ public class SphereInteraction : MonoBehaviour
     initialRotation = graph.transform.rotation;
   }
 
-  void StopInteraction()
-  {
-
-  }
+  void StopInteraction() { }
 
   void UpdateInteraction()
   {
@@ -55,7 +49,6 @@ public class SphereInteraction : MonoBehaviour
         rotation.eulerAngles.z > 90.0f && rotation.eulerAngles.z < 270.0f)
     {
       lefToRight = right - left;
-      graph.boundingSphere.Update();
       leftToCenter = graph.boundingSphere.transform.position - left;
       handleDistance = Vector3.Distance(left, right);
       initialScale = graph.transform.localScale;

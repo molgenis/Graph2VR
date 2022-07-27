@@ -14,13 +14,23 @@ public class BoundingSphere : MonoBehaviour
   {
     // Calc center
     Vector3 center = Vector3.zero;
+    double xCoordinate = 0;
+    double yCoordinate = 0;
+    double zCoordinate = 0;
+
     if (graph.nodeList.Count > 0)
     {
       foreach (Node node in graph.nodeList)
       {
-        center += node.transform.position;
+        xCoordinate += node.transform.position.x;
+        yCoordinate += node.transform.position.y;
+        zCoordinate += node.transform.position.z;
       }
-      center = center / graph.nodeList.Count;
+      center = new Vector3(
+        calculateCoordinate(xCoordinate),
+        calculateCoordinate(yCoordinate),
+        calculateCoordinate(zCoordinate)
+       );
 
       Vector3 farpoint = Vector3.zero;
       float far = 0f;
@@ -40,4 +50,10 @@ public class BoundingSphere : MonoBehaviour
       transform.localScale = new Vector3(1, 1, isFlat ? 0.1f : 1f) * size * 2;
     }
   }
+  private float calculateCoordinate(double coordinate)
+  {
+    int count = graph.nodeList.Count;
+    return (float)(coordinate / count);
+  }
+
 }
