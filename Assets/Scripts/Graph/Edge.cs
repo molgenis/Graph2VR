@@ -474,7 +474,7 @@ public class Edge : MonoBehaviour
         Destroy(child.gameObject);
       }
 
-      for (int i = 0; i < lineRenderer.positionCount - 1; i++)
+      for (int i = 1; i < lineRenderer.positionCount - 2; i++)
       {
         GameObject collider = new("Collider: (" + i + " to " + (i + 1) + ")");
         Vector3 from = lineRenderer.GetPosition(i);
@@ -484,7 +484,7 @@ public class Edge : MonoBehaviour
 
         collider.transform.SetParent(bendLineColliders.transform);
         collider.transform.localPosition = (from + to) * 0.5f;
-        collider.transform.rotation = Quaternion.FromToRotation(Vector3.up, normal);
+        collider.transform.localRotation = Quaternion.FromToRotation(Vector3.up, normal);
         collider.transform.localScale = Vector3.one;
         CapsuleCollider capsule = collider.AddComponent<CapsuleCollider>();
         capsule.radius = 0.015f;
