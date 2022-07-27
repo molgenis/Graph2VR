@@ -462,7 +462,8 @@ public class Edge : MonoBehaviour
       bendLineColliders.SetActive(false);
       directLineCollider.transform.rotation = Quaternion.Euler(0, backRotation.x, backRotation.y);
       directLineCollider.transform.localPosition = Vector3.zero;
-      directLineCollider.height = distance * 0.85f;
+      float parentScale = graph.transform.localScale.magnitude;
+      directLineCollider.height = distance / parentScale;
     }
     else
     {
