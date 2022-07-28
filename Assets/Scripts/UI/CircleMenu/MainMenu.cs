@@ -1,4 +1,5 @@
 using Dweiss;
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -46,7 +47,7 @@ public class MainMenu : BaseMenu
     cm.ReBuild();
   }
 
-  public void PopulateMainDisplaySubMenus()
+  private void PopulateMainDisplaySubMenus()
   {
     // We are in a sub menu
     cm.AddButton("Back", Color.blue / 2, () =>
@@ -57,6 +58,10 @@ public class MainMenu : BaseMenu
       PopulateMainMenu();
     });
 
+    if (subMenu == "SelectGraph")
+    {
+      PopulateSelectGraphMenu();
+    }
     if (subMenu == "Settings")
     {
       PopulateSettingsMenu();
@@ -67,7 +72,7 @@ public class MainMenu : BaseMenu
     }
   }
 
-  public void PopulateBaseMainMenu()
+  private void PopulateBaseMainMenu()
   {
 
     cm.AddButton("Reset Graph2VR DEMO - Mountain", Color.red, () =>
@@ -126,7 +131,7 @@ public class MainMenu : BaseMenu
     });
   }
 
-  public void PopulateLoadMenu()
+  private void PopulateLoadMenu()
   {
     string path = Application.persistentDataPath;
     foreach (string filePath in System.IO.Directory.GetFiles(path))
@@ -142,7 +147,51 @@ public class MainMenu : BaseMenu
     }
   }
 
-  public void PopulateSettingsMenu()
+  private void PopulateSelectGraphMenu()
+  {
+    if (populateMenuState == PopulateMenuState.unloaded)
+    {
+      QueryService.Instance.GetGraphsOnSelectedServer(PopulateSelectGraphCallback);
+      populateMenuState = PopulateMenuState.loading;
+    }
+
+    if (populateMenuState == PopulateMenuState.loaded)
+    {
+      DrawDelayedSelectGraphButtons();
+    }
+    else
+    {
+      cm.AddButton("Loading...", grayColor, () => { });
+    }
+  }
+
+  protected List<string> graphsInSelectedDatabase = null;
+
+  private void PopulateSelectGraphCallback(List<string> results)
+  {
+    graphsInSelectedDatabase = results;
+    populateMenuState = PopulateMenuState.loaded;
+    PopulateMainMenu();
+  }
+
+  private void DrawDelayedSelectGraphButtons()
+  {
+    if (populateMenuState == PopulateMenuState.loaded)
+    {
+      foreach (string graph in graphsInSelectedDatabase)
+      {
+        cm.AddButton(graph, grayColor, () =>
+        {
+          Settings.Instance.baseURI = graph;
+          QueryService.Instance.SwitchEndpoint();
+          cm.Close();
+        });
+
+      }
+    }
+  }
+
+  private void PopulateSettingsMenu()
   {
     cm.AddButton("Connect to custom server", Color.green / 2, () =>
     {
@@ -156,6 +205,13 @@ public class MainMenu : BaseMenu
         QueryService.Instance.SwitchEndpoint();
       }, PlayerPrefs.GetString("CustomServer", ""), "Enter a custom server url...");
       Close();
+    });
+
+    cm.AddButton("Select graph on server", Color.green / 2, () =>
+    {
+      subMenu = "SelectGraph";
+      cm.Close();
+      PopulateMainMenu();
     });
 
     foreach (DatabaseSetttings dataBaseSettings in Settings.Instance.databaseSetttings)

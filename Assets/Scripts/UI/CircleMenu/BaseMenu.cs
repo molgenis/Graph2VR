@@ -14,6 +14,13 @@ public class BaseMenu : MonoBehaviour
   protected enum PopulateMenuState { unloaded, loading, loaded };
   protected PopulateMenuState populateMenuState = PopulateMenuState.unloaded;
 
+  protected static Color closeRemoveColor = new Color(0.847f, 0.32f, 0.30f);
+  protected static Color defaultMenuColor = Color.blue / 2;
+  protected static Color grayColor = new Color(1, 1, 1) / 2;
+  protected static Color dangerColor = new Color(1, 0.5f, 0.5f) / 2;
+  protected static Color okColor = Color.green / 2;
+  protected static Color warningColor = Color.yellow / 2;
+
   public void Start()
   {
     cm = GetComponent<CircleMenu>();

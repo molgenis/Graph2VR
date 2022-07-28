@@ -3,7 +3,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.IO;
 using System.Linq;
+using System.Xml;
+using System.Xml.Linq;
+using System.Xml.XPath;
 using UnityEngine;
 using VDS.RDF;
 using VDS.RDF.Parsing;
@@ -188,6 +192,53 @@ public class QueryService : MonoBehaviour
       Debug.Log("Please use a Construct query");
     }
   }
+
+  Action<List<string>> getGraphsOnSelectedServerCallback;
+  public void GetGraphsOnSelectedServer(Action<List<string>> callback)
+  {
+    getGraphsOnSelectedServerCallback = callback;
+    StartCoroutine("GetGraphsOnSelectedServerHelper");
+  }
+
+  private IEnumerator GetGraphsOnSelectedServerHelper()
+  {
+    string query = $@"
+      SELECT DISTINCT ?graph
+      WHERE {{ 
+        GRAPH ?graph {{ ?s ?p ?o }}
+      }}";
+    System.Net.HttpWebResponse results = endPoint.QueryRaw(query);
+    yield return new WaitForEndOfFrame();
+
+    StreamReader reader = new StreamReader(results.GetResponseStream());
+
+    string nextLine = reader.ReadLine();
+    string sparqlResult = nextLine;
+    while (nextLine != null)
+    {
+      nextLine = reader.ReadLine();
+      sparqlResult += nextLine;
+      yield return new WaitForEndOfFrame();
+    }
+
+    XmlReader xmlReader = XmlReader.Create(new StringReader(sparqlResult));
+    XElement xml = XElement.Load(xmlReader);
+    XmlNameTable nameTable = new NameTable();
+    XmlNamespaceManager namespaceManager = new XmlNamespaceManager(nameTable);
+    string nameSpace = xml.GetDefaultNamespace().NamespaceName;
+    namespaceManager.AddNamespace("ns", nameSpace);
+    IEnumerable list = (IEnumerable)xml.XPathEvaluate("//ns:uri", namespaceManager);
+
+    List<string> graphNames = new List<string>();
+    foreach (XElement graph in list)
+    {
+      graphNames.Add(graph.Value);
+    }
+    getGraphsOnSelectedServerCallback(graphNames);
+  }
+
+
+
 
   public void GetOutgoingPredicats(string URI, SparqlResultsCallback sparqlResultsCallback)
   {

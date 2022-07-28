@@ -7,12 +7,6 @@ using VDS.RDF.Query;
 public class NodeMenu : BaseMenu
 {
   protected Dictionary<string, Tuple<string, int>> labelAndCountByUri = null;
-  private static Color closeRemoveColor = new Color(0.847f, 0.32f, 0.30f);
-  private static Color defaultMenuColor = Color.blue / 2;
-  private static Color grayColor = new Color(1, 1, 1) / 2;
-  private static Color dangerColor = new Color(1, 0.5f, 0.5f) / 2;
-  private static Color okColor = Color.green / 2;
-  private static Color warningColor = Color.yellow / 2;
 
   public void PopulateNode(UnityEngine.Object input)
   {
