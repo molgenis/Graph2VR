@@ -17,4 +17,8 @@ We tried to reduce the ways to interact with the graph to a few simple operation
 - Adding new nodes and edges.
 - Interacting with the graph (zoom, move, rotate) 
 
+## VDS.RDF fix to make the dotnetrdf library work on the Quest2 headset
 
+Running the application on the headset will give this error
+`Cannot use Type VDS.RDF.Parsing.GZippedNTriplesParser for the RDF Parser Type as it does not implement the required interface VDS.RDF.IRdfReader`
+To fix this we made a custom version of the library that removes this check https://github.com/dotnetrdf/dotnetrdf/blame/main/Libraries/dotNetRdf/Core/MimeTypeDefinition.cs#L398 and shiped it with graph2vr.
