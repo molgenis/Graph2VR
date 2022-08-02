@@ -1,9 +1,9 @@
 # Graph2VR
 
-GraphVR is an application to Visualize Graphs (SPARQL) as 3D Graphs in Virtual Reality.
+Graph2VR is an application to Visualize Graphs (SPARQL) as 3D Graphs in Virtual Reality.
 The idea is to explore, analyze, and interact with the data in the graph intuitively.
 
-GraphVR has been built in Unity and is able to connect to a SPARQL endpoint using [dotNetRDF](https://dotnetrdf.org/).
+Graph2VR has been built in Unity and is able to connect to a SPARQL endpoint using [dotNetRDF](https://dotnetrdf.org/).
 We got inspired by many different tools to work with Linked data and to visualize Graphs.
 Virtual Reality offers the user way more space to expand the graph, then a 2D computer screen.
 
