@@ -155,7 +155,7 @@ public class QueryService : MonoBehaviour
           Select {variable} <http://graph2vr.org/label> AS ?graph2vrlabel STR(?label) as ?label
           where {{
             {variable} rdfs:label ?label .
-            FILTER(LANG(?label) = '' || LANGMATCHES(LANG(?label), '{Main.instance.languageCode}'))
+            {LanguageFilterString("?label")}
           }}
         }}
 
@@ -237,9 +237,6 @@ public class QueryService : MonoBehaviour
     getGraphsOnSelectedServerCallback(graphNames);
   }
 
-
-
-
   public void GetOutgoingPredicats(string URI, SparqlResultsCallback sparqlResultsCallback)
   {
     string query = $@"
@@ -250,7 +247,7 @@ public class QueryService : MonoBehaviour
         OPTIONAL {{
           ?p rdfs:label ?label
         }}
-        FILTER(LANG(?label) = '' || LANGMATCHES(LANG(?label), '{Main.instance.languageCode}')) 
+        {LanguageFilterString("?label")}
       }}
       ORDER BY ?label ?p LIMIT 100";
     endPoint.QueryWithResultSet(query, sparqlResultsCallback, state: null);
@@ -266,7 +263,7 @@ public class QueryService : MonoBehaviour
         OPTIONAL {{
           ?p rdfs:label ?label
         }}
-        FILTER(LANG(?label) = '' || LANGMATCHES(LANG(?label), '{Main.instance.languageCode}')) 
+        {LanguageFilterString("?label")}
       }} 
       ORDER BY ?label ?p LIMIT 100";
     endPoint.QueryWithResultSet(query, sparqlResultsCallback, state: null);
@@ -335,7 +332,6 @@ public class QueryService : MonoBehaviour
 
   private string GetAutoCompleteQuery(string searchTerm, Node variableNode)
   {
-
     if (Settings.Instance.databaseSuportsBifContains)
     {
       return GetAutoCompleteBifQuery(searchTerm, variableNode);
@@ -346,6 +342,17 @@ public class QueryService : MonoBehaviour
     }
   }
 
+  private static string LanguageFilterString(string variableName)
+  {
+    if (Settings.Instance.languageCode == "")
+    {
+      return "";
+    }
+    else
+    {
+      return $"FILTER(LANG({variableName}) = '' || LANGMATCHES(LANG({variableName}), '{Settings.Instance.languageCode}')).";
+    }
+  }
   private static string GetAutoCompleteNonBifQuery(string searchTerm, Node variableNode)
   {
     if (variableNode != null)
@@ -359,7 +366,7 @@ public class QueryService : MonoBehaviour
                 ?uri(^(<>| !<>) | rdfs:label | skos:altLabel) ?entity.
                 BIND(STR(?entity) AS ?name).
                 FILTER REGEX(?name, '{searchTerm}', 'i').
-                FILTER(LANG(?name) = '' || LANGMATCHES(LANG(?name), '{Main.instance.languageCode}')).
+                {LanguageFilterString("?name")}
               }}
               LIMIT 5";
     }
@@ -388,7 +395,7 @@ public class QueryService : MonoBehaviour
                  {variableNode.graph.GetTriplesString()}
                  {variableNode.GetQueryLabel()} rdfs:label ?name.
                  ?name bif:contains ""'{AddStar(searchTerm)}'"".
-                 FILTER(LANG(?name) = '' || LANGMATCHES(LANG(?name), '{Main.instance.languageCode}')).
+                 {LanguageFilterString("?name")}
                }}
                LIMIT 5";
     }
@@ -400,7 +407,7 @@ public class QueryService : MonoBehaviour
               where {{
                 ?uri rdfs:label ?name.
                 ?name bif:contains ""'{AddStar(searchTerm)}'"".
-                FILTER(LANG(?name) = '' || LANGMATCHES(LANG(?name), '{Main.instance.languageCode}')).
+                {LanguageFilterString("?name")}
               }}
               LIMIT 5";
     }

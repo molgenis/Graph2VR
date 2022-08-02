@@ -802,7 +802,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f024f26b416be5468a56c382613b171, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  languageCode: en
   mainGraph: {fileID: 0}
   graphPrefab: {fileID: 280358173420448884, guid: 4b47d999b2a37494baf875b5db9ccd16, type: 3}
   keyboard: {fileID: 1728787462}
@@ -1355,6 +1354,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfad8e0279381294fad0e271990e9952, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  languageCode: en
   sparqlEndpoint: https://dbpedia.org/sparql
   baseURI: http://dbpedia.org
   databaseSuportsBifContains: 1

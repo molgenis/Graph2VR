@@ -70,6 +70,11 @@ public class MainMenu : BaseMenu
     {
       PopulateLoadMenu();
     }
+    if (subMenu == "Language")
+    {
+      PopulateLanguageMenu();
+    }
+
   }
 
   private void PopulateBaseMainMenu()
@@ -145,6 +150,63 @@ public class MainMenu : BaseMenu
         Close();
       });
     }
+  }
+
+  private void PopulateLanguageMenu()
+  {
+    cm.AddButton("Don't filter on language code", defaultMenuColor, () =>
+    {
+      Settings.Instance.languageCode = "";
+      subMenu = "Settings";
+      cm.Close();
+      PopulateMainMenu();
+    });
+    cm.AddButton("DE - Deutsch", Color.green / 2, () =>
+    {
+      Settings.Instance.languageCode = "de";
+      subMenu = "Settings";
+      cm.Close();
+      PopulateMainMenu();
+    });
+    cm.AddButton("EN - English", Color.green / 2, () =>
+    {
+      Settings.Instance.languageCode = "en";
+      subMenu = "Settings";
+      cm.Close();
+      PopulateMainMenu();
+    });
+    cm.AddButton("ES - Español", Color.green / 2, () =>
+    {
+      Settings.Instance.languageCode = "es";
+      subMenu = "Settings";
+      cm.Close();
+      PopulateMainMenu();
+    });
+    cm.AddButton("FR - Français", Color.green / 2, () =>
+    {
+      Settings.Instance.languageCode = "fr";
+      subMenu = "Settings";
+      cm.Close();
+      PopulateMainMenu();
+    });
+
+    cm.AddButton("NL - Nederlands", Color.green / 2, () =>
+    {
+      Settings.Instance.languageCode = "nl";
+      subMenu = "Settings";
+      cm.Close();
+      PopulateMainMenu();
+    });
+
+    cm.AddButton("Custom language code", defaultMenuColor, () =>
+    {
+      Utils.GetStringFromVRKeyboard((string code) =>
+      {
+        Settings.Instance.languageCode = code;
+      });
+      Close();
+    });
+
   }
 
   private void PopulateSelectGraphMenu()
@@ -265,5 +327,13 @@ public class MainMenu : BaseMenu
         PopulateMainMenu();
       });
     }
+
+    cm.AddButton("Select a languagefilter", Color.green / 2, () =>
+    {
+      subMenu = "Language";
+      cm.Close();
+      PopulateMainMenu();
+    });
+
   }
 }
