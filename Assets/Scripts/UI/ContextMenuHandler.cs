@@ -46,7 +46,11 @@ public class ContextMenuHandler : MonoBehaviour
           predicates.Add(triple.Predicate);
         }
         int numAdded = 0;
-        AddLabel(node.uri, headerSize);
+        GameObject uriLabel = AddLabel($"<color=blue>{node.uri}</color>", headerSize);
+        uriLabel.AddComponent<Button>().onClick.AddListener(() =>
+        {
+          Application.OpenURL(node.uri);
+        });
         foreach (string predicate in Settings.Instance.infopanelPredicates)
         {
           string prediacteName = node.graph.GetShortName(predicate);
