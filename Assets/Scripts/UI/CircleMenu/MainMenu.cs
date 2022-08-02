@@ -156,35 +156,40 @@ public class MainMenu : BaseMenu
   {
     cm.AddButton("Don't filter on language code", defaultMenuColor, () =>
     {
-      Settings.Instance.languageCode = "";
+      PlayerPrefs.SetString("LanguageCode", "");
+      Main.instance.languageCode = "";
       subMenu = "Settings";
       cm.Close();
       PopulateMainMenu();
     });
     cm.AddButton("DE - Deutsch", Color.green / 2, () =>
     {
-      Settings.Instance.languageCode = "de";
+      PlayerPrefs.SetString("LanguageCode", "de");
+      Main.instance.languageCode = "de";
       subMenu = "Settings";
       cm.Close();
       PopulateMainMenu();
     });
     cm.AddButton("EN - English", Color.green / 2, () =>
     {
-      Settings.Instance.languageCode = "en";
+      PlayerPrefs.SetString("LanguageCode", "en");
+      Main.instance.languageCode = "en";
       subMenu = "Settings";
       cm.Close();
       PopulateMainMenu();
     });
     cm.AddButton("ES - Español", Color.green / 2, () =>
     {
-      Settings.Instance.languageCode = "es";
+      PlayerPrefs.SetString("LanguageCode", "es");
+      Main.instance.languageCode = "es";
       subMenu = "Settings";
       cm.Close();
       PopulateMainMenu();
     });
     cm.AddButton("FR - Français", Color.green / 2, () =>
     {
-      Settings.Instance.languageCode = "fr";
+      PlayerPrefs.SetString("LanguageCode", "fr");
+      Main.instance.languageCode = "fr";
       subMenu = "Settings";
       cm.Close();
       PopulateMainMenu();
@@ -192,7 +197,8 @@ public class MainMenu : BaseMenu
 
     cm.AddButton("NL - Nederlands", Color.green / 2, () =>
     {
-      Settings.Instance.languageCode = "nl";
+      PlayerPrefs.SetString("LanguageCode", "nl");
+      Main.instance.languageCode = "nl";
       subMenu = "Settings";
       cm.Close();
       PopulateMainMenu();
@@ -202,7 +208,8 @@ public class MainMenu : BaseMenu
     {
       Utils.GetStringFromVRKeyboard((string code) =>
       {
-        Settings.Instance.languageCode = code;
+        PlayerPrefs.SetString("LanguageCode", code);
+        Main.instance.languageCode = code;
       });
       Close();
     });
@@ -328,7 +335,7 @@ public class MainMenu : BaseMenu
       });
     }
 
-    cm.AddButton("Select a languagefilter", Color.green / 2, () =>
+    cm.AddButton("Change languagefilter: " + Main.instance.languageCode, warningColor, () =>
     {
       subMenu = "Language";
       cm.Close();

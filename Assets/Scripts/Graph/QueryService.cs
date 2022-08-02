@@ -344,13 +344,13 @@ public class QueryService : MonoBehaviour
 
   private static string LanguageFilterString(string variableName)
   {
-    if (Settings.Instance.languageCode == "")
+    if (Main.instance.languageCode == "")
     {
       return "";
     }
     else
     {
-      return $"FILTER(LANG({variableName}) = '' || LANGMATCHES(LANG({variableName}), '{Settings.Instance.languageCode}')).";
+      return $"FILTER(LANG({variableName}) = '' || LANGMATCHES(LANG({variableName}), '{Main.instance.languageCode}')).";
     }
   }
   private static string GetAutoCompleteNonBifQuery(string searchTerm, Node variableNode)

@@ -29,7 +29,6 @@ namespace Dweiss
     //"https://github.com/PjotrSvetachov/GraphVR/example-graph";
     // "http://dbpedia.org";
 
-    public string languageCode = "en";
     public string sparqlEndpoint = "https://dbpedia.org/sparql";
     public string baseURI = "http://dbpedia.org"; //"https://github.com/PjotrSvetachov/GraphVR/example-graph";
     public bool databaseSuportsBifContains = false;

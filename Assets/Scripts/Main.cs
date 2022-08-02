@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class Main : MonoBehaviour
 {
+  public string languageCode = "en";
+
   static public Main instance;
   public Graph mainGraph = null;
   public GameObject graphPrefab;
@@ -10,6 +12,8 @@ public class Main : MonoBehaviour
 
   void Start()
   {
+    Main.instance.languageCode = PlayerPrefs.GetString("LanguageCode", "");
+
     VDS.RDF.Options.UsePLinqEvaluation = false;
 
     // NOTE: CODE FOR DEMO PURPOSE
