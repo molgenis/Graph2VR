@@ -1,4 +1,4 @@
-# GraphVR
+# Graph2VR
 
 GraphVR is an application to Visualize Graphs (SPARQL) as 3D Graphs in Virtual Reality.
 The idea is to explore, analyze, and interact with the data in the graph intuitively.
