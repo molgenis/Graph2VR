@@ -19,7 +19,7 @@ public class Main : MonoBehaviour
     if (GameObject.FindGameObjectWithTag("UseCustomDatabase") != null)
     {
       Settings.Instance.sparqlEndpoint = PlayerPrefs.GetString("CustomServer", "http://localhost:8890/sparql");
-      Settings.Instance.baseURI = "https://github.com/PjotrSvetachov/GraphVR/example-graph";
+      Settings.Instance.baseURI = PlayerPrefs.GetString("CustomGraphDatabase", "");
       Settings.Instance.databaseSuportsBifContains = false;
       Settings.Instance.searchOnKeypress = true;
       Settings.Instance.initialSparqlQueryString = $@"

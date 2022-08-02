@@ -182,11 +182,13 @@ public class MainMenu : BaseMenu
       {
         cm.AddButton(graph, grayColor, () =>
         {
+          PlayerPrefs.SetString("CustomGraphDatabase", graph);
+          string endpoint = PlayerPrefs.GetString("CustomServer");
           Settings.Instance.baseURI = graph;
+          Settings.Instance.sparqlEndpoint = endpoint;
           QueryService.Instance.SwitchEndpoint();
           cm.Close();
         });
-
       }
     }
   }
@@ -198,7 +200,8 @@ public class MainMenu : BaseMenu
       Utils.GetStringFromVRKeyboard(endpoint =>
       {
         PlayerPrefs.SetString("CustomServer", endpoint);
-        Settings.Instance.baseURI = "https://github.com/PjotrSvetachov/GraphVR/example-graph";
+        PlayerPrefs.SetString("CustomGraphDatabase", "");
+        Settings.Instance.baseURI = PlayerPrefs.GetString("CustomGraphDatabase", "");
         Settings.Instance.sparqlEndpoint = endpoint;
         Settings.Instance.databaseSuportsBifContains = false;
         Settings.Instance.searchOnKeypress = false;
