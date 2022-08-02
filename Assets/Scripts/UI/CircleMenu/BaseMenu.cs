@@ -75,12 +75,14 @@ public class BaseMenu : MonoBehaviour
     {
       graph.SwitchLayout<FruchtermanReingold>();
       graph.layout.CalculateLayout();
+      graph.boundingSphere.isFlat = false;
     });
 
     cm.AddButton("Layout: Force Directed 2D", Color.green / 2, () =>
     {
       graph.SwitchLayout<SpatialGrid2D>();
       graph.layout.CalculateLayout();
+      graph.boundingSphere.isFlat = true;
     });
 
 
@@ -88,12 +90,14 @@ public class BaseMenu : MonoBehaviour
     {
       graph.SwitchLayout<HierarchicalView>();
       graph.layout.CalculateLayout();
+      graph.boundingSphere.isFlat = false;
     });
 
     cm.AddButton("Layout: Class Hierarchy", Color.green / 2, () =>
     {
       graph.SwitchLayout<ClassHierarchy>();
       graph.layout.CalculateLayout();
+      graph.boundingSphere.isFlat = false;
     });
 
 

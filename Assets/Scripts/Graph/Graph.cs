@@ -83,15 +83,12 @@ public class Graph : MonoBehaviour
   public void QuerySimilarPatternsMultipleLayers()
   {
     string triples = GetTriplesString();
-    Debug.Log("QuerySimilarPatternsMultipleLayers");
     void QuerySimilarPatternsMultipleLayersCallback(SparqlResultSet results, string query)
     {
-      Debug.Log("QuerySimilarPatternsMultipleLayersCallback");
       UnityMainThreadDispatcher.Instance().Enqueue(() =>
       {
         Quaternion rotation = Camera.main.transform.rotation;
         Vector3 offset = transform.position + (rotation * new Vector3(0, 0, 1 + boundingSphere.size));
-        Debug.Log("QuerySimilarPatternsMultipleLayersCallback results: " + results.Count);
         foreach (SparqlResult result in results)
         {
           string constructQuery = triples;
@@ -122,6 +119,7 @@ public class Graph : MonoBehaviour
     newGraph.layout = planes;
     newGraph.boundingSphere.isFlat = true;
     newGraph.boundingSphere.GetComponent<Renderer>().forceRenderingOff = true;
+    newGraph.boundingSphere.lookDirection = rotation;
   }
 
   public void AddToSelection(Edge toAdd)
