@@ -459,6 +459,10 @@ public class Graph : MonoBehaviour
     node.graph = this;
     node.SetURI(value);
     node.SetLabel(value);
+    if (nodeList.Count == 0)
+    {
+      boundingSphere.gameObject.SetActive(true);
+    }
     nodeList.Add(node);
     return node;
   }

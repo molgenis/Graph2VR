@@ -9,6 +9,7 @@ public class BoundingSphere : MonoBehaviour
   public void Start()
   {
     transform.SetParent(null);
+    gameObject.SetActive(false);
   }
 
   public void Update()

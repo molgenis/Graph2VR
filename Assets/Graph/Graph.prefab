@@ -244,3 +244,4 @@ MonoBehaviour:
   graph: {fileID: 662167465230485843}
   size: 1
   isFlat: 0
+  lookDirection: {x: 0, y: 0, z: 0, w: 1}
