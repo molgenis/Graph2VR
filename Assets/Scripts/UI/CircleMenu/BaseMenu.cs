@@ -122,11 +122,11 @@ public class BaseMenu : MonoBehaviour
       graph.PinAllNodes(false);
     });
 
-    if (graph.boundingSphere.GetComponent<Renderer>().forceRenderingOff == false)
+    if (graph.boundingSphere.IsVisible())
     {
       cm.AddButton("Hide sphere", new Color(0, 0.9f, 1.0f) / 2, () =>
       {
-        graph.boundingSphere.GetComponent<Renderer>().forceRenderingOff = true;
+        graph.boundingSphere.Hide();
         subMenu = "Graph";
         cm.Close();
         PopulateGraphMenu();
@@ -137,7 +137,7 @@ public class BaseMenu : MonoBehaviour
     {
       cm.AddButton("Show sphere", new Color(0, 0.9f, 1.0f) / 2, () =>
       {
-        graph.boundingSphere.GetComponent<Renderer>().forceRenderingOff = false;
+        graph.boundingSphere.Show();
         populateMenuState = PopulateMenuState.unloaded;
         cm.Close();
         PopulateGraphMenu();
@@ -150,7 +150,7 @@ public class BaseMenu : MonoBehaviour
         Graph graphToSave = graph;
         Utils.GetStringFromVRKeyboard((string fileName) =>
         {
-          SaveLoad.Save(graphToSave, fileName);
+          SaveLoadGraph.Save(graphToSave, fileName);
         }
         , "graph", "Enter a filename...");
         Close();

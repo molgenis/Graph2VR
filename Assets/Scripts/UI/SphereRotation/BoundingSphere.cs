@@ -6,10 +6,28 @@ public class BoundingSphere : MonoBehaviour
   public float size = 1;
   public bool isFlat = false;
   public Quaternion lookDirection = Quaternion.identity;
-  public void Start()
+  private new Renderer renderer;
+
+  private void Awake()
   {
+    renderer = GetComponent<Renderer>();
     transform.SetParent(null);
-    gameObject.SetActive(false);
+    Hide();
+  }
+
+  public void Hide()
+  {
+    renderer.forceRenderingOff = true;
+  }
+
+  public void Show()
+  {
+    renderer.forceRenderingOff = false;
+  }
+
+  public bool IsVisible()
+  {
+    return !renderer.forceRenderingOff;
   }
 
   public void Update()

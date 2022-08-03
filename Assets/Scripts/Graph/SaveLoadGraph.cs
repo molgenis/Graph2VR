@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 using UnityEngine;
 using VDS.RDF;
 
-public class SaveLoad : MonoBehaviour
+public class SaveLoadGraph
 {
   private static readonly string regexSelector = "^(<[^>]+>)\\s(<[^>]+>)\\s([<|'|\"][^'\">]+[>|'|\"])";
   private static string FileName(string name)
@@ -14,8 +14,6 @@ public class SaveLoad : MonoBehaviour
 
   public static void Save(Graph graph, string name)
   {
-    Debug.Log(graph);
-    Debug.Log(graph.edgeList.Count);
     using StreamWriter writer = new(FileName(name), false);
     foreach (Edge edge in graph.edgeList)
     {

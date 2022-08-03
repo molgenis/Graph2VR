@@ -111,12 +111,32 @@ public class MainMenu : BaseMenu
       PopulateMainMenu();
     });
 
+    cm.AddButton("Save application state", new Color(1, 0.5f, 0.5f) / 2, () =>
+    {
+      ApplicationState.Save("Text.g2v");
+      /*
+      Utils.GetStringFromVRKeyboard((string fileName) =>
+      {
+        SaveLoadGraph.Save(graphToSave, fileName + ".nt");
+      }
+      , "graph", "Enter a filename...");
+      */
+      Close();
+    });
+
+    cm.AddButton("Load application state", new Color(1, 0.5f, 0.5f) / 2, () =>
+    {
+      ApplicationState.Load("Text.g2v");
+      Close();
+    });
+
+
     cm.AddButton("Save closest Graph", new Color(1, 0.5f, 0.5f) / 2, () =>
     {
       Graph graphToSave = Main.instance.FindClosestGraphOrCreateNewGraph(transform.position);
       Utils.GetStringFromVRKeyboard((string fileName) =>
       {
-        SaveLoad.Save(graphToSave, fileName + ".nt");
+        SaveLoadGraph.Save(graphToSave, fileName + ".nt");
       }
       , "graph", "Enter a filename...");
       Close();
@@ -145,7 +165,7 @@ public class MainMenu : BaseMenu
       cm.AddButton(fileName, new Color(1, 0.5f, 0.5f) / 2, () =>
       {
         Graph graph = Main.instance.CreateGraph();
-        SaveLoad.Load(graph, fileName);
+        SaveLoadGraph.Load(graph, fileName);
         graph.layout.CalculateLayout();
         Close();
       });

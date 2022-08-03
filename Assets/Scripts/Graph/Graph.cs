@@ -426,29 +426,58 @@ public class Graph : MonoBehaviour
     return clone;
   }
 
-  public void CreateNode(string value, INode iNode)
+  public Node GetExistingNode(string nodeName)
   {
+    return nodeList.Find((Node node) => node.name == nodeName);
+  }
+
+  public Node CreateNode(string value, INode iNode)
+  {
+    string name = "Node: " + value;
+    Node existingNode = GetExistingNode(name);
+    if (existingNode != null)
+    {
+      return existingNode;
+    }
+
     GameObject clone = Instantiate<GameObject>(nodePrefab);
-    clone.name = "Node " + value;
+    clone.name = "Node: " + value;
     clone.transform.SetParent(transform);
     clone.transform.localPosition = UnityEngine.Random.insideUnitSphere * 3f;
     clone.transform.localRotation = Quaternion.identity;
     clone.transform.localScale = Vector3.one * 0.05f;
     Node node = CreateNodeFromClone(value, clone);
     node.graphNode = iNode;
+    return node;
   }
 
   public Node CreateNode(string value, Vector3 position)
   {
+    string name = "Node: " + value;
+    Node existingNode = GetExistingNode(name);
+    if (existingNode != null)
+    {
+      return existingNode;
+    }
+
     GameObject clone = Instantiate<GameObject>(nodePrefab);
-    clone.name = "Node " + value;
+    clone.name = name;
     clone.transform.SetParent(transform);
     clone.transform.position = position;
     clone.transform.localRotation = Quaternion.identity;
     clone.transform.localScale = Vector3.one * 0.05f;
     Node node = CreateNodeFromClone(value, clone);
     NodeFactory nodeFactory = new();
-    node.graphNode = nodeFactory.CreateUriNode(new Uri(value));
+
+    if (Uri.IsWellFormedUriString(value, UriKind.Absolute))
+    {
+      node.graphNode = nodeFactory.CreateUriNode(new Uri(value));
+    }
+    else
+    {
+      node.graphNode = nodeFactory.CreateLiteralNode(value);
+    }
+
     return node;
   }
 
@@ -461,7 +490,7 @@ public class Graph : MonoBehaviour
     node.SetLabel(value);
     if (nodeList.Count == 0)
     {
-      boundingSphere.gameObject.SetActive(true);
+      boundingSphere.Show();
     }
     nodeList.Add(node);
     return node;

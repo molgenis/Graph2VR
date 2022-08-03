@@ -78,4 +78,15 @@ public class Main : MonoBehaviour
     }
     return graph;
   }
+
+  public void ClearWorkspace()
+  {
+    GameObject[] graphs = GameObject.FindGameObjectsWithTag("Graph");
+    foreach (GameObject graphGameObject in graphs)
+    {
+      Graph graph = graphGameObject.GetComponent<Graph>();
+      Destroy(graph.boundingSphere.gameObject);
+      Destroy(graphGameObject);
+    }
+  }
 }

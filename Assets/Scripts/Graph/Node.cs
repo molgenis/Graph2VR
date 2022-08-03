@@ -13,7 +13,7 @@ public class Node : MonoBehaviour
 
   public string uri = ""; // Full URI, empty if literal
   public string label = "";
-  private string cachedNodeLabel = ""; // label of the node, (before it gets converted to variable)
+  public string cachedNodeLabel = ""; // label of the node, (before it gets converted to variable)
   public bool lockPosition = false;
 
   public INode graphNode;
