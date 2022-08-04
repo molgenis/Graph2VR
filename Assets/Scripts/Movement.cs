@@ -6,6 +6,7 @@ public class Movement : MonoBehaviour
   public float snapTurnAngle = 20;
   public float movementSpeed = 10;
   public Transform teleportPoint;
+  public Transform cameraPoint;
   public GameObject teleportTarget;
 
   bool teleportLock = false;
@@ -55,7 +56,7 @@ public class Movement : MonoBehaviour
       if (teleportLock)
       {
         teleportTarget.SetActive(false);
-        transform.position = teleportPoint.position + new Vector3(0, Settings.Instance.playerHeight, 0);
+        transform.position = (teleportPoint.position + new Vector3(0, Settings.Instance.playerHeight, 0)) - cameraPoint.localPosition;
       }
       teleportLock = false;
     }
