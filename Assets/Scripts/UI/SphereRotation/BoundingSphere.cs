@@ -7,7 +7,7 @@ public class BoundingSphere : MonoBehaviour
   public bool isFlat = false;
   public Quaternion lookDirection = Quaternion.identity;
   private new Renderer renderer;
-
+  public bool unhideOnFirstResult = true;
   private void Awake()
   {
     renderer = GetComponent<Renderer>();

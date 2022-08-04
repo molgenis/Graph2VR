@@ -4,16 +4,6 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
-
-//graphs
-// - selections
-// - layout algoritm
-//  - edges
-//  - nodes 
-//    - positions
-//    - pin state
-//    - image / label state?
-
 public class ApplicationState
 {
   [Serializable]
@@ -25,6 +15,7 @@ public class ApplicationState
   [Serializable]
   public class GraphState
   {
+    public string GUID;
     public float positionX;
     public float positionY;
     public float positionZ;
@@ -34,8 +25,18 @@ public class ApplicationState
     public float rotationX;
     public float rotationY;
     public float rotationZ;
-    public float rotationW;
     public bool showBoundingSphere;
+    public ushort layout;
+    public string creationQuery;
+
+    //SemanticPlanes
+    public float semanticPlanesLookDirectionX = 0;
+    public float semanticPlanesLookDirectionY = 0;
+    public float semanticPlanesLookDirectionZ = 0;
+
+    public string parentGraphGUID;
+    public List<string> subGraphGUIDs = new List<string>();
+
     public List<EdgeState> edges = new List<EdgeState>();
     public List<NodeState> unconnectedNodes = new List<NodeState>();
   }
@@ -97,17 +98,31 @@ public class ApplicationState
   private static GraphState SaveGraphState(Graph graph)
   {
     GraphState state = new GraphState();
+    state.GUID = graph.GUID;
     state.positionX = graph.transform.position.x;
     state.positionY = graph.transform.position.y;
     state.positionZ = graph.transform.position.z;
     state.scaleX = graph.transform.localScale.x;
     state.scaleY = graph.transform.localScale.y;
     state.scaleZ = graph.transform.localScale.z;
-    state.rotationX = graph.transform.rotation.x;
-    state.rotationY = graph.transform.rotation.y;
-    state.rotationZ = graph.transform.rotation.z;
-    state.rotationY = graph.transform.rotation.w;
+    state.rotationX = graph.transform.rotation.eulerAngles.x;
+    state.rotationY = graph.transform.rotation.eulerAngles.y;
+    state.rotationZ = graph.transform.rotation.eulerAngles.z;
+    state.creationQuery = graph.creationQuery;
     state.showBoundingSphere = graph.boundingSphere.IsVisible();
+    state.layout = ((ushort)graph.GetLayout());
+
+    SemanticPlanes plane = graph.GetComponent<SemanticPlanes>();
+    Quaternion direction = plane.lookDirection;
+    state.semanticPlanesLookDirectionX = direction.eulerAngles.x;
+    state.semanticPlanesLookDirectionY = direction.eulerAngles.y;
+    state.semanticPlanesLookDirectionZ = direction.eulerAngles.z;
+
+    state.parentGraphGUID = (graph.parentGraph == null) ? "" : graph.parentGraph.GUID;
+    foreach (Graph subGraph in graph.subGraphs)
+    {
+      state.subGraphGUIDs.Add(subGraph.GUID);
+    }
 
     // Triples
     foreach (Edge edge in graph.edgeList)
@@ -149,17 +164,44 @@ public class ApplicationState
 
   private static void LoadState(State state)
   {
+    List<Graph> graphs = new List<Graph>();
     foreach (GraphState graphState in state.graphs)
     {
-      LoadGraphState(graphState, Main.instance.CreateGraph());
+      graphs.Add(LoadGraphState(graphState));
+    }
+
+    // handle self references
+    foreach (Graph graph in graphs)
+    {
+      if (graph.graphState.parentGraphGUID != "")
+      {
+        graph.parentGraph = graphs.Find((Graph graphCheck) => graphCheck.GUID == graph.graphState.parentGraphGUID);
+      }
+
+      foreach (string guid in graph.graphState.subGraphGUIDs)
+      {
+        graph.subGraphs.Add(graphs.Find((Graph graphCheck) => graphCheck.GUID == guid));
+      }
+
+      SemanticPlanes plane = graph.GetComponent<SemanticPlanes>();
+      plane.parentGraph = graph.parentGraph;// graphs.Find((Graph graph) => graph.GUID == graph.graphState.semanticPlanesParentGraphGUID);
+      graph.boundingSphere.lookDirection = plane.lookDirection;
     }
   }
 
-  private static void LoadGraphState(GraphState state, Graph graph)
+  private static Graph LoadGraphState(GraphState state)
   {
+    Graph graph = Main.instance.CreateGraph();
+    graph.graphState = state;
+    graph.GUID = state.GUID;
     graph.transform.position = new Vector3(state.positionX, state.positionY, state.positionZ);
     graph.transform.localScale = new Vector3(state.scaleX, state.scaleY, state.scaleZ);
-    graph.transform.rotation = new Quaternion(state.rotationX, state.rotationW, state.rotationZ, state.rotationW);
+    graph.transform.rotation = Quaternion.Euler(state.rotationX, state.rotationY, state.rotationZ);
+    graph.creationQuery = state.creationQuery;
+    graph.SetLayout((Graph.Layout)state.layout);
+
+    SemanticPlanes plane = graph.GetComponent<SemanticPlanes>();
+    plane.lookDirection = Quaternion.Euler(state.semanticPlanesLookDirectionX, state.semanticPlanesLookDirectionY, state.semanticPlanesLookDirectionZ);
 
     // Recreate edges
     foreach (EdgeState edgeState in state.edges)
@@ -189,6 +231,7 @@ public class ApplicationState
         graph.selection.Add(edge);
       }
     }
+    return graph;
   }
 
   private static Edge LoadEdgeState(EdgeState state, Graph graph)

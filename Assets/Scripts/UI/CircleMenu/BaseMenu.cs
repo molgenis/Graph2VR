@@ -73,33 +73,23 @@ public class BaseMenu : MonoBehaviour
   {
     cm.AddButton("Layout: Force Directed 3D", Color.green / 2, () =>
     {
-      graph.SwitchLayout<FruchtermanReingold>();
-      graph.layout.CalculateLayout();
-      graph.boundingSphere.isFlat = false;
+      graph.SetLayout(Graph.Layout.FruchtermanReingold);
     });
 
     cm.AddButton("Layout: Force Directed 2D", Color.green / 2, () =>
     {
-      graph.SwitchLayout<SpatialGrid2D>();
-      graph.layout.CalculateLayout();
-      graph.boundingSphere.isFlat = true;
+      graph.SetLayout(Graph.Layout.SpatialGrid2D);
     });
-
 
     cm.AddButton("Layout: Hierarchical View", Color.green / 2, () =>
     {
-      graph.SwitchLayout<HierarchicalView>();
-      graph.layout.CalculateLayout();
-      graph.boundingSphere.isFlat = false;
+      graph.SetLayout(Graph.Layout.HierarchicalView);
     });
 
     cm.AddButton("Layout: Class Hierarchy", Color.green / 2, () =>
     {
-      graph.SwitchLayout<ClassHierarchy>();
-      graph.layout.CalculateLayout();
-      graph.boundingSphere.isFlat = false;
+      graph.SetLayout(Graph.Layout.ClassHierarchy);
     });
-
 
     cm.AddButton("Auto layout", Color.yellow / 2, () =>
     {

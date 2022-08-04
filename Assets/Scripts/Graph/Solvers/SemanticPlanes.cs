@@ -24,15 +24,18 @@ public class SemanticPlanes : BaseLayoutAlgorithm
 
     // Selected edges is main graph
     Dictionary<string, Vector3> uriToPosition = new Dictionary<string, Vector3>();
-    foreach (Edge edge in parentGraph.selection)
+    if (parentGraph != null)
     {
-      string subjectName = GetIdentifier(edge.displaySubject);
-      string objectName = GetIdentifier(edge.displayObject);
+      foreach (Edge edge in parentGraph.selection)
+      {
+        string subjectName = GetIdentifier(edge.displaySubject);
+        string objectName = GetIdentifier(edge.displayObject);
 
-      if (!uriToPosition.ContainsKey(subjectName))
-        uriToPosition.Add(subjectName, edge.displaySubject.transform.localPosition);
-      if (!uriToPosition.ContainsKey(objectName))
-        uriToPosition.Add(objectName, edge.displayObject.transform.localPosition);
+        if (!uriToPosition.ContainsKey(subjectName))
+          uriToPosition.Add(subjectName, edge.displaySubject.transform.localPosition);
+        if (!uriToPosition.ContainsKey(objectName))
+          uriToPosition.Add(objectName, edge.displayObject.transform.localPosition);
+      }
     }
 
     // Set positions we know

@@ -302,7 +302,6 @@ public class QueryService : MonoBehaviour
 
   public void QuerySimilarPatternsMultipleLayers(string triples, OrderedDictionary orderByList, Action<SparqlResultSet, string> callback)
   {
-    Debug.Log("QuerySimilarPatternsMultipleLayers query service");
     // TODO: make sure 'orderByList' do still exist
     string order = GetOrderByString(orderByList);
     string query = $@"
@@ -313,7 +312,6 @@ public class QueryService : MonoBehaviour
 
     endPoint.QueryWithResultSet(query, (SparqlResultSet results, object state) =>
     {
-      Debug.Log("QuerySimilarPatternsMultipleLayers query service internal callback");
       callback(results, query);
     }, null);
   }

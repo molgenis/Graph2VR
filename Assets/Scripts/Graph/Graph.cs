@@ -8,6 +8,7 @@ using VDS.RDF.Query;
 
 public class Graph : MonoBehaviour
 {
+  public string GUID;
   public BaseLayoutAlgorithm layout = null;
   public BoundingSphere boundingSphere;
   public GameObject edgePrefab;
@@ -24,6 +25,10 @@ public class Graph : MonoBehaviour
   public List<Graph> subGraphs = new();
   public Graph parentGraph = null;
   public string creationQuery = "";
+  public enum Layout : ushort { FruchtermanReingold = 0, SpatialGrid2D, HierarchicalView, ClassHierarchy, SemanticPlanes }
+  public Layout currentLayout = Layout.FruchtermanReingold;
+
+  public ApplicationState.GraphState graphState;
 
   public Graph QuerySimilarWithTriples(string triples, Vector3 position, Quaternion rotation)
   {
@@ -44,8 +49,6 @@ public class Graph : MonoBehaviour
 
   public string GetTriplesString()
   {
-    Debug.Log("Get Selection: ");
-    Debug.Log(selection.Aggregate(string.Empty, (accum, edge) => accum += edge.GetQueryString()));
     return selection.Aggregate(string.Empty, (accum, edge) => accum += edge.GetQueryString());
   }
 
@@ -110,27 +113,24 @@ public class Graph : MonoBehaviour
   private void SetupNewGraph(Graph newGraph, string query, Quaternion rotation, SparqlResultSet results)
   {
     newGraph.creationQuery = query;
-    newGraph.gameObject.GetComponent<FruchtermanReingold>().enabled = false;
     SemanticPlanes planes = newGraph.gameObject.GetComponent<SemanticPlanes>();
     planes.lookDirection = rotation;
     planes.parentGraph = this;
     planes.variableNameLookup = results;
     planes.enabled = true;
     newGraph.layout = planes;
-    newGraph.boundingSphere.isFlat = true;
-    newGraph.boundingSphere.GetComponent<Renderer>().forceRenderingOff = true;
     newGraph.boundingSphere.lookDirection = rotation;
+    newGraph.SetLayout(Layout.SemanticPlanes);
+    newGraph.boundingSphere.unhideOnFirstResult = false;
   }
 
   public void AddToSelection(Edge toAdd)
   {
-    Debug.Log("Add to Selection: " + toAdd.uri);
     selection.Add(toAdd);
   }
 
   public void RemoveFromSelection(Edge toRemove)
   {
-    Debug.Log("Remove to Selection: " + toRemove.uri);
     selection.Remove(toRemove);
   }
 
@@ -360,6 +360,7 @@ public class Graph : MonoBehaviour
 
   private void Awake()
   {
+    GUID = Guid.NewGuid().ToString();
     variableNameManager = new VariableNameManager();
   }
 
@@ -488,7 +489,7 @@ public class Graph : MonoBehaviour
     node.graph = this;
     node.SetURI(value);
     node.SetLabel(value);
-    if (nodeList.Count == 0)
+    if (nodeList.Count == 0 && boundingSphere.unhideOnFirstResult)
     {
       boundingSphere.Show();
     }
@@ -602,7 +603,41 @@ public class Graph : MonoBehaviour
     }
   }
 
-  public void SwitchLayout<T>()
+  public Layout GetLayout()
+  {
+    return currentLayout;
+  }
+
+  public void SetLayout(Layout layout)
+  {
+    switch (layout)
+    {
+      case Layout.FruchtermanReingold:
+        SwitchLayout<FruchtermanReingold>();
+        boundingSphere.isFlat = false;
+        break;
+      case Layout.SpatialGrid2D:
+        SwitchLayout<SpatialGrid2D>();
+        boundingSphere.isFlat = true;
+        break;
+      case Layout.HierarchicalView:
+        SwitchLayout<HierarchicalView>();
+        boundingSphere.isFlat = false;
+        break;
+      case Layout.ClassHierarchy:
+        SwitchLayout<ClassHierarchy>();
+        boundingSphere.isFlat = false;
+        break;
+      case Layout.SemanticPlanes:
+        SwitchLayout<SemanticPlanes>();
+        boundingSphere.isFlat = true;
+        break;
+    }
+    currentLayout = layout;
+    this.layout.CalculateLayout();
+  }
+
+  private void SwitchLayout<T>()
   {
     foreach (BaseLayoutAlgorithm baseLayout in GetComponents<BaseLayoutAlgorithm>())
     {
