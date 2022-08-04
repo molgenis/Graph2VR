@@ -20,7 +20,7 @@ public class Movement : MonoBehaviour
       if (name == "vive")
       {
         isVive = true;
-        Settings.Instance.playerHeight = Settings.Instance.playerHeight - 0.55f;
+        Settings.Instance.playerHeight = Settings.Instance.playerHeight - 0.81f;
       }
     });
   }
