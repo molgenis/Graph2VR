@@ -56,7 +56,9 @@ public class Movement : MonoBehaviour
       if (teleportLock)
       {
         teleportTarget.SetActive(false);
-        transform.position = teleportPoint.position + (transform.position - cameraPoint.position) + new Vector3(0, Settings.Instance.playerHeight, 0);
+        Vector3 cameraOffset = (transform.position - cameraPoint.position);
+        cameraOffset = new Vector3(cameraOffset.x, 0, cameraOffset.z);
+        transform.position = teleportPoint.position + cameraOffset + new Vector3(0, Settings.Instance.playerHeight, 0);
       }
       teleportLock = false;
     }
