@@ -111,27 +111,30 @@ public class MainMenu : BaseMenu
       PopulateMainMenu();
     });
 
+    cm.AddButton("Quick save", new Color(1, 0.5f, 0.5f) / 2, () =>
+    {
+      ApplicationState.Save("quicksave.g2v");
+      Close();
+    });
+
+    cm.AddButton("Quick load", new Color(1, 0.5f, 0.5f) / 2, () =>
+    {
+      ApplicationState.Load("quicksave.g2v");
+      Close();
+    });
+
     cm.AddButton("Save application state", new Color(1, 0.5f, 0.5f) / 2, () =>
     {
-      ApplicationState.Save("Text.g2v");
-      /*
+
       Utils.GetStringFromVRKeyboard((string fileName) =>
       {
-        SaveLoadGraph.Save(graphToSave, fileName + ".nt");
+        ApplicationState.Save(fileName + ".g2v");
       }
-      , "graph", "Enter a filename...");
-      */
+      , "state", "Enter a filename...");
       Close();
     });
 
-    cm.AddButton("Load application state", new Color(1, 0.5f, 0.5f) / 2, () =>
-    {
-      ApplicationState.Load("Text.g2v");
-      Close();
-    });
-
-
-    cm.AddButton("Save closest Graph", new Color(1, 0.5f, 0.5f) / 2, () =>
+    cm.AddButton("Save closest Graph as ntriples", new Color(1, 0.5f, 0.5f) / 2, () =>
     {
       Graph graphToSave = Main.instance.FindClosestGraphOrCreateNewGraph(transform.position);
       Utils.GetStringFromVRKeyboard((string fileName) =>
@@ -142,7 +145,7 @@ public class MainMenu : BaseMenu
       Close();
     });
 
-    cm.AddButton("Load Graph", new Color(1, 0.5f, 0.5f) / 2, () =>
+    cm.AddButton("Load", new Color(1, 0.5f, 0.5f) / 2, () =>
     {
       subMenu = "Load";
       cm.Close();
@@ -162,10 +165,20 @@ public class MainMenu : BaseMenu
     foreach (string filePath in System.IO.Directory.GetFiles(path))
     {
       string fileName = Path.GetFileName(filePath);
+      string extension = Path.GetExtension(filePath);
+      if (extension != ".nt" && extension != ".g2v") continue;
       cm.AddButton(fileName, new Color(1, 0.5f, 0.5f) / 2, () =>
       {
         Graph graph = Main.instance.CreateGraph();
-        SaveLoadGraph.Load(graph, fileName);
+
+        if (extension == ".nt")
+        {
+          SaveLoadGraph.Load(graph, fileName);
+        }
+        if (extension == ".g2v")
+        {
+          ApplicationState.Load(fileName);
+        }
         graph.layout.CalculateLayout();
         Close();
       });

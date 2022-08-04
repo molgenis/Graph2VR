@@ -194,7 +194,6 @@ public class Node : MonoBehaviour
 
   void Update()
   {
-
     transform.rotation = Quaternion.LookRotation(Camera.main.transform.position - transform.position, Vector3.up);
     if (isControllerGrabbed || isPointerHovered)
     {
@@ -210,7 +209,6 @@ public class Node : MonoBehaviour
     {
       transform.position = new Vector3(transform.position.x, 0, transform.position.z);
     }
-
   }
 
   private void OnDestroy()

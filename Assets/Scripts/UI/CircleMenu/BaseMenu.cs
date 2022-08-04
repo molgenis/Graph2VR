@@ -135,7 +135,7 @@ public class BaseMenu : MonoBehaviour
       });
     }
 
-    cm.AddButton("Save this Graph", new Color(1, 0.5f, 0.5f) / 2, () =>
+    cm.AddButton("Save this Graph as ntriples", new Color(1, 0.5f, 0.5f) / 2, () =>
       {
         Graph graphToSave = graph;
         Utils.GetStringFromVRKeyboard((string fileName) =>

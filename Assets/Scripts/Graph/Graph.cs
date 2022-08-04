@@ -404,6 +404,12 @@ public class Graph : MonoBehaviour
     edge.displaySubject = from;
     edge.displayObject = to;
 
+    NodeFactory nodeFactory = new();
+
+    edge.graphSubject = from.graphNode;
+    edge.graphObject = to.graphNode;
+    edge.graphPredicate = nodeFactory.CreateUriNode(new Uri(uri));
+
     // Check if its self referencing
     if (from.uri != null && from.uri != "" && from.uri == to.uri)
     {
