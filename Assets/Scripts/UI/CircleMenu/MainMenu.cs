@@ -111,19 +111,19 @@ public class MainMenu : BaseMenu
       PopulateMainMenu();
     });
 
-    cm.AddButton("Quick save", new Color(1, 0.5f, 0.5f) / 2, () =>
+    cm.AddButton("Quick save", defaultMenuColor, () =>
     {
       ApplicationState.Save("quicksave.g2v");
       Close();
     });
 
-    cm.AddButton("Quick load", new Color(1, 0.5f, 0.5f) / 2, () =>
+    cm.AddButton("Quick load", defaultMenuColor, () =>
     {
       ApplicationState.Load("quicksave.g2v");
       Close();
     });
 
-    cm.AddButton("Save application state", new Color(1, 0.5f, 0.5f) / 2, () =>
+    cm.AddButton("Save application state", defaultMenuColor, () =>
     {
 
       Utils.GetStringFromVRKeyboard((string fileName) =>
@@ -134,7 +134,7 @@ public class MainMenu : BaseMenu
       Close();
     });
 
-    cm.AddButton("Save closest Graph as ntriples", new Color(1, 0.5f, 0.5f) / 2, () =>
+    cm.AddButton("Save closest Graph as ntriples", defaultMenuColor, () =>
     {
       Graph graphToSave = Main.instance.FindClosestGraphOrCreateNewGraph(transform.position);
       Utils.GetStringFromVRKeyboard((string fileName) =>
@@ -145,7 +145,7 @@ public class MainMenu : BaseMenu
       Close();
     });
 
-    cm.AddButton("Load", new Color(1, 0.5f, 0.5f) / 2, () =>
+    cm.AddButton("Load", defaultMenuColor, () =>
     {
       subMenu = "Load";
       cm.Close();
