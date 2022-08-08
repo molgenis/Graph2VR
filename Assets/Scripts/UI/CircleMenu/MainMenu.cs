@@ -84,9 +84,13 @@ public class MainMenu : BaseMenu
     {
       foreach (GameObject gameObject in FindObjectsOfType<GameObject>())
       {
-        gameObject.SetActive(false);
-        Destroy(gameObject);
+        if (gameObject.GetComponent<LeanTween>() == null)
+        {
+          gameObject.SetActive(false);
+          Destroy(gameObject);
+        }
       }
+      LeanTween.cancelAll();
       SceneManager.LoadScene("Main");
       return;
     });
@@ -95,12 +99,16 @@ public class MainMenu : BaseMenu
     {
       foreach (GameObject gameObject in FindObjectsOfType<GameObject>())
       {
-        gameObject.SetActive(false);
-        Destroy(gameObject);
+        if (gameObject.GetComponent<LeanTween>() == null)
+        {
+          gameObject.SetActive(false);
+          Destroy(gameObject);
+        }
       }
       GameObject clone = new GameObject("SelectCustomDatabase");
       clone.tag = "UseCustomDatabase";
       DontDestroyOnLoad(clone);
+      LeanTween.cancelAll();
       SceneManager.LoadScene("Main");
       return;
     });

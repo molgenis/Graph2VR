@@ -9,6 +9,7 @@ public class ApplicationState
   [Serializable]
   public class State
   {
+    public int saveVersion = 1;
     public List<GraphState> graphs = new List<GraphState>();
   }
 
