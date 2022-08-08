@@ -148,12 +148,14 @@ public class Graph : MonoBehaviour
 
   public void CollapseGraph(Node node)
   {
+    creationQuery = "";
     CollapseIncomingGraph(node);
     CollapseOutgoingGraph(node);
   }
 
   public void CollapseIncomingGraph(Node node)
   {
+    creationQuery = "";
     CollapseGraph(node, RemoveIncoming);
   }
 
@@ -161,6 +163,7 @@ public class Graph : MonoBehaviour
   {
     if (edge.displayObject == node && edge.displaySubject.connections.Count == 1)
     {
+      creationQuery = "";
       RemoveNode(edge.displaySubject);
       node.connections.Remove(edge);
     }
@@ -168,6 +171,7 @@ public class Graph : MonoBehaviour
 
   public void CollapseOutgoingGraph(Node node)
   {
+    creationQuery = "";
     CollapseGraph(node, RemoveOutgoing);
   }
 
@@ -175,6 +179,7 @@ public class Graph : MonoBehaviour
   {
     if (edge.displaySubject == node && edge.displayObject.connections.Count == 1)
     {
+      creationQuery = "";
       RemoveNode(edge.displayObject);
       node.connections.Remove(edge);
     }
@@ -182,6 +187,7 @@ public class Graph : MonoBehaviour
 
   private void CollapseGraph(Node node, Action<Node, Edge> removeFunction)
   {
+    creationQuery = "";
     // Reverse iterate so we can savely remove items from the list while doing the iteration
     for (int i = node.connections.Count - 1; i >= 0; i--)
     {
@@ -192,6 +198,7 @@ public class Graph : MonoBehaviour
 
   public void ExpandGraph(Node node, string uri, bool isOutgoingLink)
   {
+    creationQuery = "";
     QueryService.Instance.ExpandGraph(node, uri, isOutgoingLink, ((graph, refinmentGraph, state) =>
     {
       if (state != null)
@@ -228,6 +235,7 @@ public class Graph : MonoBehaviour
 
   private void AddTriple(Triple triple)
   {
+    creationQuery = "";
     AddObjects(triple);
     AddSubjects(triple);
     AddEdges(triple);
@@ -543,6 +551,7 @@ public class Graph : MonoBehaviour
   {
     if (node != null)
     {
+      creationQuery = "";
       // Reverse iterate so we can savely remove items from the list while doing the iteration
       for (int i = node.connections.Count - 1; i >= 0; i--)
       {
@@ -565,6 +574,7 @@ public class Graph : MonoBehaviour
 
   public void RemoveEdge(Edge edge)
   {
+    creationQuery = "";
     edgeList.Remove(edge);
     edge.Remove();
 

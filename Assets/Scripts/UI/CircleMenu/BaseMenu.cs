@@ -157,7 +157,7 @@ public class BaseMenu : MonoBehaviour
 
     if (graph.parentGraph != null && graph.creationQuery != "")
     {
-      cm.AddButton("Close sibling graphs", new Color(1, 0.5f, 0.5f) / 2, () =>
+      cm.AddButton("Close unmodified sibling graphs", new Color(1, 0.5f, 0.5f) / 2, () =>
       {
         graph.RemoveGraphsOfSameQuery();
         Close();
