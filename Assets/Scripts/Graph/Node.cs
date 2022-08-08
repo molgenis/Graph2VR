@@ -99,6 +99,13 @@ public class Node : MonoBehaviour
   {
     InvokeRepeating("UpdateDisplay", 1, 1);
     UpdateColor();
+
+    ShowFocus(Color.white);
+    LeanTween.value(gameObject, (float value) => transform.Find("Selected").gameObject.GetComponentInChildren<Renderer>().material.color = new Color32(1, 1, 1, (byte)(value * 255)), 1f, 0f, 3f).setOnComplete(() =>
+    {
+      transform.Find("Selected").gameObject.GetComponentInChildren<Renderer>().material.color = Color.black;
+      HideFocus();
+    });
   }
 
   public void AddConnection(Edge edge)
@@ -224,14 +231,24 @@ public class Node : MonoBehaviour
   {
     if (IsEdgePartOfSelectedTriple())
     {
-      transform.Find("Selected").gameObject.SetActive(true);
-      transform.Find("Selected").gameObject.GetComponentInChildren<Renderer>().material.SetColor("_EmissionColor", ColorSettings.instance.nodeSelectedColor);
+      ShowFocus(ColorSettings.instance.nodeSelectedColor);
     }
     else
     {
-      transform.Find("Selected").gameObject.SetActive(false);
+      HideFocus();
       UpdateColor();
     }
+  }
+
+  private void ShowFocus(Color color)
+  {
+    transform.Find("Selected").gameObject.SetActive(true);
+    transform.Find("Selected").gameObject.GetComponentInChildren<Renderer>().material.SetColor("_EmissionColor", color);
+  }
+
+  private void HideFocus()
+  {
+    transform.Find("Selected").gameObject.SetActive(false);
   }
 
   public void SetImageFromList(List<string> images)
