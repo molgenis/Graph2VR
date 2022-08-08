@@ -73,7 +73,15 @@ public class ApplicationState
       isVariable = node.IsVariable;
       isLocked = node.lockPosition;
       cachedNodeLabel = node.cachedNodeLabel;
+      Texture2D texture = node.GetTexture();
+      if (texture != null)
+      {
+        image = texture.EncodeToPNG();
+        imageWidth = texture.width;
+        imageHeight = texture.height;
+      }
     }
+
     public float positionX;
     public float positionY;
     public float positionZ;
@@ -82,6 +90,9 @@ public class ApplicationState
     public string cachedNodeLabel;
     public bool isVariable;
     public bool isLocked;
+    public byte[] image;
+    public int imageWidth;
+    public int imageHeight;
   }
 
   private static State SaveState()
@@ -256,6 +267,12 @@ public class ApplicationState
     Node node = graph.CreateNode(nodeText, new Vector3(state.positionX, state.positionY, state.positionZ));
     node.LockPosition = state.isLocked;
     node.cachedNodeLabel = state.cachedNodeLabel;
+    if (state.image != null)
+    {
+      Texture2D image = new Texture2D(state.imageWidth, state.imageHeight);
+      image.LoadImage(state.image);
+      node.SetTexture(image, state.imageWidth, state.imageHeight);
+    }
     if (state.isVariable)
     {
       node.MakeVariable();

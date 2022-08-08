@@ -28,6 +28,7 @@ public class Node : MonoBehaviour
   private bool isPointerHovered = false;
   private bool isControllerHovered = false;
   private bool isControllerGrabbed = false;
+  private Texture2D cachedImage = null;
 
   public bool LockPosition
   {
@@ -261,8 +262,9 @@ public class Node : MonoBehaviour
     }
   }
 
-  private void SetTexture(Texture2D image, int width, int height)
+  public void SetTexture(Texture2D image, int width, int height)
   {
+    cachedImage = image;
     Color color = GetComponent<Renderer>().material.color;
     GameObject borderObject = transform.Find("Border").gameObject;
     GameObject imageObject = borderObject.transform.Find("Image").gameObject;
@@ -279,6 +281,11 @@ public class Node : MonoBehaviour
     float aspect = ((float)height / width);
     float sizeY = sizeX / aspect;
     borderObject.transform.localScale = new Vector3(sizeY, sizeX, scale);
+  }
+
+  public Texture2D GetTexture()
+  {
+    return cachedImage;
   }
 
   public void MakeVariable()
