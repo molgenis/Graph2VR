@@ -12,6 +12,7 @@ public class ApplicationState
   {
     public int saveVersion = 1;
     public List<GraphState> graphs = new List<GraphState>();
+    public List<EdgeState> crossGraphEdges = new List<EdgeState>();
   }
 
   [Serializable]
@@ -46,19 +47,26 @@ public class ApplicationState
   [Serializable]
   public class EdgeState
   {
-    public EdgeState(Edge edge)
+    public EdgeState(Edge edge, bool crossGraphEdge = false)
     {
       subjectNode = new NodeState(edge.displaySubject);
       objectNode = new NodeState(edge.displayObject);
       predicate = edge.uri;
       isVariable = edge.IsVariable;
       isSelected = edge.IsSelected;
+      if (crossGraphEdge)
+      {
+        optionalObjectGraphGUID = edge.displayObject.graph.GUID;
+        optionalSubjectGraphGUID = edge.displaySubject.graph.GUID;
+      }
     }
     public NodeState subjectNode;
     public string predicate;
     public NodeState objectNode;
     public bool isVariable = false;
     public bool isSelected = false;
+    public string optionalObjectGraphGUID = "";
+    public string optionalSubjectGraphGUID = "";
   }
 
   [Serializable]
@@ -131,6 +139,7 @@ public class ApplicationState
     public byte[] image;
     public int imageWidth;
     public int imageHeight;
+    public string nodeOfExternalGraphGUID = "";
   }
 
   private static State SaveState()
@@ -139,13 +148,13 @@ public class ApplicationState
     GameObject[] graphs = GameObject.FindGameObjectsWithTag("Graph");
     foreach (GameObject graph in graphs)
     {
-      GraphState graphData = SaveGraphState(graph.GetComponent<Graph>());
+      GraphState graphData = SaveGraphState(graph.GetComponent<Graph>(), state);
       state.graphs.Add(graphData);
     }
     return state;
   }
 
-  private static GraphState SaveGraphState(Graph graph)
+  private static GraphState SaveGraphState(Graph graph, State mainState)
   {
     GraphState state = new GraphState();
     state.GUID = graph.GUID;
@@ -177,7 +186,15 @@ public class ApplicationState
     // Triples
     foreach (Edge edge in graph.edgeList)
     {
-      state.edges.Add(new EdgeState(edge));
+      bool isCrossGraphEdge = edge.graph.GUID != edge.displayObject.graph.GUID || edge.graph.GUID != edge.displaySubject.graph.GUID;
+      if (isCrossGraphEdge)
+      {
+        mainState.crossGraphEdges.Add(new EdgeState(edge, true));
+      }
+      else
+      {
+        state.edges.Add(new EdgeState(edge));
+      }
     }
 
     // Unconnected nodes
@@ -188,6 +205,7 @@ public class ApplicationState
         state.unconnectedNodes.Add(new NodeState(node));
       }
     }
+
     return state;
   }
 
@@ -212,9 +230,10 @@ public class ApplicationState
     LoadState(state);
   }
 
+  static List<Graph> graphs = new List<Graph>();
   private static void LoadState(State state)
   {
-    List<Graph> graphs = new List<Graph>();
+    graphs.Clear();
     foreach (GraphState graphState in state.graphs)
     {
       graphs.Add(LoadGraphState(graphState));
@@ -236,6 +255,12 @@ public class ApplicationState
       SemanticPlanes plane = graph.GetComponent<SemanticPlanes>();
       plane.parentGraph = graph.parentGraph;// graphs.Find((Graph graph) => graph.GUID == graph.graphState.semanticPlanesParentGraphGUID);
       graph.boundingSphere.lookDirection = plane.lookDirection;
+    }
+
+    // handle cross graph nodes
+    foreach (EdgeState edge in state.crossGraphEdges)
+    {
+      LoadEdgeState(edge);
     }
   }
 
@@ -284,13 +309,26 @@ public class ApplicationState
     return graph;
   }
 
-  private static Edge LoadEdgeState(EdgeState state, Graph graph)
+  private static Edge LoadEdgeState(EdgeState state, Graph graph = null)
   {
-    Edge edge = graph.CreateEdge(
-      LoadNodeState(state.subjectNode, graph),
-      state.predicate,
-      LoadNodeState(state.objectNode, graph)
-    );
+    Node nodeSubject;
+    Node nodeObject;
+    if (graph == null)
+    {
+      Graph subjectGraph = graphs.Find((Graph graphCheck) => graphCheck.GUID == state.optionalSubjectGraphGUID);
+      Graph objectGraph = graphs.Find((Graph graphCheck) => graphCheck.GUID == state.optionalObjectGraphGUID);
+      nodeSubject = LoadNodeState(state.subjectNode, subjectGraph);
+      nodeObject = LoadNodeState(state.objectNode, objectGraph);
+      graph = subjectGraph;
+    }
+    else
+    {
+      nodeSubject = LoadNodeState(state.subjectNode, graph);
+      nodeObject = LoadNodeState(state.objectNode, graph);
+    }
+
+    if (nodeSubject == null || nodeObject == null) return null;
+    Edge edge = graph.CreateEdge(nodeSubject, state.predicate, nodeObject);
     edge.IsSelected = state.isSelected;
     if (state.isVariable)
     {
