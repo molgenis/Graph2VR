@@ -1,3 +1,4 @@
+using Dweiss;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -76,10 +77,48 @@ public class ApplicationState
       Texture2D texture = node.GetTexture();
       if (texture != null)
       {
-        image = texture.EncodeToPNG();
+
+        image = ClampTextureSize(texture, Settings.Instance.savedMaximumImageWidth, Settings.Instance.savedMaximumImageHeight).EncodeToPNG();
         imageWidth = texture.width;
         imageHeight = texture.height;
       }
+    }
+
+    private Texture2D ClampTextureSize(Texture2D source, int targetWidth, int targetHeight)
+    {
+      int scaleWidth = 0;
+      int scaleHeight = 0;
+      float aspect = (float)source.width / source.height;
+      if (source.width > targetWidth)
+      {
+        scaleWidth = targetWidth;
+        scaleHeight = (int)(targetHeight / aspect);
+        if (scaleHeight > targetHeight)
+        {
+          scaleWidth = (int)(targetWidth * aspect);
+          scaleHeight = targetHeight;
+        }
+        return ScaleTexture(source, scaleWidth, scaleHeight);
+      }
+      return source;
+    }
+
+    private Texture2D ScaleTexture(Texture2D source, int targetWidth, int targetHeight)
+    {
+      Debug.Log(targetWidth + " - " + targetHeight);
+      Texture2D result = new Texture2D(targetWidth, targetHeight, source.format, false);
+      float incX = (1.0f / (float)targetWidth);
+      float incY = (1.0f / (float)targetHeight);
+      for (int i = 0; i < result.height; ++i)
+      {
+        for (int j = 0; j < result.width; ++j)
+        {
+          Color newColor = source.GetPixelBilinear((float)j / (float)result.width, (float)i / (float)result.height);
+          result.SetPixel(j, i, newColor);
+        }
+      }
+      result.Apply();
+      return result;
     }
 
     public float positionX;

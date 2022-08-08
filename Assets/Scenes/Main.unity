@@ -1361,6 +1361,8 @@ MonoBehaviour:
     baseURI: https://github.com/PjotrSvetachov/GraphVR/example-graph
     databaseSuportsBifContains: 0
     searchOnKeypress: 0
+  savedMaximumImageWidth: 256
+  savedMaximumImageHeight: 256
 --- !u!4 &543450651980506302
 Transform:
   m_ObjectHideFlags: 0
