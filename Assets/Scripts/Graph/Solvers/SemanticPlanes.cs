@@ -68,11 +68,6 @@ public class SemanticPlanes : BaseLayoutAlgorithm
         {
           node.transform.localPosition = position;
         }
-        else
-        {
-          //Todo: Fix this error - it still occurrs sometimes
-          Debug.Log("We do not expect this to happen");
-        }
       }
 
       // flatten graph
