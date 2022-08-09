@@ -50,7 +50,7 @@ public class MainMenu : BaseMenu
   private void PopulateMainDisplaySubMenus()
   {
     // We are in a sub menu
-    cm.AddButton("Back", Color.blue / 2, () =>
+    cm.AddButton(Icon("\uF064") + "Back", Color.blue / 2, () =>
     {
       subMenu = "";
       populateMenuState = PopulateMenuState.unloaded;
@@ -79,8 +79,7 @@ public class MainMenu : BaseMenu
 
   private void PopulateBaseMainMenu()
   {
-
-    cm.AddButton("Reset Graph2VR DEMO - Mountain", Color.red, () =>
+    cm.AddButton(Icon("\uF021") + "Reset Graph2VR DEMO - Mountain", Color.red, () =>
     {
       foreach (GameObject gameObject in FindObjectsOfType<GameObject>())
       {
@@ -94,8 +93,7 @@ public class MainMenu : BaseMenu
       SceneManager.LoadScene("Main");
       return;
     });
-
-    cm.AddButton("Reset Graph2VR DEMO - Local", Color.red, () =>
+    cm.AddButton(Icon("\uF021") + "Reset Graph2VR DEMO - Local", Color.red, () =>
     {
       foreach (GameObject gameObject in FindObjectsOfType<GameObject>())
       {
@@ -112,26 +110,26 @@ public class MainMenu : BaseMenu
       SceneManager.LoadScene("Main");
       return;
     });
-    cm.AddButton("Settings", Color.yellow / 2, () =>
+    cm.AddButton(Icon("\uF013") + "Settings", Color.yellow / 2, () =>
     {
       subMenu = "Settings";
       cm.Close();
       PopulateMainMenu();
     });
 
-    cm.AddButton("Quick save", defaultMenuColor, () =>
+    cm.AddButton(Icon("\uF0C7") + "Quick save", defaultMenuColor, () =>
     {
       ApplicationState.Save("quicksave.g2v");
       Close();
     });
 
-    cm.AddButton("Quick load", defaultMenuColor, () =>
+    cm.AddButton(Icon("\uF56E") + "Quick load", defaultMenuColor, () =>
     {
       ApplicationState.Load("quicksave.g2v");
       Close();
     });
 
-    cm.AddButton("Save application state", defaultMenuColor, () =>
+    cm.AddButton(Icon("\uF0C7") + "Save application state", defaultMenuColor, () =>
     {
 
       Utils.GetStringFromVRKeyboard((string fileName) =>
@@ -142,7 +140,7 @@ public class MainMenu : BaseMenu
       Close();
     });
 
-    cm.AddButton("Save closest Graph as ntriples", defaultMenuColor, () =>
+    cm.AddButton(Icon("\uF0C7") + "Save closest Graph as ntriples", defaultMenuColor, () =>
     {
       Graph graphToSave = Main.instance.FindClosestGraphOrCreateNewGraph(transform.position);
       Utils.GetStringFromVRKeyboard((string fileName) =>
@@ -153,14 +151,14 @@ public class MainMenu : BaseMenu
       Close();
     });
 
-    cm.AddButton("Load", defaultMenuColor, () =>
+    cm.AddButton(Icon("\uF56E") + "Load", defaultMenuColor, () =>
     {
       subMenu = "Load";
       cm.Close();
       PopulateMainMenu();
     });
 
-    cm.AddButton("Search for existing node", Color.blue / 2, () =>
+    cm.AddButton(Icon("\uF002") + "Search for existing node", Color.blue / 2, () =>
     {
       Main.instance.FindClosestGraphOrCreateNewGraph(transform.position).AddNodeFromDatabase();
       Close();
@@ -305,7 +303,7 @@ public class MainMenu : BaseMenu
 
   private void PopulateSettingsMenu()
   {
-    cm.AddButton("Connect to custom server", Color.green / 2, () =>
+    cm.AddButton(Icon("\uF51E") + "Connect to custom server", Color.green / 2, () =>
     {
       Utils.GetStringFromVRKeyboard(endpoint =>
       {
@@ -320,7 +318,7 @@ public class MainMenu : BaseMenu
       Close();
     });
 
-    cm.AddButton("Select graph on server", Color.green / 2, () =>
+    cm.AddButton(Icon("\uF1E0") + "Select graph on server", Color.green / 2, () =>
     {
       subMenu = "SelectGraph";
       cm.Close();
@@ -329,7 +327,7 @@ public class MainMenu : BaseMenu
 
     foreach (DatabaseSetttings dataBaseSettings in Settings.Instance.databaseSetttings)
     {
-      cm.AddButton("Switch to " + dataBaseSettings.label, Color.green / 2, () =>
+      cm.AddButton(Icon("\uF51E") + "Switch to " + dataBaseSettings.label, Color.green / 2, () =>
       {
         Settings.Instance.baseURI = dataBaseSettings.baseURI;
         Settings.Instance.sparqlEndpoint = dataBaseSettings.sparqlEndpoint;
@@ -340,7 +338,7 @@ public class MainMenu : BaseMenu
       });
     }
 
-    cm.AddButton(Settings.Instance.searchOnKeypress ? "Use: Search on submit" : "Use: Search on key-press", Color.yellow / 2, () =>
+    cm.AddButton(Settings.Instance.searchOnKeypress ? Icon("\uF11C") + "Use: Search on submit" : Icon("\uF11C") + "Use: Search on key-press", Color.yellow / 2, () =>
     {
       Settings.Instance.searchOnKeypress = !Settings.Instance.searchOnKeypress;
       cm.Close();
@@ -350,7 +348,7 @@ public class MainMenu : BaseMenu
     if (isQuestController)
     {
       bool isLeftHanded = PlayerPrefs.GetInt("isLeftHanded", 0) == 1;
-      cm.AddButton(isLeftHanded ? "Switch to righthanded" : "Switch to lefthanded", Color.yellow / 2, () =>
+      cm.AddButton(isLeftHanded ? Icon("\uf0a4") + "Switch to righthanded" : Icon("\uf0a5") + "Switch to lefthanded", Color.yellow / 2, () =>
       {
         PlayerPrefs.SetInt("isLeftHanded", !isLeftHanded ? 1 : 0);
         GameObject.FindGameObjectWithTag("LeftController").GetComponent<SwitchHandTracking>().UpdateLeftRightHandedInterface();
@@ -376,7 +374,7 @@ public class MainMenu : BaseMenu
       });
     }
 
-    cm.AddButton("Change languagefilter: " + Main.instance.languageCode, warningColor, () =>
+    cm.AddButton(Icon("\uF1AB") + "Change languagefilter: " + Main.instance.languageCode, warningColor, () =>
     {
       subMenu = "Language";
       cm.Close();

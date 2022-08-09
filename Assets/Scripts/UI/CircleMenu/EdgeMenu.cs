@@ -30,7 +30,7 @@ public class EdgeMenu : BaseMenu
     cm.Close();
     if (GraphHasSelectedVariable())
     {
-      cm.AddButton("Order By", Color.white / 2, () =>
+      cm.AddButton(Icon("\uF15D") + "Order By", Color.white / 2, () =>
       {
         subMenu = "OrderBy";
         cm.Close();
@@ -41,37 +41,37 @@ public class EdgeMenu : BaseMenu
     if (edge.IsSelected)
     {
       limitSlider.SetActive(true);
-      cm.AddButton("Remove selection", Color.yellow / 2, () =>
+      cm.AddButton(Icon("\uF204") + "Remove selection", Color.yellow / 2, () =>
       {
         graph.orderBy.Remove(edge.variableName);
         edge.Deselect();
         PopulateEdge(input);
       });
-      cm.AddButton("Query similar patterns", Color.yellow / 2, () =>
+      cm.AddButton(Icon("\uF5FD") + "Query similar patterns", Color.yellow / 2, () =>
       {
         graph.QuerySimilarPatternsMultipleLayers();
       });
-      cm.AddButton("Query similar patterns (single layer)", Color.yellow / 2, () =>
+      cm.AddButton(Icon("\uF24D") + "Query similar patterns (single layer)", Color.yellow / 2, () =>
       {
         graph.QuerySimilarPatternsSingleLayer();
       });
     }
     else
     {
-      cm.AddButton("Select triple", Color.yellow / 2, () =>
+      cm.AddButton(Icon("\uF205") + "Select triple", Color.yellow / 2, () =>
       {
         edge.Select();
         PopulateEdge(input);
       });
     }
-    cm.AddButton("Graph operations", Color.yellow / 2, () =>
+    cm.AddButton(Icon("\uF1E0") + "Graph operations", Color.yellow / 2, () =>
     {
       subMenu = "Graph";
       cm.Close();
       PopulateEdge(input);
     });
 
-    cm.AddButton("Close Edge", new Color(1, 0.5f, 0.5f) / 2, () =>
+    cm.AddButton(Icon("\uF057") + "Close Edge", new Color(1, 0.5f, 0.5f) / 2, () =>
     {
       graph.RemoveEdge(edge);
       Close();
@@ -79,13 +79,13 @@ public class EdgeMenu : BaseMenu
 
     if (edge.IsVariable)
     {
-      cm.AddButton("Undo variable conversion", Color.blue / 2, () =>
+      cm.AddButton(Icon("\uf715") + "Undo variable conversion", Color.blue / 2, () =>
       {
         graph.orderBy.Remove(edge.variableName);
         edge.UndoConversion();
         PopulateEdge(input);
       });
-      cm.AddButton("Rename variable", Color.red / 2, () =>
+      cm.AddButton(Icon("\uF11C") + "Rename variable", Color.red / 2, () =>
       {
         Utils.GetStringFromVRKeyboard((string name) =>
         {
@@ -98,7 +98,7 @@ public class EdgeMenu : BaseMenu
     {
       if (!edge.IsVariable)
       {
-        cm.AddButton("Convert to Variable and select", ColorSettings.instance.variableColor / 2, () =>
+        cm.AddButton(Icon("\uF128") + "Convert to Variable and select", ColorSettings.instance.variableColor / 2, () =>
         {
           edge.MakeVariable();
           edge.Select();
@@ -112,7 +112,7 @@ public class EdgeMenu : BaseMenu
   private void PopulateEdgeDisplaySubMenus(UnityEngine.Object input)
   {
     // We are in a sub menu
-    cm.AddButton("Back", Color.blue / 2, () =>
+    cm.AddButton(Icon("\uF064") + "Back", Color.blue / 2, () =>
     {
       subMenu = "";
       cm.Close();
@@ -141,7 +141,7 @@ public class EdgeMenu : BaseMenu
         graph.orderBy.Remove(order.Key);
         cm.Close();
         PopulateEdge(edge);
-      }, order.Value.ToString(), () =>
+      }, order.Value.ToString() == "ASC" ? Icon("\uF15D") + " ASC" : Icon("\uF15E") + " DESC", () =>
       {
         graph.orderBy[order.Key] = order.Value.ToString() == "ASC" ? "DESC" : "ASC";
         cm.Close();

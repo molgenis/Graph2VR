@@ -111,21 +111,21 @@ public class NodeMenu : BaseMenu
 
     if (node.uri != "")
     {
-      cm.AddButton("Collapse Incoming", dangerColor, () =>
+      cm.AddButton(Icon("\uF057") + "Collapse Incoming", dangerColor, () =>
       {
         graph.CollapseIncomingGraph(node);
       });
-      cm.AddButton("Collapse Outgoing", dangerColor, () =>
+      cm.AddButton(Icon("\uF057") + "Collapse Outgoing", dangerColor, () =>
       {
         graph.CollapseOutgoingGraph(node);
       });
-      cm.AddButton("Collapse All", dangerColor, () =>
+      cm.AddButton(Icon("\uF057") + "Collapse All", dangerColor, () =>
       {
         graph.CollapseGraph(node);
       });
     }
 
-    cm.AddButton("Close node", dangerColor, () =>
+    cm.AddButton(Icon("\uF05E") + "Close node", dangerColor, () =>
     {
       graph.RemoveNode(node, true);
       Close();
@@ -135,7 +135,7 @@ public class NodeMenu : BaseMenu
 
   private void PopulateNodeDisplayMainMenu(UnityEngine.Object input)
   {
-    cm.AddButton("List incoming predicates", okColor, () =>
+    cm.AddButton(Icon("\uF060") + "List incoming predicates", okColor, () =>
     {
       subMenu = "Incoming";
       cm.Close();
@@ -143,24 +143,24 @@ public class NodeMenu : BaseMenu
     });
     if (node.graphNode.NodeType == NodeType.Uri || node.graphNode.NodeType == NodeType.Variable)
     {
-      cm.AddButton("List outgoing predicates", okColor, () =>
+      cm.AddButton(Icon("\uF061") + "List outgoing predicates", okColor, () =>
       {
         subMenu = "Outgoing";
         cm.Close();
         PopulateNode(input);
       });
     }
-    cm.AddButton("Close/Remove operations", closeRemoveColor, () =>
+    cm.AddButton(Icon("\uF057") + "Close/Remove operations", closeRemoveColor, () =>
     {
       subMenu = "Node";
       cm.Close();
       PopulateNode(input);
     });
-    cm.AddButton("Show/hide info", defaultMenuColor, () =>
+    cm.AddButton(Icon("\uF05A") + "Show/hide info", defaultMenuColor, () =>
     {
       node.ToggleInfoPanel();
     });
-    cm.AddButton("Graph operations", warningColor, () =>
+    cm.AddButton(Icon("\uF1E0") + "Graph operations", warningColor, () =>
     {
       subMenu = "Graph";
       cm.Close();
@@ -169,7 +169,7 @@ public class NodeMenu : BaseMenu
 
     if (node.lockPosition)
     {
-      cm.AddButton("Unlock position", okColor, () =>
+      cm.AddButton(Icon("\uF3C1") + "Unpin position", okColor, () =>
       {
         LeanTween.cancel(node.gameObject);
         LeanTween.value(node.gameObject, 0.2f, 0.4f, 0.3f).setOnUpdate(value => node.transform.Find("Nail").GetComponent<NailRotation>().offset = value).setOnComplete(() =>
@@ -182,7 +182,7 @@ public class NodeMenu : BaseMenu
     }
     else
     {
-      cm.AddButton("Lock position", okColor, () =>
+      cm.AddButton(Icon("\uF023") + "Pin position", okColor, () =>
       {
         LeanTween.cancel(node.gameObject);
         LeanTween.value(node.gameObject, 0.4f, 0.2f, 0.5f).setOnUpdate(value => node.transform.Find("Nail").GetComponent<NailRotation>().offset = value);
@@ -194,12 +194,12 @@ public class NodeMenu : BaseMenu
 
     if (node.IsVariable)
     {
-      cm.AddButton("Undo variable conversion", defaultMenuColor, () =>
+      cm.AddButton(Icon("\uF111") + "Undo variable conversion", defaultMenuColor, () =>
       {
         node.UndoConversion();
         PopulateNode(node);
       });
-      cm.AddButton("Rename variable", dangerColor, () =>
+      cm.AddButton(Icon("\uF11C") + "Rename variable", dangerColor, () =>
       {
         Utils.GetStringFromVRKeyboard((string label) =>
         {
@@ -207,7 +207,7 @@ public class NodeMenu : BaseMenu
         }
         , node.GetLabel(), "Enter a variable name...");
       });
-      cm.AddButton("Search for existing node", defaultMenuColor, () =>
+      cm.AddButton(Icon("\uF11C") + "Search for existing node", defaultMenuColor, () =>
       {
         Main.instance.FindClosestGraphOrCreateNewGraph(transform.position).AddNodeFromDatabase(node);
         Close();
@@ -215,7 +215,7 @@ public class NodeMenu : BaseMenu
     }
     else
     {
-      cm.AddButton("Convert to Variable", ColorSettings.instance.variableColor / 2, () =>
+      cm.AddButton(Icon("\uF128") + "Convert to Variable", ColorSettings.instance.variableColor / 2, () =>
       {
         node.MakeVariable();
         PopulateNode(node);
@@ -226,7 +226,7 @@ public class NodeMenu : BaseMenu
   public void PopulateNodeDisplaySubMenus(UnityEngine.Object input)
   {
     // We are in a sub menu
-    cm.AddButton("Back", defaultMenuColor, () =>
+    cm.AddButton(Icon("\uF064") + "Back", defaultMenuColor, () =>
     {
       subMenu = "";
       populateMenuState = PopulateMenuState.unloaded;

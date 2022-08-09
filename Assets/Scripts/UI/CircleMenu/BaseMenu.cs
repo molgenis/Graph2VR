@@ -34,6 +34,11 @@ public class BaseMenu : MonoBehaviour
     }
   }
 
+  public string Icon(string id)
+  {
+    return $" <font=\"FontAwesome\">{id}</font> ";
+  }
+
   public void Close()
   {
     if (node != null) node.IsActiveInMenu = false;
@@ -71,50 +76,51 @@ public class BaseMenu : MonoBehaviour
 
   public void PopulateGraphMenu()
   {
-    cm.AddButton("Layout: Force Directed 3D", Color.green / 2, () =>
+    cm.AddButton(Icon("\uF1E0") + "Layout: Force Directed 3D", Color.green / 2, () =>
     {
       graph.SetLayout(Graph.Layout.FruchtermanReingold);
     });
 
-    cm.AddButton("Layout: Force Directed 2D", Color.green / 2, () =>
+    cm.AddButton(Icon("\uF5EE") + "Layout: Force Directed 2D", Color.green / 2, () =>
     {
       graph.SetLayout(Graph.Layout.SpatialGrid2D);
     });
 
-    cm.AddButton("Layout: Hierarchical View", Color.green / 2, () =>
+    cm.AddButton(Icon("\uF0E8") + "Layout: Hierarchical View", Color.green / 2, () =>
     {
       graph.SetLayout(Graph.Layout.HierarchicalView);
     });
 
-    cm.AddButton("Layout: Class Hierarchy", Color.green / 2, () =>
+    cm.AddButton(Icon("\uF126") + "Layout: Class Hierarchy", Color.green / 2, () =>
     {
       graph.SetLayout(Graph.Layout.ClassHierarchy);
     });
 
-    cm.AddButton("Auto layout", Color.yellow / 2, () =>
+    cm.AddButton(Icon("\uF021") + "Auto layout", Color.yellow / 2, () =>
     {
       graph.layout.CalculateLayout();
     });
 
-    cm.AddButton("Close Graph", new Color(1, 0.5f, 0.5f) / 2, () =>
+    cm.AddButton(Icon("\uF057") + "Close Graph", new Color(1, 0.5f, 0.5f) / 2, () =>
     {
       graph.Remove();
       Close();
     });
 
-    cm.AddButton("Pin all nodes", new Color(0.5f, 0.5f, 0.5f) / 2, () =>
+
+    cm.AddButton(Icon("\uF023") + "Pin all nodes", new Color(0.5f, 0.5f, 0.5f) / 2, () =>
     {
       graph.PinAllNodes(true);
     });
 
-    cm.AddButton("Unpin all nodes", new Color(0.5f, 0.5f, 0.5f) / 2, () =>
+    cm.AddButton(Icon("\uF3C1") + "Unpin all nodes", new Color(0.5f, 0.5f, 0.5f) / 2, () =>
     {
       graph.PinAllNodes(false);
     });
 
     if (graph.boundingSphere.IsVisible())
     {
-      cm.AddButton("Hide sphere", new Color(0, 0.9f, 1.0f) / 2, () =>
+      cm.AddButton(Icon("\uF070") + "Hide sphere", new Color(0, 0.9f, 1.0f) / 2, () =>
       {
         graph.boundingSphere.Hide();
         subMenu = "Graph";
@@ -125,7 +131,7 @@ public class BaseMenu : MonoBehaviour
     }
     else
     {
-      cm.AddButton("Show sphere", new Color(0, 0.9f, 1.0f) / 2, () =>
+      cm.AddButton(Icon("\uF06E") + "Show sphere", new Color(0, 0.9f, 1.0f) / 2, () =>
       {
         graph.boundingSphere.Show();
         populateMenuState = PopulateMenuState.unloaded;
@@ -135,7 +141,7 @@ public class BaseMenu : MonoBehaviour
       });
     }
 
-    cm.AddButton("Save this Graph as ntriples", new Color(1, 0.5f, 0.5f) / 2, () =>
+    cm.AddButton(Icon("\uF0C7") + "Save this Graph as ntriples", new Color(1, 0.5f, 0.5f) / 2, () =>
       {
         Graph graphToSave = graph;
         Utils.GetStringFromVRKeyboard((string fileName) =>
@@ -148,7 +154,7 @@ public class BaseMenu : MonoBehaviour
 
     if (graph.subGraphs.Count > 0)
     {
-      cm.AddButton("Close all child graphs", new Color(1, 0.5f, 0.5f) / 2, () =>
+      cm.AddButton(Icon("\uF057") + "Close all child graphs", new Color(1, 0.5f, 0.5f) / 2, () =>
       {
         graph.RemoveSubGraphs();
         Close();
@@ -157,7 +163,7 @@ public class BaseMenu : MonoBehaviour
 
     if (graph.parentGraph != null && graph.creationQuery != "")
     {
-      cm.AddButton("Close unmodified sibling graphs", new Color(1, 0.5f, 0.5f) / 2, () =>
+      cm.AddButton(Icon("\uF057") + "Close unmodified sibling graphs", new Color(1, 0.5f, 0.5f) / 2, () =>
       {
         graph.RemoveGraphsOfSameQuery();
         Close();
