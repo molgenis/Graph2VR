@@ -1637,6 +1637,15 @@ MonoBehaviour:
     baseURI: https://github.com/PjotrSvetachov/GraphVR/example-graph
     databaseSuportsBifContains: 0
     searchOnKeypress: 0
+  predefinedPredicates:
+  - name: owl:sameAs
+    uri: http://www.w3.org/2002/07/owl#sameAs
+  - name: skos:exactMatch
+    uri: http://www.w3.org/2004/02/skos/core#exactMatch
+  - name: skos:closeMatch
+    uri: http://www.w3.org/2004/02/skos/core#closeMatch
+  - name: rdfs:seeAlso
+    uri: http://www.w3.org/2000/01/rdf-schema#seeAlso
   savedMaximumImageWidth: 256
   savedMaximumImageHeight: 256
 --- !u!4 &543450651980506302

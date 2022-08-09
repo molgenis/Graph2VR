@@ -1,3 +1,4 @@
+using Dweiss;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -71,6 +72,13 @@ public class EdgeMenu : BaseMenu
       PopulateEdge(input);
     });
 
+    cm.AddButton(Icon("\uF02B") + "Set Predicate", Color.yellow / 2, () =>
+    {
+      subMenu = "EdgePredicate";
+      cm.Close();
+      PopulateEdge(input);
+    });
+
     cm.AddButton(Icon("\uF057") + "Close Edge", new Color(1, 0.5f, 0.5f) / 2, () =>
     {
       graph.RemoveEdge(edge);
@@ -127,6 +135,35 @@ public class EdgeMenu : BaseMenu
     {
       PopulateOrderByMenu();
     }
+    if (subMenu == "EdgePredicate")
+    {
+      PopulateEdgePredicateMenu();
+    }
+  }
+
+  public void PopulateEdgePredicateMenu()
+  {
+
+    foreach (PredefinedPredicate predicate in Settings.Instance.predefinedPredicates)
+    {
+      cm.AddButton(predicate.name, new Color(1, 0.5f, 0.5f) / 2, () =>
+      {
+        edge.uri = predicate.uri;
+        edge.InitializeTexts();
+        Close();
+      });
+    }
+
+    cm.AddButton(Icon("\uF11C") + "Custom Predicate", new Color(1, 0.5f, 0.5f) / 2, () =>
+    {
+      Edge cachedEdge = edge;
+      Utils.GetStringFromVRKeyboard((string predicate) =>
+      {
+        cachedEdge.uri = predicate;
+        cachedEdge.InitializeTexts();
+      }, "http://", "predicate");
+      Close();
+    });
   }
 
   public void PopulateOrderByMenu()

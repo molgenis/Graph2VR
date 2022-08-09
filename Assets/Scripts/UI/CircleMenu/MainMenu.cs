@@ -74,7 +74,6 @@ public class MainMenu : BaseMenu
     {
       PopulateLanguageMenu();
     }
-
   }
 
   private void PopulateBaseMainMenu()

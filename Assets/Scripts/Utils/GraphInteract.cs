@@ -208,7 +208,7 @@ public class GraphInteract : MonoBehaviour
           Node EdgeEnd = CurrentHoveredObject.GetComponent<Node>();
           if (EdgeBegin != null && EdgeEnd != null && EdgeBegin != EdgeEnd)
           {
-            Edge edge = EdgeBegin.graph.CreateEdge(EdgeBegin, Settings.Instance.defaultEdgeCreationURI + edgeCreationCounter, EdgeEnd);
+            Edge edge = GetEdge(EdgeEnd);
             edgeCreationCounter++;
           }
         }
@@ -216,5 +216,10 @@ public class GraphInteract : MonoBehaviour
       }
     }
     oldTrigger = newState;
+  }
+
+  private Edge GetEdge(Node EdgeEnd)
+  {
+    return EdgeBegin.graph.CreateEdge(EdgeBegin, Settings.Instance.defaultEdgeCreationURI + edgeCreationCounter, EdgeEnd);
   }
 }

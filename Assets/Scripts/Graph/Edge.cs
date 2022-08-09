@@ -139,7 +139,7 @@ public class Edge : MonoBehaviour
     UpdateColor();
   }
 
-  private void InitializeTexts()
+  public void InitializeTexts()
   {
     string shortName = graph.GetShortName(uri);
     if (shortName != "")
