@@ -86,6 +86,7 @@ public class CircleMenuButton : MonoBehaviour, IPointerEnterHandler, IPointerExi
 
   public void OnPointerClick(PointerEventData eventData)
   {
+    menu.click.Play();
     Material material = gameObject.GetComponent<Renderer>().material;
     LeanTween.cancel(gameObject, false);
     material.color = button.color + new Color(0.6f, 0.6f, 0.6f);

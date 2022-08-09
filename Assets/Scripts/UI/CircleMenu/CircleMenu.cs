@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class CircleMenu : MonoBehaviour
 {
+  public AudioSource click;
   public Transform leftController = null;
   public Transform rightController = null;
   public Material baseMaterial;
