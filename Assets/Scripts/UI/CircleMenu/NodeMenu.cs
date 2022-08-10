@@ -125,7 +125,7 @@ public class NodeMenu : BaseMenu
       });
     }
 
-    cm.AddButton(Icon("\uF05E") + "Close node", dangerColor, () =>
+    cm.AddButton(Icon("\uF057") + "Close node", dangerColor, () =>
     {
       graph.RemoveNode(node, true);
       Close();
@@ -169,7 +169,7 @@ public class NodeMenu : BaseMenu
 
     if (node.lockPosition)
     {
-      cm.AddButton(Icon("\uF3C1") + "Unpin position", okColor, () =>
+      cm.AddButton(Icon("\uF023") + "Unpin position", okColor, () =>
       {
         LeanTween.cancel(node.gameObject);
         LeanTween.value(node.gameObject, 0.2f, 0.4f, 0.3f).setOnUpdate(value => node.transform.Find("Nail").GetComponent<NailRotation>().offset = value).setOnComplete(() =>
@@ -182,7 +182,7 @@ public class NodeMenu : BaseMenu
     }
     else
     {
-      cm.AddButton(Icon("\uF023") + "Pin position", okColor, () =>
+      cm.AddButton(Icon("\uF3C1") + "Pin position", okColor, () =>
       {
         LeanTween.cancel(node.gameObject);
         LeanTween.value(node.gameObject, 0.4f, 0.2f, 0.5f).setOnUpdate(value => node.transform.Find("Nail").GetComponent<NailRotation>().offset = value);

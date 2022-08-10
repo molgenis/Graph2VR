@@ -108,19 +108,19 @@ public class BaseMenu : MonoBehaviour
     });
 
 
-    cm.AddButton(Icon("\uF023") + "Pin all nodes", new Color(0.5f, 0.5f, 0.5f) / 2, () =>
+    cm.AddButton(Icon("\uF3C1") + "Pin all nodes", new Color(0.5f, 0.5f, 0.5f) / 2, () =>
     {
       graph.PinAllNodes(true);
     });
 
-    cm.AddButton(Icon("\uF3C1") + "Unpin all nodes", new Color(0.5f, 0.5f, 0.5f) / 2, () =>
+    cm.AddButton(Icon("\uF023") + "Unpin all nodes", new Color(0.5f, 0.5f, 0.5f) / 2, () =>
     {
       graph.PinAllNodes(false);
     });
 
     if (graph.boundingSphere.IsVisible())
     {
-      cm.AddButton(Icon("\uF070") + "Hide sphere", new Color(0, 0.9f, 1.0f) / 2, () =>
+      cm.AddButton(Icon("\uF06E") + "Hide sphere", new Color(0, 0.9f, 1.0f) / 2, () =>
       {
         graph.boundingSphere.Hide();
         subMenu = "Graph";
@@ -131,7 +131,7 @@ public class BaseMenu : MonoBehaviour
     }
     else
     {
-      cm.AddButton(Icon("\uF06E") + "Show sphere", new Color(0, 0.9f, 1.0f) / 2, () =>
+      cm.AddButton(Icon("\uF070") + "Show sphere", new Color(0, 0.9f, 1.0f) / 2, () =>
       {
         graph.boundingSphere.Show();
         populateMenuState = PopulateMenuState.unloaded;

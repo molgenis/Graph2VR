@@ -42,7 +42,7 @@ public class EdgeMenu : BaseMenu
     if (edge.IsSelected)
     {
       limitSlider.SetActive(true);
-      cm.AddButton(Icon("\uF204") + "Remove selection", Color.yellow / 2, () =>
+      cm.AddButton(Icon("\uF205") + "Remove selection", Color.yellow / 2, () =>
       {
         graph.orderBy.Remove(edge.variableName);
         edge.Deselect();
@@ -59,7 +59,7 @@ public class EdgeMenu : BaseMenu
     }
     else
     {
-      cm.AddButton(Icon("\uF205") + "Select triple", Color.yellow / 2, () =>
+      cm.AddButton(Icon("\uF204") + "Select triple", Color.yellow / 2, () =>
       {
         edge.Select();
         PopulateEdge(input);
