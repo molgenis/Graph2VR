@@ -207,7 +207,7 @@ public class NodeMenu : BaseMenu
         }
         , node.GetLabel(), "Enter a variable name...");
       });
-      cm.AddButton(Icon("\uF11C") + "Search for existing node", defaultMenuColor, () =>
+      cm.AddButton(Icon("\uF11C") + "Context specific search", defaultMenuColor, () =>
       {
         Main.instance.FindClosestGraphOrCreateNewGraph(transform.position).AddNodeFromDatabase(node);
         Close();
