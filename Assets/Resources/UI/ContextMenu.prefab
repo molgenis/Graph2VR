@@ -245,7 +245,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &876817918030772295
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -546,8 +546,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5848304789924852163}
   m_HandleRect: {fileID: 3496872621453986813}
   m_Direction: 2
-  m_Value: 0
-  m_Size: 0.99998736
+  m_Value: 1
+  m_Size: 0.9999856
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -587,7 +587,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.012289564, y: 0.022827148}
+  m_AnchoredPosition: {x: 0.0034080853, y: -0.022705078}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &9179368768220999851

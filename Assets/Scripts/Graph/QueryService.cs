@@ -17,6 +17,8 @@ using VDS.RDF.Query.Patterns;
 public class QueryService : MonoBehaviour
 {
   public int queryLimit = 25;
+  public static int searchResultsLimit = 100;
+
   const string PREFIXES = @"
     prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
     prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
@@ -366,7 +368,7 @@ public class QueryService : MonoBehaviour
                 FILTER REGEX(?name, '{searchTerm}', 'i').
                 {LanguageFilterString("?name")}
               }}
-              LIMIT 5";
+              LIMIT {searchResultsLimit}";
     }
     else
     {
@@ -378,7 +380,7 @@ public class QueryService : MonoBehaviour
                  BIND(STR(?entity) AS ?name).
                  FILTER REGEX(?name, '{searchTerm}', 'i')
               }}
-              LIMIT 5";
+              LIMIT {searchResultsLimit}";
     }
   }
 
@@ -395,7 +397,7 @@ public class QueryService : MonoBehaviour
                  ?name bif:contains ""'{AddStar(searchTerm)}'"".
                  {LanguageFilterString("?name")}
                }}
-               LIMIT 5";
+               LIMIT {searchResultsLimit}";
     }
     else
     {
@@ -407,7 +409,7 @@ public class QueryService : MonoBehaviour
                 ?name bif:contains ""'{AddStar(searchTerm)}'"".
                 {LanguageFilterString("?name")}
               }}
-              LIMIT 5";
+              LIMIT {searchResultsLimit}";
     }
   }
 
