@@ -7,6 +7,8 @@ public class ClassHierarchy : BaseLayoutAlgorithm
   private static readonly string TYPE_PREDICATE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
   private readonly float offsetSize = 0.3f;
   private bool running = false;
+  private bool notAClassHiearchy = false;
+  private int notAClassHiearchyPositionCounter = 0;
 
   private void Update()
   {
@@ -39,11 +41,13 @@ public class ClassHierarchy : BaseLayoutAlgorithm
 
   private void CalculateHierarchicalLevels()
   {
+    notAClassHiearchyPositionCounter = 0;
     List<Edge> subClassOfEdgeList = graph.edgeList.FindAll(edge => edge.uri.ToLower() == SUBCLASS_OF_PREDICATE);
     Node initialNode = null;
     if (subClassOfEdgeList.Count == 0)
     {
       Debug.Log("Not a class hiearchy");
+      notAClassHiearchy = true;
       return;
     }
     else
@@ -191,7 +195,11 @@ public class ClassHierarchy : BaseLayoutAlgorithm
   public float PositionNodeLevels(Node node, int level, float subClassOfOffset)
   {
     float newSubClassOfOffset = subClassOfOffset;
-    if (!node.LockPosition)
+    if (notAClassHiearchy)
+    {
+      SetNodePosition(node, level, subClassOfOffset, 0, notAClassHiearchyPositionCounter++);
+    }
+    else if (!node.LockPosition)
     {
       Node parentNode = node.hierarchicalSettings.parent;
       if (node.hierarchicalSettings.hierarchicalType == Hierarchical.HierarchicalType.Type && parentNode != null)
