@@ -1450,10 +1450,13 @@ MonoBehaviour:
   initialSparqlQueryString: 'prefix dbo: <http://dbpedia.org/ontology/> prefix rdfs:
     <http://www.w3.org/2000/01/rdf-schema#> prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
     prefix dbp: <http://dbpedia.org/property/> prefix dbr: <http://dbpedia.org/resource/>
-    construct {     ?mountain rdf:type dbo:Mountain.     ?mountain dbo:elevation
-    ?height.     ?mountain dbp:location ?location }  where {     ?mountain rdf:type
-    dbo:Mountain.     ?mountain dbo:elevation ?height.     ?mountain dbp:location
-    ?location }  ORDER BY DESC (?height)  LIMIT 10'
+    construct {    ?mountain rdf:type dbo:Mountain .      ?mountain dbo:elevation
+    ?height .      ?mountain dbp:location ?location .   ?mountain rdfs:label ?label
+    .   ?mountain <http://xmlns.com/foaf/0.1/depiction> ?image . }  where {     
+    ?mountain rdf:type dbo:Mountain .      ?mountain dbo:elevation ?height .    
+    ?mountain dbp:location ?location .   ?mountain rdfs:label ?label .   ?mountain
+    <http://xmlns.com/foaf/0.1/depiction> ?image . } ORDER BY DESC (?height) LIMIT
+    50 '
   initialSparqlURI: http://www.w3.org/2002/07/owl#Thing
   startWithSingleNode: 0
   searchOnKeypress: 1
