@@ -3683,13 +3683,13 @@ RectTransform:
   m_Children:
   - {fileID: 168299348}
   - {fileID: 200951132}
-  m_Father: {fileID: 1575591754406861637}
-  m_RootOrder: 1
+  m_Father: {fileID: 3583251672502924130}
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.000091552734}
-  m_SizeDelta: {x: -20, y: -13.8650055}
+  m_AnchoredPosition: {x: 8.5, y: 0.00012207031}
+  m_SizeDelta: {x: -3, y: -13.8650055}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &641397319
 GameObject:
@@ -5092,20 +5092,19 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-    et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-    laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit
-    in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-    occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim
-    id est laborum.
-
-
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-    sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-    minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-    commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit
-    esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
-    non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+  m_text: "<style=\"title>Grabbing a node:</style>\r\nTo interact with single nodes
+    or even the whole graphs, gesture controls are used:\r <br>\n<style=\"H1>Grabbing
+    a node:</style>\r\nA node can be grabbed by holding a controller close to the
+    node and pressing the grip button. While pressing the grip button of this controller,
+    the node can be moved via drag and drop. The reference point is the light dot
+    in front of the controller (not the laser).\r<br>\n<style=\"H2>Grabbing the whole
+    graph:</style>\r\nPressing the grip buttons of both controllers at the same time,
+    will grab the whole graph.\r\nIt is possible to drag and drop the graph while
+    holding both of the grip buttons, you could even fly with the graph.\r\n<br>\n<style=\"H3>Rotating
+    and zooming:\r</style>\nWhile the graph has been grabbed (grip buttons of both
+    controllers) you can rotate the rotate the graph with the controllers.\r\nWhen
+    you move your controllers towards each other, you can zoom the graph smaller.
+    When the controllers are pulled apart from each other, can zoom the graph bigger."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -7427,49 +7426,19 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
-    eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt
-    in culpa qui officia deserunt mollit anim id est laborum.
-
-
-    Lorem ipsum dolor
-    sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-    et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-    laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit
-    in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-    occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim
-    id est laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-    eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-    veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
-    dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-    sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-
-    Lorem ipsum
-    dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-    ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-    ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-    in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-    Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt
-    mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipiscing
-    elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-    ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
-    ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit
-    esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
-    non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-
-    Lorem
-    ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-    ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-    ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-    in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-    Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt
-    mollit anim id est laborum.'
+  m_text: "There are tree ways to navigate through the virtual environment of Graph2VR:
+    Walking, teleportation and flying.\r\n\n<style=\"H1>Walking:</style>\r\nIf you
+    move in the real world, the movement should also be performed in the virtual
+    environment. This will allow you to move small distances and get close to a node.\n\n<style=\"H1>Teleportation:</style>\r\n\n
+    The thumbstick / trackpad of the right controller is used to teleport and to
+    rotate by a small angle to the side. \nWhile holding down, a green circle will
+    show up on the tip of the laser. Once you release it, you will be teleported
+    to the position of the green circle.\n\n<style=\"H1>Flying:</style>\r\n\nTo fly,
+    use thumbstick (Quest2) / trackpad (Vive) on the left controller. This allows
+    you to fly in your looking direction. \nFlying might feel quite fast in the first
+    place, but if the graphs get larger, flying fast becomes quit handy. To fly slower,
+    press the joytick just slightly. \nFlying backwards or strafing sidwards is also
+    possible.\r\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -8359,7 +8328,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3583251672502924130}
-  - {fileID: 634789887}
   - {fileID: 4669797346073165652}
   m_Father: {fileID: 2107972567}
   m_RootOrder: 3
@@ -8573,6 +8541,7 @@ RectTransform:
   - {fileID: 1102594094}
   - {fileID: 1351149150}
   - {fileID: 1451585990}
+  - {fileID: 634789887}
   m_Father: {fileID: 1575591754406861637}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -8712,7 +8681,7 @@ RectTransform:
   m_Children:
   - {fileID: 7739011983197626429}
   m_Father: {fileID: 1575591754406861637}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 1}
