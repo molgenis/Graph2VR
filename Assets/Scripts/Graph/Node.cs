@@ -106,6 +106,62 @@ public class Node : MonoBehaviour
       transform.Find("Selected").gameObject.GetComponentInChildren<Renderer>().material.color = Color.black;
       HideFocus();
     });
+    RefineNode();
+  }
+
+  public void RefineNode()
+  {
+    if (graphNode == null)
+    {
+      return;
+    }
+    else
+    {
+      ConnectLabelToNode();
+      ConnectImageToNode();
+    }
+  }
+
+  private void ConnectLabelToNode()
+  {
+    Edge labelEdge = connections.Find(edge => edge.displaySubject == this && IsLabelPredicate(edge.uri));
+    if (labelEdge != null)
+    {
+      SetLabel(labelEdge.displayObject.uri);
+    }
+  }
+
+  private void ConnectImageToNode()
+  {
+    List<string> imagePredicats = new List<string>();
+    foreach (Edge edge in connections)
+    {
+      if (IsImagePredicate(edge.uri))
+      {
+        imagePredicats.Add(edge.displayObject.uri);
+      }
+    }
+    if (imagePredicats.Count > 0)
+    {
+      SetImageFromList(imagePredicats);
+    }
+  }
+
+  private bool IsLabelPredicate(string predicate)
+  {
+    return predicate == "http://www.w3.org/2000/01/rdf-schema#label";
+  }
+
+  private bool IsImagePredicate(string predicate)
+  {
+    foreach (string pred in Settings.Instance.imagePredicates)
+    {
+      if (predicate.Equals(pred))
+      {
+        return true;
+      }
+    }
+    return false;
   }
 
   public void AddConnection(Edge edge)
