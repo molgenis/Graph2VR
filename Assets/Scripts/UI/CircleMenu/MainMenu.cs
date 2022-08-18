@@ -166,7 +166,10 @@ public class MainMenu : BaseMenu
     cm.AddButton(Icon("\uF05A") + "Show help", Color.blue, () =>
     {
       Transform helpMenu = GameObject.FindGameObjectWithTag("HelpMenu").transform;
-      helpMenu.position = Camera.main.transform.position + (Camera.main.transform.forward * 2);
+      helpMenu.position = Camera.main.transform.position + (Camera.main.transform.forward * 1.5f);
+      Vector3 lookDirection = (helpMenu.position - Camera.main.transform.position).normalized;
+      helpMenu.rotation = Quaternion.LookRotation(lookDirection);
+
       helpMenu.Find("Help Menu Container").gameObject.SetActive(true);
     });
   }
