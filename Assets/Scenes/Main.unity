@@ -844,7 +844,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: Saving / loading
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1588,7 +1588,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: Node intraction
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2158,7 +2158,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: Setting up a query
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3081,21 +3081,18 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
-    eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt
-    in culpa qui officia deserunt mollit anim id est laborum.
-
-
-    Lorem ipsum dolor
-    sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-    et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-    laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit
-    in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-    occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim
-    id est laborum.'
+  m_text: "Depending on the context, the menu can have different options:\n<style=\u201CH1\u201D>
+    The main menu </style>\r\nThe main menu can be opened by pressing the settings
+    button.\r\nHere are options to reset the application, set the settings and different
+    ways to save & load as well as a search function.\r\n<style=\u201CH1\"> The node
+    menu </style>\r\nTo open the node menu, aim on a node with the laser and press
+    the trigger button.\r\nDepending on whether the node is a URInode (blue), a Literal
+    (yellow) or a variable node, the menu contains different options.\r\n<style=\u201CH1\u201D>
+    The edge menu </style>\r\nTo open the edge menu, aim on an edge with the laser
+    and press the trigger button.\r\nOnce the edge has been selected, the edge menu
+    contains the options to adjust a query and to request for query results.\r\n\r\nClick
+    on another node / edge to get its menu. If you click just somewhere, where no
+    node/edge is, then the menu will close."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3230,7 +3227,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: Graph intraction
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3340,11 +3337,11 @@ RectTransform:
   m_Father: {fileID: 3583251672502924130}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.000061035156}
-  m_SizeDelta: {x: -19.999998, y: -13.8650055}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -0.000030517578, y: -0.00026829072}
+  m_SizeDelta: {x: -13.150026, y: 1800}
+  m_Pivot: {x: 0.5, y: 1}
 --- !u!1 &589428726
 GameObject:
   m_ObjectHideFlags: 0
@@ -3403,7 +3400,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: Edge intraction
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3648,11 +3645,11 @@ RectTransform:
   m_Father: {fileID: 3583251672502924130}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.000061035156}
-  m_SizeDelta: {x: -19.999998, y: -13.8650055}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -0.000030517578, y: -0.00026829072}
+  m_SizeDelta: {x: -13.150026, y: 1800}
+  m_Pivot: {x: 0.5, y: 1}
 --- !u!1 &634789886
 GameObject:
   m_ObjectHideFlags: 0
@@ -3686,11 +3683,11 @@ RectTransform:
   m_Father: {fileID: 3583251672502924130}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 8.5, y: 0.00012207031}
-  m_SizeDelta: {x: -3, y: -13.8650055}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -0.000030517578, y: -0.00026829072}
+  m_SizeDelta: {x: -13.150026, y: 1800}
+  m_Pivot: {x: 0.5, y: 1}
 --- !u!1 &641397319
 GameObject:
   m_ObjectHideFlags: 0
@@ -4651,7 +4648,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: Node / Edge creation
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -5214,11 +5211,11 @@ RectTransform:
   m_Father: {fileID: 3583251672502924130}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.000061035156}
-  m_SizeDelta: {x: -19.999998, y: -13.8650055}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -0.000030517578, y: -0.00026829072}
+  m_SizeDelta: {x: -13.150026, y: 1800}
+  m_Pivot: {x: 0.5, y: 1}
 --- !u!1 &1102650828
 GameObject:
   m_ObjectHideFlags: 0
@@ -6099,11 +6096,11 @@ RectTransform:
   m_Father: {fileID: 3583251672502924130}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.000061035156}
-  m_SizeDelta: {x: -19.999998, y: -13.8650055}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -0.000030517578, y: -0.00026829072}
+  m_SizeDelta: {x: -13.150026, y: 1800}
+  m_Pivot: {x: 0.5, y: 1}
 --- !u!1 &1444277321
 GameObject:
   m_ObjectHideFlags: 0
@@ -6286,11 +6283,11 @@ RectTransform:
   m_Father: {fileID: 3583251672502924130}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.000061035156}
-  m_SizeDelta: {x: -19.999998, y: -13.8650055}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -0.000030517578, y: -0.00026829072}
+  m_SizeDelta: {x: -13.150026, y: 1800}
+  m_Pivot: {x: 0.5, y: 1}
 --- !u!1 &1489197715
 GameObject:
   m_ObjectHideFlags: 0
@@ -6349,7 +6346,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: Menu controls
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -6868,21 +6865,18 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
-    eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt
-    in culpa qui officia deserunt mollit anim id est laborum.
-
-
-    Lorem ipsum dolor
-    sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-    et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-    laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit
-    in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-    occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim
-    id est laborum.'
+  m_text: "Sometimes it is necessary to add new nodes ore edges.\r\nEspecially variable
+    nodes are often used to create queries.\r\nHere is how you can do it:\r\n<style=\u201CH1\u201D>
+    Creating a new node: </style>\r\nHold the trigger button on your controller for
+    2-3 seconds.\r\nA new (variable) node will spawn at the position of your controller.\r\nTo
+    spawn a specific node from the database, you can use the search function.\r\nPress
+    the settings button to open the main menu and click on \u201CSearch for existing
+    node\u201D.\r\nThen type in your search term using the virtual keyboard.\r\nOnce
+    you found and selected the correct node, it will spawn at the position of your
+    left controller.\r\n<style=\u201CH1\u201D> Creating a new Edge</style>\r\nIt
+    is possible to create a new edge between two nodes.\r\nTo do so, put your controller
+    at the position of the first node and keep the trigger button pressed. Then draw
+    an edge to the second node and release the trigger button."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -7228,11 +7222,11 @@ RectTransform:
   m_Father: {fileID: 3583251672502924130}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.000061035156}
-  m_SizeDelta: {x: -19.999998, y: -13.8650055}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -0.000030517578, y: -0.00026829072}
+  m_SizeDelta: {x: -13.150026, y: 1800}
+  m_Pivot: {x: 0.5, y: 1}
 --- !u!1 &1937580856
 GameObject:
   m_ObjectHideFlags: 0
@@ -7429,13 +7423,13 @@ MonoBehaviour:
   m_text: "There are tree ways to navigate through the virtual environment of Graph2VR:
     Walking, teleportation and flying.\r\n\n<style=\"H1>Walking:</style>\r\nIf you
     move in the real world, the movement should also be performed in the virtual
-    environment. This will allow you to move small distances and get close to a node.\n\n<style=\"H1>Teleportation:</style>\r\n\n
-    The thumbstick / trackpad of the right controller is used to teleport and to
-    rotate by a small angle to the side. \nWhile holding down, a green circle will
-    show up on the tip of the laser. Once you release it, you will be teleported
-    to the position of the green circle.\n\n<style=\"H1>Flying:</style>\r\n\nTo fly,
-    use thumbstick (Quest2) / trackpad (Vive) on the left controller. This allows
-    you to fly in your looking direction. \nFlying might feel quite fast in the first
+    environment. This will allow you to move small distances and get close to a node.\n\n<style=\"H1>Teleportation:</style>\r\n\nThe
+    thumbstick / trackpad of the right controller is used to teleport and to rotate
+    by a small angle to the side. \nWhile holding down, a green circle will show
+    up on the tip of the laser. Once you release it, you will be teleported to the
+    position of the green circle.\n\n<style=\"H1>Flying:</style>\r\n\nTo fly, use
+    thumbstick (Quest2) / trackpad (Vive) on the left controller. This allows you
+    to fly in your looking direction. \nFlying might feel quite fast in the first
     place, but if the graphs get larger, flying fast becomes quit handy. To fly slower,
     press the joytick just slightly. \nFlying backwards or strafing sidwards is also
     possible.\r\n"
@@ -7683,11 +7677,11 @@ RectTransform:
   m_Father: {fileID: 3583251672502924130}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.000061035156}
-  m_SizeDelta: {x: -19.999998, y: -13.8650055}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -0.000030517578, y: -0.00026829072}
+  m_SizeDelta: {x: -13.150026, y: 1800}
+  m_Pivot: {x: 0.5, y: 1}
 --- !u!1 &2107972566
 GameObject:
   m_ObjectHideFlags: 0
