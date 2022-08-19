@@ -264,7 +264,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Node / Edge creation
+  m_text: Gesture controls
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -709,21 +709,33 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
-    eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt
-    in culpa qui officia deserunt mollit anim id est laborum.
-
-
-    Lorem ipsum dolor
-    sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-    et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-    laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit
-    in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-    occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim
-    id est laborum.'
+  m_text: "<style=\"H1>Saving & Loading</style>\r\n\nGraph2VR offers different kinds
+    to save and load, most of them can be found in the main menu by pressing the
+    settings button:\r\n\n<style=\"H1>Quick save / Quick load</style>\r\n\nThe Quicksave
+    saves the current state of the application.\r There is only one quick save state
+    that will be overwritten when saving again.\r\nIt and be used to quickly try
+    something out, or before you turn the headset off, to continue the session later.\r\n\nSaving
+    the application state will also save images loaded into the application, to make
+    sure that they can be accessed again at least as preview, even if they are offline.\r\n\nIf
+    the images are big, they will be scaled down and saved with a lower resolution.\r\n\n<style=\"H1>Save
+    application state</style>\r\n\nAs the Quick save, this stores the current state
+    of the application.\r\nIn contrast to the Quick save, you need to specify a filename.\r
+    This can be used to create multiple save states.\r\n\n<style=\"H1>Save closest
+    Graph as ntriples</style>\r\nNtriples (.nt) is a standard format to save and
+    load triples, it can be used to be used in other applications and e.g., to upload
+    the data into a Virtuoso server.\r\nThis will only store the triples of the closest
+    graph.\r\nThe position of the graph is determined by its center:.\nThis becomes
+    relevant, when graphs get bigger.\r\nTo make sure, you\u2019re saving the correct
+    graph, you can also select any node or edge in a graph, access the graph operations
+    of that graph in the menu and store the Graph via the graph operations menu.\r\n\n<style=\"H1>
+    Load </style>\r\n\nThe load function can be either used to load a save state,
+    or to load a ntriples file.\r\nWhile loading a save state will overwrite the
+    current session, the data from a ntriples file will be added as new graph.\r\n\nBe
+    careful, when loading large ntriple files, Graph2VR tries to visualize the whole
+    file at once and might get stuck or crash if there are too many Triples in one
+    file.\r\n\nInstead of loading such a file directly into Graph2VR we recommend
+    to use an external Server (e.g., a Virtuoso server) to load the data and query
+    it via the SPARQL Endpoint."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1483,7 +1495,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Edge intraction
+  m_text: Node intraction
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2406,43 +2418,19 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '<style="H1"> Menu controls: </style>
-
-    Depending on the context, the
-    menu can have different options:
-
-    <style="H1"> The main menu </style>
-
-    The
-    main menu can be opened by pressing the settings button.
-
-    Here are options
-    to reset the application, set the settings and different ways to save & load
-    as well as a search function.
-
-    <style="H1"> The node menu </style>
-
-    To
-    open the node menu, aim on a node with the laser and press the trigger button.
-
-    Depending
-    on whether the node is a URInode (blue), a Literal (yellow) or a variable node,
-    the menu contains different options.
-
-    <style="H1"> The edge menu </style>
-
-    To
-    open the edge menu, aim on an edge with the laser and press the trigger button.
-
-    Once
-    the edge has been selected, the edge menu contains the options to adjust a query
-    and to request for query results.
-
-    
-
-    Click on another node / edge to
-    get its menu. If you click just somewhere, where no node/edge is, then the menu
-    will close.'
+  m_text: "<style=\"H1>Node / edge creation</style>\r\n\nSometimes it is necessary
+    to add new nodes ore edges.\r\nEspecially variable nodes are often used to create
+    queries.\r\nHere is how you can do it:\r\n\n<style=\"H1>Creating a new node:
+    </style>\r\n\nHold the trigger button on your controller for 2-3 seconds.\r\nA
+    new (variable) node will spawn at the position of your controller.\r\nTo spawn
+    a specific node from the database, you can use the search function.\r\nPress
+    the settings button to open the main menu and click on \u201CSearch for existing
+    node\u201D.\r\nThen type in your search term using the virtual keyboard.\r\nOnce
+    you found and selected the correct node, it will spawn at the position of your
+    left controller.\r\n\n<style=\"H1>Creating a new Edge</style>\r\n\nIt is possible
+    to create a new edge between two nodes.\r\nTo do so, put your controller at the
+    position of the first node and keep the trigger button pressed. Then draw an
+    edge to the second node and release the trigger button."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2701,7 +2689,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Menu controls
+  m_text: Node / Edge creation
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2813,7 +2801,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 750}
+  m_SizeDelta: {x: 0, y: 1000}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!1 &634789886
 GameObject:
@@ -2850,7 +2838,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 1000}
+  m_SizeDelta: {x: 0, y: 1600}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!1 &641397319
 GameObject:
@@ -2910,7 +2898,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Gesture controls
+  m_text: Navigation
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3298,21 +3286,31 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
-    eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt
-    in culpa qui officia deserunt mollit anim id est laborum.
-
-
-    Lorem ipsum dolor
-    sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-    et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-    laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit
-    in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-    occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim
-    id est laborum.'
+  m_text: "<style=\"H1>Node Interaction: </style>\n\nHover over a node with your
+    laser will highlight the node and increase the text size temporarily.\r\nTo drag
+    and drop a node, put your controller close to the node, so that the yellow light
+    ball in front of it touches the node. Then press (and hold) the grip button of
+    that controller to drag and drop the node with you controller.\r\nYou can select
+    a node with your laser. Press the trigger button when you selected a node to
+    open the node menu on your left hand. The selected node will now be displayed
+    in red, to indicate that it is selected.\n\r\n<style=\"H1>Creating new nodes</style>\r\n\nTo
+    spawn a new variable node, hold the trigger button for 2-3 seconds.\r\nTo request
+    a specific new node from the database, you can use the search function in the
+    main menu or the context specific search in the Node menu.\r\nThis search includes
+    the selected triples in the search, and will search for nodes, that would match
+    the selected node\u2019s position in the selection.\r\nNew nodes will be created
+    at the left controller\u2019s position, but might be affected by the layout algorithms.\r\n\n<style=\"H1>Node
+    colours:</style>\r\n\nThe template for the colours of the nodes is based on the
+    colour schema of VOWL.\r\nLiterals (Text strings and numbers) are yellow.\r\nURIs
+    are blue\r\nClasses (if specified) are light blue \u2013 in contrast to the definition
+    of VOWL, this applies to all classes, not only to classes from the current ontology.\r\nBlank
+    nodes are dark grey.\r\nSelected nodes are highlighted in red.\r\nHighlighted
+    nodes are white\r\nVariable nodes are green.\r\nNew nodes will have a white sphere
+    around them, that fades out\r.\n\n<style=\"H1> Node refinement:\r</style>\n\nTo
+    make it easier to read the nodes, we try to shorten the URI or display the node\u2019s
+    label instead. If a node has images, one of those images will be displayed on
+    top of the node.\r\nThis refinement takes place at the start and when the graph
+    is expanded."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3677,7 +3675,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Graph intraction
+  m_text: Edge intraction
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -4118,19 +4116,19 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "<style=\"H1>Gesture controls</style>\r\nTo interact with single nodes
-    or even the whole graphs, gesture controls are used:\r <br>\n<style=\"H1>Grabbing
-    a node:</style>\r\nA node can be grabbed by holding a controller close to the
-    node and pressing the grip button. While pressing the grip button of this controller,
-    the node can be moved via drag and drop. The reference point is the light dot
-    in front of the controller (not the laser).\r<br>\n<style=\"H2>Grabbing the whole
-    graph:</style>\r\nPressing the grip buttons of both controllers at the same time,
-    will grab the whole graph.\r\nIt is possible to drag and drop the graph while
-    holding both of the grip buttons, you could even fly with the graph.\r\n<br>\n<style=\"H3>Rotating
-    and zooming:\r</style>\nWhile the graph has been grabbed (grip buttons of both
-    controllers) you can rotate the rotate the graph with the controllers.\r\nWhen
-    you move your controllers towards each other, you can zoom the graph smaller.
-    When the controllers are pulled apart from each other, can zoom the graph bigger."
+  m_text: "<style=\"H1>Navigation:</style>\r\n\nThere are tree ways to navigate through
+    the virtual environment of Graph2VR: Walking, teleportation and flying.\r\n\n<style=\"H1>Walking:</style>\r\n\nIf
+    you move in the real world, the movement should also be performed in the virtual
+    environment. This will allow you to move small distances and get close to a node.\n\n<style=\"H1>Teleportation:</style>\r\n\nThe
+    thumbstick / trackpad of the right controller is used to teleport and to rotate
+    by a small angle to the side. \nWhile holding down, a green circle will show
+    up on the tip of the laser. Once you release it, you will be teleported to the
+    position of the green circle.\n\n<style=\"H1>Flying:</style>\r\n\nTo fly, use
+    thumbstick (Quest2) / trackpad (Vive) on the left controller. This allows you
+    to fly in your looking direction. \nFlying might feel quite fast in the first
+    place, but if the graphs get larger, flying fast becomes quit handy. To fly slower,
+    press the joytick just slightly. \nFlying backwards or strafing sidwards is also
+    possible.\r\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -4242,7 +4240,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 1000}
+  m_SizeDelta: {x: 0, y: 1500}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!1 &1102650828
 GameObject:
@@ -4302,7 +4300,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Navigation
+  m_text: Introduction
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -4667,21 +4665,27 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
-    eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt
-    in culpa qui officia deserunt mollit anim id est laborum.
-
-
-    Lorem ipsum dolor
-    sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-    et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-    laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit
-    in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-    occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim
-    id est laborum.'
+  m_text: "<style=\"H1>Edge Interaction: </style>\n\n<style=\"H1>Opening the Edge
+    menu\r </style>\n\nWhen selecting an edge with the laser and pressing the trigger
+    button, the edge menu will open. A red cylinder indicates that an edge has been
+    selected and  the name of the edge will be displayed on the left of the menu.
+    \n\n<style=\"H1>Building a query:\r </style>\n\r\nThe edges menu also contains
+    several options that do not only affect the edge, but also triples. A triple
+    consists of the combination of node, edge, node, also called subject predicate
+    object. Once an triple has been selected, the menu will have some additional
+    options to build and modify a query.\r\nRequesting the query results is also
+    done via the edge menu, but are only shown, for edges that are part of a slected
+    triple.\r\nAlso, the modifiers for a query like the limit slider or the \"Order
+    By\" button are only shown in the menu for edges in selected triples.\r\n\n<style=\"H1>Creating
+    new edges\r </style>\n\nIt is possible to create a new edge between two nodes.\r\nTo
+    do so, put your controller at the position of the first node and keep the trigger
+    button pressed. Then draw an edge to the second node and release the trigger
+    button.\n\n<style=\"H1>Bend Edges</style>\n\nIn case of nodes, that are connected
+    via multiple edges, those edges will be bend to prevent overlapping.\n\n<style=\"H1>Edge
+    colours:</style>\r\n\nThe colours of the edges is inspired by the colour schema
+    of VOWL:\r\nCommon edges are black\nHovering over edges makes them white\nSubclass
+    relationships have a white arrowhead\nSelected edges are red\nSelected triples
+    are glowing yellow\nUnselected variable edges are green\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -4816,21 +4820,28 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
-    eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt
-    in culpa qui officia deserunt mollit anim id est laborum.
-
-
-    Lorem ipsum dolor
-    sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-    et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-    laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit
-    in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-    occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim
-    id est laborum.'
+  m_text: "<style=\"H1> Setting up a query: </style>\n\nGraph2VR uses SPARQL Construct
+    queries to request data from SPARQL Endpoints.\r\nWhat you can do is creating
+    a Triple pattern out of existing triples.\r\nTherefore, you select the edge between
+    two nodes and add the triple (node, edge, node) to the pattern.\r\nYou can convert
+    nodes and/or edges to variables, to find datasets that match the pattern, but
+    do not specify this node or edge. If you open the edge menu of a selected triple,
+    you will have the menu entry \u201COrder By\u201D, to modify the order of the
+    query results.\r\nBelow the circle menu is the limit slider.\r\nThe Limit slider
+    limits the maximum number of results you will receive.\r\nThis is also the case
+    when expanding the graph via the incoming or outgoing predicates.\r\nOnce you
+    have selected all the triples necessary for your query, you can select an edge
+    from one of those selected triples. There you have the options \u201CQuery similar
+    patterns\u201D to request a series of 2D result graphs. Those will spawn in the
+    direction you\u2019re looking.\r\nTo prevent the result graphs to collide with
+    the ground, make sure, you don\u2019t look at the floor of the platform.\r\nThere
+    is an additional query option \u201CQuery similar patterns (single layer)\u201C.
+    This will merge all the result graphs to a single graph without of duplicate
+    nodes.\n\r\nGraph2VR (version 1.0) does not yet support all SPARQL keywords.\r\nEven
+    so, it relys on DotNetRDF and could therefore deal with other keywords, not all
+    of them are available via the menu.\r\nSome pretty common commands like \"Count\",
+    \"Optional\", \"Filter\", \"Group By\", \"Union\u201D, \"Minus\" or \"Service\"
+    are not available via the menu yet."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -5014,7 +5025,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Node intraction
+  m_text: Menu controls
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -5126,7 +5137,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 1000}
+  m_SizeDelta: {x: 0, y: 1500}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!1 &1444277321
 GameObject:
@@ -5186,21 +5197,50 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
-    eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt
-    in culpa qui officia deserunt mollit anim id est laborum.
+  m_text: '<style="H1>Menu controls: </style>
 
 
-    Lorem ipsum dolor
-    sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-    et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-    laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit
-    in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-    occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim
-    id est laborum.'
+    Depending on the context, the
+    menu can have different options:
+
+
+    <style="H1>The main menu </style>
+
+
+    The
+    main menu can be opened by pressing the settings button.
+
+    Here are options
+    to reset the application, set the settings and different ways to save & load
+    as well as a search function.
+
+
+    <style="H1>The node menu </style>
+
+
+    To
+    open the node menu, aim on a node with the laser and press the trigger button.
+
+    Depending
+    on whether the node is a URInode (blue), a Literal (yellow) or a variable node,
+    the menu contains different options.
+
+
+    <style="H1> The edge menu </style>
+
+
+    To
+    open the edge menu, aim on an edge with the laser and press the trigger button.
+
+    Once
+    the edge has been selected, the edge menu contains the options to adjust a query
+    and to request for query results.
+
+    <br>
+
+    Click on another node / edge
+    to get its menu. If you click just somewhere, where no node/edge is, then the
+    menu will close.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -5756,19 +5796,19 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "<style=\"H1\"> Node / edge creation</style>\r\nSometimes it is necessary
-    to add new nodes ore edges.\r\nEspecially variable nodes are often used to create
-    queries.\r\nHere is how you can do it:\r\n<style=\"H1\"> Creating a new node:
-    </style>\r\nHold the trigger button on your controller for 2-3 seconds.\r\nA
-    new (variable) node will spawn at the position of your controller.\r\nTo spawn
-    a specific node from the database, you can use the search function.\r\nPress
-    the settings button to open the main menu and click on \u201CSearch for existing
-    node\u201D.\r\nThen type in your search term using the virtual keyboard.\r\nOnce
-    you found and selected the correct node, it will spawn at the position of your
-    left controller.\r\n<style=\"H1\"> Creating a new Edge</style>\r\nIt is possible
-    to create a new edge between two nodes.\r\nTo do so, put your controller at the
-    position of the first node and keep the trigger button pressed. Then draw an
-    edge to the second node and release the trigger button."
+  m_text: "<style=\"H1>Gesture controls</style>\r\n\nTo interact with single nodes
+    or even the whole graphs, gesture controls are used:\r <br>\n<style=\"H1>Grabbing
+    a node:</style>\r\n\nA node can be grabbed by holding a controller close to the
+    node and pressing the grip button. While pressing the grip button of this controller,
+    the node can be moved via drag and drop. The reference point is the light dot
+    in front of the controller (not the laser).\r<br>\n<style=\"H1>Grabbing the whole
+    graph:</style>\r\n\nPressing the grip buttons of both controllers at the same
+    time, will grab the whole graph.\r\nIt is possible to drag and drop the graph
+    while holding both of the grip buttons, you could even fly with the graph.\r\n<br>\n<style=\"H1>Rotating
+    and zooming:\r</style>\n\nWhile the graph has been grabbed (grip buttons of both
+    controllers) you can rotate the rotate the graph with the controllers.\r\nWhen
+    you move your controllers towards each other, you can zoom the graph smaller.
+    When the controllers are pulled apart from each other, can zoom the graph bigger."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -6311,19 +6351,22 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "<style=\"H1>Navigation:</style>\r\nThere are tree ways to navigate through
-    the virtual environment of Graph2VR: Walking, teleportation and flying.\r\n\n<style=\"H1>Walking:</style>\r\nIf
-    you move in the real world, the movement should also be performed in the virtual
-    environment. This will allow you to move small distances and get close to a node.\n\n<style=\"H1>Teleportation:</style>\r\n\nThe
-    thumbstick / trackpad of the right controller is used to teleport and to rotate
-    by a small angle to the side. \nWhile holding down, a green circle will show
-    up on the tip of the laser. Once you release it, you will be teleported to the
-    position of the green circle.\n\n<style=\"H1>Flying:</style>\r\n\nTo fly, use
-    thumbstick (Quest2) / trackpad (Vive) on the left controller. This allows you
-    to fly in your looking direction. \nFlying might feel quite fast in the first
-    place, but if the graphs get larger, flying fast becomes quit handy. To fly slower,
-    press the joytick just slightly. \nFlying backwards or strafing sidwards is also
-    possible.\r\n"
+  m_text: '<style="H1>Introduction:</style>
+
+
+    Welcome to Graph2VR!
+
+
+    Graph2VR
+    is a PhD project, to visualize Linked Data in Virtual Reality.
+
+
+    Have fun
+    testing it, and if you need help, you can always get back here.
+
+    To open
+    this help panel, press the settings button on your controller to open the main
+    menu and press "Help".'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -6458,7 +6501,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Saving / loading
+  m_text: Saving & Loading
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
