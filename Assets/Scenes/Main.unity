@@ -2466,17 +2466,16 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: "<style=\"H1>Node / edge creation</style>\n\nSometimes it is necessary
-    to add new nodes or edges.\nEspecially variable nodes are often necessary to
-    create queries.\nHere is how you can do it:\n\n<style=\"H1>Creating a new node:
-    </style>\n\nHold the trigger button on your controller for 2-3 seconds.\nA new
-    (variable) node will spawn at the position of your controller.\n\nYou can use
-    the search function to spawn a specific node from the database:\nFirst, press
-    the settings button to open the main menu and click on \u201CSearch for existing
-    node\u201D. Then type in your search term using the virtual keyboard. Once you
-    pick a URI, a new node will spawn at the position of your left controller.\n\n<style=\"H1>Creating
-    a new Edge</style>\n\nTo create a new edge between two nodes, put your controller
-    at the position of the first node and keep the trigger button pressed. Now you
-    can create a new outgoing edge to the second node and release the trigger button."
+    to add new nodes or edges.\nHere is how you can do it:\n\n<style=\"H1>Creating
+    a new node: </style>\n\nHold the trigger button for 2-3 seconds to spawn a new
+    variable node. \n\nUse the search function in the main menu or the context-specific
+    search in the node menu to search for a specific node.\nThe context-specific
+    search includes the selected triples in the search. \n\nNew nodes will spawn
+    at the position of your left controller.\nSome of the layout algorithms will
+    move them immediately.\n\n<style=\"H1>Creating a new Edge</style>\n\nTo create
+    a new edge between two nodes, put your controller at the position of the first
+    node and keep the trigger button pressed. Now you can create a new outgoing edge
+    to the second node and release the trigger button.\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -6409,7 +6408,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "<style=\"H1>Introduction:</style>\n\nWelcome to Graph2VR!\n\nGraph2VR
+  m_text: "<style=\"H1>Introduction:</style>\n\n<style=\"H1>Welcome to Graph2VR!</style>\n\nGraph2VR
     is a PhD project with the aim to visualize Linked Data in Virtual Reality.\n\nHave
     fun testing it! \n\nYou can always get back here:\nPress the settings button
     to open the main menu and click on \"Show help\" to open this help panel."
