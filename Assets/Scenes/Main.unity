@@ -750,7 +750,7 @@ MonoBehaviour:
     <style="H1>Save closest Graph as ntriples</style>
 
 
-    Ntriples
+    N-triples
     (.nt) is a standard format to save and load triples. It can be used in other
     applications, e.g., to upload the data into a Virtuoso server.
 
@@ -768,16 +768,16 @@ MonoBehaviour:
 
 
     The load function can be
-    either used to load a save state or to load a ntriples file.
+    either used to load a save state or to load a n-triples file.
 
     While loading
-    a save state will overwrite the current session, the data from a ntriples file
+    a save state will overwrite the current session, the data from a n-triples file
     will be added as a new graph.
 
 
     Be careful when loading large ntriple files;
     Graph2VR tries to visualize the whole file at once and might get stuck or crash
-    if there are too many Triples in one file.
+    if there are too many triples in one file.
 
 
     Instead of loading such a file
@@ -2465,17 +2465,48 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "<style=\"H1>Node / edge creation</style>\n\nSometimes it is necessary
-    to add new nodes or edges.\nHere is how you can do it:\n\n<style=\"H1>Creating
-    a new node: </style>\n\nHold the trigger button for 2-3 seconds to spawn a new
-    variable node. \n\nUse the search function in the main menu or the context-specific
-    search in the node menu to search for a specific node.\nThe context-specific
-    search includes the selected triples in the search. \n\nNew nodes will spawn
-    at the position of your left controller.\nSome of the layout algorithms will
-    move them immediately.\n\n<style=\"H1>Creating a new Edge</style>\n\nTo create
-    a new edge between two nodes, put your controller at the position of the first
-    node and keep the trigger button pressed. Now you can create a new outgoing edge
-    to the second node and release the trigger button.\n"
+  m_text: '<style="H1>Menu controls: </style>
+
+
+    Depending on the context, the
+    menu can have different options:
+
+
+    <style="H1>The main menu </style>
+
+
+    Press
+    the settings button to open the main menu.
+
+    Here are options to reset the
+    application, the settings and different ways to save & load as well as a search
+    function.
+
+
+    <style="H1>The node menu </style>
+
+
+    Aim at a node with the
+    laser and press the trigger button to open the node menu.
+
+    The menu contains
+    different options depending on whether the node is a URI node (blue), a literal
+    node (yellow) or a variable node.
+
+
+    <style="H1> The edge menu </style>
+
+
+    Aim
+    at an edge with the laser and press the trigger button to open the edge menu.
+    The edge menu contains options to adjust a query and to request query results.
+
+    <br>
+
+    The
+    menu will close when you click on the free space outside the menu.
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2734,7 +2765,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Node / Edge creation
+  m_text: Menu controls
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -4893,15 +4924,16 @@ MonoBehaviour:
     ascending or descending. It is possible to order by multiple variables within
     the same query.\n\n<style=\"H1>Requesting the query results: </style>\n\nOnce
     you have selected all the triples necessary for your query, you can click an
-    edge from one of those selected triples. \nYou have the options:\n\n\"Query similar
-    patterns\" to request a series of 2D result graphs. Those will spawn in the direction
-    you're looking. To prevent the result graphs from colliding with the ground,
-    ensure you don't look at the floor of the platform.\n\n\"Query similar patterns
-    (single layer)\". \nThis will merge all the result graphs into a single graph
-    without duplicate nodes.\n\n<style=\"H1>Limitations: </style>\n\nGraph2VR (version
-    1.0) does not yet support all SPARQL keywords.\nE.g. \"Count\", \"Optional\",
-    \"Filter\", \"Group By\", \"Union\", \"Minus\", or \"Service\" are still to be
-    implemented."
+    edge from one of those selected triples. \n\nYou have the options:\n\n<style=\"H2>Query
+    similar patterns</style> \nThis will  request a series of 2D result graphs. Those
+    will spawn in the direction you're looking. To prevent the result graphs from
+    colliding with the ground, ensure you don't look at the floor of the platform.\n\n<style=\"H2>Query
+    similar patterns (single layer)</style> \nThis will merge all the result graphs
+    into a single graph without duplicate nodes.\n\n<style=\"H1>Limitations: </style>\n\nGraph2VR
+    (version 1.0) does not yet offer using all SPARQL keywords. Even so DotNetRDF
+    would support them, some common  keywords like \"Count\", \"Optional\", \"Filter\",
+    \"Group By\", \"Bind\" \"Union\", \"Minus\", or \"Service\" are not yet accessible
+    via the Graph2VR menu."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -5085,7 +5117,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Menu controls
+  m_text: Node / Edge creation
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -5257,48 +5289,17 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '<style="H1>Menu controls: </style>
-
-
-    Depending on the context, the
-    menu can have different options:
-
-
-    <style="H1>The main menu </style>
-
-
-    Press
-    the settings button to open the main menu.
-
-    Here are options to reset the
-    application, the settings and different ways to save & load as well as a search
-    function.
-
-
-    <style="H1>The node menu </style>
-
-
-    Aim at a node with the
-    laser and press the trigger button to open the node menu.
-
-    The menu contains
-    different options depending on whether the node is a URI node (blue), a literal
-    node (yellow) or a variable node.
-
-
-    <style="H1> The edge menu </style>
-
-
-    Aim
-    at an edge with the laser and press the trigger button to open the edge menu.
-    The edge menu contains options to adjust a query and to request query results.
-
-    <br>
-
-    The
-    menu will close when you click on the free space outside the menu.
-
-'
+  m_text: "<style=\"H1>Node / edge creation</style>\n\nSometimes it is necessary
+    to add new nodes or edges.\nHere is how you can do it:\n\n<style=\"H1>Creating
+    a new node: </style>\n\nHold the trigger button for 2-3 seconds to spawn a new
+    variable node. \n\nUse the search function in the main menu or the context-specific
+    search in the node menu to search for a specific node.\nThe context-specific
+    search includes the selected triples in the search. \n\nNew nodes will spawn
+    at the position of your left controller.\nSome of the layout algorithms will
+    move them immediately.\n\n<style=\"H1>Creating a new Edge</style>\n\nTo create
+    a new edge between two nodes, put your controller at the position of the first
+    node and keep the trigger button pressed. Now you can create a new outgoing edge
+    to the second node and release the trigger button.\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -5863,8 +5864,8 @@ MonoBehaviour:
     the same time will grab the whole graph.\nIt is possible to drag and drop the
     graph while holding both grip buttons, and you could even fly with the graph.\n<br>\n<style=\"H1>Rotating
     and zooming:\n</style>\n\nWhile holding the graph with the grip buttons of both
-    controllers, you can rotate it with the controllers.\nWhen you move your controllers
-    towards each other, you can zoom the graph smaller. Likewise, moving the controllers
+    controllers, you can rotate the graph.\nWhen you move your controllers towards
+    each other, you can zoom the graph smaller. Likewise, pulling the controllers
     apart will zoom the graph bigger."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
