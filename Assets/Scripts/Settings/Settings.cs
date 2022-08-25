@@ -17,7 +17,7 @@ namespace Dweiss
     public string label = "";
     public string sparqlEndpoint = "https://dbpedia.org/sparql";
     public string baseURI = "http://dbpedia.org"; //"https://github.com/PjotrSvetachov/GraphVR/example-graph";
-    public bool databaseSuportsBifContains = false;
+    public bool databaseSupportsBifContains = false;
     public bool searchOnKeypress = false;
   }
 
@@ -38,7 +38,7 @@ namespace Dweiss
 
     public string sparqlEndpoint = "https://dbpedia.org/sparql";
     public string baseURI = "http://dbpedia.org"; //"https://github.com/PjotrSvetachov/GraphVR/example-graph";
-    public bool databaseSuportsBifContains = false;
+    public bool databaseSupportsBifContains = false;
 
     public string defaultNodeCreationURI = "http://graph2vr.org/newNode#";
     public string defaultEdgeCreationURI = "http://graph2vr.org/newEdge#";

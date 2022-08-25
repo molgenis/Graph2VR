@@ -332,7 +332,7 @@ public class QueryService : MonoBehaviour
 
   private string GetAutoCompleteQuery(string searchTerm, Node variableNode)
   {
-    if (Settings.Instance.databaseSuportsBifContains)
+    if (Settings.Instance.databaseSupportsBifContains)
     {
       return GetAutoCompleteBifQuery(searchTerm, variableNode);
     }

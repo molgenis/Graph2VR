@@ -320,7 +320,7 @@ public class MainMenu : BaseMenu
         PlayerPrefs.SetString("CustomGraphDatabase", "");
         Settings.Instance.baseURI = PlayerPrefs.GetString("CustomGraphDatabase", "");
         Settings.Instance.sparqlEndpoint = endpoint;
-        Settings.Instance.databaseSuportsBifContains = false;
+        Settings.Instance.databaseSupportsBifContains = false;
         Settings.Instance.searchOnKeypress = false;
         QueryService.Instance.SwitchEndpoint();
       }, PlayerPrefs.GetString("CustomServer", ""), "Enter a custom server url...");
@@ -340,7 +340,7 @@ public class MainMenu : BaseMenu
       {
         Settings.Instance.baseURI = dataBaseSettings.baseURI;
         Settings.Instance.sparqlEndpoint = dataBaseSettings.sparqlEndpoint;
-        Settings.Instance.databaseSuportsBifContains = dataBaseSettings.databaseSuportsBifContains;
+        Settings.Instance.databaseSupportsBifContains = dataBaseSettings.databaseSupportsBifContains;
         Settings.Instance.searchOnKeypress = dataBaseSettings.searchOnKeypress;
         QueryService.Instance.SwitchEndpoint();
         Close();
