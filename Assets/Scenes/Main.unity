@@ -5043,11 +5043,7 @@ MonoBehaviour:
     looking. To prevent the result graphs from colliding with the ground, ensure
     you don't look at the floor of the platform.\n\n<style=\"H2>Query similar patterns
     (single layer)</style> \n\nThis will merge all the result graphs into a single
-    graph without duplicate nodes.\n\n<style=\"H1>Limitations</style>\n\nGraph2VR
-    (version 1.0) does not yet offer using all SPARQL keywords. Even so DotNetRDF
-    would support them, some common  keywords like \"Count\", \"Optional\", \"Filter\",
-    \"Group By\", \"Bind\" \"Union\", \"Minus\", or \"Service\" are not yet accessible
-    via the Graph2VR menu."
+    graph without duplicate nodes."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -5525,7 +5521,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 1700}
+  m_SizeDelta: {x: 0, y: 1500}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!1 &1503421650
 GameObject:
@@ -6005,10 +6001,11 @@ MonoBehaviour:
 
     While
     holding the graph with the grip buttons of both controllers, you can rotate the
-    graph.
+    graph with your controllers like holding a ball.
 
-    When you move your controllers towards each other, you can zoom the
-    graph smaller. Likewise, pulling the controllers apart will zoom the graph bigger.'
+    When you move your controllers
+    towards each other, you can scale the graph down. Likewise, pulling the controllers
+    apart will scale the graph up.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
