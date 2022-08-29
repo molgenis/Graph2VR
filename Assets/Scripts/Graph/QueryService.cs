@@ -154,7 +154,7 @@ public class QueryService : MonoBehaviour
 
     return $@"
         Optional{{
-          Select {variable} <http://graph2vr.org/label> AS ?graph2vrlabel STR(?label) as ?label
+          Select {variable} <http://graph2vr.org/label> AS ?graph2vrlabel sample(STR(?label)) as ?label
           where {{
             {variable} rdfs:label ?label .
             {LanguageFilterString("?label")}
