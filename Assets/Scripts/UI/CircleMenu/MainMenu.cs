@@ -297,15 +297,30 @@ public class MainMenu : BaseMenu
     {
       foreach (string graph in graphsInSelectedDatabase)
       {
-        cm.AddButton(graph, grayColor, () =>
-        {
-          PlayerPrefs.SetString("CustomGraphDatabase", graph);
-          string endpoint = PlayerPrefs.GetString("CustomServer");
-          Settings.Instance.baseURI = graph;
-          Settings.Instance.sparqlEndpoint = endpoint;
-          QueryService.Instance.SwitchEndpoint();
-          cm.Close();
-        });
+        if (graph == Settings.Instance.baseURI) {
+          cm.AddButton(graph, Color.blue, () =>
+          {
+            PlayerPrefs.SetString("CustomGraphDatabase", graph);
+            string endpoint = Settings.Instance.sparqlEndpoint;
+            Settings.Instance.baseURI = graph;
+            Settings.Instance.sparqlEndpoint = endpoint;
+            QueryService.Instance.SwitchEndpoint();
+            cm.Close();
+            PopulateMainMenu();
+          });
+        }
+        else { 
+          cm.AddButton(graph, grayColor, () =>
+          {
+            PlayerPrefs.SetString("CustomGraphDatabase", graph);
+            string endpoint = Settings.Instance.sparqlEndpoint;
+            Settings.Instance.baseURI = graph;
+            Settings.Instance.sparqlEndpoint = endpoint;
+            QueryService.Instance.SwitchEndpoint();
+            cm.Close();
+            PopulateMainMenu();
+          });
+        }
       }
     }
   }
