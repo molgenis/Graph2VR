@@ -556,6 +556,13 @@ public class Graph : MonoBehaviour
       for (int i = node.connections.Count - 1; i >= 0; i--)
       {
         Edge edge = node.connections[i];
+        if (edge.IsSelected)
+        {
+          edge.IsSelected = false;
+          edge.graph.RemoveFromSelection(edge);
+          // In case there is an edge between two graphs, this should also be removed.
+          this.RemoveFromSelection(edge);
+        }
         edge.displayObject.connections.Remove(edge);
         edge.displaySubject.connections.Remove(edge);
         edgeList.Remove(edge);
@@ -575,6 +582,12 @@ public class Graph : MonoBehaviour
   public void RemoveEdge(Edge edge)
   {
     creationQuery = "";
+    if (edge.IsSelected)
+    {
+      edge.IsSelected = false;
+      edge.graph.RemoveFromSelection(edge);
+      this.RemoveFromSelection(edge);
+    }
     edgeList.Remove(edge);
     edge.Remove();
 

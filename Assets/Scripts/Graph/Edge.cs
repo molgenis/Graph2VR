@@ -329,6 +329,11 @@ public class Edge : MonoBehaviour
     UpdateEdgeLines(true);
     displayObject.UpdateSelectionStatus();
     displaySubject.UpdateSelectionStatus();
+    if (IsSelected)
+    {
+      IsSelected = false;
+      graph.RemoveFromSelection(this);
+    }
   }
 
   public void UpdateEdgeLines(bool removeSelf = false)

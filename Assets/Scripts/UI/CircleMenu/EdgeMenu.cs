@@ -148,8 +148,18 @@ public class EdgeMenu : BaseMenu
     {
       cm.AddButton(predicate.name, new Color(1, 0.5f, 0.5f) / 2, () =>
       {
-        edge.uri = predicate.uri;
-        edge.InitializeTexts();
+        if (edge.IsSelected)
+        {
+          edge.Deselect();
+          edge.uri = predicate.uri;
+          edge.InitializeTexts();
+          edge.Select();
+        }
+        else
+        {
+          edge.uri = predicate.uri;
+          edge.InitializeTexts();
+        }
         Close();
       });
     }
@@ -157,11 +167,24 @@ public class EdgeMenu : BaseMenu
     cm.AddButton(Icon("\uF11C") + "Custom Predicate", new Color(1, 0.5f, 0.5f) / 2, () =>
     {
       Edge cachedEdge = edge;
-      Utils.GetStringFromVRKeyboard((string predicate) =>
+      if (cachedEdge.IsSelected)
       {
-        cachedEdge.uri = predicate;
-        cachedEdge.InitializeTexts();
-      }, "http://", "predicate");
+        cachedEdge.Deselect();
+        Utils.GetStringFromVRKeyboard((string predicate) =>
+        {
+          cachedEdge.uri = predicate;
+          cachedEdge.InitializeTexts();
+        }, "http://", "predicate");
+        cachedEdge.Select();
+      }
+      else
+      {
+        Utils.GetStringFromVRKeyboard((string predicate) =>
+        {
+          cachedEdge.uri = predicate;
+          cachedEdge.InitializeTexts();
+        }, "http://", "predicate");
+      }
       Close();
     });
   }
