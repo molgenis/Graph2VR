@@ -110,7 +110,7 @@ RectTransform:
   m_GameObject: {fileID: 2560182947889555648}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.025, y: 0.025, z: 0.025}
+  m_LocalScale: {x: 0.005, y: 0.005, z: 0.005}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6008310698498198632}
@@ -210,12 +210,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 8.95
-  m_fontSizeBase: 10
+  m_fontSize: 64
+  m_fontSizeBase: 128
   m_fontWeight: 400
   m_enableAutoSizing: 1
-  m_fontSizeMin: 8
-  m_fontSizeMax: 12
+  m_fontSizeMin: 64
+  m_fontSizeMax: 128
   m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
@@ -226,9 +226,9 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_enableWordWrapping: 0
   m_wordWrappingRatios: 0.4
-  m_overflowMode: 1
+  m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
@@ -433,6 +433,7 @@ MonoBehaviour:
   displaySubject: {fileID: 0}
   displayObject: {fileID: 0}
   textFront: {fileID: 6514513769168667944}
+  textShort: 
   variableName: 
   lineType: 0
   bendDirectionOffset: 0
