@@ -137,6 +137,8 @@ PlayerSettings:
   bundleVersion: 1.0.0
   preloadedAssets:
   - {fileID: 11400000, guid: 49299175b7782b94b9548978ab9ebfcc, type: 2}
+  - {fileID: -7106906202021479067, guid: e9fdf00479fecdb46b9f73cb2671ddc1, type: 2}
+  - {fileID: 5795986684192282295, guid: 535e11ec91bb15e4c849303cb242cb59, type: 2}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -155,7 +157,7 @@ PlayerSettings:
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
     Android: com.Graph2VR.Graph2VR
-    Standalone: com.DefaultCompany.Graph2VR
+    Standalone: com.Graph2VR.Graph2VR
   buildNumber:
     Standalone: 0
     iPhone: 0
@@ -490,7 +492,9 @@ PlayerSettings:
     Android: 1
     iPhone: 1
     tvOS: 1
-  m_BuildTargetGroupLightmapEncodingQuality: []
+  m_BuildTargetGroupLightmapEncodingQuality:
+  - m_BuildTarget: Android
+    m_EncodingQuality: 2
   m_BuildTargetGroupLightmapSettings: []
   m_BuildTargetNormalMapEncoding: []
   m_BuildTargetDefaultTextureCompressionFormat: []
