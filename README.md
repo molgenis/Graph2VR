@@ -24,4 +24,4 @@ We had to adjust the DotNetRDF library and rebuild it, to make it work on the Qu
 
 Running the application without the small fix on the headset will give this error:
 `Cannot use Type VDS.RDF.Parsing.GZippedNTriplesParser for the RDF Parser Type as it does not implement the required interface VDS.RDF.IRdfReader`
-To fix this we made a custom version of the [library](https://github.com/dotnetrdf/dotnetrdf/blame/main/Libraries/dotNetRdf/Core/MimeTypeDefinition.cs#L398) that dooesn't contain this check. We shiped it with Graph2VR.
+To fix this we made a custom version of the [library](https://github.com/dotnetrdf/dotnetrdf/blame/main/Libraries/dotNetRdf/Core/MimeTypeDefinition.cs#L398) that doesn't contain this check. We shiped it with Graph2VR.
