@@ -1,6 +1,6 @@
 # Graph2VR
 
-Graph2VR is an application to Visualize Graphs (SPARQL) as 3D Graphs in Virtual Reality.
+Graph2VR is a PhD project, a prototype for a VR application to Visualize Graphs (SPARQL) as 3D Graphs in Virtual Reality.
 The idea is to explore, analyze, and interact with the data in the graph using gesture control.
 
 Graph2VR has been built in Unity and is able to connect to a SPARQL endpoint using [dotNetRDF](https://dotnetrdf.org/).
@@ -17,12 +17,11 @@ We tried to reduce the ways to interact with the graph to a few simple operation
 - Interacting with the graph (zoom, move, rotate) 
 - Using visual queries or a search function to add specific nodes
 
-
+For more detailed instructions on how to use Graph2VR, please refer to the [Graph2VR User Manual](https://github.com/PjotrSvetachov/Graph2VR/blob/master/Graph2VR_User_manual.pdf).
 
 In case you need a newer version of DotNetRDF if you develop the program further:
 We had to adjust the DotNetRDF library and rebuild it, to make it work on the Quest2 headset.
 
 Running the application without the small fix on the headset will give this error:
 `Cannot use Type VDS.RDF.Parsing.GZippedNTriplesParser for the RDF Parser Type as it does not implement the required interface VDS.RDF.IRdfReader`
-To fix this we made a custom version of the library that removes this check.
-https://github.com/dotnetrdf/dotnetrdf/blame/main/Libraries/dotNetRdf/Core/MimeTypeDefinition.cs#L398 we gave shiped it with Graph2VR.
+To fix this we made a custom version of the [library](https://github.com/dotnetrdf/dotnetrdf/blame/main/Libraries/dotNetRdf/Core/MimeTypeDefinition.cs#L398) that dooesn't contain this check. We shiped it with Graph2VR.
