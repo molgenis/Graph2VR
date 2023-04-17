@@ -23,7 +23,6 @@ For more detailed instructions on how to use Graph2VR, please refer to the [Grap
 
 In case you need a newer version of DotNetRDF if you develop the program further:
 We had to adjust the DotNetRDF library and rebuild it, to make it work on the Quest2 headset.
-
 Running the application without the small fix on the headset will give this error:
 
 `Cannot use Type VDS.RDF.Parsing.GZippedNTriplesParser for the RDF Parser Type as it does not implement the required interface VDS.RDF.IRdfReader`
