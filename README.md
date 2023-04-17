@@ -19,10 +19,13 @@ We tried to reduce the ways to interact with the graph to a few simple operation
 
 For more detailed instructions on how to use Graph2VR, please refer to the [Graph2VR User Manual](https://github.com/PjotrSvetachov/Graph2VR/blob/master/Graph2VR_User_manual.pdf).
 
+
+
 In case you need a newer version of DotNetRDF if you develop the program further:
 We had to adjust the DotNetRDF library and rebuild it, to make it work on the Quest2 headset.
 
 Running the application without the small fix on the headset will give this error:
+
 `Cannot use Type VDS.RDF.Parsing.GZippedNTriplesParser for the RDF Parser Type as it does not implement the required interface VDS.RDF.IRdfReader`
 
 To fix this we made a custom version of the [library](https://github.com/dotnetrdf/dotnetrdf/blame/main/Libraries/dotNetRdf/Core/MimeTypeDefinition.cs#L398) that doesn't contain this check. We shiped it with Graph2VR.
