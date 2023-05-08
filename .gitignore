@@ -75,6 +75,7 @@ Library/CurrentMaximizeLayout.dwlt
 Library/CurrentLayout.dwlt
 
 # Please dont do FilesToCopy stuff
+/VirtuosoDocker/
 /[Aa]ssets/_FilesToCopy*
 /[Aa]ssets/_FilesToCopy/*
 VirtuosoDocker/db/ToLoad/Maelstrom_Reach.v0.9.owl
