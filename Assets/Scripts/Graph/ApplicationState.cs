@@ -267,6 +267,7 @@ public class ApplicationState
   private static Graph LoadGraphState(GraphState state)
   {
     Graph graph = Main.instance.CreateGraph();
+    graph.loading = true;
     graph.graphState = state;
     graph.GUID = state.GUID;
     graph.transform.position = new Vector3(state.positionX, state.positionY, state.positionZ);
@@ -306,6 +307,7 @@ public class ApplicationState
         graph.selection.Add(edge);
       }
     }
+    graph.loading = false;
     return graph;
   }
 

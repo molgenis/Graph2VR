@@ -41,6 +41,7 @@ public class ClassHierarchy : BaseLayoutAlgorithm
 
   private void CalculateHierarchicalLevels()
   {
+    notAClassHiearchy = false;
     notAClassHiearchyPositionCounter = 0;
     List<Edge> subClassOfEdgeList = graph.edgeList.FindAll(edge => edge.uri.ToLower() == SUBCLASS_OF_PREDICATE);
     Node initialNode = null;

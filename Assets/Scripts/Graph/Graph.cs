@@ -8,6 +8,7 @@ using VDS.RDF.Query;
 
 public class Graph : MonoBehaviour
 {
+  public bool loading = false;
   public string GUID;
   public BaseLayoutAlgorithm layout = null;
   public BoundingSphere boundingSphere;
@@ -239,7 +240,7 @@ public class Graph : MonoBehaviour
     AddObjects(triple);
     AddSubjects(triple);
     AddEdges(triple);
-    layout.CalculateLayout();
+    if (!loading) layout.CalculateLayout();
   }
 
   private void AddEdges(Triple triple)
@@ -326,7 +327,7 @@ public class Graph : MonoBehaviour
         SemanticPlanes plane = gameObject.GetComponent<SemanticPlanes>();
         if (plane.enabled && this.layout == plane)
         {
-          plane.CalculateLayout();
+          if (!loading) plane.CalculateLayout();
         }
       });
     }
@@ -347,7 +348,7 @@ public class Graph : MonoBehaviour
       CreateEdge(triple.Subject, triple.Predicate, triple.Object);
     }
 
-    layout.CalculateLayout();
+    if (!loading) layout.CalculateLayout();
   }
 
   public void Clear()
@@ -663,7 +664,7 @@ public class Graph : MonoBehaviour
         break;
     }
     currentLayout = layout;
-    this.layout.CalculateLayout();
+    if (!loading) this.layout.CalculateLayout();
   }
 
   private void SwitchLayout<T>()
