@@ -316,20 +316,21 @@ public class Node : MonoBehaviour
   {
     foreach (string uri in images)
     {
-      UnityWebRequest imageRequest = UnityWebRequestTexture.GetTexture(uri);
+      UnityWebRequest imageRequest = UnityWebRequestTexture.GetTexture(uri, false);
       yield return imageRequest.SendWebRequest();
+      yield return new WaitForSeconds(Random.Range(0.0f, 5.0f));
       if (imageRequest.result != UnityWebRequest.Result.Success)
       {
+        imageRequest.Dispose();
         continue;
       }
       else
       {
-        DownloadHandlerTexture imageDownloadHandler = (DownloadHandlerTexture)imageRequest.downloadHandler;
-        int width = imageDownloadHandler.texture.width;
-        int height = imageDownloadHandler.texture.height;
-        Texture2D image = new(width, height, imageDownloadHandler.texture.format, true);
-        image.LoadImage(imageDownloadHandler.data);
-        SetTexture(image, width, height);
+        Texture2D image = DownloadHandlerTexture.GetContent(imageRequest);
+        image = Utils.ClampTextureSize(image, Settings.Instance.savedMaximumImageWidth, Settings.Instance.savedMaximumImageHeight);
+        SetTexture(image, image.width, image.height);
+
+        imageRequest.Dispose();
         break;
       }
     }
@@ -342,8 +343,6 @@ public class Node : MonoBehaviour
     GameObject borderObject = transform.Find("Border").gameObject;
     GameObject imageObject = borderObject.transform.Find("Image").gameObject;
 
-    image.filterMode = FilterMode.Bilinear;
-    image.Apply(true);
     borderObject.SetActive(true);
     borderObject.GetComponent<Renderer>().material.color = color;
     gameObject.GetComponent<Renderer>().enabled = false;

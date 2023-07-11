@@ -7,6 +7,42 @@ using VDS.RDF.Query;
 
 public class Utils
 {
+  static public Texture2D ClampTextureSize(Texture2D source, int targetWidth, int targetHeight)
+  {
+    int scaleWidth;
+    int scaleHeight;
+    float aspect = (float)source.width / source.height;
+    if (source.width > targetWidth)
+    {
+      scaleWidth = targetWidth;
+      scaleHeight = (int)(targetHeight / aspect);
+      if (scaleHeight > targetHeight)
+      {
+        scaleWidth = (int)(targetWidth * aspect);
+        scaleHeight = targetHeight;
+      }
+      return ScaleTexture(source, scaleWidth, scaleHeight);
+    }
+    return source;
+  }
+
+  static public Texture2D ScaleTexture(Texture2D source, int targetWidth, int targetHeight)
+  {
+    Texture2D result = new Texture2D(targetWidth, targetHeight, source.format, false);
+    for (int i = 0; i < result.height; ++i)
+    {
+      for (int j = 0; j < result.width; ++j)
+      {
+        Color newColor = source.GetPixelBilinear((float)j / (float)result.width, (float)i / (float)result.height);
+        result.SetPixel(j, i, newColor);
+      }
+    }
+    result.filterMode = FilterMode.Bilinear;
+    result.Apply(true, false);
+    return result;
+  }
+
+
   static public void GetStringFromVRKeyboard(Action<string> callback, string initialValue = "", string placeHolder = "...")
   {
     Main.instance.keyboard.GetComponent<GetStringFromKeyboardHandler>().GetString(callback, initialValue, placeHolder);
