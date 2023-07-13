@@ -48,6 +48,25 @@ public class EdgeMenu : BaseMenu
         edge.Deselect();
         PopulateEdge(input);
       });
+
+
+      if (edge.IsOptional)
+      {
+        cm.AddButton(Icon("\uF205") + "Mark as required", Color.yellow / 2, () =>
+        {
+          edge.IsOptional = false;
+          PopulateEdge(input);
+        });
+      }
+      else
+      {
+        cm.AddButton(Icon("\uF205") + "Mark as optional", Color.yellow / 2, () =>
+        {
+          edge.IsOptional = true;
+          PopulateEdge(input);
+        });
+      }
+
       cm.AddButton(Icon("\uF5FD") + "Query similar patterns", Color.yellow / 2, () =>
       {
         graph.QuerySimilarPatternsMultipleLayers();

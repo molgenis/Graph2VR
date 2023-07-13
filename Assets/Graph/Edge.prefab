@@ -391,7 +391,7 @@ LineRenderer:
     numCornerVertices: 0
     numCapVertices: 0
     alignment: 0
-    textureMode: 0
+    textureMode: 1
     shadowBias: 0.5
     generateLightingData: 0
   m_UseWorldSpace: 1
@@ -438,6 +438,7 @@ MonoBehaviour:
   lineType: 0
   bendDirectionOffset: 0
   flippedDirection: 0
+  isOptional: 0
 --- !u!1 &8899116447942161616
 GameObject:
   m_ObjectHideFlags: 0

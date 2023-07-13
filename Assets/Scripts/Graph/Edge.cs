@@ -32,6 +32,7 @@ public class Edge : MonoBehaviour
 
   private readonly NodeFactory nodeFactory = new();
 
+  public bool isOptional = false;
   private bool isVariable = false;
   private bool isSelected = false;
   private bool isActiveInMenu = false;
@@ -52,6 +53,28 @@ public class Edge : MonoBehaviour
     }
   }
 
+  public bool IsOptional
+  {
+    get => isOptional;
+    set
+    {
+      isOptional = value;
+      if (isOptional)
+      {
+        lineRenderer.material.mainTexture = Settings.Instance.lineDashed;
+        lineRenderer.material.SetFloat("_AlphaClip", 1);
+        lineRenderer.material.SetFloat("_Cutoff", 0.5f);
+        lineRenderer.material.EnableKeyword("_ALPHATEST_ON");
+      }
+      else
+      {
+        lineRenderer.material.mainTexture = Settings.Instance.line;
+        lineRenderer.material.DisableKeyword("_ALPHATEST_ON");
+      }
+    }
+  }
+
+
   public bool IsSelected
   {
     get => isSelected;
@@ -61,6 +84,10 @@ public class Edge : MonoBehaviour
       UpdateColor();
       displayObject.UpdateSelectionStatus();
       displaySubject.UpdateSelectionStatus();
+      if (isSelected == false)
+      {
+        IsOptional = false;
+      }
     }
   }
 
