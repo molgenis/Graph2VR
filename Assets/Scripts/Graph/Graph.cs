@@ -52,9 +52,24 @@ public class Graph : MonoBehaviour
   {
     return selection.Aggregate(string.Empty, (accum, edge) => accum += edge.GetQueryString());
   }
+  public string GetTriplesStringWithOptional()
+  {
+    return selection.Aggregate(string.Empty, (accum, edge) => accum += GetEdgeTrippleWithOptional(edge));
+  }
+
+
+  private string GetEdgeTrippleWithOptional(Edge edge)
+  {
+    if (edge.IsOptional)
+    {
+      return "OPTIONAL {" + edge.GetQueryString() + "}\n";
+    }
+    return edge.GetQueryString();
+  }
 
   public string RealNodeValue(INode node)
   {
+    if (node == null) return "";
     return node.NodeType switch
     {
       NodeType.GraphLiteral or NodeType.Literal => GetLiteralValue(node),
@@ -86,7 +101,8 @@ public class Graph : MonoBehaviour
 
   public void QuerySimilarPatternsMultipleLayers()
   {
-    string triples = GetTriplesString();
+    string triples = GetTriplesStringWithOptional();
+    Debug.Log("triples: " + triples);
     void QuerySimilarPatternsMultipleLayersCallback(SparqlResultSet results, string query)
     {
       UnityMainThreadDispatcher.Instance().Enqueue(() =>

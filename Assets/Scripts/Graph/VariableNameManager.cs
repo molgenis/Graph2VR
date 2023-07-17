@@ -6,6 +6,26 @@ public class VariableNameManager
   private IDictionary<string, string> uriToVariable = new Dictionary<string, string>();
   private int counter = 1;
 
+  public IDictionary<string, string> GetDictionary()
+  {
+    return uriToVariable;
+  }
+
+  public void RestoreDictionary(IDictionary<string, string> dictionary)
+  {
+    uriToVariable = dictionary;
+  }
+
+  public int GetCounter()
+  {
+    return counter;
+  }
+
+  public void RestoreCounter(int counter)
+  {
+    this.counter = counter;
+  }
+
   public string GetVariableName(INode node)
   {
     if (node == null)

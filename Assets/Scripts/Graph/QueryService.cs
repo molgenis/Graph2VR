@@ -181,10 +181,11 @@ public class QueryService : MonoBehaviour
     string query = $@"
             {PREFIXES}
             construct {{
-                {triples} 
+                {removeOptional(triples)} 
             }} where {{
                 {triples} 
             }} LIMIT {queryLimit}";
+    Debug.Log(query);
     if (IsConstructSparqlQuery(query))
     {
       ExecuteQuery(query, queryCallback);
@@ -193,6 +194,13 @@ public class QueryService : MonoBehaviour
     {
       Debug.Log("Please use a Construct query");
     }
+  }
+
+  private string removeOptional(string triples)
+  {
+    triples = triples.Replace("OPTIONAL {", "");
+    triples = triples.Replace("}\n", "");
+    return triples;
   }
 
   Action<List<string>> getGraphsOnSelectedServerCallback;
@@ -311,12 +319,13 @@ public class QueryService : MonoBehaviour
       select distinct * where {{
         {triples}
       }} {order} LIMIT {queryLimit}";
-
+    Debug.Log("QuerySimilarPatternsMultipleLayers: " + query);
     endPoint.QueryWithResultSet(query, (SparqlResultSet results, object state) =>
     {
       callback(results, query);
     }, null);
   }
+
   public void AutocompleteSearch(string searchTerm, SparqlResultsCallback callback, Node variableNode = null)
   {
     if (searchTerm.Length > 3)

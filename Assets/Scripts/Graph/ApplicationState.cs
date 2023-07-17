@@ -30,6 +30,8 @@ public class ApplicationState
     public bool showBoundingSphere;
     public ushort layout;
     public string creationQuery;
+    public int variableNameGeneratorCounter;
+    public IDictionary<string, string> variableNameGeneratorDictionary;
 
     //SemanticPlanes
     public float semanticPlanesLookDirectionX = 0;
@@ -51,8 +53,11 @@ public class ApplicationState
       subjectNode = new NodeState(edge.displaySubject);
       objectNode = new NodeState(edge.displayObject);
       predicate = edge.uri;
+      variableName = edge.variableName;
       isVariable = edge.IsVariable;
       isSelected = edge.IsSelected;
+      isOptional = edge.IsOptional;
+
       if (crossGraphEdge)
       {
         optionalObjectGraphGUID = edge.displayObject.graph.GUID;
@@ -62,8 +67,10 @@ public class ApplicationState
     public NodeState subjectNode;
     public string predicate;
     public NodeState objectNode;
+    public string variableName;
     public bool isVariable = false;
     public bool isSelected = false;
+    public bool isOptional = false;
     public string optionalObjectGraphGUID = "";
     public string optionalSubjectGraphGUID = "";
   }
@@ -132,6 +139,8 @@ public class ApplicationState
     state.creationQuery = graph.creationQuery;
     state.showBoundingSphere = graph.boundingSphere.IsVisible();
     state.layout = ((ushort)graph.GetLayout());
+    state.variableNameGeneratorCounter = graph.variableNameManager.GetCounter();
+    state.variableNameGeneratorDictionary = graph.variableNameManager.GetDictionary();
 
     SemanticPlanes plane = graph.GetComponent<SemanticPlanes>();
     Quaternion direction = plane.lookDirection;
@@ -229,6 +238,8 @@ public class ApplicationState
   private static Graph LoadGraphState(GraphState state)
   {
     Graph graph = Main.instance.CreateGraph();
+    //graph.variableNameManager.RestoreCounter(state.variableNameGeneratorCounter);
+
     graph.loading = true;
     graph.graphState = state;
     graph.GUID = state.GUID;
@@ -270,6 +281,9 @@ public class ApplicationState
       }
     }
     graph.loading = false;
+    graph.variableNameManager.RestoreCounter(state.variableNameGeneratorCounter);
+    graph.variableNameManager.RestoreDictionary(state.variableNameGeneratorDictionary);
+
     return graph;
   }
 
@@ -294,9 +308,11 @@ public class ApplicationState
     if (nodeSubject == null || nodeObject == null) return null;
     Edge edge = graph.CreateEdge(nodeSubject, state.predicate, nodeObject);
     edge.IsSelected = state.isSelected;
+    edge.IsOptional = state.isOptional;
     if (state.isVariable)
     {
       edge.MakeVariable();
+      edge.variableName = state.variableName;
     }
     return edge;
   }
