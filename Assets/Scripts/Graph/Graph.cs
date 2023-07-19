@@ -134,7 +134,6 @@ public class Graph : MonoBehaviour
               if (selectedEdge.isOptional)
               {
                 bool optionalExistsInResult = result.HasBoundValue("optionalTripelExists" + selectedEdge.optionalTripleCounter);
-                Debug.Log("optionalExistsInResult: " + optionalExistsInResult);
                 if (!optionalExistsInResult) removeLine = true;
               }
             }

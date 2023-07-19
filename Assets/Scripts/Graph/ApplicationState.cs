@@ -10,6 +10,8 @@ public class ApplicationState
   public class State
   {
     public int saveVersion = 1;
+    public long optionalCounter;
+
     public List<GraphState> graphs = new List<GraphState>();
     public List<EdgeState> crossGraphEdges = new List<EdgeState>();
   }
@@ -57,6 +59,7 @@ public class ApplicationState
       isVariable = edge.IsVariable;
       isSelected = edge.IsSelected;
       isOptional = edge.IsOptional;
+      optionalTripleCounter = edge.optionalTripleCounter;
 
       if (crossGraphEdge)
       {
@@ -73,6 +76,8 @@ public class ApplicationState
     public bool isOptional = false;
     public string optionalObjectGraphGUID = "";
     public string optionalSubjectGraphGUID = "";
+
+    public long optionalTripleCounter = 0;
   }
 
   [Serializable]
@@ -114,6 +119,7 @@ public class ApplicationState
   private static State SaveState()
   {
     State state = new State();
+    state.optionalCounter = Edge.optionalCounter;
     GameObject[] graphs = GameObject.FindGameObjectsWithTag("Graph");
     foreach (GameObject graph in graphs)
     {
@@ -205,6 +211,7 @@ public class ApplicationState
   private static void LoadState(State state)
   {
     graphs.Clear();
+    Edge.optionalCounter = state.optionalCounter;
     foreach (GraphState graphState in state.graphs)
     {
       graphs.Add(LoadGraphState(graphState));
@@ -309,6 +316,7 @@ public class ApplicationState
     Edge edge = graph.CreateEdge(nodeSubject, state.predicate, nodeObject);
     edge.IsSelected = state.isSelected;
     edge.IsOptional = state.isOptional;
+    edge.optionalTripleCounter = state.optionalTripleCounter;
     if (state.isVariable)
     {
       edge.MakeVariable();
