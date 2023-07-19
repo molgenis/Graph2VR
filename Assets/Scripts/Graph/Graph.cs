@@ -106,14 +106,10 @@ public class Graph : MonoBehaviour
     {
       UnityMainThreadDispatcher.Instance().Enqueue(() =>
       {
-        Debug.Log("QuerySimilarPatternsMultipleLayersCallback");
-        Debug.Log("query: " + query);
-
         Quaternion rotation = Camera.main.transform.rotation;
         Vector3 offset = transform.position + (rotation * new Vector3(0, 0, 1 + boundingSphere.size));
         foreach (SparqlResult result in results)
         {
-          Debug.Log("result: " + result.ToString());
           string preSelectedQuery = "";
           foreach (string line in triples.Split(" .\n"))
           {

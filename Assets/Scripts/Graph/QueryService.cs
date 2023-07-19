@@ -185,7 +185,6 @@ public class QueryService : MonoBehaviour
             }} where {{
                 {triples} 
             }} LIMIT {queryLimit}";
-    Debug.Log(query);
     if (IsConstructSparqlQuery(query))
     {
       ExecuteQuery(query, queryCallback);
