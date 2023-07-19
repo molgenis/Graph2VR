@@ -57,12 +57,11 @@ public class Graph : MonoBehaviour
     return selection.Aggregate(string.Empty, (accum, edge) => accum += GetEdgeTrippleWithOptional(edge));
   }
 
-
   private string GetEdgeTrippleWithOptional(Edge edge)
   {
     if (edge.IsOptional)
     {
-      return "OPTIONAL {" + edge.GetQueryString() + "}\n";
+      return "OPTIONAL {" + edge.GetQueryString() + " BIND (true as ?optionalTripelExists" + edge.optionalTripleCounter + ")}\n";
     }
     return edge.GetQueryString();
   }
@@ -101,30 +100,67 @@ public class Graph : MonoBehaviour
 
   public void QuerySimilarPatternsMultipleLayers()
   {
-    string triples = GetTriplesStringWithOptional();
-    Debug.Log("triples: " + triples);
+    string triples = GetTriplesString();
     void QuerySimilarPatternsMultipleLayersCallback(SparqlResultSet results, string query)
     {
       UnityMainThreadDispatcher.Instance().Enqueue(() =>
       {
+        Debug.Log("QuerySimilarPatternsMultipleLayersCallback");
+        Debug.Log("query: " + query);
+
         Quaternion rotation = Camera.main.transform.rotation;
         Vector3 offset = transform.position + (rotation * new Vector3(0, 0, 1 + boundingSphere.size));
         foreach (SparqlResult result in results)
         {
-          string constructQuery = triples;
-          foreach (var node in result)
+          Debug.Log("result: " + result.ToString());
+          string preSelectedQuery = "";
+          foreach (string line in triples.Split(" .\n"))
           {
-            constructQuery = constructQuery.Replace("?" + node.Key, RealNodeValue(node.Value));
+            if (line == "") continue;
+            Edge selectedEdge = null;
+
+            foreach (Edge selected in selection)
+            {
+              string selectedLine = selected.GetQueryString();
+              if ((line + " .\n").Trim().CompareTo(selectedLine.Trim()) == 0)
+              {
+                selectedEdge = selected;
+              }
+            }
+
+            bool removeLine = false;
+            if (selectedEdge != null)
+            {
+              if (selectedEdge.isOptional)
+              {
+                bool optionalExistsInResult = result.HasBoundValue("optionalTripelExists" + selectedEdge.optionalTripleCounter);
+                Debug.Log("optionalExistsInResult: " + optionalExistsInResult);
+                if (!optionalExistsInResult) removeLine = true;
+              }
+            }
+
+            if (!removeLine)
+            {
+              preSelectedQuery += line + " .\n";
+            }
           }
 
-          Graph newGraph = QuerySimilarWithTriples(constructQuery, offset, Quaternion.identity);
+          foreach (var node in result)
+          {
+            if (RealNodeValue(node.Value) != "")
+            {
+              preSelectedQuery = preSelectedQuery.Replace("?" + node.Key, RealNodeValue(node.Value));
+            }
+          }
+
+          Graph newGraph = QuerySimilarWithTriples(preSelectedQuery, offset, Quaternion.identity);
           offset += rotation * new Vector3(0, 0, 0.5f);
           SetupNewGraph(newGraph, query, rotation, results);
         }
       });
     }
 
-    QueryService.Instance.QuerySimilarPatternsMultipleLayers(triples, orderBy, QuerySimilarPatternsMultipleLayersCallback);
+    QueryService.Instance.QuerySimilarPatternsMultipleLayers(GetTriplesStringWithOptional(), orderBy, QuerySimilarPatternsMultipleLayersCallback);
   }
 
   private void SetupNewGraph(Graph newGraph, string query, Quaternion rotation, SparqlResultSet results)

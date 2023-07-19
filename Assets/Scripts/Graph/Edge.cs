@@ -20,6 +20,11 @@ public class Edge : MonoBehaviour
   private LineRenderer lineRenderer;
   public TMPro.TextMeshPro textFront;
 
+  // 0 its not a optional value
+  // > 0 the unique optional index of the triple
+  public long optionalTripleCounter = 0;
+  public static long optionalCounter = 0;
+
   public string textShort = "";
   private string textLong = "";
   public string variableName = "";
@@ -59,6 +64,8 @@ public class Edge : MonoBehaviour
     set
     {
       isOptional = value;
+      optionalCounter++;
+      optionalTripleCounter = optionalCounter;
       if (isOptional)
       {
         lineRenderer.material.mainTexture = Settings.Instance.lineDashed;

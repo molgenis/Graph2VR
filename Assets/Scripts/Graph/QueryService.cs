@@ -319,7 +319,6 @@ public class QueryService : MonoBehaviour
       select distinct * where {{
         {triples}
       }} {order} LIMIT {queryLimit}";
-    Debug.Log("QuerySimilarPatternsMultipleLayers: " + query);
     endPoint.QueryWithResultSet(query, (SparqlResultSet results, object state) =>
     {
       callback(results, query);

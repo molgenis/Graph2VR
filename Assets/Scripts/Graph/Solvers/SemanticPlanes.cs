@@ -56,6 +56,7 @@ public class SemanticPlanes : BaseLayoutAlgorithm
           if (stop) break;
           foreach (var col in result)
           {
+            if (col.Value == null) continue;
             if (node.uri.ToString() == col.Value.ToString())
             {
               variableName = "?" + col.Key;
