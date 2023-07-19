@@ -310,15 +310,16 @@ public class QueryService : MonoBehaviour
     endPoint.QueryWithResultGraph(query, callback, null);
   }
 
-  public void QuerySimilarPatternsMultipleLayers(string triples, OrderedDictionary orderByList, Action<SparqlResultSet, string> callback)
+  public void QuerySimilarPatternsMultipleLayers(string triples, OrderedDictionary orderByList, List<string> groupByList, Action<SparqlResultSet, string> callback)
   {
     // TODO: make sure 'orderByList' do still exist
     string order = GetOrderByString(orderByList);
+    string group = GetGroupByString(groupByList);
     string query = $@"
       {PREFIXES}
       select distinct * where {{
         {triples}
-      }} {order} LIMIT {queryLimit}";
+      }} {group} {order} LIMIT {queryLimit}";
     endPoint.QueryWithResultSet(query, (SparqlResultSet results, object state) =>
     {
       callback(results, query);
@@ -489,6 +490,20 @@ public class QueryService : MonoBehaviour
       foreach (DictionaryEntry order in orderByList)
       {
         result += $"{order.Value}({order.Key}) ";
+      }
+      return result;
+    }
+    return "";
+  }
+
+  private static string GetGroupByString(List<string> groupByList)
+  {
+    if (groupByList.Count > 0)
+    {
+      string result = "Group By ";
+      foreach (string group in groupByList)
+      {
+        result += $"{group} ";
       }
       return result;
     }

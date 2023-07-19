@@ -37,6 +37,13 @@ public class EdgeMenu : BaseMenu
         cm.Close();
         PopulateEdge(input);
       });
+
+      cm.AddButton(Icon("\uF58D") + "Group By", Color.white / 2, () =>
+      {
+        subMenu = "GroupBy";
+        cm.Close();
+        PopulateEdge(input);
+      });
     }
 
     if (edge.IsSelected)
@@ -45,6 +52,7 @@ public class EdgeMenu : BaseMenu
       cm.AddButton(Icon("\uF205") + "Remove selection", Color.yellow / 2, () =>
       {
         graph.orderBy.Remove(edge.variableName);
+        graph.groupBy.Remove(edge.variableName);
         edge.Deselect();
         PopulateEdge(input);
       });
@@ -109,6 +117,7 @@ public class EdgeMenu : BaseMenu
       cm.AddButton(Icon("\uf715") + "Undo variable conversion", Color.blue / 2, () =>
       {
         graph.orderBy.Remove(edge.variableName);
+        graph.groupBy.Remove(edge.variableName);
         edge.UndoConversion();
         PopulateEdge(input);
       });
@@ -154,6 +163,14 @@ public class EdgeMenu : BaseMenu
     {
       PopulateOrderByMenu();
     }
+
+    // TODO: currently broken
+    /*
+    if (subMenu == "GroupBy")
+    {
+      PopulateGroupByMenu();
+    }
+    */
     if (subMenu == "EdgePredicate")
     {
       PopulateEdgePredicateMenu();
@@ -241,6 +258,37 @@ public class EdgeMenu : BaseMenu
       {
         graph.orderBy.Remove(variable);
         graph.orderBy.Add(variable, "ASC");
+        cm.Close();
+        PopulateEdge(edge);
+      });
+    }
+  }
+
+  public void PopulateGroupByMenu()
+  {
+    int count = 1;
+    foreach (string group in graph.groupBy)
+    {
+      string label = count + " - " + group;
+      cm.AddButton(label, label, Color.green / 2, () =>
+      {
+        graph.groupBy.Remove(group);
+        cm.Close();
+        PopulateEdge(edge);
+      });
+      count++;
+    }
+    HashSet<string> addNameList = SelectedVariableNames();
+    foreach (string group in graph.groupBy)
+    {
+      addNameList.Remove(group.ToString());
+    }
+    foreach (string variable in addNameList)
+    {
+      cm.AddButton("Group by " + variable, Color.gray / 2, () =>
+      {
+        graph.groupBy.Remove(variable);
+        graph.groupBy.Add(variable);
         cm.Close();
         PopulateEdge(edge);
       });
