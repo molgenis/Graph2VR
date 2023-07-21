@@ -7,19 +7,26 @@ Graph2VR has been built in Unity and is able to connect to a SPARQL endpoint usi
 We got inspired by many different tools to work with Linked data and to visualize Graphs.
 Virtual Reality offers the user way more space to expand the graph, then a 2D computer screen.
 
+![Hierarchical_View](https://github.com/molgenis/Graph2VR/assets/49238704/673d2008-c93b-4e8f-9505-3cdcb2ba52cd)
+
 We tried to reduce the ways to interact with the graph to a few simple operations:
 - Getting some information about the current node
 - Expanding the graph at a certain node using incoming or outgoing predicates.
 - Deleting a node or collapsing those nodes around it that are not connected to the graph elsewhere.
 - Comparing different parts of the graph side by side (different visualisations)
 - Building visual query pattern to form a SPARQL query.
-![Semantic planes](https://github.com/molgenis/Graph2VR/assets/49238704/aa144a7e-96c6-474b-b8b4-a807d1b3e6b1)
 - Adding new nodes and edges.
 - Interacting with the graph (zoom, move, rotate)
-![Graph2VRRotation](https://github.com/molgenis/Graph2VR/assets/49238704/45a87902-f7f3-43d7-8e38-d05b2a12bb35)
 - Using visual queries or a search function to add specific nodes
 
+![Graph2VRRotation](https://github.com/molgenis/Graph2VR/assets/49238704/45a87902-f7f3-43d7-8e38-d05b2a12bb35)
+
+![Semantic planes](https://github.com/molgenis/Graph2VR/assets/49238704/aa144a7e-96c6-474b-b8b4-a807d1b3e6b1)
+
 For more detailed instructions on how to use Graph2VR, please refer to the [Graph2VR User Manual]( https://doi.org/10.5281/zenodo.8040594).
+
+
+
 
 
 
