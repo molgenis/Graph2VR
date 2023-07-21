@@ -48,18 +48,6 @@ public class QueryService : MonoBehaviour
     defaultNamespace.AddNamespace("dbpedia/ontology", new Uri("http://dbpedia.org/ontology/"));
   }
 
-  public void ExecuteQuery(string query, GraphCallback queryCallback)
-  {
-    try
-    {
-      endPoint.QueryWithResultGraph(query, queryCallback, state: null);
-    }
-    catch (RdfQueryException error)
-    {
-      Debug.Log("No database connection found");
-      Debug.Log(error);
-    }
-  }
   public void ExpandGraph(Node node, string uri, bool isOutgoingLink, Action<IGraph, IGraph, object> queryCallback)
   {
     string refinmentQuery = GetExpandGraphQuery(node, uri, isOutgoingLink);
@@ -175,8 +163,23 @@ public class QueryService : MonoBehaviour
         }}
     ";
   }
+  public void ExecuteQuery(string query, Action<IGraph, bool> callback, bool additiveMode = false)
+  {
+    try
+    {
+      endPoint.QueryWithResultGraph(query, (IGraph results, object state) =>
+      {
+        callback(results, additiveMode);
+      }, state: null);
+    }
+    catch (RdfQueryException error)
+    {
+      Debug.Log("No database connection found");
+      Debug.Log(error);
+    }
+  }
 
-  public void QueryByTriples(string triples, GraphCallback queryCallback)
+  public void QueryByTriples(string triples, Action<IGraph, bool> callback, bool additiveMode = false)
   {
     string query = $@"
             {PREFIXES}
@@ -187,7 +190,7 @@ public class QueryService : MonoBehaviour
             }} LIMIT {queryLimit}";
     if (IsConstructSparqlQuery(query))
     {
-      ExecuteQuery(query, queryCallback);
+      ExecuteQuery(query, callback, additiveMode);
     }
     else
     {
@@ -309,7 +312,7 @@ public class QueryService : MonoBehaviour
     endPoint.QueryWithResultGraph(query, callback, null);
   }
 
-  public void QuerySimilarPatternsMultipleLayers(string triples, OrderedDictionary orderByList, List<string> groupByList, Action<SparqlResultSet, string> callback)
+  public void QuerySimilarPatternsMultipleLayers(string triples, string triplesWithOptional, OrderedDictionary orderByList, List<string> groupByList, bool additiveMode, Action<SparqlResultSet, string, string, bool> callback)
   {
     // TODO: make sure 'orderByList' do still exist
     string order = GetOrderByString(orderByList);
@@ -317,11 +320,11 @@ public class QueryService : MonoBehaviour
     string query = $@"
       {PREFIXES}
       select distinct * where {{
-        {triples}
+        {triplesWithOptional}
       }} {group} {order} LIMIT {queryLimit}";
     endPoint.QueryWithResultSet(query, (SparqlResultSet results, object state) =>
     {
-      callback(results, query);
+      callback(results, query, triples, additiveMode);
     }, null);
   }
 

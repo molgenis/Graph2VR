@@ -32,9 +32,7 @@ public class Graph : MonoBehaviour
 
   public ApplicationState.GraphState graphState;
 
-  private bool additiveNodeCreationMode = false;
-  private string querySimilarPatternsTriples = "";
-  public Graph QuerySimilarWithTriples(string triples, Vector3 position, Quaternion rotation, Graph graphToUse = null)
+  public Graph QuerySimilarWithTriples(string triples, Vector3 position, Quaternion rotation, Graph graphToUse = null, bool additiveMode = false)
   {
     Graph graph = graphToUse;
     if (graph == null)
@@ -45,7 +43,7 @@ public class Graph : MonoBehaviour
       graph.transform.position = position;
       graph.transform.rotation = rotation;
     }
-    graph.CreateGraphByTriples(triples);
+    graph.CreateGraphByTriples(triples, additiveMode);
     return graph;
   }
 
@@ -101,7 +99,6 @@ public class Graph : MonoBehaviour
 
   public void QuerySimilarPatternsSingleLayer()
   {
-    querySimilarPatternsTriples = GetTriplesString();
     bool selectionContainsOptional = false;
     foreach (Edge triple in selection)
     {
@@ -110,33 +107,27 @@ public class Graph : MonoBehaviour
 
     if (selectionContainsOptional)
     {
-      additiveNodeCreationMode = true;
-      QueryService.Instance.QuerySimilarPatternsMultipleLayers(GetTriplesStringWithOptional(), orderBy, groupBy, QuerySimilarPatternsCallback);
+      QueryService.Instance.QuerySimilarPatternsMultipleLayers(GetTriplesString(), GetTriplesStringWithOptional(), orderBy, groupBy, true, QuerySimilarPatternsCallback);
     }
     else
     {
-      additiveNodeCreationMode = false;
-      QuerySimilarWithTriples(querySimilarPatternsTriples, new Vector3(0, 0, 2), Quaternion.identity);
+      QuerySimilarWithTriples(GetTriplesString(), new Vector3(0, 0, 2), Quaternion.identity);
     }
   }
 
   public void QuerySimilarPatternsMultipleLayers()
   {
-    querySimilarPatternsTriples = GetTriplesString();
-    additiveNodeCreationMode = false;
-    QueryService.Instance.QuerySimilarPatternsMultipleLayers(GetTriplesStringWithOptional(), orderBy, groupBy, QuerySimilarPatternsCallback);
+    QueryService.Instance.QuerySimilarPatternsMultipleLayers(GetTriplesString(), GetTriplesStringWithOptional(), orderBy, groupBy, false, QuerySimilarPatternsCallback);
   }
 
-  void QuerySimilarPatternsCallback(SparqlResultSet results, string query)
+  void QuerySimilarPatternsCallback(SparqlResultSet results, string query, string triples, bool additiveMode)
   {
     UnityMainThreadDispatcher.Instance().Enqueue(() =>
     {
       Graph additiveModeGraph = null;
-      if (additiveNodeCreationMode)
+      if (additiveMode)
       {
         additiveModeGraph = Main.instance.CreateGraph();
-        additiveModeGraph.additiveNodeCreationMode = additiveNodeCreationMode;
-        additiveModeGraph.querySimilarPatternsTriples = querySimilarPatternsTriples;
         additiveModeGraph.parentGraph = this;
         subGraphs.Add(additiveModeGraph);
         additiveModeGraph.transform.position = new Vector3(0, 1, 0);
@@ -148,7 +139,7 @@ public class Graph : MonoBehaviour
       foreach (SparqlResult result in results)
       {
         string preSelectedQuery = "";
-        foreach (string line in querySimilarPatternsTriples.Split(" .\n"))
+        foreach (string line in triples.Split(" .\n"))
         {
           if (line == "") continue;
           Edge selectedEdge = null;
@@ -186,8 +177,8 @@ public class Graph : MonoBehaviour
           }
         }
 
-        Graph newGraph = QuerySimilarWithTriples(preSelectedQuery, offset, Quaternion.identity, additiveModeGraph);
-        if (!additiveNodeCreationMode)
+        Graph newGraph = QuerySimilarWithTriples(preSelectedQuery, offset, Quaternion.identity, additiveModeGraph, additiveMode);
+        if (!additiveMode)
         {
           offset += rotation * new Vector3(0, 0, 0.5f);
           SetupNewGraph(newGraph, query, rotation, results);
@@ -386,9 +377,9 @@ public class Graph : MonoBehaviour
     return str.TrimStart('<', '\'').TrimEnd('>', '\'');
   }
 
-  public void CreateGraphByTriples(string triples)
+  public void CreateGraphByTriples(string triples, bool additiveMode = false)
   {
-    QueryService.Instance.QueryByTriples(triples, RebuildGraphCallback);
+    QueryService.Instance.QueryByTriples(triples, RebuildGraphCallback, additiveMode);
   }
 
   public void CreateGraphBySparqlQuery(string query)
@@ -396,11 +387,11 @@ public class Graph : MonoBehaviour
     QueryService.Instance.ExecuteQuery(query, RebuildGraphCallback);
   }
 
-  private void RebuildGraphCallback(IGraph resultGraph, object state)
+  private void RebuildGraphCallback(IGraph resultGraph, bool additiveMode = false)
   {
     if (resultGraph == null || resultGraph.Triples == null || resultGraph.Triples.Count == 0)
     {
-      if (!additiveNodeCreationMode)
+      if (!additiveMode)
       {
         Destroy(gameObject);
       }
@@ -410,7 +401,7 @@ public class Graph : MonoBehaviour
       resultGraph.NamespaceMap.Import(QueryService.Instance.defaultNamespace);
       UnityMainThreadDispatcher.Instance().Enqueue(() =>
       {
-        BuildByIGraph(resultGraph);
+        BuildByIGraph(resultGraph, additiveMode);
 
         SemanticPlanes plane = gameObject.GetComponent<SemanticPlanes>();
         if (plane.enabled && this.layout == plane)
@@ -422,9 +413,9 @@ public class Graph : MonoBehaviour
   }
 
   // Builds a new graph out of an IGraph, deletes the old one
-  private void BuildByIGraph(IGraph iGraph)
+  private void BuildByIGraph(IGraph iGraph, bool additiveMode = false)
   {
-    if (!additiveNodeCreationMode)
+    if (!additiveMode)
     {
       Clear();
     }
