@@ -32,21 +32,21 @@ public class Graph : MonoBehaviour
 
   public ApplicationState.GraphState graphState;
 
-  public Graph QuerySimilarWithTriples(string triples, Vector3 position, Quaternion rotation)
+  private bool additiveNodeCreationMode = false;
+  private string querySimilarPatternsTriples = "";
+  public Graph QuerySimilarWithTriples(string triples, Vector3 position, Quaternion rotation, Graph graphToUse = null)
   {
-    Graph newGraph = Main.instance.CreateGraph();
-    newGraph.parentGraph = this;
-    subGraphs.Add(newGraph);
-    newGraph.transform.position = position;
-    newGraph.transform.rotation = rotation;
-    newGraph.CreateGraphByTriples(triples);
-    return newGraph;
-  }
-
-  public void QuerySimilarPatternsSingleLayer()
-  {
-    string triples = GetTriplesString();
-    QuerySimilarWithTriples(triples, new Vector3(0, 0, 2), Quaternion.identity);
+    Graph graph = graphToUse;
+    if (graph == null)
+    {
+      graph = Main.instance.CreateGraph();
+      graph.parentGraph = this;
+      subGraphs.Add(graph);
+      graph.transform.position = position;
+      graph.transform.rotation = rotation;
+    }
+    graph.CreateGraphByTriples(triples);
+    return graph;
   }
 
   public string GetTriplesString()
@@ -99,64 +99,101 @@ public class Graph : MonoBehaviour
     return result;
   }
 
+  public void QuerySimilarPatternsSingleLayer()
+  {
+    querySimilarPatternsTriples = GetTriplesString();
+    bool selectionContainsOptional = false;
+    foreach (Edge triple in selection)
+    {
+      if (triple.isOptional) selectionContainsOptional = true;
+    }
+
+    if (selectionContainsOptional)
+    {
+      additiveNodeCreationMode = true;
+      QueryService.Instance.QuerySimilarPatternsMultipleLayers(GetTriplesStringWithOptional(), orderBy, groupBy, QuerySimilarPatternsCallback);
+    }
+    else
+    {
+      additiveNodeCreationMode = false;
+      QuerySimilarWithTriples(querySimilarPatternsTriples, new Vector3(0, 0, 2), Quaternion.identity);
+    }
+  }
+
   public void QuerySimilarPatternsMultipleLayers()
   {
-    string triples = GetTriplesString();
-    void QuerySimilarPatternsMultipleLayersCallback(SparqlResultSet results, string query)
+    querySimilarPatternsTriples = GetTriplesString();
+    additiveNodeCreationMode = false;
+    QueryService.Instance.QuerySimilarPatternsMultipleLayers(GetTriplesStringWithOptional(), orderBy, groupBy, QuerySimilarPatternsCallback);
+  }
+
+  void QuerySimilarPatternsCallback(SparqlResultSet results, string query)
+  {
+    UnityMainThreadDispatcher.Instance().Enqueue(() =>
     {
-      UnityMainThreadDispatcher.Instance().Enqueue(() =>
+      Graph additiveModeGraph = null;
+      if (additiveNodeCreationMode)
       {
-        Quaternion rotation = Camera.main.transform.rotation;
-        Vector3 offset = transform.position + (rotation * new Vector3(0, 0, 1 + boundingSphere.size));
-        foreach (SparqlResult result in results)
+        additiveModeGraph = Main.instance.CreateGraph();
+        additiveModeGraph.additiveNodeCreationMode = additiveNodeCreationMode;
+        additiveModeGraph.querySimilarPatternsTriples = querySimilarPatternsTriples;
+        additiveModeGraph.parentGraph = this;
+        subGraphs.Add(additiveModeGraph);
+        additiveModeGraph.transform.position = new Vector3(0, 1, 0);
+        additiveModeGraph.transform.rotation = Quaternion.identity;
+      }
+
+      Quaternion rotation = Camera.main.transform.rotation;
+      Vector3 offset = transform.position + (rotation * new Vector3(0, 0, 1 + boundingSphere.size));
+      foreach (SparqlResult result in results)
+      {
+        string preSelectedQuery = "";
+        foreach (string line in querySimilarPatternsTriples.Split(" .\n"))
         {
-          string preSelectedQuery = "";
-          foreach (string line in triples.Split(" .\n"))
+          if (line == "") continue;
+          Edge selectedEdge = null;
+
+          foreach (Edge selected in selection)
           {
-            if (line == "") continue;
-            Edge selectedEdge = null;
-
-            foreach (Edge selected in selection)
+            string selectedLine = selected.GetQueryString();
+            if ((line + " .\n").Trim().CompareTo(selectedLine.Trim()) == 0)
             {
-              string selectedLine = selected.GetQueryString();
-              if ((line + " .\n").Trim().CompareTo(selectedLine.Trim()) == 0)
-              {
-                selectedEdge = selected;
-              }
-            }
-
-            bool removeLine = false;
-            if (selectedEdge != null)
-            {
-              if (selectedEdge.isOptional)
-              {
-                bool optionalExistsInResult = result.HasBoundValue("optionalTripelExists" + selectedEdge.optionalTripleCounter);
-                if (!optionalExistsInResult) removeLine = true;
-              }
-            }
-
-            if (!removeLine)
-            {
-              preSelectedQuery += line + " .\n";
+              selectedEdge = selected;
             }
           }
 
-          foreach (var node in result)
+          bool removeLine = false;
+          if (selectedEdge != null)
           {
-            if (RealNodeValue(node.Value) != "")
+            if (selectedEdge.isOptional)
             {
-              preSelectedQuery = preSelectedQuery.Replace("?" + node.Key, RealNodeValue(node.Value));
+              bool optionalExistsInResult = result.HasBoundValue("optionalTripelExists" + selectedEdge.optionalTripleCounter);
+              if (!optionalExistsInResult) removeLine = true;
             }
           }
 
-          Graph newGraph = QuerySimilarWithTriples(preSelectedQuery, offset, Quaternion.identity);
+          if (!removeLine)
+          {
+            preSelectedQuery += line + " .\n";
+          }
+        }
+
+        foreach (var node in result)
+        {
+          if (RealNodeValue(node.Value) != "")
+          {
+            preSelectedQuery = preSelectedQuery.Replace("?" + node.Key, RealNodeValue(node.Value));
+          }
+        }
+
+        Graph newGraph = QuerySimilarWithTriples(preSelectedQuery, offset, Quaternion.identity, additiveModeGraph);
+        if (!additiveNodeCreationMode)
+        {
           offset += rotation * new Vector3(0, 0, 0.5f);
           SetupNewGraph(newGraph, query, rotation, results);
         }
-      });
-    }
-
-    QueryService.Instance.QuerySimilarPatternsMultipleLayers(GetTriplesStringWithOptional(), orderBy, groupBy, QuerySimilarPatternsMultipleLayersCallback);
+      }
+    });
   }
 
   private void SetupNewGraph(Graph newGraph, string query, Quaternion rotation, SparqlResultSet results)
@@ -363,7 +400,10 @@ public class Graph : MonoBehaviour
   {
     if (resultGraph == null || resultGraph.Triples == null || resultGraph.Triples.Count == 0)
     {
-      Destroy(gameObject);
+      if (!additiveNodeCreationMode)
+      {
+        Destroy(gameObject);
+      }
     }
     else
     {
@@ -384,7 +424,10 @@ public class Graph : MonoBehaviour
   // Builds a new graph out of an IGraph, deletes the old one
   private void BuildByIGraph(IGraph iGraph)
   {
-    Clear();
+    if (!additiveNodeCreationMode)
+    {
+      Clear();
+    }
 
     foreach (INode node in iGraph.Nodes)
     {

@@ -38,12 +38,15 @@ public class EdgeMenu : BaseMenu
         PopulateEdge(input);
       });
 
+      /*
+      // TODO: currently broken
       cm.AddButton(Icon("\uF58D") + "Group By", Color.white / 2, () =>
       {
         subMenu = "GroupBy";
         cm.Close();
         PopulateEdge(input);
       });
+      */
     }
 
     if (edge.IsSelected)
@@ -163,14 +166,10 @@ public class EdgeMenu : BaseMenu
     {
       PopulateOrderByMenu();
     }
-
-    // TODO: currently broken
-    /*
     if (subMenu == "GroupBy")
     {
       PopulateGroupByMenu();
     }
-    */
     if (subMenu == "EdgePredicate")
     {
       PopulateEdgePredicateMenu();
