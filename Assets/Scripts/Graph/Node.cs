@@ -394,7 +394,14 @@ public class Node : MonoBehaviour
     }
     else
     {
-      this.label = label.Replace("@" + Main.instance.languageCode, "");
+      if (Main.instance.languageCode == "")
+      {
+        this.label = label;
+      }
+      else
+      {
+        this.label = label.Replace("@" + Main.instance.languageCode, "");
+      }
       cachedNodeLabel = this.label;
     }
     UpdateDisplay();

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using VDS.RDF;
 using VDS.RDF.Query;
 
 public class SemanticPlanes : BaseLayoutAlgorithm
@@ -12,7 +13,7 @@ public class SemanticPlanes : BaseLayoutAlgorithm
     string identifier = node.uri;
     if (node.IsVariable || node.uri == "" || node.uri == null)
     {
-      identifier = node.GetLabel();
+      identifier = node.GetQueryLabel();
     }
     return identifier;
   }
@@ -45,6 +46,13 @@ public class SemanticPlanes : BaseLayoutAlgorithm
       if (uriToPosition.TryGetValue(node.uri, out position))
       {
         node.transform.localPosition = position;
+      }
+      else if (node.graphNode.NodeType == NodeType.Literal)
+      {
+        if (uriToPosition.TryGetValue(node.GetQueryLabel(), out position))
+        {
+          node.transform.localPosition = position;
+        }
       }
       else
       {
