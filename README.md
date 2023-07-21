@@ -13,8 +13,10 @@ We tried to reduce the ways to interact with the graph to a few simple operation
 - Deleting a node or collapsing those nodes around it that are not connected to the graph elsewhere.
 - Comparing different parts of the graph side by side (different visualisations)
 - Building visual query pattern to form a SPARQL query.
+![Semantic planes](https://github.com/molgenis/Graph2VR/assets/49238704/aa144a7e-96c6-474b-b8b4-a807d1b3e6b1)
 - Adding new nodes and edges.
-- Interacting with the graph (zoom, move, rotate) 
+- Interacting with the graph (zoom, move, rotate)
+![Graph2VRRotation](https://github.com/molgenis/Graph2VR/assets/49238704/45a87902-f7f3-43d7-8e38-d05b2a12bb35)
 - Using visual queries or a search function to add specific nodes
 
 For more detailed instructions on how to use Graph2VR, please refer to the [Graph2VR User Manual]( https://doi.org/10.5281/zenodo.8040594).
