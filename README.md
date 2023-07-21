@@ -17,7 +17,7 @@ We tried to reduce the ways to interact with the graph to a few simple operation
 - Interacting with the graph (zoom, move, rotate) 
 - Using visual queries or a search function to add specific nodes
 
-For more detailed instructions on how to use Graph2VR, please refer to the [Graph2VR User Manual](https://github.com/PjotrSvetachov/Graph2VR/blob/master/Graph2VR_User_manual.pdf).
+For more detailed instructions on how to use Graph2VR, please refer to the [Graph2VR User Manual]( https://doi.org/10.5281/zenodo.8040594).
 
 
 
@@ -27,4 +27,4 @@ Running the application without the small fix on the headset will give this erro
 
 `Cannot use Type VDS.RDF.Parsing.GZippedNTriplesParser for the RDF Parser Type as it does not implement the required interface VDS.RDF.IRdfReader`
 
-To fix this we made a custom version of the [library](https://github.com/dotnetrdf/dotnetrdf/blame/main/Libraries/dotNetRdf/Core/MimeTypeDefinition.cs#L398) that doesn't contain this check. We shiped it with Graph2VR.
+To fix this we made a custom version of the [library](https://github.com/dotnetrdf/dotnetrdf/blame/main/Libraries/dotNetRdf/Core/MimeTypeDefinition.cs#L398) that doesn't contain this check. We shipped it with Graph2VR.
