@@ -549,7 +549,7 @@ public class Graph : MonoBehaviour
     return node;
   }
 
-  public Node CreateNode(string value, Vector3 position)
+  public Node CreateNode(string value, Vector3 position, string literalDateType = "", string literalLang = "")
   {
     string name = "Node: " + value;
     Node existingNode = GetExistingNode(name);
@@ -567,13 +567,21 @@ public class Graph : MonoBehaviour
     Node node = CreateNodeFromClone(value, clone);
     NodeFactory nodeFactory = new();
 
+
     if (Uri.IsWellFormedUriString(value, UriKind.Absolute))
     {
       node.graphNode = nodeFactory.CreateUriNode(new Uri(value));
     }
     else
     {
-      node.graphNode = nodeFactory.CreateLiteralNode(value);
+      if (Uri.IsWellFormedUriString(literalDateType, UriKind.Absolute))
+      {
+        node.graphNode = nodeFactory.CreateLiteralNode(value, new Uri(literalDateType));
+      }
+      else if (literalLang != "")
+      {
+        node.graphNode = nodeFactory.CreateLiteralNode(value, literalLang);
+      }
     }
 
     return node;

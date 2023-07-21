@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
+using VDS.RDF;
 
 public class ApplicationState
 {
@@ -90,6 +91,15 @@ public class ApplicationState
       positionZ = node.transform.position.z;
       uri = node.uri;
       label = node.label;
+
+      if (node.graphNode.NodeType == NodeType.Literal)
+      {
+        ILiteralNode literal = (node.graphNode as ILiteralNode);
+        literalDateType = literal.DataType?.ToString();
+        literalLang = literal.Language?.ToString();
+        if (literalDateType == null) literalDateType = "";
+        if (literalLang == null) literalLang = "";
+      }
       isVariable = node.IsVariable;
       isLocked = node.lockPosition;
       cachedNodeLabel = node.cachedNodeLabel;
@@ -107,6 +117,8 @@ public class ApplicationState
     public float positionZ;
     public string uri;
     public string label;
+    public string literalDateType = "";
+    public string literalLang = "";
     public string cachedNodeLabel;
     public bool isVariable;
     public bool isLocked;
@@ -328,7 +340,7 @@ public class ApplicationState
   private static Node LoadNodeState(NodeState state, Graph graph)
   {
     string nodeText = state.uri == "" ? state.label : state.uri;
-    Node node = graph.CreateNode(nodeText, new Vector3(state.positionX, state.positionY, state.positionZ));
+    Node node = graph.CreateNode(nodeText, new Vector3(state.positionX, state.positionY, state.positionZ), state.literalDateType, state.literalLang);
     node.LockPosition = state.isLocked;
     node.cachedNodeLabel = state.cachedNodeLabel;
     if (state.image != null)
