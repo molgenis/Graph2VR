@@ -9,15 +9,20 @@ Virtual Reality offers the user way more space to expand the graph, then a 2D co
 
 <img src="https://github.com/molgenis/Graph2VR/assets/49238704/aa144a7e-96c6-474b-b8b4-a807d1b3e6b1" width="600">
 
-We tried to reduce the ways to interact with the graph to a few simple operations:
-- Getting some information about the current node
-- Expanding the graph at a certain node using incoming or outgoing predicates.
-- Deleting a node or collapsing those nodes around it that are not connected to the graph elsewhere.
-- Comparing different parts of the graph side by side (different visualisations)
-- Building visual query pattern to form a SPARQL query.
-- Adding new nodes and edges.
-- Interacting with the graph (zoom, move, rotate)
-- Using visual queries or a search function to add specific nodes
+We tried to write a GUI to explore and interact with the graph in Virtual Reality. 
+A few simple operations to do so are:
+
+<ul>
+  <li>Getting some information about the current node</li>
+  <li>Expanding the graph at a certain node using incoming or outgoing predicates</li>
+  <li>Deleting a node or collapsing those nodes around it that are not connected to the graph elsewhere</li>
+  <li>Comparing different parts of the graph side by side (different visualisations)</li>
+  <li>Building visual query patterns to form a SPARQL query</li>
+  <li>Adding new nodes and edges</li>
+  <li>Interacting with the graph (zoom, move, rotate)</li>
+  <li>Using visual queries or a search function to add specific nodes</li>
+  <li>Saving the results to ntriple format to be able to reuse it in other programs</li>
+</ul>
 
 <img src="https://github.com/molgenis/Graph2VR/assets/49238704/45a87902-f7f3-43d7-8e38-d05b2a12bb35" width="600">
 
