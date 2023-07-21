@@ -106,7 +106,10 @@ public class Node : MonoBehaviour
       transform.Find("Selected").gameObject.GetComponentInChildren<Renderer>().material.color = Color.black;
       HideFocus();
     });
-    RefineNode();
+    if (!isVariable)
+    {
+      RefineNode();
+    }
   }
 
   public void RefineNode()
