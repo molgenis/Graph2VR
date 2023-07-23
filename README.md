@@ -33,3 +33,5 @@ Different Layout Algorithms can help to visualize the data.
 <img src="https://github.com/molgenis/Graph2VR/assets/49238704/673d2008-c93b-4e8f-9505-3cdcb2ba52cd" width="400">
 
 For more detailed instructions on how to use Graph2VR, check out the [Graph2VR User Manual]( https://doi.org/10.5281/zenodo.8040594).
+
+We recommend to load it on the Quest2 VR headset via [sidequest](https://sidequestvr.com/download)
