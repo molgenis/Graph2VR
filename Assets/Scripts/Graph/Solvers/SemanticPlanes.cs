@@ -39,6 +39,13 @@ public class SemanticPlanes : BaseLayoutAlgorithm
       }
     }
 
+    /*
+    foreach (var item in uriToPosition)
+    {
+      Debug.Log(item.Key);
+    }
+    */
+
     // Set positions we know
     foreach (Node node in graph.nodeList)
     {
@@ -46,13 +53,6 @@ public class SemanticPlanes : BaseLayoutAlgorithm
       if (uriToPosition.TryGetValue(node.uri, out position))
       {
         node.transform.localPosition = position;
-      }
-      else if (node.graphNode.NodeType == NodeType.Literal)
-      {
-        if (uriToPosition.TryGetValue(node.GetQueryLabel(), out position))
-        {
-          node.transform.localPosition = position;
-        }
       }
       else
       {
@@ -72,10 +72,19 @@ public class SemanticPlanes : BaseLayoutAlgorithm
               break;
             }
           }
-        }
-        if (variableName != "" && uriToPosition.TryGetValue(variableName, out position))
-        {
-          node.transform.localPosition = position;
+
+          if (variableName != "" && uriToPosition.TryGetValue(variableName, out position))
+          {
+            node.transform.localPosition = position;
+          }
+          else if (node.graphNode.NodeType == NodeType.Literal)
+          {
+            if (uriToPosition.TryGetValue(node.GetQueryLabel(), out position))
+            {
+              node.transform.localPosition = position;
+            }
+          }
+          ///
         }
       }
 
