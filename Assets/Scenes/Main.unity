@@ -7260,6 +7260,16 @@ MonoBehaviour:
     baseURI: https://github.com/PjotrSvetachov/GraphVR/example-graph
     databaseSupportsBifContains: 0
     searchOnKeypress: 0
+  - label: Disgenet
+    sparqlEndpoint: http://rdf.disgenet.org/sparql/
+    baseURI: http://rdf.disgenet.org/
+    databaseSupportsBifContains: 0
+    searchOnKeypress: 0
+  - label: Wikipathways
+    sparqlEndpoint: https://sparql.wikipathways.org/sparql
+    baseURI: 
+    databaseSupportsBifContains: 0
+    searchOnKeypress: 0
   predefinedPredicates:
   - name: owl:sameAs
     uri: http://www.w3.org/2002/07/owl#sameAs
