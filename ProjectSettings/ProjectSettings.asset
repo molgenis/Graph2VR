@@ -137,8 +137,7 @@ PlayerSettings:
   bundleVersion: 1.1.0
   preloadedAssets:
   - {fileID: 11400000, guid: 49299175b7782b94b9548978ab9ebfcc, type: 2}
-  - {fileID: -7106906202021479067, guid: e9fdf00479fecdb46b9f73cb2671ddc1, type: 2}
-  - {fileID: 5795986684192282295, guid: 535e11ec91bb15e4c849303cb242cb59, type: 2}
+  - {fileID: 0}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -744,7 +743,9 @@ PlayerSettings:
   webGLLinkerTarget: 1
   webGLThreadsSupport: 0
   webGLDecompressionFallback: 0
-  scriptingDefineSymbols: {}
+  scriptingDefineSymbols:
+    Android: LIV_UNIVERSAL_RENDER
+    Standalone: LIV_UNIVERSAL_RENDER
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:
