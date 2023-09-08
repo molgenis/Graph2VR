@@ -120,6 +120,11 @@ public class Graph : MonoBehaviour
     QueryService.Instance.QuerySimilarPatternsMultipleLayers(GetTriplesString(), GetTriplesStringWithOptional(), orderBy, groupBy, false, QuerySimilarPatternsCallback);
   }
 
+  public void CountQuerySimilarPatternsMultipleLayers(Action<int> callback)
+  {
+    QueryService.Instance.CountQuerySimilarPatternsMultipleLayers(this, GetTriplesStringWithOptional(), groupBy, callback);
+  }
+
   void QuerySimilarPatternsCallback(SparqlResultSet results, string query, string triples, bool additiveMode)
   {
     UnityMainThreadDispatcher.Instance().Enqueue(() =>

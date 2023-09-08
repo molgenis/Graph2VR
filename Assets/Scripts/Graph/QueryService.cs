@@ -328,6 +328,31 @@ public class QueryService : MonoBehaviour
     }, null);
   }
 
+  public void CountQuerySimilarPatternsMultipleLayers(Graph graph, string triplesWithOptional, List<string> groupByList, Action<int> callback)
+  {
+    string group = GetGroupByString(groupByList);
+    string query = $@"
+      {PREFIXES}
+      select count( distinct *) as ?count where {{
+        {triplesWithOptional}
+      }} {group}";
+    endPoint.QueryWithResultSet(query, (SparqlResultSet results, object state) =>
+    {
+      UnityMainThreadDispatcher.Instance().Enqueue(() =>
+      {
+        int count = 0;
+        foreach (SparqlResult result in results)
+        {
+          result.TryGetValue("count", out INode iNode);
+          ILiteralNode countNode = iNode as ILiteralNode;
+          count = int.Parse(countNode.Value.ToString());
+        }
+        callback(count);
+      });
+    }, null);
+  }
+  
+
   public void AutocompleteSearch(string searchTerm, SparqlResultsCallback callback, Node variableNode = null)
   {
     if (searchTerm.Length > 3)
