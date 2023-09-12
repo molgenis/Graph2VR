@@ -330,6 +330,7 @@ public class Node : MonoBehaviour
       else
       {
         Texture2D image = DownloadHandlerTexture.GetContent(imageRequest);
+
         image = Utils.ClampTextureSize(image, Settings.Instance.savedMaximumImageWidth, Settings.Instance.savedMaximumImageHeight);
         SetTexture(image, image.width, image.height);
 
@@ -337,6 +338,7 @@ public class Node : MonoBehaviour
         break;
       }
     }
+    Resources.UnloadUnusedAssets();
   }
 
   public void SetTexture(Texture2D image, int width, int height)

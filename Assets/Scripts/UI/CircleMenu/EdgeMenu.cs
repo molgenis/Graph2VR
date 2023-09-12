@@ -79,27 +79,6 @@ public class EdgeMenu : BaseMenu
         });
       }
 
-      if (queryMultipleLayerRefinementCount > 0)
-      {
-        cm.AddButton(Icon("\uF5FD") + "Count current selection", Color.yellow / 2, () =>
-        {
-          graph.CountQuerySimilarPatternsMultipleLayers((int count) => {
-            queryMultipleLayerRefinementCount = count;
-            PopulateEdge(input);
-          });
-        }, queryMultipleLayerRefinementCount, "results");
-      }
-      else
-      {
-        cm.AddButton(Icon("\uF5FD") + "Count current selection", Color.yellow / 2, () =>
-        {
-          graph.CountQuerySimilarPatternsMultipleLayers((int count) => {
-            queryMultipleLayerRefinementCount = count;
-            PopulateEdge(input);
-          });
-        });
-      }
-
       cm.AddButton(Icon("\uF5FD") + "Query similar patterns", Color.yellow / 2, () =>
       {
         graph.QuerySimilarPatternsMultipleLayers();
@@ -109,6 +88,27 @@ public class EdgeMenu : BaseMenu
       {
         graph.QuerySimilarPatternsSingleLayer();
       });
+
+      if (queryMultipleLayerRefinementCount > 0)
+      {
+        cm.AddButton(Icon("\uF292") + "Count all query results", Color.yellow / 2, () =>
+        {
+          graph.CountQuerySimilarPatternsMultipleLayers((int count) => {
+            queryMultipleLayerRefinementCount = count;
+            PopulateEdge(input);
+          });
+        }, queryMultipleLayerRefinementCount);
+      }
+      else
+      {
+        cm.AddButton(Icon("\uF292") + "Count all query results", Color.yellow / 2, () =>
+        {
+          graph.CountQuerySimilarPatternsMultipleLayers((int count) => {
+            queryMultipleLayerRefinementCount = count;
+            PopulateEdge(input);
+          });
+        });
+      }
     }
     else
     {
