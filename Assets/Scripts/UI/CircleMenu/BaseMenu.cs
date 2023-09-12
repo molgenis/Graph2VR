@@ -8,6 +8,7 @@ public class BaseMenu : MonoBehaviour
   public GameObject controlerModel;
   public string subMenu = "";
   public GameObject limitSlider;
+  public int queryMultipleLayerRefinementCount = 0;
   protected Node node = null;
   protected Edge edge = null;
 
@@ -49,6 +50,7 @@ public class BaseMenu : MonoBehaviour
     subMenu = "";
     edge = null;
     graph = null;
+    queryMultipleLayerRefinementCount = 0;
     if (cm != null)
     {
       cm.Close();

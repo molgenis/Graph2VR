@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.005506694, g: 0.022075854, b: 0.04601198, a: 1}
+  m_IndirectSpecularColor: {r: 0.0055015082, g: 0.022027984, b: 0.045998562, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -5888,6 +5888,14 @@ MonoBehaviour:
       - m_Name: 
         m_Id: f0a5563f-7087-4e47-9322-d9be2634d8e0
         m_Path: <XRController>/menu
+        m_Interactions: 
+        m_Processors: 
+        m_Groups: 
+        m_Action: Menu Button
+        m_Flags: 0
+      - m_Name: 
+        m_Id: 21cb8ceb-9f76-4f98-b458-0ce42a8a4d97
+        m_Path: <XRController>{LeftHand}/primaryButton
         m_Interactions: 
         m_Processors: 
         m_Groups: 
