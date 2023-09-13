@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class EdgeMenu : BaseMenu
 {
+  
   public void PopulateEdge(UnityEngine.Object input)
   {
     KeyboardHandler.instance.Close();
@@ -82,10 +83,32 @@ public class EdgeMenu : BaseMenu
       {
         graph.QuerySimilarPatternsMultipleLayers();
       });
+
       cm.AddButton(Icon("\uF24D") + "Query similar patterns (single layer)", Color.yellow / 2, () =>
       {
         graph.QuerySimilarPatternsSingleLayer();
       });
+
+      if (queryMultipleLayerRefinementCount > 0)
+      {
+        cm.AddButton(Icon("\uF292") + "Count all query results", Color.yellow / 2, () =>
+        {
+          graph.CountQuerySimilarPatternsMultipleLayers((int count) => {
+            queryMultipleLayerRefinementCount = count;
+            PopulateEdge(input);
+          });
+        }, queryMultipleLayerRefinementCount);
+      }
+      else
+      {
+        cm.AddButton(Icon("\uF292") + "Count all query results", Color.yellow / 2, () =>
+        {
+          graph.CountQuerySimilarPatternsMultipleLayers((int count) => {
+            queryMultipleLayerRefinementCount = count;
+            PopulateEdge(input);
+          });
+        });
+      }
     }
     else
     {

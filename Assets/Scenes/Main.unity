@@ -5925,6 +5925,14 @@ MonoBehaviour:
         m_Groups: 
         m_Action: Menu Button
         m_Flags: 0
+      - m_Name: 
+        m_Id: 21cb8ceb-9f76-4f98-b458-0ce42a8a4d97
+        m_Path: <XRController>{LeftHand}/primaryButton
+        m_Interactions: 
+        m_Processors: 
+        m_Groups: 
+        m_Action: Menu Button
+        m_Flags: 0
       m_Flags: 0
     m_Reference: {fileID: 0}
 --- !u!114 &1503421659

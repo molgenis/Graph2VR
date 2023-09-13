@@ -32,6 +32,7 @@ public class CircleMenu : MonoBehaviour
     public Color color;
     public Action callback;
     public int number = -1;
+    public string unit = "";
 
     public string additionalLabel = "";
     public Action additionalCallback;
@@ -67,14 +68,14 @@ public class CircleMenu : MonoBehaviour
     }
   }
 
-  public void AddButton(string label, Color color, Action callback, int number = -1)
+  public void AddButton(string label, Color color, Action callback, int number = -1, string unit="")
   {
-    buttons.Add(new CircleButton { label = label, hoveredLabel = label, color = color, callback = callback, number = number });
+    buttons.Add(new CircleButton { label = label, hoveredLabel = label, color = color, callback = callback, number = number, unit= unit });
   }
 
-  public void AddButton(string label, string hoveredLabel, Color color, Action callback, int number = -1)
+  public void AddButton(string label, string hoveredLabel, Color color, Action callback, int number = -1, string unit = "")
   {
-    buttons.Add(new CircleButton { label = label, hoveredLabel = hoveredLabel, color = color, callback = callback, number = number });
+    buttons.Add(new CircleButton { label = label, hoveredLabel = hoveredLabel, color = color, callback = callback, number = number, unit = unit });
   }
 
   public void AddButton(string label, string hoveredLabel, Color color, Action callback, string additionalLabel, Action additionalCallback)
@@ -190,6 +191,12 @@ public class CircleMenu : MonoBehaviour
         else
         {
           displayText.text = button.number.ToString();
+
+          if (button.unit.Length > 0)
+          {
+            displayText.text += "<br><size=50%>" + button.unit.ToString() + "</size>";
+          }
+          
         }
 
         displayText.fontSizeMax = 10;

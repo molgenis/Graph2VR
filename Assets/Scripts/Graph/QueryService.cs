@@ -150,7 +150,7 @@ public class QueryService : MonoBehaviour
         }}
 
         Optional{{
-          Select {variable} <http://graph2vr.org/image> AS ?graph2vrimage sample(?image)
+          Select {variable} <http://graph2vr.org/image> AS ?graph2vrimage sample(?image) as ?image
           where {{
             {variable} ({imagePredicates}) ?image .
             FILTER( strStarts( STR(?image), 'http://' ) || strStarts( STR(?image), 'https://' ) ) .
@@ -327,6 +327,31 @@ public class QueryService : MonoBehaviour
       callback(results, query, triples, additiveMode);
     }, null);
   }
+
+  public void CountQuerySimilarPatternsMultipleLayers(Graph graph, string triplesWithOptional, List<string> groupByList, Action<int> callback)
+  {
+    string group = GetGroupByString(groupByList);
+    string query = $@"
+      {PREFIXES}
+      select count( distinct *) as ?count where {{
+        {triplesWithOptional}
+      }} {group}";
+    endPoint.QueryWithResultSet(query, (SparqlResultSet results, object state) =>
+    {
+      UnityMainThreadDispatcher.Instance().Enqueue(() =>
+      {
+        int count = 0;
+        foreach (SparqlResult result in results)
+        {
+          result.TryGetValue("count", out INode iNode);
+          ILiteralNode countNode = iNode as ILiteralNode;
+          count = int.Parse(countNode.Value.ToString());
+        }
+        callback(count);
+      });
+    }, null);
+  }
+  
 
   public void AutocompleteSearch(string searchTerm, SparqlResultsCallback callback, Node variableNode = null)
   {
