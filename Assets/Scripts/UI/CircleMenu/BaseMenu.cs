@@ -98,7 +98,7 @@ public class BaseMenu : MonoBehaviour
       graph.SetLayout(Graph.Layout.ClassHierarchy);
     });
 
-    cm.AddButton(Icon("\uF021") + "Auto layout", Color.yellow / 2, () =>
+    cm.AddButton(Icon("\uF021") + "Refresh layout", Color.yellow / 2, () =>
     {
       graph.layout.CalculateLayout();
     });
