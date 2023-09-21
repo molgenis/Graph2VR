@@ -52,9 +52,15 @@ namespace Dweiss
 			fileDestination = System.IO.Path.Combine(fileDestination, FileName);
 			fileDestination = System.IO.Path.GetFullPath(fileDestination);
 			Debug.Log (name + " Load from " + fileDestination);
-			LoadSetting(fileDestination, this);
+			if(!LoadSetting(fileDestination, this)){
+			  fileDestination = System.IO.Path.Combine(Application.persistentDataPath, FileName);
+			  fileDestination = System.IO.Path.GetFullPath(fileDestination);
+			  Debug.Log (name + " Load from " + fileDestination);
+        LoadSetting(fileDestination, this);
+      }
 #endif
-                var t = JsonUtility.ToJson(this);
+
+        var t = JsonUtility.ToJson(this);
                 Debug.Log("Setting is: " + t);
             }
             catch (System.Exception e)
@@ -85,7 +91,7 @@ namespace Dweiss
             }
             return null;
         }
-        private void LoadSetting(string path, bool log = false)
+        private bool LoadSetting(string path, bool log = false)
         {
             var json = GetJsonFromFile(path);
 
@@ -98,10 +104,13 @@ namespace Dweiss
                 } catch(System.Exception e )
                 {
                     Debug.LogError("Error with overwriting settings file " + e);
+                return false;
                 }
             } else {
                 Debug.LogError("Failed loading settings of " + name + " from " + path);
+                return false;
             }
+            return true;
         }
         #endregion
         #region Unity editor
