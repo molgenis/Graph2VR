@@ -100,7 +100,7 @@ namespace Dweiss
 
     private void Awake()
     {
-      // base.Awake ();
+      base.Awake ();
       SetupSingelton();
     }
 
