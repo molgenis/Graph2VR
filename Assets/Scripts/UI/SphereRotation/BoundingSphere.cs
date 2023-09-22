@@ -34,6 +34,7 @@ public class BoundingSphere : MonoBehaviour
   {
     // Calc center
     Vector3 center = Vector3.zero;
+
     double xCoordinate = 0;
     double yCoordinate = 0;
     double zCoordinate = 0;

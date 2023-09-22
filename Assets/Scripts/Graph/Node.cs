@@ -20,6 +20,7 @@ public class Node : MonoBehaviour
   public List<Edge> connections = new();
 
   public TMPro.TextMeshPro textMesh;
+  
   // Variables for the Force-directed algorithm
   public Vector3 displacement;
 
