@@ -120,9 +120,9 @@ public class Graph : MonoBehaviour
     QueryService.Instance.QuerySimilarPatternsMultipleLayers(GetTriplesString(), GetTriplesStringWithOptional(), orderBy, groupBy, false, QuerySimilarPatternsCallback);
   }
 
-  public void CountQuerySimilarPatternsMultipleLayers(Action<int> callback)
+  public void CountQuerySimilarPatternsMultipleLayers(Action<int> callback, string optionalVariable="*")
   {
-    QueryService.Instance.CountQuerySimilarPatternsMultipleLayers(this, GetTriplesStringWithOptional(), groupBy, callback);
+    QueryService.Instance.CountQuerySimilarPatternsMultipleLayers(this, GetTriplesStringWithOptional(), groupBy, callback, optionalVariable);
   }
 
   void QuerySimilarPatternsCallback(SparqlResultSet results, string query, string triples, bool additiveMode)

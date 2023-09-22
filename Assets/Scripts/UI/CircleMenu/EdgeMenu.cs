@@ -53,7 +53,7 @@ public class EdgeMenu : BaseMenu
     if (edge.IsSelected)
     {
       limitSlider.SetActive(true);
-      cm.AddButton(Icon("\uF205") + "Remove selection", Color.yellow / 2, () =>
+      cm.AddButton(Icon("\uF205") + "Remove selection", Color.white / 2, () =>
       {
         graph.orderBy.Remove(edge.variableName);
         graph.groupBy.Remove(edge.variableName);
@@ -64,7 +64,7 @@ public class EdgeMenu : BaseMenu
 
       if (edge.IsOptional)
       {
-        cm.AddButton(Icon("\uF205") + "Mark as required", Color.yellow / 2, () =>
+        cm.AddButton(Icon("\uF205") + "Mark as required", Color.white / 2, () =>
         {
           edge.IsOptional = false;
           PopulateEdge(input);
@@ -72,43 +72,30 @@ public class EdgeMenu : BaseMenu
       }
       else
       {
-        cm.AddButton(Icon("\uF205") + "Mark as optional", Color.yellow / 2, () =>
+        cm.AddButton(Icon("\uF205") + "Mark as optional", Color.white / 2, () =>
         {
           edge.IsOptional = true;
           PopulateEdge(input);
         });
       }
 
-      cm.AddButton(Icon("\uF5FD") + "Query similar patterns", Color.yellow / 2, () =>
+      cm.AddButton(Icon("\uF292") + "Count", Color.white / 2, () =>
       {
-        graph.QuerySimilarPatternsMultipleLayers();
+        subMenu = "Count";
+        cm.Close();
+        PopulateEdge(input);
       });
 
-      cm.AddButton(Icon("\uF24D") + "Query similar patterns (single layer)", Color.yellow / 2, () =>
+      cm.AddButton(Icon("\uF5FD") + "Query similar patterns", Color.blue, () =>
+      {
+        graph.QuerySimilarPatternsMultipleLayers();
+      });;
+
+      cm.AddButton(Icon("\uF24D") + "Query similar patterns (single layer)", Color.blue, () =>
       {
         graph.QuerySimilarPatternsSingleLayer();
       });
 
-      if (queryMultipleLayerRefinementCount > 0)
-      {
-        cm.AddButton(Icon("\uF292") + "Count all query results", Color.yellow / 2, () =>
-        {
-          graph.CountQuerySimilarPatternsMultipleLayers((int count) => {
-            queryMultipleLayerRefinementCount = count;
-            PopulateEdge(input);
-          });
-        }, queryMultipleLayerRefinementCount);
-      }
-      else
-      {
-        cm.AddButton(Icon("\uF292") + "Count all query results", Color.yellow / 2, () =>
-        {
-          graph.CountQuerySimilarPatternsMultipleLayers((int count) => {
-            queryMultipleLayerRefinementCount = count;
-            PopulateEdge(input);
-          });
-        });
-      }
     }
     else
     {
@@ -193,6 +180,10 @@ public class EdgeMenu : BaseMenu
     {
       PopulateGroupByMenu();
     }
+    if (subMenu == "Count")
+    {
+      PopulateCountMenu();
+    }
     if (subMenu == "EdgePredicate")
     {
       PopulateEdgePredicateMenu();
@@ -245,6 +236,60 @@ public class EdgeMenu : BaseMenu
       }
       Close();
     });
+  }
+
+  
+  public void PopulateCountMenu()
+  {
+
+    /////////////////////////
+    if (queryMultipleLayerRefinementCount.ContainsKey("AllQueryResults"))
+    {
+      cm.AddButton(Icon("\uF292") + "Count all query results", Color.yellow / 2, () =>
+      {
+        graph.CountQuerySimilarPatternsMultipleLayers((int count) => {
+          queryMultipleLayerRefinementCount.Add("AllQueryResults", count);
+          PopulateEdge(edge);
+        });
+      }, queryMultipleLayerRefinementCount["AllQueryResults"]);
+    }
+    else
+    {
+      cm.AddButton(Icon("\uF292") + "Count all query results", Color.yellow / 2, () =>
+      {
+        graph.CountQuerySimilarPatternsMultipleLayers((int count) => {
+          queryMultipleLayerRefinementCount.Add("AllQueryResults", count);
+          PopulateEdge(edge);
+        });
+      });
+    }
+
+    foreach (string variable in SelectedVariableNames())
+    {
+
+      if (queryMultipleLayerRefinementCount.ContainsKey(variable))
+      {
+        cm.AddButton(Icon("\uF292") + "Count distinct " + variable, Color.yellow / 2, () =>
+        {
+          graph.CountQuerySimilarPatternsMultipleLayers((int count) => {
+            queryMultipleLayerRefinementCount.Add(variable, count);
+            PopulateEdge(edge);
+          }, variable);
+        }, queryMultipleLayerRefinementCount[variable]);
+      }
+      else
+      {
+        cm.AddButton(Icon("\uF292") + "Count distinct " + variable, Color.yellow / 2, () =>
+        {
+          graph.CountQuerySimilarPatternsMultipleLayers((int count) => {
+            queryMultipleLayerRefinementCount.Add(variable, count);
+            PopulateEdge(edge);
+          }, variable);
+        });
+      }
+
+
+    }
   }
 
   public void PopulateOrderByMenu()

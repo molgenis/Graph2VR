@@ -262,6 +262,7 @@ public class QueryService : MonoBehaviour
         {LanguageFilterString("?label")}
       }}
       ORDER BY ?label ?p LIMIT 100";
+    Debug.Log("GetOutgoingPredicats: "+ query);
     endPoint.QueryWithResultSet(query, sparqlResultsCallback, state: null);
   }
 
@@ -278,6 +279,7 @@ public class QueryService : MonoBehaviour
         {LanguageFilterString("?label")}
       }} 
       ORDER BY ?label ?p LIMIT 100";
+    Debug.Log("GetIncomingPredicats: " + query);
     endPoint.QueryWithResultSet(query, sparqlResultsCallback, state: null);
   }
 
@@ -328,12 +330,12 @@ public class QueryService : MonoBehaviour
     }, null);
   }
 
-  public void CountQuerySimilarPatternsMultipleLayers(Graph graph, string triplesWithOptional, List<string> groupByList, Action<int> callback)
+  public void CountQuerySimilarPatternsMultipleLayers(Graph graph, string triplesWithOptional, List<string> groupByList, Action<int> callback, string optionalVariable="*")
   {
     string group = GetGroupByString(groupByList);
     string query = $@"
       {PREFIXES}
-      select count( distinct *) as ?count where {{
+      select count( distinct {optionalVariable}) as ?count where {{
         {triplesWithOptional}
       }} {group}";
     endPoint.QueryWithResultSet(query, (SparqlResultSet results, object state) =>

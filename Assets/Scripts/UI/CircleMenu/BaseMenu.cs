@@ -8,7 +8,7 @@ public class BaseMenu : MonoBehaviour
   public GameObject controlerModel;
   public string subMenu = "";
   public GameObject limitSlider;
-  public int queryMultipleLayerRefinementCount = 0;
+  public Dictionary<string, int> queryMultipleLayerRefinementCount = new Dictionary<string, int>();
   protected Node node = null;
   protected Edge edge = null;
 
@@ -50,7 +50,7 @@ public class BaseMenu : MonoBehaviour
     subMenu = "";
     edge = null;
     graph = null;
-    queryMultipleLayerRefinementCount = 0;
+    queryMultipleLayerRefinementCount.Clear();
     if (cm != null)
     {
       cm.Close();
