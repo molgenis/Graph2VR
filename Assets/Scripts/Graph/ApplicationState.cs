@@ -352,8 +352,8 @@ public class ApplicationState
     if (state.isVariable)
     {
       node.MakeVariable();
-      node.SetLabel(state.label);
     }
+    node.SetLabel(state.label);
     return node;
   }
 
