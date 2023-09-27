@@ -35,3 +35,12 @@ Different Layout Algorithms can help to visualize the data.
 For more detailed instructions on how to use Graph2VR, check out the [Graph2VR User Manual]( https://doi.org/10.5281/zenodo.8040594).
 
 We recommend to load it on the Quest2 VR headset via [sidequest](https://sidequestvr.com/download)
+
+For a hands-on introduction to Graph2VR, we have created a video tutorial series that covers everything from basic navigation to advanced features. 
+The tutorial is designed to help both beginners and experienced users get the most out of Graph2VR.
+
+[Graph2VR Tutorial Series on YouTube](https://www.youtube.com/playlist?list=PLRQCsKSUyhNIdUzBNRTmE-_JmuiOEZbdH)
+
+Our research paper about Graph2VR is currently under Peer review and will be added soon.
+
+
