@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
 using VDS.RDF;
+using VDS.RDF.Query;
 
 public class Edge : MonoBehaviour
 {
@@ -186,6 +187,18 @@ public class Edge : MonoBehaviour
     }
     textLong = uri;
     UpdateEdgeText();
+    QueryService.Instance.GetLabelForPredicate(uri, (SparqlResultSet resultSet, object state) =>
+    {
+      if (resultSet != null && resultSet.Count > 0 && resultSet[0].HasValue("label"))
+      {
+        shortName = resultSet[0]["label"].ToString();
+      }
+      if (shortName != uri && shortName != "" && shortName != null)
+      {
+        textShort = shortName;
+      }
+      UpdateEdgeText();
+    });
   }
 
   private void UpdateColor()

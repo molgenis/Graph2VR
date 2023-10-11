@@ -283,6 +283,35 @@ public class QueryService : MonoBehaviour
     endPoint.QueryWithResultSet(query, sparqlResultsCallback, state: null);
   }
 
+  public void GetLabelForPredicate(string uri, SparqlResultsCallback callback)
+  {
+    string query = $@"
+        {PREFIXES}
+        SELECT str(?label) as ?label WHERE {{
+            OPTIONAL {{
+                <{uri}> rdfs:label ?label .
+                {LanguageFilterString("?label")}
+            }}
+        }}
+        LIMIT 1";
+    endPoint.QueryWithResultSet(query, (SparqlResultSet resultSet, object state) =>
+    {
+      if (resultSet == null)
+      {
+        callback(null, state);
+        return;
+      }
+      if (resultSet.Count > 0 && resultSet[0].HasValue("label"))
+      {
+        callback(resultSet, state);
+      }
+      else
+      {
+        callback(null, state);
+      }
+    }, state: null);
+  }
+
   private Boolean IsConstructSparqlQuery(string query)
   {
     SparqlQuery sparqlQuery = GetSparqlQuery(query);
