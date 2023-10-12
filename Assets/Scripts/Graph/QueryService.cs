@@ -262,7 +262,7 @@ public class QueryService : MonoBehaviour
         {LanguageFilterString("?label")}
       }}
       ORDER BY ?label ?p LIMIT 100";
-    Debug.Log("GetOutgoingPredicats: "+ query);
+  //  Debug.Log("GetOutgoingPredicats: "+ query);
     endPoint.QueryWithResultSet(query, sparqlResultsCallback, state: null);
   }
 
@@ -279,7 +279,7 @@ public class QueryService : MonoBehaviour
         {LanguageFilterString("?label")}
       }} 
       ORDER BY ?label ?p LIMIT 100";
-    Debug.Log("GetIncomingPredicats: " + query);
+ //   Debug.Log("GetIncomingPredicats: " + query);
     endPoint.QueryWithResultSet(query, sparqlResultsCallback, state: null);
   }
 
@@ -426,14 +426,13 @@ public class QueryService : MonoBehaviour
     {
       return $@"
               {PREFIXES}
-              select distinct {variableNode.GetQueryLabel()} AS ?uri ?name 
+              select distinct {variableNode.GetQueryLabel()} AS ?uri (SAMPLE(?name) AS ?name)
               where {{
                 {variableNode.graph.GetTriplesString()}
                 {variableNode.GetQueryLabel()} rdfs:label ?name.
                 ?uri(^(<>| !<>) | rdfs:label | skos:altLabel) ?entity.
                 BIND(STR(?entity) AS ?name).
                 FILTER REGEX(?name, '{searchTerm}', 'i').
-                {LanguageFilterString("?name")}
               }}
               LIMIT {searchResultsLimit}";
     }
@@ -441,7 +440,7 @@ public class QueryService : MonoBehaviour
     {
       return $@"
               {PREFIXES}
-              select distinct ?uri ?name 
+              select distinct ?uri (SAMPLE(?name) AS ?name) 
               where {{
                  ?uri(^(<>| !<>) | rdfs:label | skos:altLabel) ?entity.
                  BIND(STR(?entity) AS ?name).
@@ -457,12 +456,11 @@ public class QueryService : MonoBehaviour
     {
       return $@"
                {PREFIXES}
-               select distinct {variableNode.GetQueryLabel()} AS ?uri ?name 
+               select distinct {variableNode.GetQueryLabel()} AS ?uri (SAMPLE(?name) AS ?name) 
                where {{
                  {variableNode.graph.GetTriplesString()}
                  {variableNode.GetQueryLabel()} rdfs:label ?name.
                  ?name bif:contains ""'{AddStar(searchTerm)}'"".
-                 {LanguageFilterString("?name")}
                }}
                LIMIT {searchResultsLimit}";
     }
@@ -470,11 +468,10 @@ public class QueryService : MonoBehaviour
     {
       return $@"
               {PREFIXES}
-              select distinct ?uri ?name 
+              select distinct ?uri (SAMPLE(?name) AS ?name) 
               where {{
                 ?uri rdfs:label ?name.
                 ?name bif:contains ""'{AddStar(searchTerm)}'"".
-                {LanguageFilterString("?name")}
               }}
               LIMIT {searchResultsLimit}";
     }
