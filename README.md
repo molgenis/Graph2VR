@@ -3,6 +3,14 @@
 Graph2VR is a PhD project, a prototype for a VR application to Visualize Graphs (SPARQL) as 3D Graphs in Virtual Reality.
 The idea is to explore, analyze, and interact with the data in the graph using gesture control.
 
+For a hands-on introduction to Graph2VR, we have created a video tutorial series that covers everything from basic navigation to advanced features. 
+The tutorial is designed to help both beginners and experienced users get the most out of Graph2VR.
+
+[Graph2VR Tutorial Series on YouTube](https://www.youtube.com/playlist?list=PLRQCsKSUyhNIdUzBNRTmE-_JmuiOEZbdH)
+
+Our tutorial is about using Graph2VR - it does not explain much about the basics of Linked Data and SPARQL.
+If you want to learn more about the background of Linked Data, we can recommend the [Ted talk of Sir Tim Berners Lee "The next Web" (from 2009)](https://www.ted.com/talks/tim_berners_lee_the_next_web) for some basics.
+
 Graph2VR has been built in Unity and is able to connect to a SPARQL endpoint using [dotNetRDF](https://dotnetrdf.org/).
 We got inspired by many different tools to work with Linked data and to visualize Graphs.
 Virtual Reality offers the user way more space to expand the graph, then a 2D computer screen.
@@ -35,11 +43,6 @@ Different Layout Algorithms can help to visualize the data.
 For more detailed instructions on how to use Graph2VR, check out the [Graph2VR User Manual]( https://doi.org/10.5281/zenodo.8040594).
 
 We recommend to load it on the Quest2 VR headset via [sidequest](https://sidequestvr.com/download)
-
-For a hands-on introduction to Graph2VR, we have created a video tutorial series that covers everything from basic navigation to advanced features. 
-The tutorial is designed to help both beginners and experienced users get the most out of Graph2VR.
-
-[Graph2VR Tutorial Series on YouTube](https://www.youtube.com/playlist?list=PLRQCsKSUyhNIdUzBNRTmE-_JmuiOEZbdH)
 
 Our research paper about Graph2VR is currently under Peer review and will be added soon.
 
