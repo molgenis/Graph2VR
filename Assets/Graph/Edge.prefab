@@ -216,7 +216,7 @@ MonoBehaviour:
   m_enableAutoSizing: 1
   m_fontSizeMin: 64
   m_fontSizeMax: 128
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -433,6 +433,7 @@ MonoBehaviour:
   displaySubject: {fileID: 0}
   displayObject: {fileID: 0}
   textFront: {fileID: 6514513769168667944}
+  optionalTripleCounter: 0
   textShort: 
   variableName: 
   lineType: 0
