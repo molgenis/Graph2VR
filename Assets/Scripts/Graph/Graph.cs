@@ -71,7 +71,7 @@ public class Graph : MonoBehaviour
     return node.NodeType switch
     {
       NodeType.GraphLiteral or NodeType.Literal => GetLiteralValue(node),
-      NodeType.Uri => $"<{(node as IUriNode).Uri}>",
+      NodeType.Uri => $"<{(node as IUriNode).Uri.OriginalString}>",
       NodeType.Blank => "_:blankNode",
       NodeType.Variable => (node as IVariableNode).VariableName,
       _ => "",

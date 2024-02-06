@@ -253,7 +253,7 @@ public class Node : MonoBehaviour
           SetColor(Settings.Instance.literalColor);
           break;
         case NodeType.Uri:
-          uri = ((IUriNode)graphNode).Uri.ToString();
+          uri = ((IUriNode)graphNode).Uri.OriginalString;
           SetColor(ColorSettings.instance.uriColor);
           break;
       }
