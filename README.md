@@ -44,6 +44,6 @@ For more detailed instructions on how to use Graph2VR, check out the [Graph2VR U
 
 We recommend to load it on the Quest2 VR headset via [sidequest](https://sidequestvr.com/download)
 
-Our research paper about Graph2VR is currently under Peer review and will be added soon.
+Our research paper about Graph2VR can be found at https://doi.org/10.1093/database/baae008 (soon).
 
 
