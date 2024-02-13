@@ -64,7 +64,7 @@ namespace Dweiss
 #endif
 
         var t = JsonUtility.ToJson(this);
-        Debug.Log("Setting is: " + t);
+      //  Debug.Log("Setting is: " + t);
       }
       catch (System.Exception e)
       {

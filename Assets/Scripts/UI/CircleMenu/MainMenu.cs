@@ -295,6 +295,14 @@ public class MainMenu : BaseMenu
   {
     if (populateMenuState == PopulateMenuState.loaded)
     {
+      cm.AddButton("No specific graph", warningColor, () =>
+      {
+        Settings.Instance.baseURI = "";
+        QueryService.Instance.SwitchEndpoint();
+        cm.Close();
+        PopulateMainMenu();
+      });
+
       foreach (string graph in graphsInSelectedDatabase)
       {
         if (graph == Settings.Instance.baseURI) {
@@ -327,6 +335,21 @@ public class MainMenu : BaseMenu
 
   private void PopulateSettingsMenu()
   {
+
+    cm.AddButton(Icon("\uF51E") + "Current Server:\n" + Settings.Instance.sparqlEndpoint, Color.grey, () =>
+    {
+    });
+    cm.AddButton("Current Graph:\n" + ((Settings.Instance.baseURI=="") ? "No specific graph": Settings.Instance.baseURI), Color.grey, () =>
+    {
+    });
+
+    cm.AddButton(Icon("\uF1E0") + "Select graph on server", warningColor, () =>
+    {
+      subMenu = "SelectGraph";
+      cm.Close();
+      PopulateMainMenu();
+    });
+
     cm.AddButton(Icon("\uF51E") + "Connect to custom server", Color.green / 2, () =>
     {
       Utils.GetStringFromVRKeyboard(endpoint =>
@@ -340,13 +363,6 @@ public class MainMenu : BaseMenu
         QueryService.Instance.SwitchEndpoint();
       }, PlayerPrefs.GetString("CustomServer", ""), "Enter a custom server url...");
       Close();
-    });
-
-    cm.AddButton(Icon("\uF1E0") + "Select graph on server", Color.green / 2, () =>
-    {
-      subMenu = "SelectGraph";
-      cm.Close();
-      PopulateMainMenu();
     });
 
     foreach (DatabaseSetttings dataBaseSettings in Settings.Instance.databaseSetttings)
