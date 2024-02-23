@@ -2,6 +2,9 @@
 
 Graph2VR is a PhD project, a prototype for a VR application to visualize graphs (SPARQL) as 3D graphs in Virtual Reality.
 The idea is to explore, analyze, and interact with the data in the graph using gesture control.
+Graph2VR has been built in Unity and is able to connect to a SPARQL endpoint using [dotNetRDF](https://dotnetrdf.org/).
+We got inspired by many different tools to work with Linked data and to visualize Graphs.
+Virtual Reality offers the user way more space to expand the graph than a 2D computer screen.
 
 ## System Requirements
 
@@ -10,7 +13,7 @@ The idea is to explore, analyze, and interact with the data in the graph using g
 Compatibility with other VR headsets has not been verified. However, at least two controllers are required to control the app.
 
 
-- **PC Specifications**: For the Windows version, a PC with the following minimum specifications is recommended:
+### PC Specifications
   - **Processor**: Intel i5-4590 / AMD Ryzen 5 1500X or greater
   - **Memory**: 8GB+ RAM
   - **Graphics**: NVIDIA GTX 1060 / AMD Radeon RX 480 or greater
@@ -20,7 +23,7 @@ Compatibility with other VR headsets has not been verified. However, at least tw
 - **Operating System**: Windows 10 or later for PC version; standalone version available for Oculus Quest 2 and Quest 3.
 - **Unity Engine**: For development, Unity version 2021.2.15f recommended.
 
-### Standalone version Setup and Configuration
+### Standalone Version Setup
 - Oculus Quest 2 and Quest 3 users must enable developer mode for installation via SideQuest.
 
 ## Installation Instructions
@@ -39,14 +42,9 @@ The tutorial is designed to help both beginners and experienced users get the mo
 
 Check out the [Graph2VR Tutorial Series on YouTube](https://www.youtube.com/playlist?list=PLRQCsKSUyhNIdUzBNRTmE-_JmuiOEZbdH). 
 
-Our tutorial is about using Graph2VR - it does not explain much about the basics of Linked Data and SPARQL.
-If you want to learn more about the background of Linked Data, we can recommend the [Ted talk of Sir Tim Berners Lee "The next Web" (from 2009)](https://www.ted.com/talks/tim_berners_lee_the_next_web) for some basics.
+For those new to Linked Data and SPARQL, we recommend Sir Tim Berners Lee's [Ted talk "The next Web"](https://www.ted.com/talks/tim_berners_lee_the_next_web) for some basics.
 
-## Research and Development
-
-Graph2VR has been built in Unity and is able to connect to a SPARQL endpoint using [dotNetRDF](https://dotnetrdf.org/).
-We got inspired by many different tools to work with Linked data and to visualize Graphs.
-Virtual Reality offers the user way more space to expand the graph than a 2D computer screen.
+## Features
 
 Here is an example of a query that shows the results in form of stacked 2D graphs behind each other:
 
@@ -55,17 +53,15 @@ Here is an example of a query that shows the results in form of stacked 2D graph
 We tried to write a GUI to explore and interact with the graph in Virtual Reality. 
 A few simple operations to do so are:
 
-<ul>
-  <li>Getting some information about the current node</li>
-  <li>Expanding the graph at a certain node using incoming or outgoing predicates</li>
-  <li>Deleting a node or collapsing those nodes around it that are not connected to the graph elsewhere</li>
-  <li>Comparing different parts of the graph side by side (different visualisations)</li>
-  <li>Building visual query patterns to form a SPARQL query</li>
-  <li>Adding new nodes and edges</li>
-  <li>Interacting with the graph (zoom, move, rotate)</li>
-  <li>Using visual queries or a search function to add specific nodes</li>
-  <li>Saving the results to ntriple format to be able to reuse it in other programs</li>
-</ul>
+- Getting information about the current node
+- Expanding the graph at a node using incoming or outgoing predicates
+- Deleting a node or collapsing unconnected nodes
+- Comparing different parts of the graph side by side
+- Building visual query patterns for SPARQL queries
+- Adding new nodes and edges
+- Interacting with the graph (zoom, move, rotate)
+- Using visual queries or a search function to add specific nodes
+- Saving results in ntriple format for reuse in other programs
 
 <img src="https://github.com/molgenis/Graph2VR/assets/49238704/45a87902-f7f3-43d7-8e38-d05b2a12bb35" width="400">
 
