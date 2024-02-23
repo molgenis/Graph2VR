@@ -69,4 +69,4 @@ Compatibility with other VR headsets has not been verified. However, at least tw
 
 ### Software Requirements
 - **Operating System**: Windows 10 or later for PC version; standalone version available for Oculus Quest 2 and Quest 3.
-- **Unity Engine**: For development, Unity version 2021.2.15f recommended.
+- **Unity Engine**: For development, Unity version 2021.2.15f is recommended.
