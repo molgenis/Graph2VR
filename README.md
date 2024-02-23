@@ -59,7 +59,8 @@ Different Layout Algorithms can help to visualize the data.
 ### Hardware Requirements
 - **VR Headset**: Graph2VR is designed for Virtual Reality headsets, with dedicated support for the HTC Vive and Oculus Quest series (Quest 2 and Quest 3). 
 Compatibility with other VR headsets has not been verified. However, at least two controllers are required to control the app.
-
+We used OpenXR to set the controls, which makes the application less likely to run on other headsets as if it was built with SteamVR.
+However, it supported us in building a standalone version of the application for the Quest 2/3.
 
 ### PC Specifications
   - **Processor**: Intel i5-4590 / AMD Ryzen 5 1500X or greater
