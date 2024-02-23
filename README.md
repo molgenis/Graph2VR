@@ -21,20 +21,19 @@ Compatibility with other VR headsets has not been verified. However, at least tw
 
 - **Unity Engine**: Users do not need Unity to run Graph2VR, but for development or modification, Unity version 2021.2.15f is advised.
 
-### Additional Software
-- **dotNetRDF**: Graph2VR uses the dotNetRDF library for connecting to SPARQL endpoints, bundled within the application.
-
 ### Standalone version Setup and Configuration
 - Oculus Quest 2 and Quest 3 users must enable developer mode to install the standalone version via SideQuest.
 
 ## Installation Instructions
 
-- **Windows Version**: Download the `Graph2VR_windows.zip` file from the [latest release](https://github.com/molgenis/Graph2VR/releases), unzip it, and execute the application.
-
-- **Quest 2/3 Standalone Version**: Follow the instructions on SideQuest for sideloading the application onto your Oculus Quest headset.
-
 The newest release can be found [here](https://github.com/molgenis/Graph2VR/releases).
 It includes a Windows version (`Graph2VR_windows.zip`), and a standalone version for the Quest 2 or Quest 3 headset.
+
+- **Windows Version**: Download the `Graph2VR_windows.zip` file from the [latest release](https://github.com/molgenis/Graph2VR/releases), unzip it, and execute the application.
+
+- **Quest 2/3 Standalone Version**: Follow the instructions on SideQuest for sideloading the application onto your Oculus Quest headset. We recommend to load it on the Quest2 VR headset via [sidequest](https://sidequestvr.com/download)
+
+## Getting Started
 
 For a hands-on introduction to Graph2VR, we have created a video tutorial series that covers everything from basic navigation to advanced features. 
 The tutorial is designed to help both beginners and experienced users get the most out of Graph2VR.
@@ -43,6 +42,8 @@ Check out the [Graph2VR Tutorial Series on YouTube](https://www.youtube.com/play
 
 Our tutorial is about using Graph2VR - it does not explain much about the basics of Linked Data and SPARQL.
 If you want to learn more about the background of Linked Data, we can recommend the [Ted talk of Sir Tim Berners Lee "The next Web" (from 2009)](https://www.ted.com/talks/tim_berners_lee_the_next_web) for some basics.
+
+## Research and Development
 
 Graph2VR has been built in Unity and is able to connect to a SPARQL endpoint using [dotNetRDF](https://dotnetrdf.org/).
 We got inspired by many different tools to work with Linked data and to visualize Graphs.
@@ -74,8 +75,6 @@ Different Layout Algorithms can help to visualize the data.
 <img src="https://github.com/molgenis/Graph2VR/assets/49238704/673d2008-c93b-4e8f-9505-3cdcb2ba52cd" width="400">
 
 For more detailed instructions on how to use Graph2VR, check out the [Graph2VR User Manual]( https://doi.org/10.5281/zenodo.8040594).
-
-We recommend to load it on the Quest2 VR headset via [sidequest](https://sidequestvr.com/download)
 
 Our research paper about Graph2VR can be found at https://doi.org/10.1093/database/baae008 (soon).
 
