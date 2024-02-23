@@ -17,6 +17,16 @@ Check out the [Graph2VR Tutorial Series on YouTube](https://www.youtube.com/play
 
 For those new to Linked Data and SPARQL, we recommend Sir Tim Berners Lee's [Ted talk "The next Web"](https://www.ted.com/talks/tim_berners_lee_the_next_web) for some basics.
 
+## Configuring Graph2VR (optional)
+
+The file settings.txt file can be used to specify the SPARQL Endpoint(s) and the starting query.
+In case of a missing settings file, internal default settings will be used.
+The file can be placed next to the Graph2VR.exe for the Windows version. 
+
+For the Quest 2/3 version, the settings.txt can be placed in the folder 'sdcard/Android/data/com.Graph2VR.Graph2VR/files'.
+This path is created once a savestate is made.
+You can find a sample settings.txt [here](https://github.com/molgenis/Graph2VR/releases/download/1.2.3/Settings.txt)
+
 ## Installation Instructions
 
 The newest release can be found [here](https://github.com/molgenis/Graph2VR/releases).
