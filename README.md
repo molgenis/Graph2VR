@@ -4,7 +4,7 @@ Graph2VR is a PhD project, a prototype for a VR application to Visualize Graphs 
 The idea is to explore, analyze, and interact with the data in the graph using gesture control.
 
 [The newest release can be found here.](https://github.com/molgenis/Graph2VR/releases)
-There is a Windows version, Graph2VR_windows.zip, and a standalone version for the Quest headset.
+It includes a Windows version (Graph2VR_windows.zip), and a standalone version for the Quest 2 or Quest 3 headset.
 
 For a hands-on introduction to Graph2VR, we have created a video tutorial series that covers everything from basic navigation to advanced features. 
 The tutorial is designed to help both beginners and experienced users get the most out of Graph2VR.
