@@ -5,8 +5,8 @@ Graph2VR is a PhD project, a prototype for a VR application to visualize graphs 
 ## Documentation
 
 - For detailed instructions on how to use Graph2VR, refer to the [Graph2VR User Manual](https://doi.org/10.5281/zenodo.8040594).
-- Our research paper on Graph2VR will be available soon [here](https://doi.org/10.1093/database/baae008).
-  This paper compares similar tools, provides insights into the design process of Graph2VR and contains the results from our usability study.
+- Our research paper on Graph2VR will be available soon [here](https://doi.org/10.1093/database/baae008).<br>
+  The paper compares similar tools, provides insights into the design process of Graph2VR and contains the results from our usability study.
 
 ## Getting Started
 
