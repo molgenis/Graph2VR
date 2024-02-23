@@ -1,10 +1,12 @@
 # Graph2VR
 
-Graph2VR is a PhD project, a prototype for a VR application to visualize graphs (SPARQL) as 3D graphs in Virtual Reality.
-The idea is to explore, analyze, and interact with the data in the graph using gesture control.
-Graph2VR has been built in Unity and is able to connect to a SPARQL endpoint using [dotNetRDF](https://dotnetrdf.org/).
-We got inspired by many different tools to work with Linked data and to visualize Graphs.
-Virtual Reality offers the user way more space to expand the graph than a 2D computer screen.
+Graph2VR is a PhD project, a prototype for a VR application to visualize graphs (SPARQL) as 3D graphs in Virtual Reality. The idea is to explore, analyze, and interact with the data in the graph using gesture control. Graph2VR has been built in Unity and is able to connect to a SPARQL endpoint using [dotNetRDF](https://dotnetrdf.org/). We got inspired by many different tools to work with Linked data and to visualize Graphs. Virtual Reality offers the user way more space to expand the graph than a 2D computer screen.
+
+## Further Reading
+
+- For detailed instructions on how to use Graph2VR, refer to the [Graph2VR User Manual](https://doi.org/10.5281/zenodo.8040594).
+- Our research paper on Graph2VR will be available soon at [this link](https://doi.org/10.1093/database/baae008).
+  This paper compares similar tools, provides insights into the design process of Graph2VR and contains the results from our usability study.
 
 ## System Requirements
 
@@ -68,9 +70,4 @@ A few simple operations to do so are:
 Different Layout Algorithms can help to visualize the data.
 
 <img src="https://github.com/molgenis/Graph2VR/assets/49238704/673d2008-c93b-4e8f-9505-3cdcb2ba52cd" width="400">
-
-## Further Reading
-
-- For detailed instructions on how to use Graph2VR, refer to the [Graph2VR User Manual](https://doi.org/10.5281/zenodo.8040594).
-- Our research paper on Graph2VR will be available soon at [this link](https://doi.org/10.1093/database/baae008).
 
