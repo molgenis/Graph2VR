@@ -5589,6 +5589,8 @@ MonoBehaviour:
   mainGraph: {fileID: 0}
   graphPrefab: {fileID: 280358173420448884, guid: 4b47d999b2a37494baf875b5db9ccd16, type: 3}
   keyboard: {fileID: 1728787462}
+  line: {fileID: 0}
+  lineDashed: {fileID: 2800000, guid: a2e389e940a94904dba2db6986817500, type: 3}
 --- !u!114 &1503421654
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5602,6 +5604,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isActive: 0
+  lefToRight: {x: 0, y: 0, z: 0}
+  leftToCenter: {x: 0, y: 0, z: 0}
+  handleDistance: 0
 --- !u!114 &1503421655
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7289,8 +7294,6 @@ MonoBehaviour:
     uri: http://www.w3.org/2000/01/rdf-schema#seeAlso
   savedMaximumImageWidth: 256
   savedMaximumImageHeight: 256
-  line: {fileID: 0}
-  lineDashed: {fileID: 2800000, guid: a2e389e940a94904dba2db6986817500, type: 3}
 --- !u!1 &457353347808225002
 GameObject:
   m_ObjectHideFlags: 0

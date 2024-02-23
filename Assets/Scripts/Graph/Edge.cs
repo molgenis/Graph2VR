@@ -69,14 +69,14 @@ public class Edge : MonoBehaviour
       optionalTripleCounter = optionalCounter;
       if (isOptional)
       {
-        lineRenderer.material.mainTexture = Settings.Instance.lineDashed;
+        lineRenderer.material.mainTexture = Main.instance.lineDashed;
         lineRenderer.material.SetFloat("_AlphaClip", 1);
         lineRenderer.material.SetFloat("_Cutoff", 0.5f);
         lineRenderer.material.EnableKeyword("_ALPHATEST_ON");
       }
       else
       {
-        lineRenderer.material.mainTexture = Settings.Instance.line;
+        lineRenderer.material.mainTexture = Main.instance.line;
         lineRenderer.material.DisableKeyword("_ALPHATEST_ON");
       }
     }

@@ -95,9 +95,6 @@ namespace Dweiss
     public int savedMaximumImageWidth = 512;
     public int savedMaximumImageHeight = 512;
 
-    public Texture2D line;
-    public Texture2D lineDashed;
-
     private void Awake()
     {
       base.Awake ();

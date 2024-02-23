@@ -10,6 +10,9 @@ public class Main : MonoBehaviour
   public GameObject graphPrefab;
   public VRKeys.Keyboard keyboard;
 
+  public Texture2D line;
+  public Texture2D lineDashed;
+
   void Start()
   {
     Main.instance.languageCode = PlayerPrefs.GetString("LanguageCode", "");
