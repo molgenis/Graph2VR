@@ -17,12 +17,11 @@ Compatibility with other VR headsets has not been verified. However, at least tw
   - **Storage**: At least 4GB of free space is recommended.
 
 ### Software Requirements
-- **Operating System**: Windows 10 or later for the PC version. The standalone version runs on Oculus Quest 2 and Quest 3 without a PC.
-
-- **Unity Engine**: Users do not need Unity to run Graph2VR, but for development or modification, Unity version 2021.2.15f is advised.
+- **Operating System**: Windows 10 or later for PC version; standalone version available for Oculus Quest 2 and Quest 3.
+- **Unity Engine**: For development, Unity version 2021.2.15f recommended.
 
 ### Standalone version Setup and Configuration
-- Oculus Quest 2 and Quest 3 users must enable developer mode to install the standalone version via SideQuest.
+- Oculus Quest 2 and Quest 3 users must enable developer mode for installation via SideQuest.
 
 ## Installation Instructions
 
@@ -74,8 +73,8 @@ Different Layout Algorithms can help to visualize the data.
 
 <img src="https://github.com/molgenis/Graph2VR/assets/49238704/673d2008-c93b-4e8f-9505-3cdcb2ba52cd" width="400">
 
-For more detailed instructions on how to use Graph2VR, check out the [Graph2VR User Manual]( https://doi.org/10.5281/zenodo.8040594).
+## Further Reading
 
-Our research paper about Graph2VR can be found at https://doi.org/10.1093/database/baae008 (soon).
-
+- For detailed instructions on how to use Graph2VR, refer to the [Graph2VR User Manual](https://doi.org/10.5281/zenodo.8040594).
+- Our research paper on Graph2VR will be available soon at [this link](https://doi.org/10.1093/database/baae008).
 
