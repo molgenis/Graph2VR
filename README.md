@@ -2,20 +2,11 @@
 
 Graph2VR is a PhD project, a prototype for a VR application to visualize graphs (SPARQL) as 3D graphs in Virtual Reality. The idea is to explore, analyze, and interact with the data in the graph using gesture control. Graph2VR has been built in Unity and is able to connect to a SPARQL endpoint using [dotNetRDF](https://dotnetrdf.org/). We got inspired by many different tools to work with Linked data and to visualize Graphs. Virtual Reality offers the user way more space to expand the graph than a 2D computer screen.
 
-## Further Reading
+## Documentation
 
 - For detailed instructions on how to use Graph2VR, refer to the [Graph2VR User Manual](https://doi.org/10.5281/zenodo.8040594).
 - Our research paper on Graph2VR will be available soon [here](https://doi.org/10.1093/database/baae008).
   This paper compares similar tools, provides insights into the design process of Graph2VR and contains the results from our usability study.
-
-## Installation Instructions
-
-The newest release can be found [here](https://github.com/molgenis/Graph2VR/releases).
-It includes a Windows version (`Graph2VR_windows.zip`), and a standalone version for the Quest 2 or Quest 3 headset.
-
-- **Windows Version**: Download the `Graph2VR_windows.zip` file from the [latest release](https://github.com/molgenis/Graph2VR/releases), unzip it, and execute the application.
-
-- **Quest 2/3 Standalone Version**: Follow the instructions on SideQuest for sideloading the application onto your Oculus Quest headset. We recommend to load it on the Quest2 VR headset via [sidequest](https://sidequestvr.com/download)
 
 ## Getting Started
 
@@ -25,6 +16,18 @@ The tutorial is designed to help both beginners and experienced users get the mo
 Check out the [Graph2VR Tutorial Series on YouTube](https://www.youtube.com/playlist?list=PLRQCsKSUyhNIdUzBNRTmE-_JmuiOEZbdH). 
 
 For those new to Linked Data and SPARQL, we recommend Sir Tim Berners Lee's [Ted talk "The next Web"](https://www.ted.com/talks/tim_berners_lee_the_next_web) for some basics.
+
+## Installation Instructions
+
+The newest release can be found [here](https://github.com/molgenis/Graph2VR/releases).
+It includes a Windows version (`Graph2VR_windows.zip`), and a standalone version for the Quest 2 or Quest 3 headset.
+
+For the **Windows Version**: 
+- Download the `Graph2VR_windows.zip` file from the [latest release](https://github.com/molgenis/Graph2VR/releases), unzip it, and execute the application.
+
+For the **Quest 2/3 Standalone Version**:
+- Ensure your Oculus Quest 2 or Quest 3 is in developer mode to install the standalone version via SideQuest.
+- We recommend [SideQuest](https://sidequestvr.com/download) for loading the application onto the Quest2/3 VR headset.
 
 ## Features
 
@@ -67,7 +70,3 @@ Compatibility with other VR headsets has not been verified. However, at least tw
 ### Software Requirements
 - **Operating System**: Windows 10 or later for PC version; standalone version available for Oculus Quest 2 and Quest 3.
 - **Unity Engine**: For development, Unity version 2021.2.15f recommended.
-
-### Standalone Version Setup
-- Oculus Quest 2 and Quest 3 users must enable developer mode for installation via SideQuest.
-
