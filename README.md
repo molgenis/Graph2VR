@@ -5,28 +5,8 @@ Graph2VR is a PhD project, a prototype for a VR application to visualize graphs 
 ## Further Reading
 
 - For detailed instructions on how to use Graph2VR, refer to the [Graph2VR User Manual](https://doi.org/10.5281/zenodo.8040594).
-- Our research paper on Graph2VR will be available soon at [this link](https://doi.org/10.1093/database/baae008).
+- Our research paper on Graph2VR will be available soon [here](https://doi.org/10.1093/database/baae008).
   This paper compares similar tools, provides insights into the design process of Graph2VR and contains the results from our usability study.
-
-## System Requirements
-
-### Hardware Requirements
-- **VR Headset**: Graph2VR is designed for Virtual Reality headsets, with dedicated support for the HTC Vive and Oculus Quest series (Quest 2 and Quest 3). 
-Compatibility with other VR headsets has not been verified. However, at least two controllers are required to control the app.
-
-
-### PC Specifications
-  - **Processor**: Intel i5-4590 / AMD Ryzen 5 1500X or greater
-  - **Memory**: 8GB+ RAM
-  - **Graphics**: NVIDIA GTX 1060 / AMD Radeon RX 480 or greater
-  - **Storage**: At least 4GB of free space is recommended.
-
-### Software Requirements
-- **Operating System**: Windows 10 or later for PC version; standalone version available for Oculus Quest 2 and Quest 3.
-- **Unity Engine**: For development, Unity version 2021.2.15f recommended.
-
-### Standalone Version Setup
-- Oculus Quest 2 and Quest 3 users must enable developer mode for installation via SideQuest.
 
 ## Installation Instructions
 
@@ -70,4 +50,24 @@ A few simple operations to do so are:
 Different Layout Algorithms can help to visualize the data.
 
 <img src="https://github.com/molgenis/Graph2VR/assets/49238704/673d2008-c93b-4e8f-9505-3cdcb2ba52cd" width="400">
+
+## System Requirements
+
+### Hardware Requirements
+- **VR Headset**: Graph2VR is designed for Virtual Reality headsets, with dedicated support for the HTC Vive and Oculus Quest series (Quest 2 and Quest 3). 
+Compatibility with other VR headsets has not been verified. However, at least two controllers are required to control the app.
+
+
+### PC Specifications
+  - **Processor**: Intel i5-4590 / AMD Ryzen 5 1500X or greater
+  - **Memory**: 8GB+ RAM
+  - **Graphics**: NVIDIA GTX 1060 / AMD Radeon RX 480 or greater
+  - **Storage**: At least 4GB of free space is recommended.
+
+### Software Requirements
+- **Operating System**: Windows 10 or later for PC version; standalone version available for Oculus Quest 2 and Quest 3.
+- **Unity Engine**: For development, Unity version 2021.2.15f recommended.
+
+### Standalone Version Setup
+- Oculus Quest 2 and Quest 3 users must enable developer mode for installation via SideQuest.
 
