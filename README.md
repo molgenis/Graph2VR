@@ -73,7 +73,6 @@ We used OpenXR to set the controls, which makes the application less likely to r
 However, it supported us in building a standalone version of the application for the Quest 2/3.
 
 ### PC Specifications
-  - **Processor**: Intel i5-4590 / AMD Ryzen 5 1500X or greater
   - **Memory**: 8GB+ RAM
   - **Graphics**: NVIDIA GTX 1060 / AMD Radeon RX 480 or greater - Better graphics cards are able to handle more nodes and improve the fonts' readability.
   - **Storage**: At least 4GB of free space is recommended.
